@@ -1,0 +1,45 @@
+.width-80{
+    width: 80px !important;
+}
+.width-full-100{
+    width: 100% !important;
+}
+.size-50x50{
+    width: 50px !important;
+    height: 50px !important;
+}
+.size-20x20{
+    width: 20px !important;
+    height: 20px !important;
+}
+.requi{
+    color:#ff0000;
+}
+.img_view{
+    border: 1px solid #d0d0d0;
+    padding: 10px;
+    margin-right: 10px;
+    text-align: center;
+}
+.del-btn{
+    color:red;
+}
+
+.select2-container--bootstrap4 .select2-selection--multiple .select2-selection__rendered{
+    padding: 0 0.575rem !important;
+    white-space: initial !important;
+}
+
+.select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice {
+    padding: 0px 5px !important;
+}
+.list-op-aj{
+    float: left;
+}
+
+.row_show{
+    display: revert !important;
+}
+.row_hide{
+    display: none !important;
+}
