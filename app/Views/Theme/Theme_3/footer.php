@@ -224,7 +224,8 @@
         </div>
         <div class="copyright">
             <div class="container">
-                Copyright@<a href="https://dnationsoft.com/" target="_blank">DNationSoft</a>
+                <!-- Copyright@<a href="https://dnationsoft.com/" target="_blank">DNationSoft</a> -->
+                Copyright © Finerlabels 2023 | All Rights Reserved
             </div>
         </div>
     </section>
