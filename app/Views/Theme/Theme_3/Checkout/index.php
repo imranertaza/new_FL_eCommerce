@@ -266,7 +266,7 @@
                                     onclick="minusItem('<?php echo $val['rowid']; ?>')" id="plus-btn"><i
                                         class="fa fa-minus"></i></button>
 
-                                <button class="btn bg-custom-color text-white btn-sm"
+                                <button type="button" class="btn bg-custom-color text-white btn-sm"
                                     id="btn_<?php echo $val['rowid']; ?>" style="display:none;"
                                     onclick="updateQty('<?php echo $val['rowid']; ?>')">
                                     Update

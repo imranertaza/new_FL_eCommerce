@@ -959,6 +959,7 @@ function paypal_settings()
     return $settings;
 }
 
+//this function only in used Theme 3
 function get_category_id_by_product_show_home_slide($category_id){
     $table = DB()->table('cc_products');
     $table->join('cc_product_to_category', 'cc_product_to_category.product_id = cc_products.product_id')->where('cc_products.status','Active');
@@ -993,7 +994,7 @@ function get_category_id_by_product_show_home_slide($category_id){
                     '.image_view('uploads/products', $pro->product_id, '191_' . $pro->image, 'noimage.png', 'img-fluid w-100').'                    
                 </div>
                 <div class="product-bottom mt-auto">
-                    <div class="product-title mb-2">
+                    <div class="product-title product_title_area mb-2">
                         <a href="'.base_url('detail/' . $pro->product_id) .'">'.substr($pro->name, 0, 40).'</a>
                     </div>
                     <div class="price mb-2">'.currency_symbol($pro->price).'</div>';

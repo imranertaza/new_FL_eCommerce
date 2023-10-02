@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use App\Libraries\Theme_2;
 use App\Libraries\Theme_3;
 use App\Libraries\Theme_default;
 
@@ -15,6 +16,7 @@ class Theme_settings extends BaseController
     protected $crop;
     protected $permission;
     protected $theme_3;
+    protected $theme_2;
     protected $theme_default;
     private $module_name = 'Theme_settings';
 
@@ -25,6 +27,7 @@ class Theme_settings extends BaseController
         $this->crop = \Config\Services::image();
         $this->permission = new Permission();
         $this->theme_3 = new Theme_3();
+        $this->theme_2 = new Theme_2();
         $this->theme_default = new Theme_default();
     }
 
@@ -50,8 +53,8 @@ class Theme_settings extends BaseController
                 $data['theme_view'] = view('Admin/Theme_settings/default', $data);
             }
             if($theme == 'Theme_2'){
-                $data['theme_libraries'] = $this->theme_default;
-                $data['theme_view'] = view('Admin/Theme_settings/default', $data);
+                $data['theme_libraries'] = $this->theme_2;
+                $data['theme_view'] = view('Admin/Theme_settings/theme_2', $data);
             }
 
 
@@ -83,7 +86,7 @@ class Theme_settings extends BaseController
             $theme_libraries = $this->theme_default;
         }
         if($theme == 'Theme_2'){
-            $theme_libraries = $this->theme_default;
+            $theme_libraries = $this->theme_2;
         }
 
 
@@ -125,7 +128,7 @@ class Theme_settings extends BaseController
             $theme_libraries = $this->theme_default;
         }
         if($theme == 'Theme_2'){
-            $theme_libraries = $this->theme_default;
+            $theme_libraries = $this->theme_2;
         }
 
         if (!empty($_FILES['side_logo']['name'])) {

@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use App\Libraries\Theme_2;
 use App\Libraries\Theme_3;
 use App\Libraries\Theme_default;
 
@@ -14,6 +15,7 @@ class Products extends BaseController
     protected $session;
     protected $permission;
     protected $theme_3;
+    protected $theme_2;
     protected $theme_default;
     protected $crop;
     private $module_name = 'Products';
@@ -25,6 +27,7 @@ class Products extends BaseController
         $this->permission = new Permission();
         $this->crop = \Config\Services::image();
         $this->theme_3 = new Theme_3();
+        $this->theme_2 = new Theme_2();
         $this->theme_default = new Theme_default();
     }
 
@@ -92,7 +95,7 @@ class Products extends BaseController
             $theme_libraries = $this->theme_default;
         }
         if($theme == 'Theme_2'){
-            $theme_libraries = $this->theme_default;
+            $theme_libraries = $this->theme_2;
         }
 
         $adUserId = $this->session->adUserId;
@@ -474,7 +477,7 @@ class Products extends BaseController
             $theme_libraries = $this->theme_default;
         }
         if($theme == 'Theme_2'){
-            $theme_libraries = $this->theme_default;
+            $theme_libraries = $this->theme_2;
         }
 
         $adUserId = $this->session->adUserId;

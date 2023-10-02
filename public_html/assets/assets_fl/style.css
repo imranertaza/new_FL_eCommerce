@@ -2219,3 +2219,10 @@ input[type='radio']:checked{
     width:80px;
     height: 80px;
 }
+
+.product_title_area{
+    height:55px;
+}
+.product-title{
+    min-height:35px;
+}
