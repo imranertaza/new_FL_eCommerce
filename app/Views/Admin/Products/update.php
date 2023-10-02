@@ -27,7 +27,9 @@
                             <h3 class="card-title">Product update</h3>
                         </div>
                         <div class="col-md-4" style="text-align: right;">
+                            
                             <button type="submit" class="btn btn-primary">Update</button>
+                            <a href="<?php echo base_url('product_create');?>" class="btn btn-success"> Add New</a>
                         </div>
                         <div class="col-md-12" id="message" style="margin-top: 10px">
                             <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
