@@ -14,15 +14,17 @@ class Test extends BaseController {
     }
 
     public function index(){
-        $builder = DB()->table('cc_product_to_category');
+        $builder = DB()->table('cc_theme_settings');
         $rows = $builder->get()->getResult();
 
         $output = '';
         foreach ($rows as $row){
             $output .= '[<br/>';
-            $output .= "'product_to_cat_id' => ".$row->product_to_cat_id.',<br/>';
-            $output .= "'product_id' => ".$row->product_id.',<br/>';
-            $output .= "'category_id' => ".$row->category_id.',<br/>';
+            $output .= "'theme_settings_id' => "."'".$row->theme_settings_id."'".',<br/>';
+            $output .= "'label' => "."'".$row->label."'".',<br/>';
+            $output .= "'title' => "."'".$row->title."'".',<br/>';
+            $output .= "'value' => "."'".$row->value."'".',<br/>';
+            $output .= "'theme' => "."'".$row->theme."'".',<br/>';
 //            $output .= "'image' => '".str_replace("'", "\'", $row->image)."',<br/>";
 //            $output .= "'start_date' => '".$row->start_date."',<br/>";
 //            $output .= "'end_date' => '".$row->end_date."',<br/>";
