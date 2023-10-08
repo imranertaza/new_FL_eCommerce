@@ -36,6 +36,7 @@ $(function() {
     $('.select2_pro').select2({
         multiple: true,
         theme: 'bootstrap4',
+        tags: true,
         ajax: {
             url: "<?php echo base_url('related_product') ?>",
             dataType: 'json',
@@ -43,10 +44,14 @@ $(function() {
             processResults: function(data) {
                 return {
                     results: $.map(data, function(item) {
-                        return {
+                        var img = '<img src="<?php echo base_url('uploads/products')?>/'+item.product_id+'/100_'+item.image+'" class="" loading="lazy" />' + item.name;
+                        // var img = "<span ><img src='<?php echo base_url('uploads/products')?>/"+item.product_id+"/100_"+item.image+"' c/>" + item.name+"</span >";
+                        return {                            
                             text: item.name,
-                            id: item.product_id
+                            id: item.product_id,
+                            
                         }
+                        
                     })
                 };
             },

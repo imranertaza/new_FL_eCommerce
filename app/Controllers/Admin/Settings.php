@@ -58,6 +58,7 @@ class Settings extends BaseController
         $data['email'] = $this->request->getPost('email');
         $data['phone'] = $this->request->getPost('phone');
         $data['Theme'] = $this->request->getPost('Theme');
+        $data['category_product_limit'] = $this->request->getPost('category_product_limit');
 
         $data['country'] = $this->request->getPost('country');
         $data['state'] = $this->request->getPost('state');

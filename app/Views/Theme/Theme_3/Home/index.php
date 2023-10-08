@@ -339,7 +339,7 @@
             <div class="row row-cols-lg-5 row-cols-md-3 row-cols-sm-2 row-cols-1 gx-5">
                 <?php foreach($shop_by as $valShop){ ?>        
                 <div class="col mb-5">
-                    <a href="<?php echo base_url('category/' . $valShop->prod_cat_id);?>">
+                    <a href="<?php echo base_url('category/' . $valShop->prod_cat_id);?>" >
                     <div class="card p-4 border-0 text-center rounded-4">
                         <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center brand-icon">                                
                             

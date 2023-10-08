@@ -24,7 +24,8 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-8">
-                        <h3 class="card-title">Bulk Edit Product List</h3>
+                        <h3 class="card-title">Bulk Edit Product List</h3><br>
+                        <a href="<?php echo base_url('products') ?>" class="btn btn-warning  btn-xs" >Back</a>
                     </div>
                     <div class="col-md-4">
 

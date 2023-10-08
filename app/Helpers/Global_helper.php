@@ -609,6 +609,8 @@ function email_send($to, $subject, $message)
     $config['SMTPPass'] = get_lebel_by_value_in_settings('smtp_password');
     $config['SMTPPort'] = get_lebel_by_value_in_settings('smtp_port');
     $config['SMTPCrypto'] = get_lebel_by_value_in_settings('smtp_crypto');
+    $config['mailType'] = 'html';
+    $config['charset'] = 'utf-8';
 
     $email->initialize($config);
 

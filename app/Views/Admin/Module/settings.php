@@ -39,12 +39,8 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label><?php echo $val->title; ?></label>
-                                <select name="label[]" class="form-control">
-                                    <option value="1" <?php echo ($val->value == '1') ? 'selected' : ''; ?>>Active
-                                    </option>
-                                    <option value="0" <?php echo ($val->value == '0') ? 'selected' : ''; ?>>Inactive
-                                    </option>
-                                </select>
+                                <input type="text"  class="form-control" name="label[]" value="<?php echo $val->value; ?>"
+                                    required>
                                 <input type="hidden" name="id[]" value="<?php echo $val->module_settings_id; ?>"
                                     required>
                             </div>

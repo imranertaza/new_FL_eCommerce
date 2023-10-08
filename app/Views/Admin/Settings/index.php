@@ -88,6 +88,11 @@
                                                     <input type="text" name="address" class="form-control" value="<?php echo get_lebel_by_value_in_settings('address');?>"  required>
                                                 </div>
 
+                                                <div class="form-group">
+                                                    <label><?php echo get_lebel_by_title_in_settings('category_product_limit');?></label>
+                                                    <input type="text" name="category_product_limit" class="form-control" value="<?php echo get_lebel_by_value_in_settings('category_product_limit');?>"  required>
+                                                </div>
+
 
                                             </div>
                                             <div class="col-md-6">

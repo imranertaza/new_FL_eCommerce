@@ -199,7 +199,7 @@
                         <form id="first-form-top" action="<?php echo base_url('products/search'); ?>"
                             class="mini-search" method="GET">
                             <div class="input-group">
-                                <input type="text" class="form-control" name="keywordTop" placeholder="Search for Products...">
+                                <input type="text" class="form-control" name="keywordTop" placeholder="Search for Products..." value="<?php echo isset($keywordTop) ? $keywordTop : ''; ?>">
                                 <span class="input-group-btn">
                                 <button class="btn btn-default bg-white rounded-0" onclick="topSearchValidation('first-form-top','first-cat','first-keywordTop','first-valid')" type="button">                                    
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

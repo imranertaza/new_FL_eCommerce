@@ -24,8 +24,10 @@ class Category extends BaseController {
         $data['brandval'] = array();
         $data['ratingval'] = array();
 
+        $limit = get_lebel_by_value_in_settings('category_product_limit');
+
         $where = "$categoryWhere ";
-        $data['products'] = $this->categoryproductsModel->where($where)->query()->paginate(9);
+        $data['products'] = $this->categoryproductsModel->where($where)->query()->paginate($limit);
         $data['pager'] = $this->categoryproductsModel->pager;
         $data['links'] = $data['pager']->links('default','custome_link');
 
