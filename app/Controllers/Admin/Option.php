@@ -154,26 +154,30 @@ class Option extends BaseController
             return redirect()->to('option_update/' . $option_id);
         } else {
 
+            if (!empty($value)) {
+                $table = DB()->table('cc_option');
+                $table->where('option_id', $option_id)->update($data);
 
-            $table = DB()->table('cc_option');
-            $table->where('option_id', $option_id)->update($data);
+                foreach ($value as $key => $val) {
+                    $dataval['option_id'] = $option_id;
+                    $dataval['name'] = $val;
 
-            foreach ($value as $key => $val){
-                $dataval['option_id'] = $option_id;
-                $dataval['name'] = $val;
-
-                if (!empty($option_value_id[$key])){
-                    $datavalUp['name'] = $val;
-                    $tableValDel = DB()->table('cc_option_value');
-                    $tableValDel->where('option_value_id', $option_value_id[$key])->update($datavalUp);
-                }else{
-                    $tableVal = DB()->table('cc_option_value');
-                    $tableVal->insert($dataval);
+                    if (!empty($option_value_id[$key])) {
+                        $datavalUp['name'] = $val;
+                        $tableValDel = DB()->table('cc_option_value');
+                        $tableValDel->where('option_value_id', $option_value_id[$key])->update($datavalUp);
+                    } else {
+                        $tableVal = DB()->table('cc_option_value');
+                        $tableVal->insert($dataval);
+                    }
                 }
-            }
 
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('option_update/' . $option_id);
+                $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                return redirect()->to('option_update/' . $option_id);
+            }else{
+                $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"> Please Add Value ! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                return redirect()->to('option_update/' . $option_id);
+            }
 
         }
     }

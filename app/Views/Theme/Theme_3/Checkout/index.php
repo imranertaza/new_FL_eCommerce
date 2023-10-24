@@ -1,4 +1,5 @@
-<section class="main-container checkout" id="tableReload">
+<section class="main-container checkout" >
+<!--    id="tableReload"-->
     <div class="container">
         <form id="checkout-form" action="<?php echo base_url('checkout_action')  ?>" method="post">
             <div class="row">
@@ -192,7 +193,7 @@
                             <div class="col-lg-6">
                                 <div class="form-group mb-4">
                                     <label class="w-100" for="email">District</label>
-                                    <select name="shipping_city" o class="form-control"
+                                    <select name="shipping_city"  class="form-control"
                                         onchange="shippingCharge(),liveView(this,'zonVal')" id="sh_stateView">
                                         <option value="">Please select</option>
                                     </select>
@@ -224,7 +225,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6" >
                     <div class="title-checkout">
                         <label class="btn bg-custom-color text-white w-100 rounded-0"><svg
                                 xmlns="http://www.w3.org/2000/svg" width="16" height="22" viewBox="0 0 16 22"
@@ -273,7 +274,7 @@
                                 </button>
                             </div>
                             <div class="remove bg-gray px-3 py-2 rounded-2 align-items-center d-flex pro-bg-check">
-                                <a href="javascript:void(0)" onclick="removeCart('<?php echo $val['rowid']; ?>')"><i
+                                <a href="javascript:void(0)" onclick="removeCart('<?php echo $val['rowid']; ?>',this)"><i
                                         class="fa-solid fa-trash-can"></i></a>
                             </div>
                         </div>
@@ -281,11 +282,11 @@
 
                     </div>
 
-                    <div class="summery ">
+                    <div class="summery " >
                         <div class="group-check mb-4">
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Price</span>
-                                <span><?php echo currency_symbol(Cart()->total()) ?></span>
+                                <span id="check_total"><?php echo get_lebel_by_value_in_settings('currency_symbol') .Cart()->total() ?></span>
                             </div>
 
                             <div class="d-flex justify-content-between mb-2">
@@ -293,9 +294,9 @@
                                 <?php $disc = 0;
                                 if (isset(newSession()->coupon_discount)) {
                                     $disc = round((Cart()->total() * newSession()->coupon_discount) / 100); ?>
-                                <span><?php echo currency_symbol($disc) ?></span>
+                                <span><?php echo get_lebel_by_value_in_settings('currency_symbol') .$disc ?></span>
                                 <?php } else {
-                                    echo '<span>' . currency_symbol($disc) . '</span>';
+                                    echo '<span>' . get_lebel_by_value_in_settings('currency_symbol') .$disc . '</span>';
                                 }
                                 $total = (isset(newSession()->coupon_discount)) ? Cart()->total() - $disc : Cart()->total(); ?>
                             </div>
@@ -374,7 +375,7 @@
 
                             <div class="d-flex justify-content-between mt-3">
                                 <span>Shipping charge</span>
-                                <span id="chargeShip"><?php echo currency_symbol(0) ?></span>
+                                <span id="chargeShip"><?php echo get_lebel_by_value_in_settings('currency_symbol') .'0' ?></span>
                                 <input type="hidden" name="shipping_charge" id="shipping_charge">
                             </div>
                         </div>
@@ -382,7 +383,7 @@
                         <div class="total py-3 group-check mb-4" style="border-top: unset !important;">
                             <div class="d-flex justify-content-between fw-bold">
                                 <span>Total</span>
-                                <span id="total"><?php echo currency_symbol($total) ?></span>
+                                <span id="total"><?php echo get_lebel_by_value_in_settings('currency_symbol') .$total ?></span>
                                 <input type="hidden" id="totalamo" value="<?php echo $total ?>">
                             </div>
                         </div>
@@ -422,8 +423,7 @@
 
                     <input type="hidden" name="amount" id="shipping_tot" value="<?php echo $total ?>">
                     <p>
-                        <button type="submit" class="btn bg-custom-color text-white w-100 rounded-0">Confirm
-                            Order</button>
+                        <button type="submit" class="btn bg-custom-color text-white w-100 rounded-0">Confirm Order</button>
                     </p>
                 </div>
             </div>

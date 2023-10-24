@@ -150,12 +150,15 @@ class Cart extends BaseController {
                 $check = $this->check_qty($row['id'], $qty);
                 if ($check == true) {
                     $this->cart->update($data);
-                    print 'Successfully update to cart';
+                    $data['message'] = 'Successfully update to cart';
                 } else {
-                    print 'not enough quantity!';
+                    $data['message'] = 'not enough quantity!';
                 }
             }
         }
+        $data['cartTotal'] = Cart()->total();
+
+        return $this->response->setJSON($data);
     }
 
     public function removeToCart(){
@@ -166,7 +169,7 @@ class Cart extends BaseController {
             unset($_SESSION['coupon_discount']);
         }
 
-        print 'Successfully remove to cart';
+        print Cart()->total();
     }
 
     private function check_qty($productID , $qty){

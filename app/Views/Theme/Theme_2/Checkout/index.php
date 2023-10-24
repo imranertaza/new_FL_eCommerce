@@ -1,4 +1,4 @@
-<section class="main-container checkout" id="tableReload">
+<section class="main-container checkout" >
     <div class="container">
         <form id="checkout-form" action="<?php echo base_url('checkout_action')  ?>" method="post">
             <div class="row">
@@ -285,7 +285,7 @@
                         <div class="group-check mb-4">
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Price</span>
-                                <span><?php echo currency_symbol(Cart()->total()) ?></span>
+                                <span id="check_total" ><?php echo currency_symbol(Cart()->total()) ?></span>
                             </div>
 
                             <div class="d-flex justify-content-between mb-2">

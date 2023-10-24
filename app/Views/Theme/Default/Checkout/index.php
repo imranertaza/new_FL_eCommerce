@@ -1,4 +1,4 @@
-<section class="main-container checkout" id="tableReload">
+<section class="main-container checkout" >
     <div class="container">
         <form action="<?php echo base_url('checkout_action') ?>" method="post">
             <div class="row">
@@ -182,17 +182,17 @@
                                     </div>
                                 </div>
                                 <div class="list-item-qty text-center bg-gray p-1 py-3 rounded-2 align-items-center d-flex flex-column">
-                                    <button class="btn btn-sm w-100 p-0"
+                                    <button type="button" class="btn btn-sm w-100 p-0"
                                             onclick="plusItem('<?php echo $val['rowid']; ?>')" id="minus-btn"><i
                                                 class="fa fa-plus"></i></button>
                                     <input type="text" id="qty_input" name="qty"
                                            class="border-0 text-center item_<?php echo $val['rowid']; ?>"
                                            value="<?php echo $val['qty']; ?>" min="1" style="width:45px">
-                                    <button class="btn btn-sm w-100 p-0"
+                                    <button type="button" class="btn btn-sm w-100 p-0"
                                             onclick="minusItem('<?php echo $val['rowid']; ?>')" id="plus-btn"><i
                                                 class="fa fa-minus"></i></button>
 
-                                    <button class="btn btn-primary btn-sm" id="btn_<?php echo $val['rowid']; ?>"
+                                    <button type="button" class="btn btn-primary btn-sm" id="btn_<?php echo $val['rowid']; ?>"
                                             style="display:none;" onclick="updateQty('<?php echo $val['rowid']; ?>')">
                                         Update
                                     </button>
@@ -208,7 +208,7 @@
                     <div class="summery">
                         <div class="d-flex justify-content-between mb-2">
                             <span>Price</span>
-                            <span><?php echo currency_symbol(Cart()->total()) ?></span>
+                            <span id="check_total"><?php echo currency_symbol(Cart()->total()) ?></span>
                         </div>
 
                         <div class="d-flex justify-content-between mb-2">

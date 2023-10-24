@@ -539,11 +539,12 @@
                 rowid: rowid,
                 qty: qty
             },
+            dataType: 'json',
             success: function(response) {
                 $('#cartReload').load(location.href + " #cartReload");
                 $('#tableReload').load(location.href + " #tableReload");
                 $('#cartReload2').load(location.href + " #cartReload2");
-                $('#mesVal').html(response);
+                $('#mesVal').html(response.message);
                 $('.btn-count').load(location.href + " .btn-count");
                 $('.body-count').load(location.href + " .body-count");
                 $('#collapseExample').addClass('show');
@@ -551,11 +552,13 @@
                 setTimeout(function() {
                     $("#messAlt").fadeOut(1500);
                 }, 600);
+                $('#btn_' + rowid).hide();
+                checkout_data_calculate(response.cartTotal);
             }
         });
     }
 
-    function removeCart(rowid) {
+    function removeCart(rowid,div) {
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('removeToCart') ?>",
@@ -566,7 +569,7 @@
                 $('#cartReload').load(location.href + " #cartReload");
                 $('#cartReload2').load(location.href + " #cartReload2");
                 $('#tableReload').load(location.href + " #tableReload");
-                $('#mesVal').html(response);
+                $('#mesVal').html('Successfully remove to cart');
                 $('.btn-count').load(location.href + " .btn-count");
                 $('.body-count').load(location.href + " .body-count");
                 $('#collapseExample').addClass('show');
@@ -574,9 +577,27 @@
                 setTimeout(function() {
                     $("#messAlt").fadeOut(1500);
                 }, 600);
+                checkout_data_calculate(response);
+                $(div).parent().parent().remove();
             }
         });
     }
+
+    function checkout_data_calculate(data){
+        <?php $symbol = get_lebel_by_value_in_settings('currency_symbol'); ?>
+
+        var total = Number(data);
+
+        $('#check_total').html('<?php echo $symbol ?>'+ total );
+        $('#totalamo').val(total);
+
+        var shipping_charge = $('#shipping_charge').val();
+        var total_with_shipping = Number(total) + Number(shipping_charge);
+
+        $('#total').html('<?php echo $symbol; ?> ' + total_with_shipping);
+        $('#shipping_tot').val(total_with_shipping);
+    }
+
 
     function pass_show(val) {
         var html =

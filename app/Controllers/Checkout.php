@@ -174,8 +174,8 @@ class Checkout extends BaseController
             return redirect()->to('checkout');
         } else {
 
+            $shipping_charge = $this->shipping_charge($data['payment_city'],$this->request->getPost('shipping_city'),$data['shipping_method']);
 
-            
             if (isset($this->session->cusUserId)) {
                 $data['customer_id'] = $this->session->cusUserId;
             }
@@ -185,8 +185,8 @@ class Checkout extends BaseController
                 $disc = round(($this->cart->total() * $this->session->coupon_discount) / 100);
             }
             $finalAmo = $this->cart->total() - $disc;
-            if (!empty($data['shipping_charge'])) {
-                $finalAmo = ($this->cart->total() + $data['shipping_charge']) - $disc;
+            if (!empty($shipping_charge)) {
+                $finalAmo = ($this->cart->total() + $shipping_charge) - $disc;
             }
 
             if ($data['payment_method'] == '8') {
@@ -414,4 +414,28 @@ class Checkout extends BaseController
         }
         print $view;
     }
+
+    private function shipping_charge($city_id,$shipCityId,$shipping_method)
+    {
+
+        $city_id = $city_id;
+        $shipCityId = $shipCityId;
+        $shipping_method = $shipping_method;
+        if (!empty($shipCityId)) {
+            $city_id = $shipCityId;
+        }
+        $charge = 0;
+        if ($shipping_method == 'flat') {
+            $charge = $this->flat_shipping->getSettings()->calculateShipping();
+        }
+        if ($shipping_method == 'zone') {
+            $charge = $this->zone_shipping->getSettings()->calculateShipping($city_id);
+        }
+        if ($shipping_method == 'weight') {
+            $charge = $this->weight_shipping->getSettings();
+        }
+
+        return $charge;
+    }
+
 }
