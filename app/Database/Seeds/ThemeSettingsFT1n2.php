@@ -4,7 +4,7 @@ namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
 
-class ThemeSettings extends Seeder
+class ThemeSettingsFT1n2 extends Seeder
 {
     public function run()
     {

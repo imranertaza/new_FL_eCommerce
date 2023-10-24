@@ -38,6 +38,5 @@ class AllDemo extends Seeder
         $this->call('ProductRelated');
         $this->call('ProductSpecial');
         $this->call('ProductToCategory');
-        $this->call('ThemeSettingsFT3');
     }
 }
