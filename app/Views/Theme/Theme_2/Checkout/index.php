@@ -266,14 +266,14 @@
                                     onclick="minusItem('<?php echo $val['rowid']; ?>')" id="plus-btn"><i
                                         class="fa fa-minus"></i></button>
 
-                                <button class="btn bg-custom-color text-white btn-sm"
+                                <button type="button" class="btn bg-custom-color text-white btn-sm"
                                     id="btn_<?php echo $val['rowid']; ?>" style="display:none;"
                                     onclick="updateQty('<?php echo $val['rowid']; ?>')">
                                     Update
                                 </button>
                             </div>
                             <div class="remove bg-gray px-3 py-2 rounded-2 align-items-center d-flex pro-bg-check">
-                                <a href="javascript:void(0)" onclick="removeCart('<?php echo $val['rowid']; ?>')"><i
+                                <a href="javascript:void(0)" onclick="removeCart('<?php echo $val['rowid']; ?>',this)"><i
                                         class="fa-solid fa-trash-can"></i></a>
                             </div>
                         </div>
