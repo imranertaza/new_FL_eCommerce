@@ -173,7 +173,7 @@
                     </li>
                 <?php } ?>
 
-                <li class="nav-header">Settings</li>
+                <li class="nav-header">System</li>
                 <?php
                 $modArrayPur = ['Settings'];
                 $menuAccessPur = all_menu_permission_check($modArrayPur, $adRoleId);
