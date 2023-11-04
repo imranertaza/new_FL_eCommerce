@@ -1051,12 +1051,13 @@ function display_category_with_parent($cate_id)
         }
     }
 
-    rsort($catName);
-    for( $i = 0; $i<=count($catName)-1; $i++){
-        if ($i == count($catName)-1) {
-            print $catName[$i];
+    krsort($catName);
+
+    foreach ($catName as $key => $val){
+        if ($key == 0) {
+            print $val;
         }else {
-            print $catName[$i]." > ";
+            print $val." > ";
         }
     }
 
