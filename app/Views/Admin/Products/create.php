@@ -200,7 +200,7 @@
                                                 <label>Category <span class="requi">*</span></label>
                                                 <select class="select2bs4" name="categorys[]" multiple="multiple" data-placeholder="Select a State" style="width: 100%;" required>
                                                     <?php foreach ($prodCat as $cat) { ?>
-                                                        <option value="<?php echo $cat->prod_cat_id; ?>"><?php echo (!empty($cat->parent_id)) ? get_data_by_id('category_name', 'cc_product_category', 'prod_cat_id', $cat->parent_id) . '->' : ''; ?><?php echo $cat->category_name; ?></option>
+                                                        <option value="<?php echo $cat->prod_cat_id; ?>"><?php echo display_category_with_parent($cat->prod_cat_id); ?></option>
                                                     <?php } ?>
 
                                                 </select>

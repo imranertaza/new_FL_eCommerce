@@ -55,12 +55,7 @@
                                     <option value="">Please select</option>
                                     <?php foreach ($category as $cat) { ?>
                                     <option value="<?php echo $cat->prod_cat_id ?>">
-                                        <?php
-                                            $main_cat = (!empty($cat->parent_id)) ? get_data_by_id('parent_id', 'cc_product_category', 'prod_cat_id', $cat->parent_id) : '';
-                                            echo (!empty($main_cat)) ? get_data_by_id('category_name', 'cc_product_category', 'prod_cat_id', $main_cat) . '->' : '';
-                                            echo (!empty($cat->parent_id)) ? get_data_by_id('category_name', 'cc_product_category', 'prod_cat_id', $cat->parent_id) . '->' : '';
-                                            echo $cat->category_name;
-                                            ?>
+                                        <?php echo display_category_with_parent($cat->prod_cat_id);?>
                                     </option>
                                     <?php } ?>
                                 </select>

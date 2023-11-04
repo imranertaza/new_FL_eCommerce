@@ -136,7 +136,7 @@ function package_expiry($shop_id)
     $newDb = $db2->database;
     $db2->query('use ' . $newDb);
 
-    $tab  = $db2->table('license');
+    $tab = $db2->table('license');
     $pack = $tab->where('sch_id', $shop_id)->get()->getRow();
 
     $end_date = '';
@@ -172,7 +172,7 @@ function getIdByListInOption($selected, $tblId, $needCol, $table, $where, $needw
     return $options;
 }
 
-function image_view($url, $slug, $image, $no_image, $class = '')
+function image_view($url, $slug, $image, $no_image, $class = '', $id = '')
 {
     $bas_url = base_url();
 
@@ -186,17 +186,17 @@ function image_view($url, $slug, $image, $no_image, $class = '')
     $no_img = $bas_url . '/' . $url . '/' . $no_image;
     if (!empty($image)) {
         if (!file_exists($dir)) {
-            $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+            $result = '<img data-sizes="auto" id="' . $id . '" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
         } else {
             $imgPath = $dir . '/' . $image;
             if (file_exists($imgPath)) {
-                $result = '<img data-sizes="auto" src="' . $img . '" class="' . $class . '" loading="lazy">';
+                $result = '<img data-sizes="auto" leance id="' . $id . '" src="' . $img . '" class="' . $class . '" loading="lazy">';
             } else {
-                $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+                $result = '<img data-sizes="auto" id="' . $id . '" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
             }
         }
     } else {
-        $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+        $result = '<img data-sizes="auto" id="' . $id . '" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
     }
     return $result;
 }
@@ -266,7 +266,7 @@ function is_exists_update($table, $whereCol, $whereInfo, $whereId, $id)
 function add_main_based_menu_with_permission($title, $url, $roleId, $icon, $module_name)
 {
 
-    $active_url  = current_url(true);
+    $active_url = current_url(true);
 
     $permission = new Permission();
 
@@ -275,7 +275,7 @@ function add_main_based_menu_with_permission($title, $url, $roleId, $icon, $modu
 
     $access = $permission->have_access($roleId, $module_name, 'mod_access');
     if ($access == 1) {
-        $class_active   = ($active_url === $url) ? 'active' : '';
+        $class_active = ($active_url === $url) ? 'active' : '';
         $menu .= '<li class="nav-item" ><a class="nav-link' . $class_active . '"  href="' . $url . '" >';
         $menu .= '<i class="nav-icon fas ' . $icon . '"></i>';
         $menu .= '<p>' . $title . '</p>';
@@ -574,7 +574,7 @@ function get_lebel_by_title_in_theme_settings($lable)
     return $result;
 }
 
-function get_lebel_by_title_in_theme_settings_with_theme($lable,$theme)
+function get_lebel_by_title_in_theme_settings_with_theme($lable, $theme)
 {
     $table = DB()->table('cc_theme_settings');
     $data = $table->where('label', $lable)->where('theme', $theme)->get()->getRow();
@@ -586,7 +586,7 @@ function get_lebel_by_title_in_theme_settings_with_theme($lable,$theme)
     return $result;
 }
 
-function get_lebel_by_value_in_theme_settings_with_theme($lable,$theme)
+function get_lebel_by_value_in_theme_settings_with_theme($lable, $theme)
 {
     $table = DB()->table('cc_theme_settings');
     $data = $table->where('label', $lable)->where('theme', $theme)->get()->getRow();
@@ -962,60 +962,103 @@ function paypal_settings()
 }
 
 //this function only in used Theme 3
-function get_category_id_by_product_show_home_slide($category_id){
+function get_category_id_by_product_show_home_slide($category_id)
+{
     $table = DB()->table('cc_products');
-    $table->join('cc_product_to_category', 'cc_product_to_category.product_id = cc_products.product_id')->where('cc_products.status','Active');
-    $result = $table->where('cc_product_to_category.category_id',$category_id)->get()->getResult();
+    $table->join('cc_product_to_category', 'cc_product_to_category.product_id = cc_products.product_id')->where('cc_products.status', 'Active');
+    $result = $table->where('cc_product_to_category.category_id', $category_id)->get()->getResult();
 
-        $view = '';
-        $count = 0;
-        foreach($result as $pro){
-            if($count % 2 == 0) $view .='<div class="swiper-slide">' . "\n";
-            $view .= '<div class="border p-3 product-grid h-100 d-flex align-items-stretch flex-column position-relative">
+    $view = '';
+    $count = 0;
+    foreach ($result as $pro) {
+        if ($count % 2 == 0) $view .= '<div class="swiper-slide">' . "\n";
+        $view .= '<div class="border p-3 product-grid h-100 d-flex align-items-stretch flex-column position-relative">
             <div class="product-grid position-relative">';
-            if (modules_key_by_access('wishlist') == 1) {
-                if (!isset(newSession()->isLoggedInCustomer)) {
-                    $view .='<a href="'.base_url('login').'" class="btn-wishlist position-absolute mt-2 ms-2"  ><i class="fa-solid fa-heart"></i>
+        if (modules_key_by_access('wishlist') == 1) {
+            if (!isset(newSession()->isLoggedInCustomer)) {
+                $view .= '<a href="' . base_url('login') . '" class="btn-wishlist position-absolute mt-2 ms-2"  ><i class="fa-solid fa-heart"></i>
                     <span class="btn-wishlist-text position-absolute  mt-5 ms-2">Favorite</span>
                     </a>';
-                }else{
-                    $view .='<a href="javascript:void(0)" class="btn-wishlist position-absolute mt-2 ms-2" onclick="addToWishlist('.$pro->product_id.')"><i class="fa-solid fa-heart"></i>
+            } else {
+                $view .= '<a href="javascript:void(0)" class="btn-wishlist position-absolute mt-2 ms-2" onclick="addToWishlist(' . $pro->product_id . ')"><i class="fa-solid fa-heart"></i>
                     <span class="btn-wishlist-text position-absolute  mt-5 ms-2">Favorite</span>
                     </a>';
-                }
-
             }
 
-            if (modules_key_by_access('compare') == 1) {
-            $view .='<a href="javascript:void(0)" onclick="addToCompare('.$pro->product_id.')" class="btn-compare position-absolute  mt-5 ms-2"><i class="fa-solid fa-code-compare"></i>
+        }
+
+        if (modules_key_by_access('compare') == 1) {
+            $view .= '<a href="javascript:void(0)" onclick="addToCompare(' . $pro->product_id . ')" class="btn-compare position-absolute  mt-5 ms-2"><i class="fa-solid fa-code-compare"></i>
                     <span class="btn-compare-text position-absolute  mt-5 ms-2">Compare</span>
                 </a>';
-            }
-            
-            $view .='<div class="product-top mb-2">
-                    '.image_view('uploads/products', $pro->product_id, '191_' . $pro->image, 'noimage.png', 'img-fluid w-100').'                    
+        }
+
+        $view .= '<div class="product-top mb-2">
+                    ' . image_view('uploads/products', $pro->product_id, '191_' . $pro->image, 'noimage.png', 'img-fluid w-100') . '                    
                 </div>
                 <div class="product-bottom mt-auto">
                     <div class="product-title product_title_area mb-2">
-                        <a href="'.base_url('detail/' . $pro->product_id) .'">'.substr($pro->name, 0, 40).'</a>
+                        <a href="' . base_url('detail/' . $pro->product_id) . '">' . substr($pro->name, 0, 40) . '</a>
                     </div>
-                    <div class="price mb-2">'.currency_symbol($pro->price).'</div>';
-                    
-                    $view .= addToCartBtn($pro->product_id);
-                    $view .='</div>                                            
-            </div>  ';         
-            $view .= '</div>' . "\n"; 
-        
-        if($count % 2 != 0) $view .= '</div>';
-                
+                    <div class="price mb-2">' . currency_symbol($pro->price) . '</div>';
+
+        $view .= addToCartBtn($pro->product_id);
+        $view .= '</div>                                            
+            </div>  ';
+        $view .= '</div>' . "\n";
+
+        if ($count % 2 != 0) $view .= '</div>';
+
         $count++;
     }
 
-    if ($count %2 != 0) {
+    if ($count % 2 != 0) {
         $view .= '</div>';
     }
 
 
     return $view;
+
+}
+
+
+
+function get_category_name_by_id($cate_id){
+    $table = DB()->table('cc_product_category');
+    $cat = $table->where('prod_cat_id', $cate_id)->get()->getRow();
+    return $cat->category_name;
+}
+
+function category_parent_count($cate_id){
+    $table = DB()->table('cc_product_category');
+    $cat = $table->where('prod_cat_id', $cate_id)->get()->getRow();
+    if ($cat->parent_id) {
+        return category_parent_count($cat->parent_id) + 1;
+    }
+}
+
+
+function display_category_with_parent($cate_id)
+{
+    $catName = array();
+    if (!empty($cate_id)) {
+        $totalParent = category_parent_count($cate_id);
+        for ($i=0; $i<=$totalParent; $i++) {
+            $catName[] = get_category_name_by_id($cate_id);
+            $table = DB()->table('cc_product_category');
+            $cat = $table->where('prod_cat_id', $cate_id)->get()->getRow();
+            $cate_id = $cat->parent_id;
+        }
+    }
+
+    rsort($catName);
+    for( $i = 0; $i<=count($catName)-1; $i++){
+        if ($i == count($catName)-1) {
+            print $catName[$i];
+        }else {
+            print $catName[$i]." > ";
+        }
+    }
+
 
 }

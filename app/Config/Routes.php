@@ -333,7 +333,8 @@ $routes->Post('/category_url_generate', 'Category::url_generate');
 //Search top
 $routes->post('/top_search', 'Search::search_action');
 
-
+//ajax controller
+$routes->post('/get_state', 'Admin\Ajax::get_state');
 
 
 /*
