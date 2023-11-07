@@ -86,6 +86,9 @@ class Shipping extends BaseController
                 if ($code == 'weight') {
                     echo view('Admin/Shipping/weight', $data);
                 }
+                if ($code == 'zone_rate') {
+                    echo view('Admin/Shipping/zone_rate', $data);
+                }
             } else {
                 echo view('Admin/no_permission');
             }
@@ -139,6 +142,58 @@ class Shipping extends BaseController
         return redirect()->to('shipping_settings/'.$shipping_method_id);
 
 
+    }
+
+    public function zone_rate_update_action()
+    {
+        $shipping_method_id = $this->request->getPost('shipping_method_id');
+
+        //shipping settings update
+        $zone_rate_method = $this->request->getPost('zone_rate_method');
+        $table = DB()->table('cc_shipping_settings');
+        $table->set('value', $zone_rate_method)->where('shipping_method_id', $shipping_method_id)->update();
+
+
+        //Shipping status update
+        $data['status'] = $this->request->getPost('status');
+        $tableShipping = DB()->table('cc_shipping_method');
+        $tableShipping->where('shipping_method_id', $shipping_method_id)->update($data);
+
+
+
+        //shipping rate add
+        $up_to_value = $this->request->getPost('up_to_value[]');
+        $cost = $this->request->getPost('cost[]');
+        $geo_zone_id = $this->request->getPost('geo_zone_id[]');
+        $cc_geo_zone_shipping_rate_id = $this->request->getPost('cc_geo_zone_shipping_rate_id[]');
+
+        foreach ($up_to_value as $key => $v){
+            if (!empty($cc_geo_zone_shipping_rate_id[$key])){
+                $rateData['geo_zone_id'] = $geo_zone_id[$key];
+                $rateData['up_to_value'] = $v;
+                $rateData['cost'] = $cost[$key];
+                $tableRate = DB()->table('cc_geo_zone_shipping_rate');
+                $tableRate->where('cc_geo_zone_shipping_rate_id',$cc_geo_zone_shipping_rate_id[$key])->update($rateData);
+            }else{
+                $rateData['geo_zone_id'] = $geo_zone_id[$key];
+                $rateData['up_to_value'] = $v;
+                $rateData['cost'] = $cost[$key];
+                $tableRate = DB()->table('cc_geo_zone_shipping_rate');
+                $tableRate->insert($rateData);
+            }
+        }
+        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        return redirect()->to('shipping_settings/'.$shipping_method_id);
+
+
+    }
+
+    function zone_rate_delete(){
+        $cc_geo_zone_shipping_rate_id = $this->request->getPost('cc_geo_zone_shipping_rate_id');
+        $table = DB()->table('cc_geo_zone_shipping_rate');
+        $table->where('cc_geo_zone_shipping_rate_id', $cc_geo_zone_shipping_rate_id)->delete();
+
+        print '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
     }
 
     public function update_status(){
