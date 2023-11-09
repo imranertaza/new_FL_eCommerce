@@ -63,7 +63,7 @@ class Zone_rate_shipping{
 
 
         $tableRate = DB()->table('cc_geo_zone_shipping_rate');
-        $allZoneRate = $tableRate->where('geo_zone_id', $geo_zone_id)->where('up_to_value >',$totalWeight)->orderBy('up_to_value','ASC')->get()->getRow();
+        $allZoneRate = $tableRate->where('geo_zone_id', $geo_zone_id)->where('up_to_value >=',$totalWeight)->orderBy('up_to_value','ASC')->get()->getRow();
 
         if (!empty($allZoneRate)){
             $charge = $allZoneRate->cost;
@@ -81,7 +81,7 @@ class Zone_rate_shipping{
 
 
         $tableRate = DB()->table('cc_geo_zone_shipping_rate');
-        $allZoneRate = $tableRate->where('geo_zone_id', $geo_zone_id)->where('up_to_value >',$totalItem)->orderBy('up_to_value','ASC')->get()->getRow();
+        $allZoneRate = $tableRate->where('geo_zone_id', $geo_zone_id)->where('up_to_value >=',$totalItem)->orderBy('up_to_value','ASC')->get()->getRow();
 
         if (!empty($allZoneRate)){
             $charge = $allZoneRate->cost;
@@ -95,7 +95,7 @@ class Zone_rate_shipping{
         $totalPrice = Cart()->total();
 
         $tableRate = DB()->table('cc_geo_zone_shipping_rate');
-        $allZoneRate = $tableRate->where('geo_zone_id', $geo_zone_id)->where('up_to_value >',$totalPrice)->orderBy('up_to_value','ASC')->get()->getRow();
+        $allZoneRate = $tableRate->where('geo_zone_id', $geo_zone_id)->where('up_to_value >=',$totalPrice)->orderBy('up_to_value','ASC')->get()->getRow();
 
         if (!empty($allZoneRate)){
             $charge = $allZoneRate->cost;
