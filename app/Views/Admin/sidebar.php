@@ -118,7 +118,53 @@
                     </li>
                 <?php } ?>
 
+                <li class="nav-header">Modules</li>
+                <?php
+                $modArrayPur = ['Shipping'];
+                $menuAccessPur = all_menu_permission_check($modArrayPur, $adRoleId);
+                if ($menuAccessPur == true) { ?>
+                    <li class="nav-item">
+                        <a href="<?php echo base_url('shipping'); ?>" class="nav-link">
+                            <i class="nav-icon far fa-calendar-alt"></i>
+                            <p>
+                                Shipping method
+                            </p>
+                        </a>
+                    </li>
+                <?php } ?>
+
+                <?php
+                $modArrayPur = ['Payment'];
+                $menuAccessPur = all_menu_permission_check($modArrayPur, $adRoleId);
+                if ($menuAccessPur == true) { ?>
+                    <li class="nav-item">
+                        <a href="<?php echo base_url('payment'); ?>" class="nav-link">
+                            <i class="nav-icon far fa-calendar-alt"></i>
+                            <p>
+                                Payment method
+                            </p>
+                        </a>
+                    </li>
+                <?php } ?>
+
+
+                <?php
+                $modArrayPur = ['Module'];
+                $menuAccessPur = all_menu_permission_check($modArrayPur, $adRoleId);
+                if ($menuAccessPur == true) {
+                    ?>
+                    <li class="nav-item">
+                        <a href="<?php echo base_url('module'); ?>" class="nav-link">
+                            <i class="nav-icon far fa-calendar-alt"></i>
+                            <p>
+                                Module
+                            </p>
+                        </a>
+                    </li>
+                <?php } ?>
+
                 <li class="nav-header">Users</li>
+
                 <?php
                 $modArrayPur = ['User'];
                 $menuAccessPur = all_menu_permission_check($modArrayPur, $adRoleId);
@@ -166,9 +212,9 @@
                 if ($menuAccessPur == true) {
                 ?>
                     <li class="nav-item">
-                        <a href="<?php echo base_url('found_request'); ?>" class="nav-link">
+                        <a href="<?php echo base_url('fund_request'); ?>" class="nav-link">
                             <i class="nav-icon far fa-calendar-alt"></i>
-                            <p>Found Request </p>
+                            <p>Fund Request </p>
                         </a>
                     </li>
                 <?php } ?>
@@ -202,64 +248,22 @@
                     </li>
                 <?php } ?>
 
-                <?php
-                $modArrayPur = ['Shipping'];
-                $menuAccessPur = all_menu_permission_check($modArrayPur, $adRoleId);
-                if ($menuAccessPur == true) { ?>
-                    <li class="nav-item">
-                        <a href="<?php echo base_url('shipping'); ?>" class="nav-link">
-                            <i class="nav-icon far fa-calendar-alt"></i>
-                            <p>
-                                Shipping method
-                            </p>
-                        </a>
-                    </li>
-                <?php } ?>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon far fa-calendar-alt"></i>
+                        <p> Localization <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
 
-                <?php
-                $modArrayPur = ['Payment'];
-                $menuAccessPur = all_menu_permission_check($modArrayPur, $adRoleId);
-                if ($menuAccessPur == true) { ?>
-                    <li class="nav-item">
-                        <a href="<?php echo base_url('payment'); ?>" class="nav-link">
-                            <i class="nav-icon far fa-calendar-alt"></i>
-                            <p>
-                                Payment method
-                            </p>
-                        </a>
-                    </li>
-                <?php } ?>
+                        <?php echo add_main_based_menu_with_permission('Geo Zone', base_url('geo_zone'), $adRoleId, 'fa-circle', 'Geo_zone'); ?>
+
+                    </ul>
+                </li>
 
 
 
-                <!--                <li class="nav-item">-->
-                <!--                    <a href="#" class="nav-link">-->
-                <!--                        <i class="nav-icon fas fa-copy"></i>-->
-                <!--                        <p> Payment method <i class="fas fa-angle-left right"></i>-->
-                <!--                        </p>-->
-                <!--                    </a>-->
-                <!--                    <ul class="nav nav-treeview">-->
-                <!--                        --><?php //echo add_main_based_menu_with_permission('Bank Transfer', base_url('bank_transfer'), $adRoleId, 'fa-circle', 'Bank_transfer');
-                                                ?>
-                <!--                    </ul>-->
-                <!--                </li>-->
 
-
-
-                <?php
-                $modArrayPur = ['Module'];
-                $menuAccessPur = all_menu_permission_check($modArrayPur, $adRoleId);
-                if ($menuAccessPur == true) {
-                ?>
-                    <li class="nav-item">
-                        <a href="<?php echo base_url('module'); ?>" class="nav-link">
-                            <i class="nav-icon far fa-calendar-alt"></i>
-                            <p>
-                                Module
-                            </p>
-                        </a>
-                    </li>
-                <?php } ?>
 
                 <?php
                 $modArrayPur = ['Page_settings'];

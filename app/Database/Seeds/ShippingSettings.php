@@ -30,6 +30,13 @@ class ShippingSettings extends Seeder
                 'title' => 'Outside of Dhaka',
                 'value' => '120',
             ],
+            [
+                'settings_id' => 4,
+                'shipping_method_id' => 4,
+                'label' => 'zone_rate_method',
+                'title' => 'Zone Rate Method',
+                'value' => '1',
+            ],
         ];
         // Using Query Builder
         $this->db->table('cc_shipping_settings')->insertBatch($data);
