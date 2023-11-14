@@ -120,7 +120,7 @@ $routes->get('/customers_delete/(:num)', 'Admin\Customers::delete/$1');
 $routes->get('/customers_ledger/(:num)', 'Admin\Customers::ledger/$1');
 
 // founds request
-$routes->get('/found_request', 'Admin\Found_request::index');
+$routes->get('/fund_request', 'Admin\Found_request::index');
 $routes->post('/found_request_action', 'Admin\Found_request::found_action');
 
 //Settings
@@ -137,6 +137,11 @@ $routes->get('/shipping_settings/(:num)', 'Admin\Shipping\Shipping::shipping_set
 $routes->post('/shipping_update_action', 'Admin\Shipping\Shipping::update_action');
 $routes->post('/update_shipping_status', 'Admin\Shipping\Shipping::update_status');
 $routes->post('/remove_settings_weight', 'Admin\Shipping\Shipping::remove_settings_weight');
+
+
+$routes->post('/zone_rate_update_action', 'Admin\Shipping\Shipping::zone_rate_update_action');
+$routes->post('/zone_rate_delete', 'Admin\Shipping\Shipping::zone_rate_delete');
+
 
 //Payment method
 $routes->get('/payment', 'Admin\Payment\Payment::index');
@@ -220,7 +225,14 @@ $routes->post('/header_section_two_update', 'Admin\Theme_settings_3::header_sect
 $routes->post('/home_category_update', 'Admin\Theme_settings_3::home_category_update');
 $routes->post('/banner_bottom_update', 'Admin\Theme_settings_3::banner_bottom_update');
 
-
+//Localization
+$routes->get('/geo_zone', 'Admin\Geo_zone::index');
+$routes->get('/geo_zone_create', 'Admin\Geo_zone::create');
+$routes->post('/geo_zone_create_action', 'Admin\Geo_zone::create_action');
+$routes->get('/geo_zone_update/(:num)', 'Admin\Geo_zone::update/$1');
+$routes->post('/geo_zone_update_action', 'Admin\Geo_zone::update_action');
+$routes->get('/geo_zone_delete/(:num)', 'Admin\Geo_zone::delete/$1');
+$routes->post('/geo_zone_detail_delete', 'Admin\Geo_zone::geo_zone_detail_delete');
 
 //Email_send
 $routes->get('/email_send', 'Admin\Email_send::index');
@@ -335,6 +347,7 @@ $routes->post('/top_search', 'Search::search_action');
 
 //ajax controller
 $routes->post('/get_state', 'Admin\Ajax::get_state');
+$routes->post('/get_zone_value', 'Admin\Ajax::get_zone_value');
 
 
 /*

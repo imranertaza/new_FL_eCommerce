@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Libraries\Mycart;
 use App\Libraries\Weight_shipping;
+use App\Libraries\Zone_rate_shipping;
 use App\Libraries\Zone_shipping;
 use App\Libraries\Flat_shipping;
 use App\Models\ProductsModel;
@@ -19,6 +20,7 @@ class Checkout extends BaseController
     protected $zone_shipping;
     protected $flat_shipping;
     protected $weight_shipping;
+    protected $zone_rate_shipping;
     protected $cart;
 
     public function __construct()
@@ -29,6 +31,7 @@ class Checkout extends BaseController
         $this->zone_shipping = new Zone_shipping();
         $this->flat_shipping = new Flat_shipping();
         $this->weight_shipping = new Weight_shipping();
+        $this->zone_rate_shipping = new Zone_rate_shipping();
         $this->cart = new Mycart();
     }
 
@@ -368,6 +371,9 @@ class Checkout extends BaseController
         if ($paymethod == 'weight') {
             $data['charge'] = $this->weight_shipping->getSettings();
         }
+        if ($paymethod == 'zone_rate') {
+            $data['charge'] = $this->zone_rate_shipping->getSettings($city_id);
+        }
 
         return $this->response->setJSON($data);
     }
@@ -421,6 +427,7 @@ class Checkout extends BaseController
         $city_id = $city_id;
         $shipCityId = $shipCityId;
         $shipping_method = $shipping_method;
+
         if (!empty($shipCityId)) {
             $city_id = $shipCityId;
         }
@@ -433,6 +440,9 @@ class Checkout extends BaseController
         }
         if ($shipping_method == 'weight') {
             $charge = $this->weight_shipping->getSettings();
+        }
+        if ($shipping_method == 'zone_rate') {
+            $charge = $this->zone_rate_shipping->getSettings($city_id);
         }
 
         return $charge;

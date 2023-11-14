@@ -21,6 +21,12 @@ class ShippingMethod extends Seeder
                 'code' => 'zone',
                 'status' => '1',
             ],
+            [
+                'shipping_method_id' => 4,
+                'name' => 'Zone Rate Shipping',
+                'code' => 'zone_rate',
+                'status' => '1',
+            ],
         ];
         // Using Query Builder
         $this->db->table('cc_shipping_method')->insertBatch($data);

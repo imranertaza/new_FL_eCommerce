@@ -1063,3 +1063,14 @@ function display_category_with_parent($cate_id)
 
 
 }
+
+function zone_rate_type(){
+    $status = [
+        '1' => 'Weight',
+        '2' => 'Item',
+        '3' => 'Price',
+    ];
+    return $status;
+}
+
+
