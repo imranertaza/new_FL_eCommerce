@@ -984,7 +984,8 @@
                     $("#messAlt").fadeOut(1500);
                 }, 600);
                 $('#btn_' + rowid).hide();
-                checkout_data_calculate(response.cartTotal);
+                // checkout_data_calculate(response.cartTotal);
+                shippingCharge();
             }
         });
     }
@@ -1008,7 +1009,8 @@
                 setTimeout(function() {
                     $("#messAlt").fadeOut(1500);
                 }, 600);
-                checkout_data_calculate(response);
+                // checkout_data_calculate(response);
+                shippingCharge();
                 $(div).parent().parent().remove();
             }
         });
