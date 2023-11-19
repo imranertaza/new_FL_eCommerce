@@ -28,6 +28,7 @@
                             <h3 class="card-title">Product create</h3>
                         </div>
                         <div class="col-md-4" style="text-align: right;">
+                            <a href="<?php echo base_url('products');?>" class="btn btn-danger ">Back</a>
                             <button type="submit" class="btn btn-primary">Save</button>
                         </div>
                         <div class="col-md-12" style="margin-top: 10px">

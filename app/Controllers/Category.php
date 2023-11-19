@@ -31,9 +31,6 @@ class Category extends BaseController {
         $data['pager'] = $this->categoryproductsModel->pager;
         $data['links'] = $data['pager']->links('default','custome_link');
 
-//        print $this->categoryproductsModel->getLastQuery();
-//        die();
-
         $table = DB()->table('cc_product_category');
         $data['parent_Cat'] = $table->where('parent_id',$cat_id)->get()->getResult();
 

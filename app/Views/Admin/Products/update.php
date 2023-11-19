@@ -27,9 +27,9 @@
                             <h3 class="card-title">Product update</h3>
                         </div>
                         <div class="col-md-4" style="text-align: right;">
-                            
-                            <button type="submit" class="btn btn-primary">Update</button>
+                            <a href="<?php echo base_url('products');?>" class="btn btn-danger ">Back</a>
                             <a href="<?php echo base_url('product_create');?>" class="btn btn-success"> Add New</a>
+                            <button type="submit" class="btn btn-primary">Update</button>
                         </div>
                         <div class="col-md-12" id="message" style="margin-top: 10px">
                             <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
@@ -391,7 +391,7 @@
                                                 <input type="file" id="singleimage" name="description_image" class="form-control" >
                                                 <br>
                                                 <?php if (!empty($prod->description_image)){ ?>
-                                                    <?php echo image_view('uploads/products',$prod->product_id,$prod->description_image,'',$class='w-50');?>
+                                                    <?php echo image_view('uploads/products',$prod->product_id,$prod->description_image,'','img-w-h-100');?>
                                                 <?php } ?>
                                             </div>
                                         </div>
@@ -412,7 +412,7 @@
                                         <div class="col-md-8">
                                             <div class="row ">
                                                 <div class="col-md-2 img_view">
-                                                <?php echo image_view('uploads/products',$prod->product_id,'100_'.$prod->image,'noimage.png',$class='');?>
+                                                <?php echo image_view('uploads/products',$prod->product_id,'100_'.$prod->image,'noimage.png','img-w-h-100');?>
                                                 </div>
                                             </div>
                                             <div id="framesdef"></div><br>

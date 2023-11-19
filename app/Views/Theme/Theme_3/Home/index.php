@@ -19,8 +19,8 @@
                     </div>
                     <div class="swiper-pagination"></div>
                 </div>
-                <div class="side-banner d-flex flex-column flex-sm-row flex-lg-column gap-1">
-                    <div class="side-banner-box position-relative h-50">                        
+                <div class="side-banner d-flex flex-column flex-sm-row flex-sm-row flex-lg-column gap-1">
+                    <div class="side-banner-box position-relative h-50">
                         <?php
                             $side_baner_1 = get_lebel_by_value_in_theme_settings_with_theme('head_side_baner_1',$theme);
                             echo image_view('uploads/top_side_baner', '', $side_baner_1, 'noimage.png', 'img-fluid w-100 h-100');
@@ -333,7 +333,7 @@
     <div class="popular-category">
         <div class="container">
             <div class="text-center mb-5">
-                <h5>Category</h5>
+<!--                <h5>Category</h5>-->
                 <h2>Shop by Category</h2>
             </div>
             <div class="row row-cols-lg-5 row-cols-md-3 row-cols-sm-2 row-cols-1 gx-5">
