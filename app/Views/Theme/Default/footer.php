@@ -311,7 +311,7 @@
                 }, 600);
                 $('#btn_' + rowid).hide();
                 // checkout_data_calculate(response.cartTotal);
-                shippingCharge();
+                shippingCharge(response.cartTotal);
             }
         });
     }
@@ -336,7 +336,7 @@
                     $("#messAlt").fadeOut(1500);
                 }, 600);
                 // checkout_data_calculate(response);
-                shippingCharge();
+                shippingCharge(response);
                 $(div).parent().parent().remove();
             }
         });
@@ -393,25 +393,43 @@
     }
 
 
-    function shippingCharge(){
+    function shippingCharge(tA) {
         var paymethod = $('#shipping_method:checked').val();
         var cityId = $('#stateView').val();
-        var totalAmount = $('#totalamo').val();
+        if (tA == undefined) {
+            var totalAmount = $('#totalamo').val();
+        }else{
+            var totalAmount = tA;
+        }
         var shipcityId = $('#sh_stateView').val();
 
+
+        $('#totalamo').val(totalAmount);
+        $('#total').html('<?php echo $symbol; ?> ' + totalAmount);
+        $('#check_total').html('<?php echo $symbol; ?> ' + totalAmount);
+
+        <?php $symbol = get_lebel_by_value_in_settings('currency_symbol'); ?>
         $.ajax({
             method: "POST",
-            url: "<?php echo base_url('shipping_rate')?>",
-            data: {amount:totalAmount,city_id:cityId,shipCityId:shipcityId,paymethod:paymethod},
+            url: "<?php echo base_url('shipping_rate') ?>",
+            data: {
+                amount: totalAmount,
+                city_id: cityId,
+                shipCityId: shipcityId,
+                paymethod: paymethod
+            },
             dataType: 'json',
-            success: function(data){
+            success: function(data) {
                 var charge = Number(data.charge);
                 var total = Number(totalAmount);
-                var amount = total+charge;
+                var amount = Number(total) + Number(charge);
 
-                $('#chargeShip').html(data.charge);
-                $('#total').html(amount);
+                $('#chargeShip').html('<?php echo $symbol; ?> ' + data.charge);
+                $('#total').html('<?php echo $symbol; ?> ' + amount);
+                $('#totalamo').val(total);
+                $('#check_total').html('<?php echo $symbol; ?> ' + total);
                 $('#shipping_charge').val(charge);
+                $('#shipping_tot').val(amount);
             }
         });
     }
