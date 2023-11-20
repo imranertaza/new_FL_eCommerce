@@ -247,6 +247,7 @@ $routes->get('/reviews_delete/(:num)', 'Admin\Reviews::delete/$1');
 $routes->get('/bulk_edit_products', 'Admin\Advanced_products::index');
 $routes->post('/bulk_status_update', 'Admin\Advanced_products::bulk_status_update');
 $routes->post('/bulk_data_update', 'Admin\Advanced_products::bulk_data_update');
+$routes->post('/description_data_update', 'Admin\Advanced_products::description_data_update');
 $routes->post('/bulk_all_status_update', 'Admin\Advanced_products::bulk_all_status_update');
 $routes->post('/bulk_category_view', 'Admin\Advanced_products::bulk_category_view');
 $routes->post('/bulk_category_update', 'Admin\Advanced_products::bulk_category_update');
