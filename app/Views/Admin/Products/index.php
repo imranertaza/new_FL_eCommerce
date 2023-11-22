@@ -42,10 +42,10 @@
                     <thead>
                         <tr>
                             <th>Sl</th>
+                            <th>Image</th>
                             <th>Name</th>
                             <th>Model</th>
                             <th>Quantity</th>
-                            <th>Image</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -53,11 +53,11 @@
                         <?php $i=1; foreach ($product as $val){ ?>
                         <tr>
                             <td><?php echo $i++;?></td>
+                            <td><?php echo image_view('uploads/products',$val->product_id,'100_'.$val->image,'noimage.png','img-w-h-100');?></td>
                             <td><?php echo $val->name;?></td>
                             <td><?php echo $val->model;?></td>
                             <td> <?php echo $val->quantity;?></td>
-                            <td><?php echo image_view('uploads/products',$val->product_id,'100_'.$val->image,'noimage.png',$class='');?>
-                            </td>
+
                             <td>
                                 <a href="<?php echo base_url('product_update/'.$val->product_id)?>"
                                     class="btn btn-sm btn-info">Edit</a>
@@ -71,10 +71,10 @@
                     <tfoot>
                         <tr>
                             <th>Sl</th>
+                            <th>Image</th>
                             <th>Name</th>
                             <th>Model</th>
                             <th>Quantity</th>
-                            <th>Image</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>

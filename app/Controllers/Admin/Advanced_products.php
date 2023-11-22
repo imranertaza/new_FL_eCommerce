@@ -36,7 +36,11 @@ class Advanced_products extends BaseController
 
 
             $table = DB()->table('cc_products');
+            $table->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id');
             $data['product'] = $table->get()->getResult();
+
+//            $table = DB()->table('cc_products');
+//            $data['product'] = $table->get()->getResult();
 
             //$perm = array('create','read','update','delete','mod_access');
             $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
@@ -98,6 +102,29 @@ class Advanced_products extends BaseController
         print '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
     }
 
+    public function description_data_update(){
+        $product_desc_id = $this->request->getPost('product_desc_id');
+        $meta_title = $this->request->getPost('meta_title');
+        $meta_description = $this->request->getPost('meta_description');
+        $meta_keyword = $this->request->getPost('meta_keyword');
+
+        if (!empty($meta_title)) {
+            $data['meta_title'] = $meta_title;
+        }
+        if (!empty($meta_description)) {
+            $data['meta_description'] = $meta_description;
+        }
+        if (!empty($meta_keyword)) {
+            $data['meta_keyword'] = $meta_keyword;
+        }
+
+
+        $table = DB()->table('cc_product_description');
+        $table->where('product_desc_id', $product_desc_id)->update($data);
+
+        print '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+    }
+
     public function bulk_all_status_update()
     {
         $product_id = $this->request->getPost('product_id');
@@ -116,32 +143,36 @@ class Advanced_products extends BaseController
     {
         $product_id = $this->request->getPost('product_id');
         $table = DB()->table('cc_product_category');
-        $prodCat = $table->get()->getResult();
+        $data['prodCat'] = $table->get()->getResult();
 
         $tablecat = DB()->table('cc_product_to_category');
-        $prodCatSel = $tablecat->where('product_id', $product_id)->get()->getResult();
+        $data['prodCatSel'] = $tablecat->where('product_id', $product_id)->get()->getResult();
 
-        $view = '';
-        $view .= '<div class="form-group category">
-            <label>Category <span class="requi">*</span></label>
-            <select class="select2bs4" name="categorys[]" multiple="multiple" data-placeholder="Select a State" style="width: 100%;" required>';
-        $i = 1;
-        foreach ($prodCat as $key => $cat) {
-            $pName = (!empty($cat->parent_id)) ? get_data_by_id('category_name', 'cc_product_category', 'prod_cat_id', $cat->parent_id) . '->' : '';
-            foreach ($prodCatSel as $valC) {
-                $selec = ($valC->category_id == $cat->prod_cat_id) ? 'selected' : '';
-            };
-            $view .= '<option value="' . $cat->prod_cat_id . '"';
-            foreach ($prodCatSel as $valC) {
-                $view .= ($valC->category_id == $cat->prod_cat_id) ? 'selected' : '';
-            };
-            $view .= ' > ' . $pName . $cat->category_name . '</option>';
-        }
+        $data['product_id'] = $product_id;
 
-        $view .= '</select>
-            </div><input type="hidden" name="product_id" class="form-control mb-2" value="' . $product_id . '" >';
+//        $view = '';
+//        $view .= '<div class="form-group category">
+//            <label>Category <span class="requi">*</span></label>
+//            <select class="select2bs4" name="categorys[]" multiple="multiple" data-placeholder="Select a State" style="width: 100%;" required>';
+//        $i = 1;
+//        foreach ($data['prodCat'] as $key => $cat) {
+//            $pName = (!empty($cat->parent_id)) ? get_data_by_id('category_name', 'cc_product_category', 'prod_cat_id', $cat->parent_id) . '->' : '';
+//
+//            $view .= '<option value="' . $cat->prod_cat_id . '"';
+//            foreach ($data['prodCatSel'] as $valC) {
+//                $view .= ($valC->category_id == $cat->prod_cat_id) ? 'selected' : '';
+//            };
+//            $view .= ' > ' . $pName . $cat->category_name . '</option>';
+//
+////            $view .= '<option value="'.$cat->prod_cat_id.'"  >'.$cat->category_name.'</option>';
+//        }
+//
+//        $view .= '</select>
+//            </div><input type="hidden" name="product_id" class="form-control mb-2" value="' . $product_id . '" >';
+//
+//        print $view;
 
-        print $view;
+        echo view('Admin/Advanced_products/category', $data);
     }
 
     public function bulk_category_update()

@@ -966,7 +966,7 @@ function get_category_id_by_product_show_home_slide($category_id)
 {
     $table = DB()->table('cc_products');
     $table->join('cc_product_to_category', 'cc_product_to_category.product_id = cc_products.product_id')->where('cc_products.status', 'Active');
-    $result = $table->where('cc_product_to_category.category_id', $category_id)->get()->getResult();
+    $result = $table->where('cc_product_to_category.category_id', $category_id)->orderBy('cc_products.product_id','DESC')->get()->getResult();
 
     $view = '';
     $count = 0;

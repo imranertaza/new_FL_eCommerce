@@ -69,3 +69,14 @@
     margin-top: 5px;
     border: 1px solid #ced4da;
 }
+.img-w-h-100{
+    width: 100px !important;
+    height: 100px !important;
+}
+
+.dataTables_length{
+    /*font-size: 20px !important;*/
+}
+.dataTables_length select{
+    min-width: 100px !important;
+}
