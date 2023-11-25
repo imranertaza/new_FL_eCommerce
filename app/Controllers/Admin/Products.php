@@ -520,6 +520,8 @@ class Products extends BaseController
             $product_featured = $this->request->getPost('product_featured');
             if ($product_featured == 'on'){
                 $proData['featured'] = '1';
+            }else{
+                $proData['featured'] = '0';
             }
 
             $proTable = DB()->table('cc_products');

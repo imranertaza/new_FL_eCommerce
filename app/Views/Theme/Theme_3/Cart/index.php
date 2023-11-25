@@ -68,12 +68,14 @@
 
                         <tr>
                             <td colspan="4" style="border-right:0">
+                                <?php if (modules_key_by_access('coupon') == '1') { ?>
                                 <form action="<?php echo base_url('checkout_coupon_action') ?>" method="post">
                                     <div class="d-flex coupon">
                                         <input type="text" class="form-control w-auto rounded-0 me-1" name="coupon" placeholder="Coupon Code" required>
                                         <input class="btn bg-custom-color rounded-0 px-4 text-white" type="submit" name="submit" value="Apply Coupon">
                                     </div>
                                 </form>
+                                <?php } ?>
                             </td>
                             <td class="border-end-0 mo-text-center" style="text-align:left;">
                                 <?php $disc = 0;
