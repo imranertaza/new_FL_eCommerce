@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo get_lebel_by_value_in_settings('store_name'); ?></title>
+    <title><?php echo $title;?></title>
+    <meta name="description" content="<?php echo $description;?>">
+    <meta name="keywords" content="<?php echo $keywords;?>">
     <link rel="shortcut icon" href="<?php echo base_url() ?>/favicon.ico">
 
     <link rel="stylesheet" href="<?php echo base_url() ?>/assets/bootstrap.min.css">

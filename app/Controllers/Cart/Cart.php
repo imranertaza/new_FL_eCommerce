@@ -17,6 +17,10 @@ class Cart extends BaseController {
 
     public function index()
     {
+        $data['keywords'] = 'Cart Page';
+        $data['description'] = 'Cart Page';
+        $data['title'] = 'Cart Page';
+
         $data['page_title'] = 'Cart';
         echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
         echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Cart/index');

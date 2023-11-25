@@ -55,20 +55,36 @@
                                 </select>
                             </div>
 
+                            <div class="form-group">
+                                <label>Short Description</label>
+                                <textarea name="short_des" class="form-control" placeholder="Short Description" ><?php echo $page->short_des;?></textarea>
+                            </div>
 
                             <input type="hidden" name="page_id" value="<?php echo $page->page_id;?>" >
                             <button class="btn btn-primary" >Update</button>
                             <a href="<?php echo base_url('page_list')?>" class="btn btn-danger" >Back</a>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Short Description</label>
-                                <textarea name="short_des" class="form-control" placeholder="Short Description" ><?php echo $page->short_des;?></textarea>
-                            </div>
+
 
                             <div class="form-group">
                                 <label>Page Description</label>
                                 <textarea name="page_description" id="editor" rows="4" class="form-control" placeholder="Page Description" ><?php echo $page->page_description;?></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Meta Title</label>
+                                <input type="text" name="meta_title" class="form-control" value="<?php echo $page->meta_title;?>" placeholder="Meta Title">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Meta Keyword</label>
+                                <input type="text" name="meta_keyword" class="form-control" value="<?php echo $page->meta_keyword;?>" placeholder="Meta Keyword">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Meta Description</label>
+                                <textarea name="meta_description" rows="3" class="form-control" placeholder="Meta Description"><?php echo $page->meta_description;?></textarea>
                             </div>
 
 <!--                            <div class="form-group">-->

@@ -31,6 +31,9 @@ class Order extends BaseController
 
             $data['menu_active'] = 'order';
             $data['page_title'] = 'My Order';
+            $data['keywords'] = 'Customer Order';
+            $data['description'] = 'Customer Order';
+            $data['title'] = 'Customer Order';
             echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
             echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Customer/menu');
             echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Customer/order',$data);
@@ -51,6 +54,10 @@ class Order extends BaseController
 
             $data['menu_active'] = 'order';
             $data['page_title'] = 'Invoice';
+            $data['keywords'] = 'Customer Invoice';
+            $data['description'] = 'Customer Invoice';
+            $data['title'] = 'Customer Invoice';
+
             echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
             echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Customer/menu');
             echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Customer/invoice',$data);

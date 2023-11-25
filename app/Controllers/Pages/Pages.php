@@ -22,6 +22,10 @@ class Pages extends BaseController {
         $data['page_title'] = $page->page_title;
         $data['pageData'] = $page;
 
+        $data['keywords'] = $page->meta_keyword;
+        $data['description'] = $page->meta_description;
+        $data['title'] = $page->meta_title;
+
         echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
         if (!empty($page->temp)){
             echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Page/'.$page->temp);

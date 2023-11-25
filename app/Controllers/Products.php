@@ -124,6 +124,12 @@ class Products extends BaseController {
 
         $data['prod_cat_id'] = $cat_id;
         $data['page_title'] = 'Category products';
+
+        $data['keywords'] = 'Category Search';
+        $data['description'] = 'Category Search';
+        $data['title'] = (!empty($cat_id))?get_data_by_id('category_name','cc_product_category','prod_cat_id',$cat_id):'Products Search';
+
+
         echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
         echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Category/index',$data);
         echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/footer', $data);

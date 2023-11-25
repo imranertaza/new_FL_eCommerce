@@ -26,6 +26,9 @@ class Customer_ledger extends BaseController
             $table = DB()->table('cc_customer_ledger');
             $data['ledger'] = $table->where('customer_id',$this->session->cusUserId)->get()->getResult();
 
+            $data['keywords'] = 'Customer Ledger';
+            $data['description'] = 'Customer Ledger';
+            $data['title'] = 'Customer Ledger';
 
             $data['page_title'] = 'Ledger';
             $data['menu_active'] = 'ledger';

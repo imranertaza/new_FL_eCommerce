@@ -34,6 +34,9 @@ class Dashboard extends BaseController
                 $data['orderItem'] = $tableItem->where('order_id', $order->order_id)->get()->getResult();
             }
 
+            $data['keywords'] = 'Customer Dashboard';
+            $data['description'] = 'Customer Dashboard';
+            $data['title'] = 'Customer Dashboard';
 
             $data['page_title'] = 'Dashboard';
             $data['menu_active'] = 'dashboard';
