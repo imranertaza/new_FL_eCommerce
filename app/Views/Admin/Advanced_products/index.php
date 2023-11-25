@@ -147,7 +147,7 @@
                             </tr>
                         </thead>
                         <!-- row_hide -->
-                        <tbody>
+                        <tbody id="tbody">
                             <?php $i = 1;
                         $j = 1;
                         $m = 1;
