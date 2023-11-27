@@ -614,9 +614,10 @@ function email_send($to, $subject, $message)
 
     $email->initialize($config);
 
+    $titleStore = get_lebel_by_value_in_settings('store_name');
     $form = get_lebel_by_value_in_settings('mail_address');
 
-    $email->setFrom($form, 'Amazing Gadgets');
+    $email->setFrom($form, $titleStore);
     $email->setTo($to);
 
     $email->setSubject($subject);
@@ -651,15 +652,19 @@ function order_email_template($orderId)
     $item = $tableItem->where('order_id', $orderId)->get()->getResult();
     $logoImg = get_lebel_by_value_in_theme_settings('side_logo');
     $logo = image_view('uploads/logo', '', $logoImg, 'noimage.png', 'logo-css');
+
+    $titleStore = get_lebel_by_value_in_settings('store_name');
+
+    $paymentMet = get_data_by_id('name','cc_payment_method','payment_method_id',$val->payment_method);
+
     $view = '';
     $view .= "<div style='width:680px'><style> .logo-css{ margin-bottom:20px;border:none; } </style>
-    <a href='#' title='Amazing Gadgets' target='_blank' >
+    <a href='#' title='$titleStore' target='_blank' >
         $logo
     </a>
     <p style='margin-top:0px;margin-bottom:20px'>
-        Thank you for your interest in
-        <span class='il'>Amazing</span>
-        <span class='il'>Gadgets</span> products. Your
+        Thank you for your interest in        
+        <span class='il'> $titleStore </span> products. Your
         <span class='il'>order</span>
         has been received and will be processed once payment has been confirmed.
     </p>
@@ -677,7 +682,7 @@ function order_email_template($orderId)
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
                 <b><span class='il'>Order</span> ID:</b> $val->order_id<br>
                 <b>Date Added:</b> $val->createdDtm<br>
-                <b>Payment Method:</b> $val->payment_method<br>
+                <b>Payment Method:</b> $paymentMet<br>
                 <b>Shipping Method:</b> $val->shipping_method
             </td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
@@ -746,7 +751,7 @@ function order_email_template($orderId)
         $total = currency_symbol($row->final_price);
         $view .= "<tr>
             <td style='border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
-            <a href='$url' target='_blank' title='GUCCI MEN BUSINESS SHOE A02 350' style='padding:1px;border:1px solid #dddddd' >
+            <a href='$url' target='_blank' title='".$proName."' style='padding:1px;border:1px solid #dddddd' >
                     $imgView
             </a>
             </td>
@@ -815,6 +820,7 @@ function success_email_template($title, $message, $url)
     $address = get_lebel_by_value_in_settings('address');
     $logoImg = get_lebel_by_value_in_theme_settings('side_logo');
     $logo = image_view('uploads/logo', '', $logoImg, 'noimage.png', 'logo-css');
+    $titleStore = get_lebel_by_value_in_settings('store_name');
 
     $fbIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="30px" height="30px"><path fill="#039be5" d="M24 5A19 19 0 1 0 24 43A19 19 0 1 0 24 5Z"/><path fill="#fff" d="M26.572,29.036h4.917l0.772-4.995h-5.69v-2.73c0-2.075,0.678-3.915,2.619-3.915h3.119v-4.359c-0.548-0.074-1.707-0.236-3.897-0.236c-4.573,0-7.254,2.415-7.254,7.917v3.323h-4.701v4.995h4.701v13.729C22.089,42.905,23.032,43,24,43c0.875,0,1.729-0.08,2.572-0.194V29.036z"/></svg>';
     $twi = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="30px" height="30px"><path fill="#03A9F4" d="M42,12.429c-1.323,0.586-2.746,0.977-4.247,1.162c1.526-0.906,2.7-2.351,3.251-4.058c-1.428,0.837-3.01,1.452-4.693,1.776C34.967,9.884,33.05,9,30.926,9c-4.08,0-7.387,3.278-7.387,7.32c0,0.572,0.067,1.129,0.193,1.67c-6.138-0.308-11.582-3.226-15.224-7.654c-0.64,1.082-1,2.349-1,3.686c0,2.541,1.301,4.778,3.285,6.096c-1.211-0.037-2.351-0.374-3.349-0.914c0,0.022,0,0.055,0,0.086c0,3.551,2.547,6.508,5.923,7.181c-0.617,0.169-1.269,0.263-1.941,0.263c-0.477,0-0.942-0.054-1.392-0.135c0.94,2.902,3.667,5.023,6.898,5.086c-2.528,1.96-5.712,3.134-9.174,3.134c-0.598,0-1.183-0.034-1.761-0.104C9.268,36.786,13.152,38,17.321,38c13.585,0,21.017-11.156,21.017-20.834c0-0.317-0.01-0.633-0.025-0.945C39.763,15.197,41.013,13.905,42,12.429"/></svg>';
@@ -841,7 +847,7 @@ function success_email_template($title, $message, $url)
             <center> <a href='#'>$fbIcon</a> <a href='#'>$twi</a> <a href='#'>$link</a></center>
             <center> <p>$address</p></center>
             <center><hr style='width:300px;'></center>
-            <center> <p>© 2023 Amazing Gadgets. All rights reserved.</p></center>
+            <center> <p>© 2023 $titleStore || All rights reserved.</p></center>
         </div>
 
     </div>
