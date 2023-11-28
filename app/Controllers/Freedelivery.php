@@ -17,8 +17,8 @@ class Freedelivery extends BaseController {
         $table = DB()->table('products');
         $data['products'] = $table->where('status','Active')->get()->getResult();
 
-        $data['keywords'] = 'Free delivery';
-        $data['description'] = 'Free delivery';
+        $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
+        $data['description'] = get_lebel_by_value_in_settings('meta_description');
         $data['title'] = 'Free delivery';
 
         $data['page_title'] = 'About Us';

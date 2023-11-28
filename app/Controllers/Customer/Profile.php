@@ -34,9 +34,10 @@ class Profile extends BaseController
 
             $data['menu_active'] = 'profile';
             $data['page_title'] = 'Profile';
-            $data['keywords'] = 'Customer Profile';
-            $data['description'] = 'Customer Profile';
-            $data['title'] = 'Customer Profile';
+
+            $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
+            $data['description'] = get_lebel_by_value_in_settings('meta_description');
+            $data['title'] = 'Profile';
 
             echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
             echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Customer/menu');

@@ -32,8 +32,8 @@ class Search extends BaseController {
         $data['populerCat'] = $tabPopuler->limit(12)->get()->getResult();
 
 
-        $data['keywords'] = 'Search';
-        $data['description'] = 'Search';
+        $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
+        $data['description'] = get_lebel_by_value_in_settings('meta_description');
         $data['title'] = 'Search';
 
         $data['home_menu'] = true;
@@ -60,8 +60,8 @@ class Search extends BaseController {
         $data['keywordTop'] = $keywordTop;
         $data['top_category'] = $top_category;
 
-        $data['keywords'] = 'Search';
-        $data['description'] = 'Search';
+        $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
+        $data['description'] = get_lebel_by_value_in_settings('meta_description');
         $data['title'] = 'Search';
 
         $data['page_title'] = 'Search';

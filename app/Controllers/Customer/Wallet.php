@@ -31,9 +31,11 @@ class Wallet extends BaseController
 
             $data['page_title'] = 'Wallet';
             $data['menu_active'] = 'wallet';
-            $data['keywords'] = 'Customer Wallet';
-            $data['description'] = 'Customer Wallet';
-            $data['title'] = 'Customer Wallet';
+
+            $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
+            $data['description'] = get_lebel_by_value_in_settings('meta_description');
+            $data['title'] = 'Wallet';
+
             echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/header', $data);
             echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/Customer/menu');
             echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/Customer/walllet');
@@ -55,9 +57,10 @@ class Wallet extends BaseController
 
             $data['page_title'] = 'Dashboard';
             $data['menu_active'] = 'dashboard';
-            $data['keywords'] = 'Customer Add Found';
-            $data['description'] = 'Customer Add Found';
-            $data['title'] = 'Customer Add Found';
+
+            $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
+            $data['description'] = get_lebel_by_value_in_settings('meta_description');
+            $data['title'] = 'Account Add Found';
 
             echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/header', $data);
             echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/Customer/menu');

@@ -34,8 +34,8 @@ class Category extends BaseController {
         $table = DB()->table('cc_product_category');
         $data['parent_Cat'] = $table->where('parent_id',$cat_id)->get()->getResult();
 
-        $data['keywords'] = 'Category page';
-        $data['description'] = 'Category page';
+        $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
+        $data['description'] = get_lebel_by_value_in_settings('meta_description');
         $data['title'] = get_data_by_id('category_name','cc_product_category','prod_cat_id',$cat_id);
 
         $data['prod_cat_id'] = $cat_id;

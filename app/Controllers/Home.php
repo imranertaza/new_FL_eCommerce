@@ -79,9 +79,9 @@ class Home extends BaseController {
         $data['home_menu'] = true;
         $data['theme'] = get_lebel_by_value_in_settings('Theme');
 
-        $data['keywords'] = get_lebel_by_value_in_settings('store_name');
-        $data['description'] = get_lebel_by_value_in_settings('store_name');
-        $data['title'] = get_lebel_by_value_in_settings('store_name');
+        $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
+        $data['description'] = get_lebel_by_value_in_settings('meta_description');
+        $data['title'] = !empty(get_lebel_by_value_in_settings('meta_title'))?get_lebel_by_value_in_settings('meta_title'):get_lebel_by_value_in_settings('store_name');
 
         echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
         echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Home/index',$data);

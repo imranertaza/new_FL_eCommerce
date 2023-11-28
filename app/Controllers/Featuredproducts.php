@@ -23,8 +23,8 @@ class Featuredproducts extends BaseController {
         $data['pager'] = $this->productsModel->pager;
         $data['links'] = $data['pager']->links('default','custome_link');
 
-        $data['keywords'] = 'Featured Products';
-        $data['description'] = 'Featured Products';
+        $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
+        $data['description'] = get_lebel_by_value_in_settings('meta_description');
         $data['title'] = 'Featured Products';
 
         $data['page_title'] = 'Featured Products';
