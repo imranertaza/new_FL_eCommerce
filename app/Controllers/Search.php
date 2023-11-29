@@ -31,6 +31,11 @@ class Search extends BaseController {
         $tabPopuler = DB()->table('product_category_popular');
         $data['populerCat'] = $tabPopuler->limit(12)->get()->getResult();
 
+
+        $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
+        $data['description'] = get_lebel_by_value_in_settings('meta_description');
+        $data['title'] = 'Search';
+
         $data['home_menu'] = true;
         echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
         echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Home/index',$data);
@@ -54,6 +59,10 @@ class Search extends BaseController {
 
         $data['keywordTop'] = $keywordTop;
         $data['top_category'] = $top_category;
+
+        $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
+        $data['description'] = get_lebel_by_value_in_settings('meta_description');
+        $data['title'] = 'Search';
 
         $data['page_title'] = 'Search';
         echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);

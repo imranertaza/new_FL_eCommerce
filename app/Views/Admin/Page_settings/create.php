@@ -57,24 +57,40 @@
 
 
 
-                            <button class="btn btn-primary" >Create</button>
-                            <a href="<?php echo base_url('page_list')?>" class="btn btn-danger" >Back</a>
-                        </div>
-                        <div class="col-md-6">
+
                             <div class="form-group">
                                 <label>Short Description</label>
                                 <textarea name="short_des" class="form-control" placeholder="Short Description" ></textarea>
                             </div>
+
+
+                            <button class="btn btn-primary" >Create</button>
+                            <a href="<?php echo base_url('page_list')?>" class="btn btn-danger" >Back</a>
+                        </div>
+                        <div class="col-md-6">
+
+
+
 
                             <div class="form-group">
                                 <label>Page Description</label>
                                 <textarea name="page_description" id="editor" rows="4" class="form-control" placeholder="Page Description" ></textarea>
                             </div>
 
-<!--                            <div class="form-group">-->
-<!--                                <label>Image</label>-->
-<!--                                <input type="file" name="f_image" class="form-control" placeholder="image" >-->
-<!--                            </div>-->
+                            <div class="form-group">
+                                <label>Meta Title</label>
+                                <input type="text" name="meta_title" class="form-control" placeholder="Meta Title">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Meta Keyword</label>
+                                <input type="text" name="meta_keyword" class="form-control" placeholder="Meta Keyword">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Meta Description</label>
+                                <textarea name="meta_description" rows="3" class="form-control" placeholder="Meta Description"></textarea>
+                            </div>
                         </div>
                     </div>
                 </form>

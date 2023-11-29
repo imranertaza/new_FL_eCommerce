@@ -85,6 +85,11 @@ class Settings extends BaseController
         $data['tiktok_url'] = $this->request->getPost('tiktok_url');
         $data['instagram_url'] = $this->request->getPost('instagram_url');
 
+
+        $data['meta_title'] = $this->request->getPost('meta_title');
+        $data['meta_keyword'] = $this->request->getPost('meta_keyword');
+        $data['meta_description'] = $this->request->getPost('meta_description');
+
 //        if (!empty($_FILES['store_logo']['name'])) {
 //            $target_dir = FCPATH . '/uploads/store/';
 //            if (!file_exists($target_dir)) {

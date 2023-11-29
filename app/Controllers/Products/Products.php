@@ -69,6 +69,10 @@ class Products extends BaseController {
 
         $data['option'] = $this->optionView($product_id);
 
+        $data['keywords'] = $data['products']->meta_keyword;
+        $data['description'] = $data['products']->meta_description;
+        $data['title'] = $data['products']->meta_title;
+
         $data['page_title'] = 'Product Detail';
         echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
         echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Product/detail');

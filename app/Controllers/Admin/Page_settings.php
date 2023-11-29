@@ -80,6 +80,9 @@ class Page_settings extends BaseController
         $data['temp'] = !empty($this->request->getPost('temp'))?$this->request->getPost('temp'):null;
         $data['short_des'] = !empty($this->request->getPost('short_des'))?$this->request->getPost('short_des'):null;
         $data['page_description'] = !empty($this->request->getPost('page_description'))?$this->request->getPost('page_description'):null;
+        $data['meta_title'] = $this->request->getPost('meta_title');
+        $data['meta_keyword'] = $this->request->getPost('meta_keyword');
+        $data['meta_description'] = $this->request->getPost('meta_description');
 
         $this->validation->setRules([
             'page_title' => ['label' => 'Page Title', 'rules' => 'required'],
@@ -150,6 +153,10 @@ class Page_settings extends BaseController
         $data['temp'] = !empty($this->request->getPost('temp'))?$this->request->getPost('temp'):null;
         $data['short_des'] = !empty($this->request->getPost('short_des'))?$this->request->getPost('short_des'):null;
         $data['page_description'] = !empty($this->request->getPost('page_description'))?$this->request->getPost('page_description'):null;
+
+        $data['meta_title'] = $this->request->getPost('meta_title');
+        $data['meta_keyword'] = $this->request->getPost('meta_keyword');
+        $data['meta_description'] = $this->request->getPost('meta_description');
 
         $this->validation->setRules([
             'page_title' => ['label' => 'Page Title', 'rules' => 'required'],
