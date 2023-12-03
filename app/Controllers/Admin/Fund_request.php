@@ -5,14 +5,14 @@ namespace App\Controllers\Admin;
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
 
-class Found_request extends BaseController
+class Fund_request extends BaseController
 {
 
     protected $validation;
     protected $session;
     protected $crop;
     protected $permission;
-    private $module_name = 'Found_request';
+    private $module_name = 'Fund_request';
 
     public function __construct()
     {
@@ -30,7 +30,7 @@ class Found_request extends BaseController
             return redirect()->to(site_url('admin'));
         } else {
 
-            $table = DB()->table('cc_found_request');
+            $table = DB()->table('cc_fund_request');
             $data['found_request'] = $table->get()->getResult();
             
             //$perm = array('create','read','update','delete','mod_access');
@@ -41,7 +41,7 @@ class Found_request extends BaseController
             echo view('Admin/header');
             echo view('Admin/sidebar');
             if (isset($data['mod_access']) and $data['mod_access'] == 1) {
-                echo view('Admin/Found_request/index', $data);
+                echo view('Admin/Fund_request/index', $data);
             } else {
                 echo view('Admin/no_permission');
             }
@@ -49,16 +49,16 @@ class Found_request extends BaseController
         }
     }
 
-    public function found_action() {
-        $found_request_id = $this->request->getPost('found_request_id');
+    public function fund_action() {
+        $fund_request_id = $this->request->getPost('fund_request_id');
         $data['status'] = $this->request->getPost('status');
 
-        $table = DB()->table('cc_found_request');
-        $table->where('found_request_id',$found_request_id)->update($data);
+        $table = DB()->table('cc_fund_request');
+        $table->where('fund_request_id',$fund_request_id)->update($data);
 
         if($data['status'] == 'Complete'){
-            $tabledata = DB()->table('cc_found_request');
-            $row = $tabledata->where('found_request_id',$found_request_id)->get()->getRow();
+            $tabledata = DB()->table('cc_fund_request');
+            $row = $tabledata->where('fund_request_id',$fund_request_id)->get()->getRow();
 
             $oldBalance = get_data_by_id('balance','cc_customer','customer_id',$row->customer_id);
             $newBalance = $oldBalance + $row->amount;
@@ -68,7 +68,7 @@ class Found_request extends BaseController
             $tableCus->where('customer_id',$row->customer_id)->update($cusData);
 
             $cusLedg['customer_id'] = $row->customer_id;
-            $cusLedg['found_request_id'] = $found_request_id;
+            $cusLedg['fund_request_id'] = $fund_request_id;
             $cusLedg['payment_method_id'] = $row->payment_method_id;
             $cusLedg['particulars'] = 'Deposit balance';
             $cusLedg['trangaction_type'] = 'Cr.';

@@ -207,7 +207,7 @@
                 <?php } ?>
 
                 <?php
-                $modArrayPur = ['Found_request'];
+                $modArrayPur = ['Fund_request'];
                 $menuAccessPur = all_menu_permission_check($modArrayPur, $adRoleId);
                 if ($menuAccessPur == true) {
                 ?>

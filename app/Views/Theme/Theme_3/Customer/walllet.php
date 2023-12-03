@@ -10,7 +10,7 @@
                         </div>
                         <div class="col-md-12 px-5 text-center">
 
-                            <a href="<?php echo base_url('add_founds');?>" class="btn btn-primary" style="float: right;">Add founds</a>
+                            <a href="<?php echo base_url('add_funds');?>" class="btn btn-primary" style="float: right;">Add funds</a>
                             <div class="card" style="width: 10rem;">
                                 <div class="card-body text-center">
                                     <h5 class="card-title">My Balance</h5>
@@ -39,7 +39,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php $i=1; foreach($found_request as $req ){ ?>
+                                    <?php $i=1; foreach($fund_request as $req ){ ?>
                                     <tr>
                                         <td><?php echo $i++?></td>
                                         <td><?php echo get_data_by_id('name','cc_payment_method','payment_method_id',$req->payment_method_id); ?></td>

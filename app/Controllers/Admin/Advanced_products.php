@@ -108,14 +108,16 @@ class Advanced_products extends BaseController
         $meta_description = $this->request->getPost('meta_description');
         $meta_keyword = $this->request->getPost('meta_keyword');
 
-        if (!empty($meta_title)) {
-            $data['meta_title'] = $meta_title;
+        if (isset($meta_title)) {
+            $data['meta_title'] = !empty($meta_title)?$meta_title:null;
         }
-        if (!empty($meta_description)) {
-            $data['meta_description'] = $meta_description;
+
+        if (isset($meta_description)) {
+            $data['meta_description'] = !empty($meta_description)?$meta_description:null;
         }
-        if (!empty($meta_keyword)) {
-            $data['meta_keyword'] = $meta_keyword;
+
+        if (isset($meta_keyword)) {
+            $data['meta_keyword'] = !empty($meta_keyword)?$meta_keyword:null;
         }
 
 

@@ -27,6 +27,8 @@ class Products extends BaseController {
         $data['keywordTop'] = $keyword;
 
 
+        $lemit = !empty($this->request->getGetPost('show'))?$this->request->getGetPost('show'):'9';
+
         $shortBy = !empty($this->request->getGetPost('shortBy'))?$this->request->getGetPost('shortBy'):'';
         if ($shortBy == 'price_asc'){
             $shortBy = "`cc_products.price` ASC";
@@ -99,13 +101,14 @@ class Products extends BaseController {
         $searchModel = empty($cat_id) ? 'productsSearchModel' : 'categoryproductsModel';
 
         if(empty($this->request->getGetPost('option'))) {
-            $data['products'] = $this->$searchModel->where($where)->query()->orderBy($shortBy)->paginate(9);
+            $data['products'] = $this->$searchModel->where($where)->query()->orderBy($shortBy)->paginate($lemit);
         }else{
-            $data['products'] = $this->$searchModel->where($where)->all_join()->orderBy($shortBy)->paginate(9);
+            $data['products'] = $this->$searchModel->where($where)->all_join()->orderBy($shortBy)->paginate($lemit);
         }
 
+
         if (!empty($keyword)){
-            $data['products'] = $this->$searchModel->where($where)->like('cc_products.name',$keyword)->query()->orderBy($shortBy)->paginate(9);
+            $data['products'] = $this->$searchModel->where($where)->like('cc_products.name',$keyword)->query()->orderBy($shortBy)->paginate($lemit);
         }
 
         $data['pager'] = $this->$searchModel->pager;
