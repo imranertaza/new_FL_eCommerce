@@ -51,6 +51,10 @@
                                 Id </label>
                         </div>
                         <div class="form-check form-check-inline">
+                            <input type="checkbox" name="image" class="form-check-input" onclick="bulk_status('image')" id="check_10" checked="">
+                            <label class="form-check-label" for="check_10"> Image </label>
+                        </div>
+                        <div class="form-check form-check-inline">
                             <input type="checkbox" name="name" class="form-check-input" onclick="bulk_status('name')"
                                 id="check_2" checked="">
                             <label class="form-check-label" for="check_2">
@@ -127,6 +131,7 @@
                             <tr>
                                 <th class="colum_id row_show ">
                                     Id</th>
+                                <th class="colum_image row_show "> Image</th>
                                 <th class="colum_name row_show ">
                                     Name</th>
                                 <th class="colum_model row_show ">
@@ -165,8 +170,8 @@
                         foreach ($product as $key => $val) {
                         ?>
                             <tr>
-                                <td class="colum_id row_show ">
-                                    <?php echo $val->product_id; ?></td>
+                                <td class="colum_id row_show "> <?php echo $val->product_id; ?></td>
+                                <td class="colum_image row_show "> <?php echo image_view('uploads/products',$val->product_id,'100_'.$val->image,'noimage.png',$class='img-100-100');?></td>
                                 <td class="colum_name row_show ">
                                     <p
                                         onclick="updateFunction('<?php echo $val->product_id; ?>','name','<?php echo $val->name; ?>','view_name_<?php echo $j++; ?>','bulkForm_name_<?php echo $val->product_id; ?>')">

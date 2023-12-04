@@ -729,7 +729,7 @@ function submitFormBulk(formID) {
 
 function checkShowHideRow() {
 
-    var fields = ['id', 'name', 'model', 'quantity', 'category', 'price', 'status', 'featured','meta_title','meta_keyword','meta_description', 'action'];
+    var fields = ['id','image', 'name', 'model', 'quantity', 'category', 'price', 'status', 'featured','meta_title','meta_keyword','meta_description', 'action'];
 
     for (let i = 0; i < fields.length; ++i) {
         if ($('input[name="' + fields[i] + '"]').is(':checked')) {
