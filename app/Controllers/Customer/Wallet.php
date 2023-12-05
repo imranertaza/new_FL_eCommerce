@@ -23,8 +23,8 @@ class Wallet extends BaseController
         if (!isset($isLoggedInCustomer) || $isLoggedInCustomer != TRUE) {
             return redirect()->to(site_url('Login'));
         } else {
-            $table = DB()->table('cc_found_request');
-            $data['found_request'] = $table->where('customer_id', $this->session->cusUserId)->get()->getResult();
+            $table = DB()->table('cc_fund_request');
+            $data['fund_request'] = $table->where('customer_id', $this->session->cusUserId)->get()->getResult();
 
             $tableBal = DB()->table('cc_customer');
             $data['cust'] = $tableBal->where('customer_id', $this->session->cusUserId)->get()->getRow();
@@ -43,14 +43,14 @@ class Wallet extends BaseController
         }
     }
 
-    public function add_founds()
+    public function add_funds()
     {
         $isLoggedInCustomer = $this->session->isLoggedInCustomer;
         if (!isset($isLoggedInCustomer) || $isLoggedInCustomer != TRUE) {
             return redirect()->to(site_url('Login'));
         } else {
-            $table = DB()->table('cc_found_request');
-            $data['found_request'] = $table->where('customer_id', $this->session->cusUserId)->get()->getResult();
+            $table = DB()->table('cc_fund_request');
+            $data['fund_request'] = $table->where('customer_id', $this->session->cusUserId)->get()->getResult();
 
             $tableBal = DB()->table('cc_customer');
             $data['cust'] = $tableBal->where('customer_id', $this->session->cusUserId)->get()->getRow();
@@ -60,16 +60,16 @@ class Wallet extends BaseController
 
             $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
             $data['description'] = get_lebel_by_value_in_settings('meta_description');
-            $data['title'] = 'Account Add Found';
+            $data['title'] = 'Account Add Fund';
 
             echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/header', $data);
             echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/Customer/menu');
-            echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/Customer/add_founds');
+            echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/Customer/add_funds');
             echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/footer');
         }
     }
 
-    public function found_action(){
+    public function fund_action(){
         $data['amount'] = $this->request->getPost('amount');
         $data['payment_method_id'] = $this->request->getPost('payment_method_id');
         $data['customer_id'] = $this->session->cusUserId;
@@ -91,7 +91,7 @@ class Wallet extends BaseController
                 $data['card_cvc'] = $this->request->getPost('card_cvc');
             }
 
-            $table = DB()->table('cc_found_request');
+            $table = DB()->table('cc_fund_request');
             $table->insert($data);
             
             $this->session->setFlashdata('message', '<div class="alert-success-m alert-success alert-dismissible" role="alert">Update successfully </div>');
