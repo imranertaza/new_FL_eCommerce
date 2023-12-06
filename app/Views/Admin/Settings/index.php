@@ -4,12 +4,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Settings List</h1>
+                    <h1>Settings </h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="<?php echo base_url('admin_dashboard') ?>">Home</a></li>
-                        <li class="breadcrumb-item active">Settings List</li>
+                        <li class="breadcrumb-item active">Settings </li>
                     </ol>
                 </div>
             </div>
@@ -24,7 +24,7 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-8">
-                        <h3 class="card-title">Settings List</h3>
+                        <h3 class="card-title">Settings </h3>
                     </div>
                     <div class="col-md-4 text-right">
                         <button type="submit" class="btn btn-primary btn-sm " >Save</button>
@@ -45,15 +45,14 @@
                                         <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">General</a>
                                     </li>
                                     <li class="nav-item">
+                                        <a class="nav-link" id="store-tabs-four-profile-tab" data-toggle="pill" href="#store-tabs-four-store" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Store</a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Local</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-currency" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Currency</a>
                                     </li>
-
-<!--                                    <li class="nav-item">-->
-<!--                                        <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-images" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Images</a>-->
-<!--                                    </li>-->
 
                                     <li class="nav-item">
                                         <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-mail" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Mail</a>
@@ -113,6 +112,33 @@
                                                         <?php echo available_theme(get_lebel_by_value_in_settings('Theme'));?>
                                                     </select>
                                                 </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="store-tabs-four-store" role="tabpanel" aria-labelledby="custom-tabs-four-store-tab">
+                                        <div class="row">
+                                            <div class="col-md-6">
+
+                                                <div class="form-group">
+                                                    <label><?php echo get_lebel_by_title_in_settings('meta_title');?></label>
+                                                    <input type="text" name="meta_title" class="form-control" value="<?php echo get_lebel_by_value_in_settings('meta_title');?>"  required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label><?php echo get_lebel_by_title_in_settings('meta_keyword');?></label>
+                                                    <input type="text" name="meta_keyword" class="form-control" value="<?php echo get_lebel_by_value_in_settings('meta_keyword');?>"  required>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label><?php echo get_lebel_by_title_in_settings('meta_description');?></label>
+                                                    <textarea name="meta_description" rows="5" class="form-control"><?php echo get_lebel_by_value_in_settings('meta_description');?></textarea>
+                                                </div>
+
 
                                             </div>
                                         </div>

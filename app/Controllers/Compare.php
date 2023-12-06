@@ -25,6 +25,10 @@ class Compare extends BaseController {
         }
         $data['products'] = $proArray;
 
+        $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
+        $data['description'] = get_lebel_by_value_in_settings('meta_description');
+        $data['title'] = 'Product Compare';
+
         $data['page_title'] = 'Compare list';
         echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
         echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Compare/index',$data);

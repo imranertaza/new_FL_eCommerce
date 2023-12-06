@@ -55,7 +55,7 @@
                             <td><?php echo saleDate($val->createdDtm);?></td>
                             <td width="180">
                                 <?php if($val->status == 'Pending'){ ?>
-                                    <select name="status" id="status" onchange="found_request_update(this.value,'<?php echo $val->found_request_id;?>')" >
+                                    <select name="status" id="status" onchange="found_request_update(this.value,'<?php echo $val->fund_request_id;?>')" >
                                         <option value="Pending" <?php echo ($val->status == 'Pending')?'selected':'';?>>Pending</option>
                                         <option value="Complete" <?php echo ($val->status == 'Complete')?'selected':'';?>>Complete</option>
                                         <option value="Canceled" <?php echo ($val->status == 'Canceled')?'selected':'';?>>Canceled</option>

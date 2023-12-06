@@ -10,10 +10,10 @@
                     </div>
 
                     <div class="col-md-12 px-5">
-                        <h3>Add founds</h3>
+                        <h3>Add funds</h3>
                     </div>
                     <div class="col-md-6 px-5">
-                        <form action="<?php echo base_url('add_founds_action')?>" method="post">
+                        <form action="<?php echo base_url('add_funds_action')?>" method="post">
                             <div class="form-group mt-4">
                                 <label>Amount</label>
                                 <input type="text" name="amount" class="form-control" placeholder="Amount" required>

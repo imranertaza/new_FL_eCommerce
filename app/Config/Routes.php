@@ -120,8 +120,8 @@ $routes->get('/customers_delete/(:num)', 'Admin\Customers::delete/$1');
 $routes->get('/customers_ledger/(:num)', 'Admin\Customers::ledger/$1');
 
 // founds request
-$routes->get('/fund_request', 'Admin\Found_request::index');
-$routes->post('/found_request_action', 'Admin\Found_request::found_action');
+$routes->get('/fund_request', 'Admin\Fund_request::index');
+$routes->post('/fund_request_action', 'Admin\Fund_request::fund_action');
 
 //Settings
 $routes->get('/settings', 'Admin\Settings::index');
@@ -286,8 +286,8 @@ $routes->post('/newsletter_action', 'Customer\Profile::newsletter_action');
 
 
 $routes->get('/my_wallet', 'Customer\Wallet::index');
-$routes->get('/add_founds', 'Customer\Wallet::add_founds');
-$routes->post('/add_founds_action', 'Customer\Wallet::found_action');
+$routes->get('/add_funds', 'Customer\Wallet::add_funds');
+$routes->post('/add_funds_action', 'Customer\Wallet::fund_action');
 
 $routes->get('/ledger', 'Customer\Customer_ledger::index');
 

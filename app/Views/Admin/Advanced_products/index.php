@@ -51,6 +51,10 @@
                                 Id </label>
                         </div>
                         <div class="form-check form-check-inline">
+                            <input type="checkbox" name="image" class="form-check-input" onclick="bulk_status('image')" id="check_10" checked="">
+                            <label class="form-check-label" for="check_10"> Image </label>
+                        </div>
+                        <div class="form-check form-check-inline">
                             <input type="checkbox" name="name" class="form-check-input" onclick="bulk_status('name')"
                                 id="check_2" checked="">
                             <label class="form-check-label" for="check_2">
@@ -127,6 +131,7 @@
                             <tr>
                                 <th class="colum_id row_show ">
                                     Id</th>
+                                <th class="colum_image row_show "> Image</th>
                                 <th class="colum_name row_show ">
                                     Name</th>
                                 <th class="colum_model row_show ">
@@ -165,24 +170,24 @@
                         foreach ($product as $key => $val) {
                         ?>
                             <tr>
-                                <td class="colum_id row_show ">
-                                    <?php echo $val->product_id; ?></td>
+                                <td class="colum_id row_show "> <?php echo $val->product_id; ?></td>
+                                <td class="colum_image row_show "> <?php echo image_view('uploads/products',$val->product_id,'100_'.$val->image,'noimage.png',$class='img-100-100');?></td>
                                 <td class="colum_name row_show ">
                                     <p
                                         onclick="updateFunction('<?php echo $val->product_id; ?>','name','<?php echo $val->name; ?>','view_name_<?php echo $j++; ?>','bulkForm_name_<?php echo $val->product_id; ?>')">
-                                        <?php echo $val->name; ?></p>
+                                        <?php echo !empty($val->name)?$val->name:'<i style="color: #ccc;">NULL</i>'; ?></p>
                                     <span id="view_name_<?php echo $i++; ?>"></span>
                                 </td>
                                 <td class="colum_model row_show ">
                                     <p
                                         onclick="updateFunction('<?php echo $val->product_id; ?>', 'model', '<?php echo $val->model; ?>', 'view_model_<?php echo $ml++; ?>','bulkForm_model_<?php echo $val->product_id; ?>')">
-                                        <?php echo $val->model; ?> </p>
+                                        <?php echo !empty($val->model)?$val->model:'<i style="color: #ccc;">NULL</i>'; ?> </p>
                                     <span id="view_model_<?php echo $m++; ?>"></span>
                                 </td>
                                 <td class="colum_quantity row_show ">
                                     <p
                                         onclick="updateFunction('<?php echo $val->product_id; ?>', 'quantity', '<?php echo $val->quantity; ?>', 'view_qty_<?php echo $ql++; ?>','bulkForm_qty_<?php echo $val->product_id; ?>')">
-                                        <?php echo $val->quantity; ?> </p>
+                                        <?php echo !empty($val->quantity)?$val->quantity:'<i style="color: #ccc;">NULL</i>'; ?> </p>
                                     <span id="view_qty_<?php echo $q++; ?>"></span>
                                 </td>
                                 <td class="colum_category row_show">
@@ -197,7 +202,7 @@
                                 <td class="colum_price row_show">
                                     <p
                                         onclick="updateFunction('<?php echo $val->product_id; ?>', 'price', '<?php echo $val->price; ?>', 'view_price_<?php echo $pl++; ?>','bulkForm_price_<?php echo $val->product_id; ?>')">
-                                        <?php echo $val->price; ?></p>
+                                        <?php echo !empty($val->price)?$val->price:'<i style="color: #ccc;">NULL</i>'; ?></p>
                                     <span id="view_price_<?php echo $p++; ?>"></span>
                                 </td>
                                 <td class="colum_status row_show">
@@ -226,16 +231,16 @@
                                 </td>
 
                                 <td class="colum_meta_title row_hide">
-                                    <p onclick="descriptionTableDataUpdateFunction('<?php echo $val->product_desc_id; ?>','meta_title', '<?php echo $val->meta_title;?>' , 'view_meta_title_<?php echo $mt1++; ?>', 'desc_meta_title_<?php echo $val->product_id; ?>')"><?php echo $val->meta_title;?></p>
+                                    <p onclick="descriptionTableDataUpdateFunction('<?php echo $val->product_desc_id; ?>','meta_title', '<?php echo $val->meta_title;?>' , 'view_meta_title_<?php echo $mt1++; ?>', 'desc_meta_title_<?php echo $val->product_id; ?>')"><?php echo !empty($val->meta_title)?$val->meta_title:'<i style="color: #ccc;">NULL</i>';?></p>
                                     <span id="view_meta_title_<?php echo $mt++; ?>"></span>
                                 </td>
                                 <td class="colum_meta_keyword row_hide">
-                                    <p onclick="descriptionTableDataUpdateFunction('<?php echo $val->product_desc_id; ?>','meta_keyword', '<?php echo $val->meta_keyword;?>' , 'view_meta_keyword_<?php echo $mk1++; ?>', 'desc_meta_keyword_<?php echo $val->product_id; ?>')"><?php echo $val->meta_keyword;?></p>
+                                    <p onclick="descriptionTableDataUpdateFunction('<?php echo $val->product_desc_id; ?>','meta_keyword', '<?php echo $val->meta_keyword;?>' , 'view_meta_keyword_<?php echo $mk1++; ?>', 'desc_meta_keyword_<?php echo $val->product_id; ?>')"><?php echo !empty($val->meta_keyword)?$val->meta_keyword:'<i style="color: #ccc;">NULL</i>';?></p>
                                     <span id="view_meta_keyword_<?php echo $mk++; ?>"></span>
                                 </td>
 
                                 <td class="colum_meta_description row_hide">
-                                    <p onclick="descriptionTableDataUpdateFunction('<?php echo $val->product_desc_id; ?>','meta_description', '<?php echo $val->meta_description;?>' , 'view_meta_description_<?php echo $md1++; ?>', 'desc_meta_description_<?php echo $val->product_id; ?>')"><?php echo $val->meta_description;?></p>
+                                    <p onclick="descriptionTableDataUpdateFunction('<?php echo $val->product_desc_id; ?>','meta_description', '<?php echo $val->meta_description;?>' , 'view_meta_description_<?php echo $md1++; ?>', 'desc_meta_description_<?php echo $val->product_id; ?>')"><?php echo !empty($val->meta_description)?$val->meta_description:'<i style="color: #ccc;">NULL</i>';?></p>
                                     <span id="view_meta_description_<?php echo $md++; ?>"></span>
                                 </td>
                                 <td class="colum_action row_show">

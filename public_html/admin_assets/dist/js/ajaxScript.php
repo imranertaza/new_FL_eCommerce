@@ -729,7 +729,7 @@ function submitFormBulk(formID) {
 
 function checkShowHideRow() {
 
-    var fields = ['id', 'name', 'model', 'quantity', 'category', 'price', 'status', 'featured','meta_title','meta_keyword','meta_description', 'action'];
+    var fields = ['id','image', 'name', 'model', 'quantity', 'category', 'price', 'status', 'featured','meta_title','meta_keyword','meta_description', 'action'];
 
     for (let i = 0; i < fields.length; ++i) {
         if ($('input[name="' + fields[i] + '"]').is(':checked')) {
@@ -829,11 +829,11 @@ function updateSorting(val, id) {
 
 function found_request_update(val,id){
     $.ajax({
-        url: '<?php echo base_url('found_request_action') ?>',
+        url: '<?php echo base_url('fund_request_action') ?>',
         type: "POST",
         data: {
             status: val,
-            found_request_id: id
+            fund_request_id: id
         },
         success: function(data) {
             $("#message").html(data);

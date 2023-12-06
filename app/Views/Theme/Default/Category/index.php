@@ -166,14 +166,14 @@
                         <div class="col-lg-8">
                             <div class="top-bar border">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <a href="javascript:void(0)" onclick="viewStyle('gird')" id="gird-btn" class="border p-2 active-view"><svg aria-hidden="true" focusable="false" width="20px" height="20px" data-prefix="fas" data-icon="grid" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-inline--fa fa-grid fa-lg"><path fill="currentColor" d="M0 72C0 49.9 17.9 32 40 32H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V72zM0 232c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V232zM128 392v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40zM160 72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V72zM288 232v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM160 392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V392zM448 72v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM320 232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V232zM448 392v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40z" class=""></path></svg></a>
 
                                         <a href="javascript:void(0)" onclick="viewStyle('list')" id="list-btn" class="border p-2"><svg aria-hidden="true" focusable="false" width="20px" height="20px" data-prefix="fas" data-icon="list-ul" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-list-ul fa-lg"><path fill="currentColor" d="M64 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM64 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm48-208a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z" class=""></path></svg></a>
 
 <!--                                        Items --><?php //echo count($products);?>
                                     </div>
-                                    <div class="col-md-6  ">
+                                    <div class="col-md-8  ">
                                         <div class="form-group " style="float: right;">
                                             <label>Sort By</label>
                                             <select name="shortBy" onchange="formSubmit()" class="shortBy border">
@@ -181,6 +181,19 @@
                                                 <option value="name" <?php echo ((isset($_GET['shortBy'])) && ($_GET['shortBy'] == 'name'))?'selected':''; ?> >Product Name</option>
                                                 <option value="price" <?php echo ((isset($_GET['shortBy'])) && ($_GET['shortBy'] == 'price'))?'selected':''; ?>>Price</option>
                                                 <option value="feedback_star" <?php echo ((isset($_GET['shortBy'])) && ($_GET['shortBy'] == 'feedback_star'))?'selected':''; ?>>Rating</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group float-end me-2">
+                                            <label class="d-none d-sm-inline">Show</label>
+                                            <select name="show" onchange="formSubmit()" class="shortBy border">
+                                                <option value="" <?php echo ((isset($_GET['show'])) && ($_GET['show'] == ''))?'selected':''; ?> >Please select</option>
+                                                <option value="10" <?php echo ((isset($_GET['show'])) && ($_GET['show'] == '10'))?'selected':''; ?>>10</option>
+                                                <option value="20" <?php echo ((isset($_GET['show'])) && ($_GET['show'] == '20'))?'selected':''; ?>>20</option>
+                                                <option value="25" <?php echo ((isset($_GET['show'])) && ($_GET['show'] == '25'))?'selected':''; ?>>25</option>
+                                                <option value="50" <?php echo ((isset($_GET['show'])) && ($_GET['show'] == '50'))?'selected':''; ?>>50</option>
+                                                <option value="75" <?php echo ((isset($_GET['show'])) && ($_GET['show'] == '75'))?'selected':''; ?>>75</option>
+                                                <option value="100" <?php echo ((isset($_GET['show'])) && ($_GET['show'] == '100'))?'selected':''; ?>>100</option>
                                             </select>
                                         </div>
                                     </div>
