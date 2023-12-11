@@ -144,6 +144,24 @@
                                             <button type="submit" class="btn btn-primary">Save</button>
                                         </form>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <form action="<?php echo base_url('favicon_update') ?>" method="post"
+                                              enctype="multipart/form-data">
+                                            <div class="form-group mt-5">
+                                                <?php
+                                                $favicon = get_lebel_by_value_in_theme_settings('favicon');
+                                                echo image_view('uploads/logo', '', $favicon, 'noimage.png', '');
+                                                ?>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Favicon</label>
+                                                <input type="file" name="favicon" class="form-control" required>
+                                                <small>Size: 80 x 80</small>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>                           
 

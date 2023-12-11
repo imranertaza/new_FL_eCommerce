@@ -214,6 +214,7 @@ $routes->get('/order_view/(:num)', 'Admin\Order::order_view/$1');
 $routes->get('/theme_settings', 'Admin\Theme_settings::index');
 $routes->post('/slider_update', 'Admin\Theme_settings::slider_update');
 $routes->post('/logo_update', 'Admin\Theme_settings::logo_update');
+$routes->post('/favicon_update', 'Admin\Theme_settings::favicon_update');
 $routes->post('/home_category', 'Admin\Theme_settings::home_category');
 $routes->post('/home_category_banner', 'Admin\Theme_settings::home_category_banner');
 $routes->post('/settings_update', 'Admin\Theme_settings::settings_update');

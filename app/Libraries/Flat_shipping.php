@@ -17,7 +17,27 @@ class Flat_shipping{
 
 
     public function calculateShipping(){
-        return $this->flatRate;
+        $eligible_product_array = $this->get_shipping_eligible_product();
+        if (empty($eligible_product_array)){
+            return '0';
+        }else {
+            return $this->flatRate;
+        }
+    }
+
+    public function get_shipping_eligible_product(): array
+    {
+        $eligible_product = array();
+
+        foreach (Cart()->contents() as $val){
+            $table = DB()->table('cc_product_free_delivery');
+            $exist = $table->where('product_id',$val['id'])->countAllResults();
+            if (empty($exist)){
+                $eligible_product[] = $val['id'];
+            }
+        }
+
+        return $eligible_product;
     }
 
 
