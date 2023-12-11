@@ -27,13 +27,47 @@ class Dashboard extends BaseController
         if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
             return redirect()->to(site_url('admin'));
         } else {
+            $pending = get_data_by_id('order_status_id','cc_order_status','name','Pending');
+            $processing = get_data_by_id('order_status_id','cc_order_status','name','Processing');
+            $canceled = get_data_by_id('order_status_id','cc_order_status','name','Canceled');
 
             $table = DB()->table('cc_order');
             $data['allOrder'] = $table->countAllResults();
-            $data['pendingOrder'] = $table->countAllResults();
-            $data['processingOrder'] = $table->countAllResults();
-            $data['canceledOrder'] = $table->countAllResults();
+            $data['pendingOrder'] = $table->where('status',$pending)->countAllResults();
+            $data['processingOrder'] = $table->where('status',$processing)->countAllResults();
+            $data['canceledOrder'] = $table->where('status',$canceled)->countAllResults();
 
+
+
+            $tableCus = DB()->table('cc_customer');
+            $data['totalCustomer'] = $tableCus->countAllResults();
+
+            $data['totalCustomerYears'] = $tableCus->where('createdDtm >',date("Y-01-01"))->countAllResults();
+
+            $tableReview = DB()->table('cc_product_feedback');
+            $data['totalReviewPending'] = $tableReview->where('status','Pending')->countAllResults();
+
+            $tableProducts = DB()->table('cc_products');
+            $data['totalProductShort'] = $tableProducts->where('quantity <' ,'5')->countAllResults();
+
+            $tableOrder = DB()->table('cc_order');
+
+            $data['order'] = $tableOrder->countAllResults();
+            $data['orderYear'] = $tableOrder->where('createdDtm >',date("Y-01-01"))->countAllResults();
+
+
+            $data['orderAmo'] = $tableOrder->selectSum('final_amount')->get()->getRow()->final_amount;
+            $data['orderAmoYear'] = $tableOrder->selectSum('final_amount')->where('createdDtm >',date("Y-01-01"))->get()->getRow()->final_amount;
+
+            $data['orderLast'] = $tableOrder->orderBy('order_id','DESC')->limit(10)->get()->getResult();
+
+
+
+
+//            print DB()->getLastQuery();
+
+//            print date("Y-m-d H:i:s");
+//            die();
             //$perm = array('create','read','update','delete','mod_access');
             $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
             foreach ($perm as $key => $val) {

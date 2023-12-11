@@ -206,6 +206,7 @@ class Checkout extends BaseController
 
             
             DB()->transStart();
+            $order_status_id = get_data_by_id('order_status_id', 'cc_order_status', 'name', 'Pending');
 
             if ($shipping_else == 'on') {
                 $data['shipping_firstname'] = $this->request->getPost('shipping_firstname');
@@ -234,7 +235,7 @@ class Checkout extends BaseController
             $data['discount'] = $disc;
             $data['final_amount'] = $finalAmo;
 
-
+            $data['status'] = $order_status_id;
             $table = DB()->table('cc_order');
             $table->insert($data);
             $order_id = DB()->insertID();
@@ -283,7 +284,7 @@ class Checkout extends BaseController
 
 
             //order cc_order_history
-            $order_status_id = get_data_by_id('order_status_id', 'cc_order_status', 'name', 'Pending');
+
             $dataOrderHistory['order_id'] = $order_id;
             $dataOrderHistory['order_status_id'] = $order_status_id;
             $tabHistOr = DB()->table('cc_order_history');
@@ -373,10 +374,10 @@ class Checkout extends BaseController
             $data['charge'] = $this->zone_shipping->getSettings()->calculateShipping($city_id);
         }
         if ($paymethod == 'weight') {
-            $data['charge'] = $this->weight_shipping->getSettings();
+            $data['charge'] = $this->weight_shipping->getSettings()->calculateShipping();
         }
         if ($paymethod == 'zone_rate') {
-            $data['charge'] = $this->zone_rate_shipping->getSettings($city_id);
+            $data['charge'] = $this->zone_rate_shipping->getSettings($city_id)->calculateShipping();
         }
 
         return $this->response->setJSON($data);
@@ -455,10 +456,10 @@ class Checkout extends BaseController
             $charge = $this->zone_shipping->getSettings()->calculateShipping($city_id);
         }
         if ($shipping_method == 'weight') {
-            $charge = $this->weight_shipping->getSettings();
+            $charge = $this->weight_shipping->getSettings()->calculateShipping();
         }
         if ($shipping_method == 'zone_rate') {
-            $charge = $this->zone_rate_shipping->getSettings($city_id);
+            $charge = $this->zone_rate_shipping->getSettings($city_id)->calculateShipping();
         }
 
         return $charge;

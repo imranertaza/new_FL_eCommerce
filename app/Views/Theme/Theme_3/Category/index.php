@@ -37,7 +37,7 @@
                                         <div class="form-group float-end me-2">
                                             <label class="d-none d-sm-inline">Show</label>
                                             <select name="show" onchange="formSubmit()" class="shortBy border">
-                                                <option value="" <?php echo ((isset($_GET['show'])) && ($_GET['show'] == ''))?'selected':''; ?> >Please select</option>
+                                                <option value="<?php echo get_lebel_by_value_in_settings('category_product_limit');?>" <?php echo ((isset($_GET['show'])) && ($_GET['show'] == get_lebel_by_value_in_settings('category_product_limit')))?'selected':''; ?>><?php echo get_lebel_by_value_in_settings('category_product_limit');?></option>
                                                 <option value="10" <?php echo ((isset($_GET['show'])) && ($_GET['show'] == '10'))?'selected':''; ?>>10</option>
                                                 <option value="20" <?php echo ((isset($_GET['show'])) && ($_GET['show'] == '20'))?'selected':''; ?>>20</option>
                                                 <option value="25" <?php echo ((isset($_GET['show'])) && ($_GET['show'] == '25'))?'selected':''; ?>>25</option>
