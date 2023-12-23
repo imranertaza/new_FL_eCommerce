@@ -103,6 +103,10 @@ class Order extends BaseController
             $table = DB()->table('cc_order_history');
             $table->insert($data);
 
+            $dataOrder['status'] = $data['order_status_id'];
+            $tableOrder = DB()->table('cc_order');
+            $tableOrder->where('order_id',$data['order_id'])->update($dataOrder);
+
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"> History Add Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('order_view/' . $data['order_id'] . '?selTab=history');
         }

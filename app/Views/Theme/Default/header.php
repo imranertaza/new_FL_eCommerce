@@ -7,7 +7,8 @@
     <title><?php echo $title;?></title>
     <meta name="description" content="<?php echo $description;?>">
     <meta name="keywords" content="<?php echo $keywords;?>">
-    <link rel="shortcut icon" href="<?php echo base_url() ?>/favicon.ico">
+
+    <link rel="shortcut icon" href="<?php echo base_url() ?>/uploads/logo/<?php echo get_lebel_by_value_in_theme_settings('favicon');?>">
 
     <link rel="stylesheet" href="<?php echo base_url() ?>/assets/bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo base_url() ?>/assets/swiper-bundle.min.css">

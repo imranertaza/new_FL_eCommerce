@@ -160,6 +160,39 @@ class Theme_settings extends BaseController
 
     }
 
+    public function favicon_update()
+    {
+
+
+        if (!empty($_FILES['favicon']['name'])) {
+            $target_dir = FCPATH . '/uploads/logo/';
+            if (!file_exists($target_dir)) {
+                mkdir($target_dir, 0777);
+            }
+
+            //new image uplode
+            $pic = $this->request->getFile('favicon');
+            $namePic = $pic->getRandomName();
+            $pic->move($target_dir, $namePic);
+            $news_img = 'favicon_' . $pic->getName();
+            $this->crop->withFile($target_dir . '' . $namePic)->fit(80, 80, 'center')->save($target_dir . '' . $news_img);
+            unlink($target_dir . '' . $namePic);
+
+            $data['value'] = $news_img;
+
+            $table = DB()->table('cc_theme_settings');
+            $table->where('label', 'favicon')->update($data);
+
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('theme_settings');
+        } else {
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Logo required <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('theme_settings');
+        }
+
+
+    }
+
     public function home_category_banner()
     {
 
