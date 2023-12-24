@@ -1,7 +1,7 @@
 <section class="main-container checkout" >
 <!--    id="tableReload"-->
     <div class="container">
-        <form id="checkout-form" action="<?php echo base_url('checkout_action')  ?>" method="post">
+        <form id="checkout-form" action="<?php echo base_url('checkout_action')  ?>" method="post" onsubmit="return onchackoutsubmit()">
             <div class="row">
                 <div class="col-lg-12 ">
                     <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
@@ -30,37 +30,41 @@
                         <div class="col-lg-6">
                             <div class="form-group mb-4">
                                 <label class="w-100" for="name">First Name</label>
-                                <input class="form-control rounded-0" id="fname1"
+                                <input class="form-control rounded-0 in_err" id="fname1"
                                     oninput="livename1View(this.value,'namVal')" type="text" name="payment_firstname"
-                                    id="name" placeholder="First Name"
+                                    placeholder="First Name"
                                     value="<?php echo isset($customer->firstname) ? $customer->firstname : ''; ?>"
                                     required>
+                                    <span class="text-danger err d-inline-block text-capitalize" id="fnameError"></span>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group mb-4">
                                 <label class="w-100" for="name">Last Name</label>
-                                <input class="form-control rounded-0" id="lname1"
+                                <input class="form-control rounded-0 in_err" id="lname1"
                                     oninput="livename1View(this.value,'namVal')" type="text" name="payment_lastname"
-                                    id="payment_lastname" placeholder="Last Name"
+                                     placeholder="Last Name"
                                     value="<?php echo isset($customer->lastname) ? $customer->lastname : ''; ?>"
                                     required>
+                                    <span class="text-danger err d-inline-block text-capitalize" id="lnameError"></span>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group mb-4">
                                 <label class="w-100" for="email">Email</label>
-                                <input class="form-control rounded-0" type="email" name="payment_email" id="email"
+                                <input class="form-control rounded-0 in_err" type="email" name="payment_email" id="email"
                                     placeholder="Email"
                                     value="<?php echo isset($customer->email) ? $customer->email : ''; ?>" required>
+                                    <span class="text-danger err d-inline-block text-capitalize" id="emailError"></span>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group mb-4">
                                 <label class="w-100" for="phone">Phone</label>
-                                <input class="form-control rounded-0" oninput="liveTextView(this.value,'phoneVal')"
+                                <input class="form-control rounded-0 in_err" oninput="liveTextView(this.value,'phoneVal')"
                                     type="number" name="payment_phone" id="payment_phone" placeholder="Phone"
                                     value="<?php echo isset($customer->phone) ? $customer->phone : ''; ?>" required>
+                                    <span class="text-danger err d-inline-block text-capitalize" id="paymentPhoneError"></span>
                             </div>
                         </div>
 
@@ -79,47 +83,52 @@
                         <div class="col-lg-6">
                             <div class="form-group mb-4">
                                 <label class="w-100" for="phone">Country</label>
-                                <select name="payment_country_id" class="form-control"
+                                <select name="payment_country_id" class="form-control in_err" id="countryName1"
                                     onchange="selectState(this.value,'stateView'),liveView(this,'counVal')" required>
                                     <option value="">Please select</option>
 
                                     <?php echo country($coun); ?>
                                 </select>
+                                <span class="text-danger err d-inline-block text-capitalize" id="countryNamePhoneError"></span>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group mb-4">
                                 <label class="w-100" for="payment_city">District</label>
-                                <select name="payment_city" class="form-control"
+                                <select name="payment_city" class="form-control in_err"
                                     onchange="shippingCharge(),liveView(this,'zonVal')" id="stateView" required>
                                     <option value="">Please select</option>
                                     <?php echo state_with_country($coun, $zon) ?>
                                 </select>
+                                <span class="text-danger err d-inline-block text-capitalize" id="stateViewPhoneError"></span>
                             </div>
                         </div>
 
                         <div class="col-lg-12">
                             <div class="form-group mb-4">
                                 <label class="w-100" for="email">Post code</label>
-                                <input class="form-control rounded-0" type="number" name="payment_postcode"
+                                <input class="form-control rounded-0 in_err" type="number" name="payment_postcode"
                                     id="payment_postcode" placeholder="Post code" value="<?php echo $post; ?>" required>
+                                    <span class="text-danger err d-inline-block text-capitalize" id="paymentPostcodeError"></span>
                             </div>
                         </div>
 
                         <div class="col-lg-12">
                             <div class="form-group mb-4">
                                 <label class="w-100" for="name">Address line 1*</label>
-                                <input class="form-control rounded-0" oninput="liveTextView(this.value,'add1Val')"
+                                <input class="form-control rounded-0 in_err" oninput="liveTextView(this.value,'add1Val')"
                                     type="text" name="payment_address_1" id="payment_address_1"
                                     placeholder="Address line 1" value="<?php echo $add1 ?>" required>
+                                <span class="text-danger err d-inline-block text-capitalize" id="paymentAddressError"></span>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group mb-4">
                                 <label class="w-100" for="name">Address line 2*</label>
-                                <input class="form-control rounded-0" oninput="liveTextView(this.value,'add2Val')"
+                                <input class="form-control rounded-0 in_err" oninput="liveTextView(this.value,'add2Val')"
                                     type="text" name="payment_address_2" id="payment_address_2"
                                     placeholder="Address line 2" value="<?php echo $add2 ?>" required>
+                                <span class="text-danger err d-inline-block text-capitalize" id="paymentAddress2Error"></span>
                             </div>
                         </div>
                     </div>
@@ -159,67 +168,75 @@
                             <div class="col-lg-6">
                                 <div class="form-group mb-4">
                                     <label class="w-100" for="name">First Name</label>
-                                    <input class="form-control rounded-0" id="fname"
+                                    <input class="form-control rounded-0 in_err" id="fname"
                                         oninput="livenameView(this.value,'namVal')" type="text"
-                                        name="shipping_firstname" id="shipping_firstname" placeholder="First Name">
+                                        name="shipping_firstname"  placeholder="First Name">
+                                    <span class="text-danger err d-inline-block text-capitalize" id="shipping_firstname_mess"></span>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group mb-4">
                                     <label class="w-100" for="name">Last Name</label>
-                                    <input class="form-control rounded-0" id="lname"
+                                    <input class="form-control rounded-0 in_err" id="lname"
                                         oninput="livenameView(this.value,'namVal')" type="text" name="shipping_lastname"
-                                        id="shipping_lastname" placeholder="Last Name">
+                                         placeholder="Last Name">
+                                    <span class="text-danger err d-inline-block text-capitalize" id="shipping_lastname_mess"></span>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group mb-4">
                                     <label class="w-100" for="phone">Phone</label>
-                                    <input class="form-control rounded-0" oninput="liveTextView(this.value,'phoneVal')"
+                                    <input class="form-control rounded-0 in_err" oninput="liveTextView(this.value,'phoneVal')"
                                         type="number" name="shipping_phone" id="shipping_phone" placeholder="Phone">
+                                    <span class="text-danger err d-inline-block text-capitalize" id="shipping_phone_mess"></span>
                                 </div>
                             </div>
 
                             <div class="col-lg-6">
                                 <div class="form-group mb-4">
                                     <label class="w-100" for="country">Country</label>
-                                    <select name="shipping_country_id" class="form-control"
+                                    <select name="shipping_country_id" class="form-control in_err" id="shipping_country"
                                         onchange="selectState(this.value,'sh_stateView'),liveView(this,'counVal')">
                                         <option value="">Please select</option>
                                         <?php echo country(''); ?>
                                     </select>
+                                    <span class="text-danger d-inline-block text-capitalize err" id="shipping_country_mess"></span>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group mb-4">
                                     <label class="w-100" for="email">District</label>
-                                    <select name="shipping_city"  class="form-control"
+                                    <select name="shipping_city"  class="form-control in_err"
                                         onchange="shippingCharge(),liveView(this,'zonVal')" id="sh_stateView">
                                         <option value="">Please select</option>
                                     </select>
+                                    <span class="text-danger d-inline-block text-capitalize err" id="sh_stateView_mess"></span>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group mb-4">
                                     <label class="w-100" for="email">Postcode</label>
-                                    <input class="form-control rounded-0" type="number" name="shipping_postcode"
+                                    <input class="form-control rounded-0 in_err" type="number" name="shipping_postcode"
                                         id="shipping_postcode" placeholder="Shipping postcode">
+                                    <span class="text-danger d-inline-block text-capitalize err" id="shipping_postcode_mess"></span>
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="form-group mb-4">
                                     <label class="w-100" for="name">Address line 1*</label>
-                                    <input class="form-control rounded-0" oninput="liveTextView(this.value,'add1Val')"
+                                    <input class="form-control rounded-0 in_err" oninput="liveTextView(this.value,'add1Val')"
                                         type="text" name="shipping_address_1" id="shipping_address_1"
                                         placeholder="Address line 1">
+                                    <span class="text-danger err d-inline-block text-capitalize" id="shipping_address_1_mess"></span>
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="form-group mb-4">
                                     <label class="w-100" for="name">Address line 2*</label>
-                                    <input class="form-control rounded-0" oninput="liveTextView(this.value,'add2Val')"
+                                    <input class="form-control rounded-0 in_err" oninput="liveTextView(this.value,'add2Val')"
                                         type="text" name="shipping_address_2" id="shipping_address_2"
                                         placeholder="Address line 2">
+                                    <span class="text-danger d-inline-block err text-capitalize" id="shipping_address_2_mess"></span>
                                 </div>
                             </div>
                         </div>
@@ -343,8 +360,6 @@
                                 </tr>
                             </table>
                         </div>
-
-
 
                         <div class="title-checkout">
                             <label class="btn bg-custom-color text-white w-100 rounded-0">
