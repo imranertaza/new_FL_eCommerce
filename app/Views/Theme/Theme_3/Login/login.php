@@ -243,10 +243,10 @@
                 </svg>
             </div>
             <div class="col-md-6 mb-4 mb-md-0">
-                <form action="<?php echo base_url('login_action')?>" method="post" class="sing-up">
+                <form action="<?php echo base_url('login_action')?>" method="post" class="sing-up" onsubmit="return onsubmitHendler()">
                     <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
                     <div class="form-group">
-                        <div class="input-group d-flex align-items-center bg-white border px-3 rounded-2 mb-4">
+                        <div class="input-group d-flex align-items-center bg-white border px-3 rounded-2 in_err">
                             <input class="form-control border-0" id="email" name="email" type="email" placeholder="Email" value="<?php if(isset($_COOKIE['login_email_web'])){ echo $_COOKIE['login_email_web'];} ?>" required >
                             <div class="input-group-addon p-1">
                                 <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -255,8 +255,9 @@
                             </div>
                         </div>
                     </div>
+                    <span class="text-danger mb-4 d-inline-block text-capitalize err" id="emailMass"></span>
                     <div class="form-group">
-                        <div class="input-group d-flex align-items-center bg-white border px-3 rounded-2 mb-4">
+                        <div class="input-group d-flex align-items-center bg-white border px-3 rounded-2 in_err">
                             <input class="form-control border-0" id="password" name="password" type="password" placeholder="Password" value="<?php if(isset($_COOKIE['login_password_web'])){ echo $_COOKIE['login_password_web'];} ?>" required >
                             <div class="input-group-addon p-1">
                                 <svg width="23" height="12" viewBox="0 0 23 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -265,6 +266,7 @@
                             </div>
                         </div>
                     </div>
+                    <span class="text-danger mb-4 d-inline-block text-capitalize err" id="passwordMass"></span>
                     <div class="form-group">
                         <input type="submit" value="Sign In" class="btn btn-sign bg-transparent border-1 rounded-0 w-100 text-black fw-bold fs-5 border-dark">
                     </div>

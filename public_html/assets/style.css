@@ -407,6 +407,9 @@ a {
         display: block;
         text-align: right!important;
     }
+    .custom-d-50  {
+    height: 50%;
+}
 }
 .btn.btn-checkout {
     font-size: 18px;
