@@ -56,7 +56,7 @@
                                     <path d="M16.95 18C14.8 18 12.7043 17.5207 10.663 16.562C8.621 15.604 6.81267 14.3373 5.238 12.762C3.66267 11.1873 2.396 9.379 1.438 7.337C0.479334 5.29567 0 3.2 0 1.05C0 0.75 0.0999999 0.5 0.3 0.3C0.5 0.0999999 0.75 0 1.05 0H5.1C5.33333 0 5.54167 0.0749999 5.725 0.225C5.90833 0.375 6.01667 0.566667 6.05 0.8L6.7 4.3C6.73333 4.53333 6.72933 4.74567 6.688 4.937C6.646 5.129 6.55 5.3 6.4 5.45L3.975 7.9C4.675 9.1 5.55433 10.225 6.613 11.275C7.671 12.325 8.83333 13.2333 10.1 14L12.45 11.65C12.6 11.5 12.796 11.3873 13.038 11.312C13.2793 11.2373 13.5167 11.2167 13.75 11.25L17.2 11.95C17.4333 12 17.625 12.1123 17.775 12.287C17.925 12.4623 18 12.6667 18 12.9V16.95C18 17.25 17.9 17.5 17.7 17.7C17.5 17.9 17.25 18 16.95 18ZM3.025 6L4.675 4.35L4.25 2H2.025C2.10833 2.68333 2.225 3.35833 2.375 4.025C2.525 4.69167 2.74167 5.35 3.025 6ZM11.975 14.95C12.625 15.2333 13.2877 15.4583 13.963 15.625C14.6377 15.7917 15.3167 15.9 16 15.95V13.75L13.65 13.275L11.975 14.95Z" fill="#939393"></path>
                                 </svg>  
                             </a>
-                            <a class="d-none d-md-block" href="tel:<?php echo get_lebel_by_value_in_settings('phone'); ?>"> +88<?php echo get_lebel_by_value_in_settings('phone'); ?></a>
+                            <a class="d-none d-md-block" href="tel:<?php echo get_lebel_by_value_in_settings('phone'); ?>"> <?php echo get_lebel_by_value_in_settings('phone'); ?></a>
                         </div>
                         <div class="vr"></div>
                         <div class="top-email d-flex flex-sm-column flex-md-row gap-2">
@@ -154,6 +154,161 @@
                                 Shop by Categories
                             </button>
                             <ul class="dropdown-menu border  cat-drop-menu all-cat-menu btn-cat-show">
+
+                                <li>
+                                    <a class="dropdown-item" href="">
+                                        <span class="icon">
+                                            <svg width="20" height="20" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M8.125 27.5C5.0184 27.5 2.5 24.9816 2.5 21.875C2.5 18.7684 5.0184 16.25 8.125 16.25C11.2316 16.25 13.75 18.7684 13.75 21.875C13.75 24.9816 11.2316 27.5 8.125 27.5ZM21.875 27.5C18.7684 27.5 16.25 24.9816 16.25 21.875C16.25 18.7684 18.7684 16.25 21.875 16.25C24.9816 16.25 27.5 18.7684 27.5 21.875C27.5 24.9816 24.9816 27.5 21.875 27.5ZM8.125 13.75C5.0184 13.75 2.5 11.2316 2.5 8.125C2.5 5.0184 5.0184 2.5 8.125 2.5C11.2316 2.5 13.75 5.0184 13.75 8.125C13.75 11.2316 11.2316 13.75 8.125 13.75ZM21.875 13.75C18.7684 13.75 16.25 11.2316 16.25 8.125C16.25 5.0184 18.7684 2.5 21.875 2.5C24.9816 2.5 27.5 5.0184 27.5 8.125C27.5 11.2316 24.9816 13.75 21.875 13.75ZM21.875 11.25C23.6009 11.25 25 9.85089 25 8.125C25 6.39911 23.6009 5 21.875 5C20.1491 5 18.75 6.39911 18.75 8.125C18.75 9.85089 20.1491 11.25 21.875 11.25ZM8.125 11.25C9.85089 11.25 11.25 9.85089 11.25 8.125C11.25 6.39911 9.85089 5 8.125 5C6.39911 5 5 6.39911 5 8.125C5 9.85089 6.39911 11.25 8.125 11.25ZM21.875 25C23.6009 25 25 23.6009 25 21.875C25 20.1491 23.6009 18.75 21.875 18.75C20.1491 18.75 18.75 20.1491 18.75 21.875C18.75 23.6009 20.1491 25 21.875 25ZM8.125 25C9.85089 25 11.25 23.6009 11.25 21.875C11.25 20.1491 9.85089 18.75 8.125 18.75C6.39911 18.75 5 20.1491 5 21.875C5 23.6009 6.39911 25 8.125 25Z" fill="#231F20"></path>
+</svg>
+                                        </span>
+                                        <i class="fa-solid fa-angle-right  float-end"></i>
+                                        Brands
+                                    </a>
+
+                                    <ul class="dropdown-menu dropdown-submenu scroll-menu">
+                                        <li>
+
+                                            <a class="dropdown-item" href="">
+                                                <i class="fa-solid fa-angle-right  float-end "
+                                                   style="margin-top: 4px;"></i>
+                                                Alexander McQueen</a>
+
+                                            <ul class="dropdown-menu dropdown-submenu ">
+                                                <li>
+                                                    <a class="dropdown-item" href="">Apm Monaco</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="">Alexander McQueen</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Alexander McQueen</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="">Apm Monaco</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+
+
                             <?php foreach (getSideMenuArray() as $pcat) { ?>
                                 <li>
                                     <a class="dropdown-item" href="<?php echo base_url('category/' . $pcat->prod_cat_id); ?>">
@@ -166,7 +321,7 @@
                                         <?php } ?>
                                     </a>
                                     <?php if (!empty(count(getCategoryBySubArray($pcat->prod_cat_id)))) { ?>
-                                    <ul class="dropdown-menu dropdown-submenu">
+                                    <ul class="dropdown-menu dropdown-submenu scroll-menu">
                                     <?php foreach (getCategoryBySubArray($pcat->prod_cat_id) as $sCat) { ?>
                                         <li>
                                             <a class="dropdown-item"
@@ -178,7 +333,7 @@
                                                 <?php echo $sCat->category_name; ?>
                                             </a>
                                             <?php if (!empty(count(getCategoryBySubArray($sCat->prod_cat_id)))) { ?>
-                                            <ul class="dropdown-menu dropdown-submenu">
+                                            <ul class="dropdown-menu dropdown-submenu scroll-menu">
                                                 <?php foreach (getCategoryBySubArray($sCat->prod_cat_id) as $ssCat) { ?>
                                                 <li><a class="dropdown-item"
                                                         href="<?php echo base_url('category/' . $ssCat->prod_cat_id); ?>"><?php echo $ssCat->category_name; ?></a>
