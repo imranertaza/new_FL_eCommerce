@@ -2764,7 +2764,7 @@ input[type='radio']:checked {
     cursor: pointer;
     width: 16px;
     height: 24px;
-    background: url('./icons/plus.png') 0 4px no-repeat;
+    background: url('./icons/pluss.png') 0 4px no-repeat;
     opacity: .6;
     -moz-opacity: .6;
 }
