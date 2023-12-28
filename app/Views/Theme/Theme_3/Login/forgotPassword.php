@@ -7,10 +7,10 @@
                 <img src="<?php echo base_url()?>/assets/img/sing-up.png" alt="Sing In" class="img-fluid">
             </div>
             <div class="col-lg-6 mb-4 mb-lg-0">
-                <form action="<?php echo base_url('password_action')?>" method="post" class="sing-up">
+                <form action="<?php echo base_url('password_action')?>" method="post" class="sing-up" onsubmit="return emailValidtion()">
                     <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
                     <div class="form-group">
-                        <div class="input-group d-flex align-items-center bg-white border px-3 rounded-2 mb-4">
+                        <div class="input-group d-flex align-items-center bg-white border px-3 rounded-2">
                             <input class="form-control border-0" id="email" name="email" type="email" placeholder="Email"  required >
                             <div class="input-group-addon p-1">
                                 <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -19,6 +19,7 @@
                             </div>
                         </div>
                     </div>
+                    <span  id="emailError" class="text-danger err d-inline-block text-capitalize mb-4"></span>
                     <div class="form-group">
                         <input type="submit" value="Send Otp" class="btn btn-sign bg-transparent border-1 rounded-2 w-100 text-black fw-bold fs-5 border-dark">
                     </div>

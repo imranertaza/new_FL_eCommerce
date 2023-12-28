@@ -81,10 +81,17 @@ a {
     top: 10px;
 }
 
+.custom-d-50  {
+    height: 50%;
+}
+
 @media (max-width:991px) {
     .navbar-primary .navbar-nav .nav-link {color: #FFF;}
     .navbar-primary .navbar-nav .nav-link:hover {
         color: var(--color-primary);
+    }
+    .custom-d-50  {
+        height: auto;
     }
 }
 .help-center a {
@@ -2227,4 +2234,26 @@ input[type='radio']:checked{
 }
 .product-title{
     min-height:35px;
+}
+
+.scroll-menu{
+    max-height: 400px;
+    overflow: scroll ;
+    border-bottom: 1px solid #D0D0D0 !important;
+}
+
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+    background: #0A6AAD;
+    border-radius:10px;
+}
+::-webkit-scrollbar-thumb:hover {
+
+    background: #555;
 }
