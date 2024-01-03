@@ -316,7 +316,6 @@
             const bannerSiderParent =  document.querySelector("#bannerSiderParent"),
                 catBox = document.querySelector("#catBox");
                 catBox.style.height = `${bannerSiderParent.getBoundingClientRect().height}px`
-                console.log(catBox);
         });
        
        document.querySelectorAll(".collappse-btn").forEach(ele => {
