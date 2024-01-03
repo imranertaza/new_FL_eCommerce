@@ -315,7 +315,10 @@
         addEventListener("load", (event) => {
             const bannerSiderParent =  document.querySelector("#bannerSiderParent"),
                 catBox = document.querySelector("#catBox");
-                catBox.style.height = `${bannerSiderParent.getBoundingClientRect().height}px`
+                if(catBox){
+                    catBox.style.height = `${bannerSiderParent.getBoundingClientRect().height}px`;
+                }
+                
         });
        
        document.querySelectorAll(".collappse-btn").forEach(ele => {
