@@ -91,7 +91,6 @@
                                     <?php } ?>
                                     <li><a href="<?php echo base_url('logout'); ?>" class="dropdown-item mt-2 mb-2">Log
                                             out</a></li>
-
                                 </ul>
                             
                         <?php } ?>
@@ -154,7 +153,7 @@
                                 Shop by Categories
                             </button>
                             <!--category start-->
-                            <div class="dropdown-menu border accordion-cat cat-drop-menu all-cat-menu btn-cat-show ">
+                            <div class="dropdown-menu border accordion-cat cat-drop-menu all-cat-menu btn-cat-show " id="catBox">
                                 <div class="accordion">
                                     <?php foreach (getSideMenuArray() as $pcat) { ?>
 
@@ -312,6 +311,13 @@
     </header>
 
     <script>
+
+        addEventListener("load", (event) => {
+            const bannerSiderParent =  document.querySelector("#bannerSiderParent"),
+                catBox = document.querySelector("#catBox");
+                catBox.style.height = `${bannerSiderParent.getBoundingClientRect().height}px`
+                console.log(catBox);
+        });
        
        document.querySelectorAll(".collappse-btn").forEach(ele => {
            ele.addEventListener('click', (e) => {
