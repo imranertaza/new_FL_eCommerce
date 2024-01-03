@@ -2783,7 +2783,6 @@ input[type='radio']:checked {
 }
 
 .accordion-cat {
-    height: 363px;
     overflow-x: hidden;
     overflow-y: auto;
     scrollbar-width: thin;
