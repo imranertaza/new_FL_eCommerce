@@ -154,7 +154,7 @@
                                 Shop by Categories
                             </button>
                             <ul class="dropdown-menu border  cat-drop-menu all-cat-menu btn-cat-show">
-                                
+
                             <?php foreach (getSideMenuArray() as $pcat) { ?>
                                 <li>
                                     <a class="dropdown-item" href="<?php echo base_url('category/' . $pcat->prod_cat_id); ?>">
