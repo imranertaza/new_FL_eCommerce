@@ -36,7 +36,7 @@
                 <div class="col-lg-6 offset-lg-3">
                     <h3>Get in touch</h3>
                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                    <form action="#" method="post" class="contact-form" onsubmit="return contactForm()">
+<!--                    <form action="#" method="post" class="contact-form" onsubmit="return contactForm()">-->
                         <div class="mb-3">
                             <input class="form-control in_err" id="email" name="email" type="text" placeholder="Email">
                             <span class="text-danger err d-inline-block text-capitalize" id="emailError"></span>
@@ -46,9 +46,9 @@
                             <span class="text-danger err d-inline-block text-capitalize" id="messageERR"></span>
                         </div>
                         <div class="mb-3">
-                            <input type="submit" value="Get a Quary" class="btn bg-custom-color text-white rounded-0">
+                            <input type="submit" value="Get a Quary" onclick="contactFormSubmit()" class="btn bg-custom-color text-white rounded-0">
                         </div>
-                    </form>
+<!--                    </form>-->
                 </div>
             </div>
         </div>

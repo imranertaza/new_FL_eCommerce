@@ -895,6 +895,33 @@
             $('#cardForm').html(view);
         }
     }
+
+
+    function contactFormSubmit(){
+        if (contactForm() == true){
+            let email = $('#email').val();
+            let message = $('#message').val();
+
+            $.ajax({
+                method: "POST",
+                url: "<?php echo base_url('contact_form_action') ?>",
+                data: {
+                    email: email,
+                    message: message,
+                },
+                success: function(response) {
+                    // alert(response);
+                    $('#email').val('');
+                    $('#message').val('');
+                    $('#mesVal').html('Your message was successfully submitted');
+                    $('.message_alert').show();
+                    setTimeout(function() {
+                        $("#messAlt").fadeOut(1500);
+                    }, 600);
+                }
+            })
+        }
+    }
 </script>
 
 <script src="<?php echo base_url() ?>/assets/assets_fl/validation.js " type="text/javascript"> </script>

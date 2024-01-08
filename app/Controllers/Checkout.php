@@ -174,6 +174,7 @@ class Checkout extends BaseController
             'payment_email' => ['label' => 'Email', 'rules' => 'required'],
             'payment_country_id' => ['label' => 'Country', 'rules' => 'required'],
             'payment_city' => ['label' => 'City', 'rules' => 'required'],
+            'payment_method' => ['label' => 'Payment Method', 'rules' => 'required'],
         ]);
 
         if ($this->validation->run($data) == FALSE) {

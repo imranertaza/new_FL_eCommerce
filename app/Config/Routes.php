@@ -325,6 +325,7 @@ $routes->get('/payment_paypal_checkout_action', 'Paypal::paypal_checkout_action'
 //pages routes
 $routes->get('/about', 'Pages\Pages::about');
 $routes->get('/contact', 'Pages\Pages::contact');
+$routes->post('/contact_form_action', 'Pages\Pages::contact_action');
 $routes->get('/page/(:any)', 'Pages\Pages::page/$1');
 
 //products routes
