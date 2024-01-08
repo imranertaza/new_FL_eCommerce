@@ -116,6 +116,7 @@ class Products extends BaseController {
 
 //        print $this->$searchModel->getLastQuery();
 //        print_r($data['products']);
+//        print $shortBy;
 //        die();
 
         $table = DB()->table('cc_product_category');
