@@ -36,12 +36,14 @@
                 <div class="col-lg-6 offset-lg-3">
                     <h3>Get in touch</h3>
                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                    <form action="#" method="post" class="contact-form">
+                    <form action="#" method="post" class="contact-form" onsubmit="return contactForm()">
                         <div class="mb-3">
-                            <input class="form-control" id="email" name="email" type="text" placeholder="Email">
+                            <input class="form-control in_err" id="email" name="email" type="text" placeholder="Email">
+                            <span class="text-danger err d-inline-block text-capitalize" id="emailError"></span>
                         </div>
                         <div class="mb-3">
-                            <textarea name="message" class="form-control" id="message" cols="30" rows="6" placeholder="Question"></textarea>
+                            <textarea name="message" class="form-control in_err" id="message" cols="30" rows="6" placeholder="Question"></textarea>
+                            <span class="text-danger err d-inline-block text-capitalize" id="messageERR"></span>
                         </div>
                         <div class="mb-3">
                             <input type="submit" value="Get a Quary" class="btn bg-custom-color text-white rounded-0">
