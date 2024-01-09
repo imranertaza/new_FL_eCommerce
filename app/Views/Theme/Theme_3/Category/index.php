@@ -232,7 +232,7 @@
         $i=1;
         foreach(get_all_data_array('cc_option') as $op){  ?>
                                         <div class="product-filter">
-                                            <p class="mb-2"><?php echo $op->name;?></p>
+                                            <p class="mb-2 text-capitalize"><?php echo $op->name;?></p>
                                             <ul class="list-unstyled filter-items">
                                                 <?php foreach(get_array_data_by_id('cc_option_value','option_id',$op->option_id) as $key=>$opVal){
 
