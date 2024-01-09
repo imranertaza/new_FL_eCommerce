@@ -27,7 +27,7 @@ class Category extends BaseController {
         $limit = get_lebel_by_value_in_settings('category_product_limit');
 
         $where = "$categoryWhere ";
-        $data['products'] = $this->categoryproductsModel->where($where)->query()->paginate($limit);
+        $data['products'] = $this->categoryproductsModel->where($where)->orderBy('cc_products.product_id','DESC')->query()->paginate($limit);
         $data['pager'] = $this->categoryproductsModel->pager;
         $data['links'] = $data['pager']->links('default','custome_link');
 
