@@ -152,6 +152,8 @@
                                 <i class="fa-solid fa-bars me-3"></i>
                                 Shop by Categories
                             </button>
+
+
                             <!--category start-->
                             <div class="dropdown-menu border accordion-cat cat-drop-menu all-cat-menu btn-cat-show " id="catBox">
                                 <div class="accordion">
@@ -166,16 +168,17 @@
                                                     <rect width="24" height="24" fill="white"/>
                                                     <path d="M9.5 7L14.5 12L9.5 17" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"/>
                                                     </svg>
-                                                
+
                                                 </span>
                                                 <span><?php echo $pcat->category_name; ?></span>
-                                                <?php if (!empty(count(getCategoryBySubArray($pcat->prod_cat_id)))) { ?> 
+                                                <?php if (!empty(count(getCategoryBySubArray($pcat->prod_cat_id)))) { ?>
                                                 <button class="btn ms-auto button-collapse py-2 collappse-btn"
                                                     id="<?="accordionPanelsStayOpen-".$pcat->prod_cat_id?>" type="button" data-bs-toggle="collapse"
                                                     data-bs-target= <?="#panelsStayOpen-collapse-".$pcat->prod_cat_id?> aria-expanded="false"
                                                     aria-controls=<?="panelsStayOpen-collapse-".$pcat->prod_cat_id?>>
                                                 </button>
                                                 <?php }?>
+
                                             </a>
                                         </h2>
                                         <div id="<?="panelsStayOpen-collapse-".$pcat->prod_cat_id?>" class="accordion-collapse collapse"

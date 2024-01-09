@@ -35,6 +35,32 @@ class Pages extends BaseController {
         echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/footer');
     }
 
+    public function contact_action(){
+
+        $data['email'] = $this->request->getPost('email');
+        $data['message'] = $this->request->getPost('message');
+        $subject = 'Contact form';
+        $this->validation->setRules([
+            'email' => ['label' => 'Email', 'rules' => 'required'],
+            'message' => ['label' => 'Message', 'rules' => 'required'],
+        ]);
+
+        if ($this->validation->run($data) == FALSE) {
+            print $this->validation->listErrors();
+        } else {
+            //message get admin
+            $email = get_lebel_by_value_in_settings('email');
+            email_send($email, $subject, $data['message'],$data['email']);
+
+
+            //message get customer
+            $message = 'Your message was successfully submitted';
+            email_send($data['email'], $subject, $message,$email);
+
+//            print 'Your message was successfully submitted';
+        }
+    }
+
 
 
 
