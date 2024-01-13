@@ -22,6 +22,7 @@ const get = (selector) => {
 const error = (selector, message) => {
     get(selector).innerHTML = message;
 }
+
 //define on submit function for login from validetion
 const onsubmitHendler = () => {
     //get all from input 
