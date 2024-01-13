@@ -416,7 +416,7 @@ const onProfileForm = () => {
         return false;
     } else if (payment_postcode.value === "") {
         payment_postcode.classList.add("border-danger");
-        error("#stateViewPhoneError", "Please enter your post code");
+        error("#paymentPostcodeError", "Please enter your post code");
         return false;
     } else if (payment_postcode.value.length > 10) {
         payment_postcode.classList.add("border-danger");
