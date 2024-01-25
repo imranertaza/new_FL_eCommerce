@@ -21,35 +21,28 @@
                 </div>
                 <div class="side-banner d-flex flex-column flex-sm-row flex-sm-row flex-lg-column gap-1" id="bannerSiderParent">
                     <div class="side-banner-box position-relative custom-d-50">
-                        <?php
-                            $side_baner_1 = get_lebel_by_value_in_theme_settings_with_theme('head_side_baner_1',$theme);
-                            echo image_view('uploads/top_side_baner', '', $side_baner_1, 'noimage.png', 'img-fluid w-100 h-100');
-                        ?>
-                        <div class="position-absolute top-0 p-3">
-                            <h4><?php echo get_lebel_by_value_in_theme_settings_with_theme('head_side_title_1',$theme);?></h4>
-                            <a class="btn btn-sidebanner" href="<?php echo base_url('category/'.get_lebel_by_value_in_theme_settings_with_theme('head_side_category_1',$theme)); ?>">
-                                Shop Now                                
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5 12L17.25 12L12 6.75L12.66 6L19.16 12.5L12.66 19L12 18.25L17.25 13L5 13L5 12Z" fill="#818181"/>
-                                </svg>    
-                            </a>
-                        </div>
+                        <a href="<?php echo base_url('category/'.get_lebel_by_value_in_theme_settings_with_theme('head_side_category_1',$theme)); ?>">
+                            <?php
+                                $side_baner_1 = get_lebel_by_value_in_theme_settings_with_theme('head_side_baner_1',$theme);
+                                echo image_view('uploads/top_side_baner', '', $side_baner_1, 'noimage.png', 'img-fluid w-100 h-100');
+                            ?>
+                            <div class="position-absolute top-0 p-3">
+                                <h4><?php echo get_lebel_by_value_in_theme_settings_with_theme('head_side_title_1',$theme);?></h4>
+                            </div>
+                        </a>
                     </div>
                     <div class="side-banner-box position-relative custom-d-50 w-100">
-                        <?php
-                            $side_baner_2 = get_lebel_by_value_in_theme_settings_with_theme('head_side_baner_2',$theme);
-                            echo image_view('uploads/top_side_baner', '', $side_baner_2, 'noimage.png', 'img-fluid w-100 h-100');
-                        ?>
+                        <a   href="<?php echo base_url('category/'.get_lebel_by_value_in_theme_settings_with_theme('head_side_category_2',$theme)); ?>" >
+                            <?php
+                                $side_baner_2 = get_lebel_by_value_in_theme_settings_with_theme('head_side_baner_2',$theme);
+                                echo image_view('uploads/top_side_baner', '', $side_baner_2, 'noimage.png', 'img-fluid w-100 h-100');
+                            ?>
 
-                        <div class="position-absolute top-0 p-3">
-                            <h4><?php echo get_lebel_by_value_in_theme_settings_with_theme('head_side_title_2',$theme);?></h4>
-                            <a class="btn btn-sidebanner" href="<?php echo base_url('category/'.get_lebel_by_value_in_theme_settings_with_theme('head_side_category_2',$theme)); ?>" >
-                                Shop Now                                
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5 12L17.25 12L12 6.75L12.66 6L19.16 12.5L12.66 19L12 18.25L17.25 13L5 13L5 12Z" fill="#818181"/>
-                                </svg>    
-                            </a>
-                        </div>
+                            <div class="position-absolute top-0 p-3">
+                                <h4><?php echo get_lebel_by_value_in_theme_settings_with_theme('head_side_title_2',$theme);?></h4>
+
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>

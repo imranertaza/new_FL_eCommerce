@@ -5,7 +5,7 @@
             <?php $theme = get_lebel_by_value_in_settings('Theme');?>
             <div class="form-group">
                 <label><?php echo get_lebel_by_title_in_theme_settings_with_theme('head_side_title_1',$theme);?></label>
-                <input type="text" class="form-control" required name="head_side_title_1"
+                <input type="text" class="form-control"  name="head_side_title_1"
                     value="<?php echo get_lebel_by_value_in_theme_settings_with_theme('head_side_title_1',$theme);?>">
             </div>
 
@@ -46,7 +46,7 @@
 
             <div class="form-group">
                 <label><?php echo get_lebel_by_title_in_theme_settings_with_theme('head_side_title_2',$theme);?></label>
-                <input type="text" class="form-control" required name="head_side_title_2"
+                <input type="text" class="form-control"  name="head_side_title_2"
                     value="<?php echo get_lebel_by_value_in_theme_settings_with_theme('head_side_title_2',$theme);?>">
             </div>
 
