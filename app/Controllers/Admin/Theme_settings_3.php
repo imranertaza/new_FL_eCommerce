@@ -127,7 +127,7 @@ class Theme_settings_3 extends BaseController
             $namePic = $pic->getRandomName();
             $pic->move($target_dir, $namePic);
             $news_img = 'home_category_' . $pic->getName();
-            $this->crop->withFile($target_dir . '' . $namePic)->fit(261, 566, 'center')->save($target_dir . '' . $news_img);
+            $this->crop->withFile($target_dir . '' . $namePic)->fit(271, 590, 'center')->save($target_dir . '' . $news_img,100);
             unlink($target_dir . '' . $namePic);
             $data['home_category_baner_'.$prefix] = $news_img;
         }
