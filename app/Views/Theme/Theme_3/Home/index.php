@@ -100,7 +100,7 @@
                 <div class="col-sm-3">
                     <?php
                         $category_baner_1 = get_lebel_by_value_in_theme_settings_with_theme('home_category_baner_1',$theme);
-                        echo image_view('uploads/home_category', '', $category_baner_1, 'noimage.png', 'w-100 h-100');
+                        echo image_view('uploads/home_category', '', $category_baner_1, 'noimage.png', 'w-100 ');
                     ?>
                 </div>
                 <div class="col-sm-9">
@@ -141,7 +141,7 @@
                 <div class="col-sm-3">
                     <?php
                         $category_baner_2 = get_lebel_by_value_in_theme_settings_with_theme('home_category_baner_2',$theme);
-                        echo image_view('uploads/home_category', '', $category_baner_2, 'noimage.png', 'w-100 h-100');
+                        echo image_view('uploads/home_category', '', $category_baner_2, 'noimage.png', 'w-100 ');
                     ?>
                 </div>
                 <div class="col-sm-9">
@@ -182,7 +182,7 @@
                 <div class="col-sm-3">
                     <?php
                         $category_baner_3 = get_lebel_by_value_in_theme_settings_with_theme('home_category_baner_3',$theme);
-                        echo image_view('uploads/home_category', '', $category_baner_3, 'noimage.png', 'w-100 h-100');
+                        echo image_view('uploads/home_category', '', $category_baner_3, 'noimage.png', 'w-100 ');
                     ?>
                 </div>
                 <div class="col-sm-9">
@@ -224,7 +224,7 @@
                 <div class="col-sm-3">
                     <?php
                         $category_baner_4 = get_lebel_by_value_in_theme_settings_with_theme('home_category_baner_4',$theme);
-                        echo image_view('uploads/home_category', '', $category_baner_4, 'noimage.png', 'w-100 h-100');
+                        echo image_view('uploads/home_category', '', $category_baner_4, 'noimage.png', 'w-100 ');
                     ?>
                 </div>
                 <div class="col-sm-9">
@@ -265,7 +265,7 @@
                 <div class="col-sm-3">
                     <?php
                         $category_baner_5 = get_lebel_by_value_in_theme_settings_with_theme('home_category_baner_5',$theme);
-                        echo image_view('uploads/home_category', '', $category_baner_5, 'noimage.png', 'w-100 h-100');
+                        echo image_view('uploads/home_category', '', $category_baner_5, 'noimage.png', 'w-100 ');
                     ?>
                 </div>
                 <div class="col-sm-9">

@@ -457,9 +457,9 @@ a {
     font-size: 12px;
 }
 
-.product-title {
-    min-height: 35px;
-}
+/*.product-title {*/
+/*    min-height: 35px;*/
+/*}*/
 
 .products .product-title a {
     color: #2E2E2E;
@@ -2740,11 +2740,12 @@ input[type='radio']:checked {
 }
 
 .product_title_area {
-    height: 55px;
+    height: 34px;
 }
 
 .product-title {
-    min-height: 35px;
+    max-height: 35px;
+    overflow: hidden;
 }
 
 

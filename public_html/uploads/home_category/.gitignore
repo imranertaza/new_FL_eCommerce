@@ -1,4 +1,5 @@
 *.jpg
 *.png
 *.webp
+*.jpeg
 !noimage.png
