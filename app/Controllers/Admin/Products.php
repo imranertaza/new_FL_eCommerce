@@ -39,7 +39,7 @@ class Products extends BaseController
             return redirect()->to(site_url('admin'));
         } else {
             $table = DB()->table('cc_products');
-            $data['product'] = $table->get()->getResult();
+            $data['product'] = $table->orderBy('product_id','desc')->get()->getResult();
 
             //$perm = array('create','read','update','delete','mod_access');
             $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
@@ -410,6 +410,174 @@ class Products extends BaseController
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Create Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('product_create');
         }
+    }
+
+    public function copy_action() {
+        $allProductId =  $this->request->getPost('productId[]');
+
+
+        $adUserId = $this->session->adUserId;
+
+        if(!empty($allProductId)) {
+
+            DB()->transStart();
+            foreach ($allProductId as $p) {
+                $tablePro = DB()->table('cc_products');
+                $pro = $tablePro->where('product_id', $p)->get()->getRow();
+
+                //product table data insert(start)
+                $storeId = get_data_by_id('store_id', 'cc_stores', 'is_default', '1');
+                $proData['store_id'] = $storeId;
+                $proData['name'] = $pro->name;
+                $proData['model'] = $pro->model;
+                $proData['brand_id'] = !empty($pro->brand_id) ? $pro->brand_id : null;
+                $proData['price'] = $pro->price;
+                $proData['weight'] = $pro->weight;
+                $proData['length'] = $pro->length;
+                $proData['width'] = $pro->width;
+                $proData['height'] = $pro->height;
+                $proData['sort_order'] = $pro->sort_order;
+                $proData['status'] = 'Inactive';
+                $proData['quantity'] = $pro->quantity;
+                $proData['featured'] = $pro->featured;
+                $proData['createdBy'] = $adUserId;
+
+                $proTable = DB()->table('cc_products');
+                $proTable->insert($proData);
+                $productId = DB()->insertID();
+
+
+                //product category insert(start)
+                $cTable = DB()->table('cc_product_to_category');
+                $categ = $cTable->where('product_id', $p)->get()->getResult();
+                foreach ($categ as $cat) {
+                    $catData['product_id'] = $productId;
+                    $catData['category_id'] = $cat->category_id;
+
+                    $catTable = DB()->table('cc_product_to_category');
+                    $catTable->insert($catData);
+                }
+                //product category insert(end)
+
+
+                //product_free_delivery data insert(start)
+                $proFrDetable = DB()->table('cc_product_free_delivery');
+                $free_delivery = $proFrDetable->where('product_id', $p)->countAllResults();
+                if (!empty($free_delivery)) {
+                    $proFreeData['product_id'] = $productId;
+                    $proFreetable = DB()->table('cc_product_free_delivery');
+                    $proFreetable->insert($proFreeData);
+                }
+                //product_free_delivery data insert(end)
+
+
+                //product description table data insert(start)
+                $proDescTableget = DB()->table('cc_product_description');
+                $des = $proDescTableget->where('product_id', $p)->get()->getRow();
+
+                $proDescData['product_id'] = $productId;
+                $proDescData['description'] = !empty($des->description) ? $des->description : null;
+                $proDescData['tag'] = !empty($des->tag) ? $des->tag : null;
+                $proDescData['meta_title'] = !empty($des->meta_title) ? $des->meta_title : null;
+                $proDescData['meta_description'] = !empty($des->meta_description) ? $des->meta_description : null;
+                $proDescData['meta_keyword'] = !empty($des->meta_keyword) ? $des->meta_keyword : null;
+                $proDescData['video'] = !empty($des->video) ? $des->video : null;
+                $proDescData['createdBy'] = $adUserId;
+
+
+                $proDescTable = DB()->table('cc_product_description');
+                $proDescTable->insert($proDescData);
+                //product description table data insert(end)
+
+
+                $optionTableGet = DB()->table('cc_product_option');
+                $optData = $optionTableGet->where('product_id', $p)->get()->getResult();
+                if (!empty($optData)) {
+                    foreach ($optData as $valOp) {
+                        $optionData['product_id'] = $productId;
+                        $optionData['option_id'] = $valOp->option_id;
+                        $optionData['option_value_id'] = $valOp->option_value_id;
+                        $optionData['quantity'] = $valOp->quantity;
+                        $optionData['subtract'] = $valOp->subtract;
+                        $optionData['price'] = $valOp->price;
+
+                        $optionTable = DB()->table('cc_product_option');
+                        $optionTable->insert($optionData);
+                    }
+                }
+
+                //product options table data insert(end)
+
+
+                //product Attribute table data insert(start)
+                $attributeTableget = DB()->table('cc_product_attribute');
+                $attData = $attributeTableget->where('product_id', $p)->get()->getResult();
+                if (!empty($attData)) {
+                    foreach ($attData as $valAtt) {
+                        $attributeData['product_id'] = $productId;
+                        $attributeData['attribute_group_id'] = $valAtt->attribute_group_id;
+                        $attributeData['name'] = $valAtt->name;
+                        $attributeData['details'] = $valAtt->details;
+
+                        $attributeTable = DB()->table('cc_product_attribute');
+                        $attributeTable->insert($attributeData);
+                    }
+                }
+
+                //product Attribute table data insert(end)
+
+
+                //product product_special table data insert(start)
+                $specialTableGet = DB()->table('cc_product_special');
+                $spec = $specialTableGet->where('product_id', $p)->get()->getRow();
+                if (!empty($spec)) {
+                    $specialData['product_id'] = $productId;
+                    $specialData['special_price'] = $spec->special_price;
+                    $specialData['start_date'] = $spec->start_date;
+                    $specialData['end_date'] = $spec->end_date;
+
+                    $specialTable = DB()->table('cc_product_special');
+                    $specialTable->insert($specialData);
+                }
+                //product product_special table data insert(end)
+
+
+                //product_related table data insert(start)
+                $proReltableGet = DB()->table('cc_product_related');
+                $proReltableGetData = $proReltableGet->where('product_id', $p)->get()->getResult();
+                if (!empty($proReltableGetData)) {
+                    foreach ($proReltableGetData as $relp) {
+                        $proRelData['product_id'] = $productId;
+                        $proRelData['related_id'] = $relp->related_id;
+                        $proReltable = DB()->table('cc_product_related');
+                        $proReltable->insert($proRelData);
+                    }
+                }
+                //product_related table data insert(end)
+
+
+                // product_bought_together table data insert(start)
+                $proBothtableGet = DB()->table('cc_product_bought_together');
+                $proBothtableGetData = $proBothtableGet->where('product_id', $p)->get()->getResult();
+                if (!empty($proBothtableGetData)) {
+                    foreach ($proBothtableGetData as $bothp) {
+                        $proBothData['product_id'] = $productId;
+                        $proBothData['related_id'] = $bothp->related_id;
+                        $proBothtable = DB()->table('cc_product_bought_together');
+                        $proBothtable->insert($proBothData);
+                    }
+                }
+                //product_bought_together table data insert(end)
+            }
+            DB()->transComplete();
+
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Create Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('products');
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('products');
+        }
+
     }
 
     public function update($product_id)
