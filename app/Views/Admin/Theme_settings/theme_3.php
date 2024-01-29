@@ -32,6 +32,7 @@
                 ?><br>
                 <label><?php echo get_lebel_by_title_in_theme_settings_with_theme('head_side_baner_1',$theme);?></label>
                 <input type="file" class="form-control" name="head_side_baner_1">
+                <span>Recommended Size: 228 x 199</span>
             </div>
 
             <div class="form-group">
@@ -73,6 +74,7 @@
                 ?><br>
                 <label><?php echo get_lebel_by_title_in_theme_settings_with_theme('head_side_baner_2',$theme);?></label>
                 <input type="file" class="form-control" name="head_side_baner_2">
+                <span>Recommended Size: 228 x 199</span>
             </div>
 
             <div class="form-group">
@@ -112,6 +114,7 @@
                 ?><br>
                 <label><?php echo get_lebel_by_title_in_theme_settings_with_theme('home_category_baner_1',$theme);?></label>
                 <input type="file" class="form-control" name="home_category_baner_1">
+                <span>Recommended Size: 271 x 590</span>
             </div>
             <input type="hidden" class="form-control" required name="prefix" value="1">
             <button class="btn btn-primary">Save</button>
@@ -149,6 +152,7 @@
                 ?><br>
                 <label><?php echo get_lebel_by_title_in_theme_settings_with_theme('home_category_baner_2',$theme);?></label>
                 <input type="file" class="form-control" name="home_category_baner_2">
+                <span>Recommended Size: 271 x 590</span>
             </div>
             <input type="hidden" class="form-control" required name="prefix" value="2">
             <button class="btn btn-primary">Save</button>
@@ -186,6 +190,7 @@
                 ?><br>
                 <label><?php echo get_lebel_by_title_in_theme_settings_with_theme('home_category_baner_3',$theme);?></label>
                 <input type="file" class="form-control" name="home_category_baner_3">
+                <span>Recommended Size: 271 x 590</span>
             </div>
             <input type="hidden" class="form-control" required name="prefix" value="3">
             <button class="btn btn-primary">Save</button>
@@ -223,6 +228,7 @@
                 ?><br>
                 <label><?php echo get_lebel_by_title_in_theme_settings_with_theme('home_category_baner_4',$theme);?></label>
                 <input type="file" class="form-control" name="home_category_baner_4">
+                <span>Recommended Size: 271 x 590</span>
             </div>
             <input type="hidden" class="form-control" required name="prefix" value="4">
             <button class="btn btn-primary">Save</button>
@@ -260,6 +266,7 @@
                 ?><br>
                 <label><?php echo get_lebel_by_title_in_theme_settings_with_theme('home_category_baner_5',$theme);?></label>
                 <input type="file" class="form-control" name="home_category_baner_5">
+                <span>Recommended Size: 271 x 590</span>
             </div>
             <input type="hidden" class="form-control" required name="prefix" value="5">
             <button class="btn btn-primary">Save</button>
@@ -276,6 +283,7 @@
                 ?><br>
                 <label><?php echo get_lebel_by_title_in_theme_settings_with_theme('banner_bottom',$theme);?></label>
                 <input type="file" class="form-control" name="banner_bottom">
+                <span>Recommended Size: 1116 x 211</span>
             </div>
             <button class="btn btn-primary">Save</button>
 
