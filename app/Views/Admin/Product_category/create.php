@@ -65,6 +65,7 @@
                             <div class="form-group">
                                 <label>Image</label>
                                 <input type="file" name="image" class="form-control" placeholder="image">
+                                <span>Recommended Size: 166 x 208</span>
                             </div>
 
                             <div class="form-group">

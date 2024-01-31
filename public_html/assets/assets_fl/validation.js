@@ -285,7 +285,7 @@ const onRegistration = () => {
         error("#phone_error", "Invalid phone number. Please enter a valid number");
         phone.parentElement.classList.add("border-danger");
         return false;
-    } else if (phone.value.length < 10 || phone.value.length > 15) {
+    } else if (phone.value.length < 5 || phone.value.length > 30) {
 
         error("#phone_error", "Invalid phone number. Please enter a valid number");
         phone.parentElement.classList.add("border-danger");
@@ -401,7 +401,7 @@ const onProfileForm = () => {
         error("#paymentPhoneError", "Invalid phone number. Please enter a valid numeric value");
         payment_phone.classList.add("border-danger");
         return false;
-    } else if (payment_phone.value.length < 3 || payment_phone.value.length > 15) {
+    } else if (payment_phone.value.length < 5 || payment_phone.value.length > 30) {
 
         error("#paymentPhoneError", "Invalid phone number. Please enter a valid number");
         payment_phone.classList.add("border-danger");

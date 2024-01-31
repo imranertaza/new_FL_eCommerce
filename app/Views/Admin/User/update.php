@@ -121,6 +121,7 @@
                                             <div class="form-group">
                                                 <label>Image </label>
                                                 <input type="file" class="form-control" name="pic" required>
+                                                <span>Recommended Size: 250 x 150</span>
                                             </div>
 
                                             <input type="hidden" name="user_id" value="<?php echo $user->user_id;?>" required>

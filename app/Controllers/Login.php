@@ -118,7 +118,7 @@ class Login extends BaseController {
         $this->validation->setRule('firstname', 'First Name', 'required|max_length[12]|trim');
         $this->validation->setRule('lastname', 'Last Name', 'required|max_length[12]|trim');
         $this->validation->setRule('email', 'Email', 'required|valid_email|trim');
-        $this->validation->setRule('phone', 'Phone', 'required|min_length[10]|max_length[12]|trim');
+        $this->validation->setRule('phone', 'Phone', 'required|min_length[5]|max_length[30]|trim');
         $this->validation->setRule('password', 'Password', 'required|max_length[32]');
         $this->validation->setRule('confirm_password', 'Confirm Password', 'required|matches[password]|max_length[32]');
 

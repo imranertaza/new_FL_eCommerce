@@ -45,6 +45,7 @@
                         <div class="form-group">
                             <label>Image</label>
                             <input type="file" name="image" class="form-control" placeholder="image" >
+                            <span>Recommended Size: 250 x 150</span>
                         </div>
 
                         <button class="btn btn-primary" >Create</button>

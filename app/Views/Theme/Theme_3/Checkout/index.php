@@ -375,17 +375,18 @@
                         <div class="group-check ">
 
                             <div class="d-flex flex-column">
-                                <?php foreach (get_all_data_array('cc_shipping_method') as $ship) {
-                                    if ($ship->status == '1') { ?>
+                                <?php  $dataCount = count(get_array_data_by_id('cc_shipping_method','status','1'));
+                                foreach (get_array_data_by_id('cc_shipping_method','status','1') as $ship) {
+                                    ?>
                                 <div class="d-flex justify-content-between mt-3">
-                                    <div class="form-check"><label class="form-check-label"><input
-                                                class="form-check-input" type="radio" name="shipping_method"
-                                                oninput="shippingCharge()" id="shipping_method"
-                                                value="<?php echo $ship->code; ?>" required>
-                                            <?php echo $ship->name; ?></label></div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" name="shipping_method" oninput="shippingCharge()" id="shipping_method" value="<?php echo $ship->code; ?>" <?php echo ($dataCount == 1)?'checked':'';?>  required>
+                                            <?php echo $ship->name; ?>
+                                        </label>
+                                    </div>
                                 </div>
-                                <?php }
-                                } ?>
+                                <?php  }  ?>
                             </div>
 
                             <div class="d-flex justify-content-between mt-3">
