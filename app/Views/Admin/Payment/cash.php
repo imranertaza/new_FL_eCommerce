@@ -47,6 +47,7 @@
                         <div class="col-md-6">
                             <label>Image</label>
                             <input type="file" class="form-control" name="image" >
+                            <span>Recommended Size: 120 x 30</span>
                         </div>
                         <?php foreach ($payment_settings as $val){ ?>
                             <div class="col-md-6">

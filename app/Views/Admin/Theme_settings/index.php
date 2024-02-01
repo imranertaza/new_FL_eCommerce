@@ -76,7 +76,7 @@
                                                 <input type="file" name="slider" class="form-control" required>
                                                 <input type="hidden" name="nameslider" class="form-control"
                                                        value="slider_1" required>
-                                                       <small>Size: <?php echo $theme_libraries->slider_width; ?> x <?php echo $theme_libraries->slider_height; ?></small>
+                                                       <small>Recommended Size: <?php echo $theme_libraries->slider_width; ?> x <?php echo $theme_libraries->slider_height; ?></small>
                                             </div>
                                             
                                             <button type="submit" class="btn btn-primary">Save</button>
@@ -97,7 +97,7 @@
                                                 <input type="file" name="slider" class="form-control" required>
                                                 <input type="hidden" name="nameslider" class="form-control"
                                                        value="slider_3" required>
-                                                <small>Size: <?php echo $theme_libraries->slider_width; ?> x <?php echo $theme_libraries->slider_height; ?></small>
+                                                <small>Recommended Size: <?php echo $theme_libraries->slider_width; ?> x <?php echo $theme_libraries->slider_height; ?></small>
                                             </div>
                                             <button type="submit" class="btn btn-primary">Save</button>
                                         </form>
@@ -116,7 +116,7 @@
                                                 <input type="file" name="slider" class="form-control" required>
                                                 <input type="hidden" name="nameslider" class="form-control"
                                                        value="slider_2" required>
-                                                <small>Size: <?php echo $theme_libraries->slider_width; ?> x <?php echo $theme_libraries->slider_height; ?></small>
+                                                <small>Recommended Size: <?php echo $theme_libraries->slider_width; ?> x <?php echo $theme_libraries->slider_height; ?></small>
                                             </div>
                                             <button type="submit" class="btn btn-primary">Save</button>
                                         </form>
@@ -139,7 +139,7 @@
                                             <div class="form-group">
                                                 <label>Logo</label>
                                                 <input type="file" name="side_logo" class="form-control" required>
-                                                <small>Size: <?php echo $theme_libraries->logo_width; ?> x <?php echo $theme_libraries->logo_height; ?></small>
+                                                <small>Recommended Size: <?php echo $theme_libraries->logo_width; ?> x <?php echo $theme_libraries->logo_height; ?></small>
                                             </div>
                                             <button type="submit" class="btn btn-primary">Save</button>
                                         </form>
@@ -157,7 +157,7 @@
                                             <div class="form-group">
                                                 <label>Favicon</label>
                                                 <input type="file" name="favicon" class="form-control" required>
-                                                <small>Size: 80 x 80</small>
+                                                <small>Recommended Size: 80 x 80</small>
                                             </div>
                                             <button type="submit" class="btn btn-primary">Save</button>
                                         </form>
