@@ -146,213 +146,207 @@ class Checkout extends BaseController
 
     public function checkout_action()
     {
+        if (!empty($this->cart->contents())) {
+            $data['payment_firstname'] = $this->request->getPost('payment_firstname');
+            $data['payment_lastname'] = $this->request->getPost('payment_lastname');
+            $data['payment_phone'] = $this->request->getPost('payment_phone');
+            $data['payment_email'] = $this->request->getPost('payment_email');
+            $data['payment_country_id'] = $this->request->getPost('payment_country_id');
+            $data['payment_city'] = $this->request->getPost('payment_city');
+            $data['payment_postcode'] = $this->request->getPost('payment_postcode');
+            $data['payment_address_1'] = $this->request->getPost('payment_address_1');
+            $data['payment_address_2'] = $this->request->getPost('payment_address_2');
 
-        $data['payment_firstname'] = $this->request->getPost('payment_firstname');
-        $data['payment_lastname'] = $this->request->getPost('payment_lastname');
-        $data['payment_phone'] = $this->request->getPost('payment_phone');
-        $data['payment_email'] = $this->request->getPost('payment_email');
-        $data['payment_country_id'] = $this->request->getPost('payment_country_id');
-        $data['payment_city'] = $this->request->getPost('payment_city');
-        $data['payment_postcode'] = $this->request->getPost('payment_postcode');
-        $data['payment_address_1'] = $this->request->getPost('payment_address_1');
-        $data['payment_address_2'] = $this->request->getPost('payment_address_2');
+            $data['shipping_method'] = $this->request->getPost('shipping_method');
+            $data['shipping_charge'] = $this->request->getPost('shipping_charge');
+            $data['payment_method'] = $this->request->getPost('payment_method');
 
-        $data['shipping_method'] = $this->request->getPost('shipping_method');
-        $data['shipping_charge'] = $this->request->getPost('shipping_charge');
-        $data['payment_method'] = $this->request->getPost('payment_method');
+            $data['store_id'] = get_data_by_id('store_id', 'cc_stores', 'is_default', '1');
 
-        $data['store_id'] = get_data_by_id('store_id', 'cc_stores', 'is_default', '1');
+            $new_acc_create = $this->request->getPost('new_acc_create');
 
-        $new_acc_create = $this->request->getPost('new_acc_create');
+            $shipping_else = $this->request->getPost('shipping_else');
 
-        $shipping_else = $this->request->getPost('shipping_else');
+            $this->validation->setRules([
+                'payment_firstname' => ['label' => 'First name', 'rules' => 'required'],
+                'payment_lastname' => ['label' => 'Last name', 'rules' => 'required'],
+                'payment_phone' => ['label' => 'Phone', 'rules' => 'required'],
+                'payment_email' => ['label' => 'Email', 'rules' => 'required'],
+                'payment_country_id' => ['label' => 'Country', 'rules' => 'required'],
+                'payment_city' => ['label' => 'City', 'rules' => 'required'],
+                'payment_method' => ['label' => 'Payment Method', 'rules' => 'required'],
+            ]);
 
-        $this->validation->setRules([
-            'payment_firstname' => ['label' => 'First name', 'rules' => 'required'],
-            'payment_lastname' => ['label' => 'Last name', 'rules' => 'required'],
-            'payment_phone' => ['label' => 'Phone', 'rules' => 'required'],
-            'payment_email' => ['label' => 'Email', 'rules' => 'required'],
-            'payment_country_id' => ['label' => 'Country', 'rules' => 'required'],
-            'payment_city' => ['label' => 'City', 'rules' => 'required'],
-            'payment_method' => ['label' => 'Payment Method', 'rules' => 'required'],
-        ]);
-
-        if ($this->validation->run($data) == FALSE) {
-            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert" style="color: #fff;" >' . $this->validation->listErrors() . ' </div>');
-            return redirect()->to('checkout');
-        } else {
-
-            $shipping_charge = $this->shipping_charge($data['payment_city'],$this->request->getPost('shipping_city'),$data['shipping_method']);
-
-            if (isset($this->session->cusUserId)) {
-                $data['customer_id'] = $this->session->cusUserId;
-            }
-
-            $disc = null;
-            if (isset($this->session->coupon_discount)) {
-                $disc = round(($this->cart->total() * $this->session->coupon_discount) / 100);
-            }
-            $finalAmo = $this->cart->total() - $disc;
-            if (!empty($shipping_charge)) {
-                $finalAmo = ($this->cart->total() + $shipping_charge) - $disc;
-            }
-
-            if ($data['payment_method'] == '8') {
-                $balCus = get_data_by_id('balance', 'cc_customer', 'customer_id', $this->session->cusUserId);
-                if ($balCus < $finalAmo) {
-                    $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert" style="color: #fff;" >Not enough balance </div>');
-                    return redirect()->to('checkout');
-                }
-            }
-
-            
-            DB()->transStart();
-            $order_status_id = get_data_by_id('order_status_id', 'cc_order_status', 'name', 'Pending');
-
-            if ($shipping_else == 'on') {
-                $data['shipping_firstname'] = $this->request->getPost('shipping_firstname');
-                $data['shipping_lastname'] = $this->request->getPost('shipping_lastname');
-                $data['shipping_phone'] = $this->request->getPost('shipping_phone');
-                $data['shipping_country_id'] = $this->request->getPost('shipping_country_id');
-                $data['shipping_city'] = $this->request->getPost('shipping_city');
-                $data['shipping_postcode'] = $this->request->getPost('shipping_postcode');
-                $data['shipping_address_1'] = $this->request->getPost('shipping_address_1');
-                $data['shipping_address_2'] = $this->request->getPost('shipping_address_2');
+            if ($this->validation->run($data) == FALSE) {
+                $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert" style="color: #fff;" >' . $this->validation->listErrors() . ' </div>');
+                return redirect()->to('checkout');
             } else {
-                $data['shipping_firstname'] = $data['payment_firstname'];
-                $data['shipping_lastname'] = $data['payment_lastname'];
-                $data['shipping_phone'] = $data['payment_phone'];
-                $data['shipping_country_id'] = $data['payment_country_id'];
-                $data['shipping_city'] = $data['payment_city'];
-                $data['shipping_postcode'] = $this->request->getPost('payment_postcode');
-                $data['shipping_address_1'] = $data['payment_address_1'];
-                $data['shipping_address_2'] = $data['payment_address_2'];
-            }
+
+                $shipping_charge = $this->shipping_charge($data['payment_city'], $this->request->getPost('shipping_city'), $data['shipping_method']);
+
+                if (isset($this->session->cusUserId)) {
+                    $data['customer_id'] = $this->session->cusUserId;
+                }
+
+                $disc = null;
+                if (isset($this->session->coupon_discount)) {
+                    $disc = round(($this->cart->total() * $this->session->coupon_discount) / 100);
+                }
+                $finalAmo = $this->cart->total() - $disc;
+                if (!empty($shipping_charge)) {
+                    $finalAmo = ($this->cart->total() + $shipping_charge) - $disc;
+                }
+
+                if ($data['payment_method'] == '8') {
+                    $balCus = get_data_by_id('balance', 'cc_customer', 'customer_id', $this->session->cusUserId);
+                    if ($balCus < $finalAmo) {
+                        $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert" style="color: #fff;" >Not enough balance </div>');
+                        return redirect()->to('checkout');
+                    }
+                }
 
 
+                DB()->transStart();
+                $order_status_id = get_data_by_id('order_status_id', 'cc_order_status', 'name', 'Pending');
+
+                if ($shipping_else == 'on') {
+                    $data['shipping_firstname'] = $this->request->getPost('shipping_firstname');
+                    $data['shipping_lastname'] = $this->request->getPost('shipping_lastname');
+                    $data['shipping_phone'] = $this->request->getPost('shipping_phone');
+                    $data['shipping_country_id'] = $this->request->getPost('shipping_country_id');
+                    $data['shipping_city'] = $this->request->getPost('shipping_city');
+                    $data['shipping_postcode'] = $this->request->getPost('shipping_postcode');
+                    $data['shipping_address_1'] = $this->request->getPost('shipping_address_1');
+                    $data['shipping_address_2'] = $this->request->getPost('shipping_address_2');
+                } else {
+                    $data['shipping_firstname'] = $data['payment_firstname'];
+                    $data['shipping_lastname'] = $data['payment_lastname'];
+                    $data['shipping_phone'] = $data['payment_phone'];
+                    $data['shipping_country_id'] = $data['payment_country_id'];
+                    $data['shipping_city'] = $data['payment_city'];
+                    $data['shipping_postcode'] = $this->request->getPost('payment_postcode');
+                    $data['shipping_address_1'] = $data['payment_address_1'];
+                    $data['shipping_address_2'] = $data['payment_address_2'];
+                }
 
 
-            $data['total'] = $this->cart->total();
-            $data['discount'] = $disc;
-            $data['final_amount'] = $finalAmo;
+                $data['total'] = $this->cart->total();
+                $data['discount'] = $disc;
+                $data['final_amount'] = $finalAmo;
 
-            $data['status'] = $order_status_id;
-            $table = DB()->table('cc_order');
-            $table->insert($data);
-            $order_id = DB()->insertID();
-
-
-            //u-wallet
-            if ($data['payment_method'] == '8') {
-                $newBal = $balCus - $finalAmo;
-                $cusData['balance'] = $newBal;
-                $tableCus = DB()->table('cc_customer');
-                $tableCus->where('customer_id', $this->session->cusUserId)->update($cusData);
+                $data['status'] = $order_status_id;
+                $table = DB()->table('cc_order');
+                $table->insert($data);
+                $order_id = DB()->insertID();
 
 
-                $cusLedg['customer_id'] = $this->session->cusUserId;
-                $cusLedg['order_id'] = $order_id;
-                $cusLedg['payment_method_id'] = $data['payment_method'];
-                $cusLedg['particulars'] = 'Product purchase';
-                $cusLedg['trangaction_type'] = 'Dr.';
-                $cusLedg['amount'] = $finalAmo;
-                $cusLedg['rest_balance'] = $newBal;
-
-                $tableCusLedg = DB()->table('cc_customer_ledger');
-                $tableCusLedg->insert($cusLedg);
-            }
+                //u-wallet
+                if ($data['payment_method'] == '8') {
+                    $newBal = $balCus - $finalAmo;
+                    $cusData['balance'] = $newBal;
+                    $tableCus = DB()->table('cc_customer');
+                    $tableCus->where('customer_id', $this->session->cusUserId)->update($cusData);
 
 
+                    $cusLedg['customer_id'] = $this->session->cusUserId;
+                    $cusLedg['order_id'] = $order_id;
+                    $cusLedg['payment_method_id'] = $data['payment_method'];
+                    $cusLedg['particulars'] = 'Product purchase';
+                    $cusLedg['trangaction_type'] = 'Dr.';
+                    $cusLedg['amount'] = $finalAmo;
+                    $cusLedg['rest_balance'] = $newBal;
+
+                    $tableCusLedg = DB()->table('cc_customer_ledger');
+                    $tableCusLedg->insert($cusLedg);
+                }
 
 
-            //card detail add
-            if ($data['payment_method'] == '7') {
-                $dataCard['payment_method_id'] = $data['payment_method'];
-                $dataCard['order_id'] = $order_id;
-                $dataCard['card_name'] = $this->request->getPost('card_name');
-                $dataCard['card_number'] = $this->request->getPost('card_number');
-                $dataCard['card_expiration'] = $this->request->getPost('card_expiration');
-                $dataCard['card_cvc'] = $this->request->getPost('card_cvc');
+                //card detail add
+                if ($data['payment_method'] == '7') {
+                    $dataCard['payment_method_id'] = $data['payment_method'];
+                    $dataCard['order_id'] = $order_id;
+                    $dataCard['card_name'] = $this->request->getPost('card_name');
+                    $dataCard['card_number'] = $this->request->getPost('card_number');
+                    $dataCard['card_expiration'] = $this->request->getPost('card_expiration');
+                    $dataCard['card_cvc'] = $this->request->getPost('card_cvc');
 
-                $tableCard = DB()->table('cc_order_card_details');
-                $tableCard->insert($dataCard);
-            }
-            //card detail add
-
-
+                    $tableCard = DB()->table('cc_order_card_details');
+                    $tableCard->insert($dataCard);
+                }
+                //card detail add
 
 
+                //order cc_order_history
+
+                $dataOrderHistory['order_id'] = $order_id;
+                $dataOrderHistory['order_status_id'] = $order_status_id;
+                $tabHistOr = DB()->table('cc_order_history');
+                $tabHistOr->insert($dataOrderHistory);
 
 
-            //order cc_order_history
+                foreach ($this->cart->contents() as $val) {
+                    $oldQty = get_data_by_id('quantity', 'cc_products', 'product_id', $val['id']);
+                    $dataOrder['order_id'] = $order_id;
+                    $dataOrder['product_id'] = $val['id'];
+                    $dataOrder['price'] = $val['price'];
+                    $dataOrder['quantity'] = $val['qty'];
+                    $dataOrder['total_price'] = $val['subtotal'];
+                    $dataOrder['final_price'] = $val['subtotal'];
+                    $tableOrder = DB()->table('cc_order_item');
+                    $tableOrder->insert($dataOrder);
+                    $order_item_id = DB()->insertID();
 
-            $dataOrderHistory['order_id'] = $order_id;
-            $dataOrderHistory['order_status_id'] = $order_status_id;
-            $tabHistOr = DB()->table('cc_order_history');
-            $tabHistOr->insert($dataOrderHistory);
+                    $newqty['quantity'] = $oldQty - $val['qty'];
+                    $tablePro = DB()->table('cc_products');
+                    $tablePro->where('product_id', $val['id'])->update($newqty);
 
+                    foreach (get_all_data_array('cc_option') as $vl) {
+                        if (!empty($val['op_' . strtolower($vl->name)])) {
+                            $data[strtolower($vl->name)] = $val['op_' . strtolower($vl->name)];
 
+                            $table = DB()->table('cc_product_option');
+                            $option = $table->where('option_value_id', $data[strtolower($vl->name)])->where('product_id', $val['id'])->get()->getRow();
 
-
-            foreach ($this->cart->contents() as $val) {
-                $oldQty = get_data_by_id('quantity', 'cc_products', 'product_id', $val['id']);
-                $dataOrder['order_id'] = $order_id;
-                $dataOrder['product_id'] = $val['id'];
-                $dataOrder['price'] = $val['price'];
-                $dataOrder['quantity'] = $val['qty'];
-                $dataOrder['total_price'] = $val['subtotal'];
-                $dataOrder['final_price'] = $val['subtotal'];
-                $tableOrder = DB()->table('cc_order_item');
-                $tableOrder->insert($dataOrder);
-                $order_item_id = DB()->insertID();
-
-                $newqty['quantity'] = $oldQty - $val['qty'];
-                $tablePro = DB()->table('cc_products');
-                $tablePro->where('product_id', $val['id'])->update($newqty);
-
-                foreach (get_all_data_array('cc_option') as $vl) {
-                    if (!empty($val['op_' . strtolower($vl->name)])) {
-                        $data[strtolower($vl->name)] = $val['op_' . strtolower($vl->name)];
-
-                        $table = DB()->table('cc_product_option');
-                        $option = $table->where('option_value_id', $data[strtolower($vl->name)])->where('product_id', $val['id'])->get()->getRow();
-
-                        if (!empty($option)) {
-                            $dataOptino['order_id'] = $order_id;
-                            $dataOptino['order_item_id'] = $order_item_id;
-                            $dataOptino['product_id'] = $option->product_id;
-                            $dataOptino['option_id'] = $option->option_id;
-                            $dataOptino['option_value_id'] = $option->option_value_id;
-                            $dataOptino['name'] = strtolower($vl->name);
-                            $dataOptino['value'] = get_data_by_id('name', 'cc_option_value', 'option_value_id', $option->option_value_id);
-                            $tableOption = DB()->table('cc_order_option');
-                            $tableOption->insert($dataOptino);
+                            if (!empty($option)) {
+                                $dataOptino['order_id'] = $order_id;
+                                $dataOptino['order_item_id'] = $order_item_id;
+                                $dataOptino['product_id'] = $option->product_id;
+                                $dataOptino['option_id'] = $option->option_id;
+                                $dataOptino['option_value_id'] = $option->option_value_id;
+                                $dataOptino['name'] = strtolower($vl->name);
+                                $dataOptino['value'] = get_data_by_id('name', 'cc_option_value', 'option_value_id', $option->option_value_id);
+                                $tableOption = DB()->table('cc_order_option');
+                                $tableOption->insert($dataOptino);
+                            }
                         }
                     }
                 }
+
+
+                DB()->transComplete();
+
+                //email send customer
+                $temMes = order_email_template($order_id);
+                $subject = 'Product order - Order ID ' . $order_id;
+                $message = $temMes;
+                email_send($data['payment_email'], $subject, $message);
+
+
+                //email send admin
+                $email = get_lebel_by_value_in_settings('email');
+                $subjectAd = 'Product order - Order ID ' . $order_id;
+                $messageAd = $temMes;
+                email_send($email, $subjectAd, $messageAd);
+
+                unset($_SESSION['coupon_discount']);
+                $this->cart->destroy();
+
+                $this->session->setFlashdata('message', '<div class="alert-success-m alert-success alert-dismissible" role="alert">Your order has been successfully placed </div>');
+                return redirect()->to('checkout_success');
             }
-
-
-            DB()->transComplete();
-
-            //email send customer
-            $temMes = order_email_template($order_id);
-            $subject = 'Product order - Order ID '.$order_id;
-            $message = $temMes;
-            email_send($data['payment_email'], $subject, $message);
-
-
-            //email send admin
-            $email = get_lebel_by_value_in_settings('email');
-            $subjectAd = 'Product order - Order ID '.$order_id;
-            $messageAd = $temMes;
-            email_send($email, $subjectAd, $messageAd);
-
-            unset($_SESSION['coupon_discount']);
-            $this->cart->destroy();
-
-            $this->session->setFlashdata('message', '<div class="alert-success-m alert-success alert-dismissible" role="alert">Your order has been successfully placed </div>');
-            return redirect()->to('checkout_success');
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert" style="color: #fff;" >Your cart is empty!</div>');
+            return redirect()->to('checkout');
         }
     }
 

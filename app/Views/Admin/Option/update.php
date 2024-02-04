@@ -48,7 +48,7 @@
                                 <select name="type" class="form-control" required>
                                     <option value="">Please select</option>
                                     <option value="select" <?php echo ($option->type == 'select')?'selected':''; ?> >Select</option>
-                                    <option value="checkbox" <?php echo ($option->type == 'checkbox')?'selected':''; ?> >Checkbox</option>
+<!--                                    <option value="checkbox" --><?php //echo ($option->type == 'checkbox')?'selected':''; ?><!-- >Checkbox</option>-->
                                     <option value="radio" <?php echo ($option->type == 'radio')?'selected':''; ?> >Radio</option>
                                 </select>
                             </div>
