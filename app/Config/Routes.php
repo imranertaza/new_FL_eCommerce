@@ -254,7 +254,10 @@ $routes->post('/bulk_all_status_update', 'Admin\Advanced_products::bulk_all_stat
 $routes->post('/bulk_category_view', 'Admin\Advanced_products::bulk_category_view');
 $routes->post('/bulk_category_update', 'Admin\Advanced_products::bulk_category_update');
 
+$routes->post('/bulk_product_cpoy', 'Admin\Advanced_products::bulk_product_cpoy');
 
+$routes->get('/datatable_test', 'Admin\Advanced_products::datatable_test');
+$routes->get('/datatable_data', 'Admin\Advanced_products::datatable_data');
 
 
 //login routes
@@ -303,6 +306,7 @@ $routes->post('/addtocartdetail', 'Cart\Cart::addtocartdetail');
 $routes->post('/addtocartgroup', 'Cart\Cart::addToCartGroup');
 $routes->post('/updateToCart', 'Cart\Cart::updateToCart');
 $routes->post('/removeToCart', 'Cart\Cart::removeToCart');
+$routes->get('/cart_empty_check', 'Cart\Cart::cart_empty_check');
 
 //Checkout
 $routes->get('/checkout', 'Checkout::index');

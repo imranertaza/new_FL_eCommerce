@@ -85,10 +85,11 @@ class Products extends BaseController {
 
         $totalOptionPrice = 0;
         foreach(get_all_data_array('cc_option') as $vl) {
-            $data[strtolower($vl->name)] = $this->request->getPost(strtolower($vl->name));
+            $fildName = str_replace(' ','',$vl->name);
+            $data[strtolower($fildName)] = $this->request->getPost(strtolower($fildName));
 
             $table = DB()->table('cc_product_option');
-            $option = $table->where('option_value_id',$data[strtolower($vl->name)])->where('product_id',$product_id)->get()->getRow();
+            $option = $table->where('option_value_id',$data[strtolower($fildName)])->where('product_id',$product_id)->get()->getRow();
 
             if (!empty($option)) {
                 if (empty($option->subtract)){
@@ -179,7 +180,8 @@ class Products extends BaseController {
         $data = $table->where('option_id',$option_id)->where('product_id',$product_id)->get()->getResult();
         $view = '<ul class="list-unstyled filter-items mb-3">';
         foreach($data as $key=> $opVal){
-            $view .='<li class="mt-2"><input type="radio" class="btn-check" oninput="optionPriceCalculate('.$product_id.')"  name="'.strtolower($name).'" id="option_'.$opVal->option_value_id.'" value="'.$opVal->option_value_id.'"  autocomplete="off" required>';
+            $fildName = str_replace(' ','',$name);
+            $view .='<li class="mt-2"><input type="radio" class="btn-check" oninput="optionPriceCalculate('.$product_id.')"  name="'.strtolower($fildName).'" id="option_'.$opVal->option_value_id.'" value="'.$opVal->option_value_id.'"  autocomplete="off" required>';
 
                 $nameVal = get_data_by_id('name','cc_option_value','option_value_id',$opVal->option_value_id);
                 $firstCar =  mb_substr($nameVal, 0, 1); $length = strlen($nameVal);
@@ -197,7 +199,8 @@ class Products extends BaseController {
     private function typeSelect($option_id,$product_id,$name){
         $table = DB()->table('cc_product_option');
         $data = $table->where('option_id',$option_id)->where('product_id',$product_id)->get()->getResult();
-        $view = '<select name="'.strtolower($name).'"  onchange="optionPriceCalculate('.$product_id.')" class="form-control my-2" required><option value="" >Please select</option>';
+        $fildName = str_replace(' ','',$name);
+        $view = '<select name="'.strtolower($fildName).'"  onchange="optionPriceCalculate('.$product_id.')" class="form-control detail-select my-2" required><option value="" >Please select</option>';
         foreach($data as $key=> $opVal){
             $nameVal = get_data_by_id('name','cc_option_value','option_value_id',$opVal->option_value_id);
             $firstCar =  mb_substr($nameVal, 0, 1); $length = strlen($nameVal);

@@ -38,6 +38,15 @@ class Cart extends BaseController {
         }
     }
 
+    public function cart_empty_check(){
+        if (empty($this->cart->contents())){
+            $result = false;
+        }else{
+            $result = true;
+        }
+        print $result;
+    }
+
     public function addToCart(){
 
 

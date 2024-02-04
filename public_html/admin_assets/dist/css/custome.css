@@ -80,3 +80,7 @@
 .dataTables_length select{
     min-width: 100px !important;
 }
+.img-100-100{
+    width: 100px !important;
+    height: 100px !important;
+}
