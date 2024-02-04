@@ -47,7 +47,7 @@
                                 <select name="type" class="form-control" required>
                                     <option value="">Please select</option>
                                     <option value="select">Select</option>
-                                    <option value="checkbox">Checkbox</option>
+<!--                                    <option value="checkbox">Checkbox</option>-->
                                     <option value="radio">Radio</option>
                                 </select>
                             </div>

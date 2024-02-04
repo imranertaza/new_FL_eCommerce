@@ -2806,7 +2806,9 @@ input[type='radio']:checked {
     padding-left: 34px !important;
 }
 
-
+.detail-select{
+    color: blue;
+}
 
 
 

@@ -940,4 +940,40 @@ function allchecked(source) {
     }
 }
 
+function allCheckedDemo(source) {
+    var checkboxes = document.querySelectorAll('#example2 input[type="checkbox"]');
+    for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i] != source)
+            checkboxes[i].checked = source.checked;
+    }
+}
+
+function bulk_product_copy(){
+    $.ajax({
+        method: "POST",
+        url: "<?php echo base_url('bulk_product_cpoy') ?>",
+        data: $('input[name^="productId[]"]').serializeArray(),
+        beforeSend: function() {
+            $("#loading-image").show();
+        },
+        success: function(data) {
+            $("#message").html(data);
+            $("#tablereload").load(document.URL+ ' #example2', function(){
+                $('#example2').DataTable({
+                    "paging": true,
+                    "lengthChange": true,
+                    "searching": true,
+                    "ordering": true,
+                    "autoWidth": false,
+                    "responsive": true,
+                    "drawCallback": function( settings ) {
+                        checkShowHideRow();
+                    }
+                });
+            });
+        }
+
+    });
+}
+
 </script>

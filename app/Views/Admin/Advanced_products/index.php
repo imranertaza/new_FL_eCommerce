@@ -33,6 +33,7 @@
                             class="btn btn-primary  btn-xs float-right "><i class="fas fa-plus"></i> Add</a>
                         <a class="btn btn-xs btn-info float-right mr-2" data-toggle="collapse" href="#collapseProduct"
                             role="button" aria-expanded="false" aria-controls="collapseProduct">Settings</a>
+                        <button type="button" onclick="bulk_product_copy()" class="btn btn-secondary btn-xs float-right mr-2"><i class="nav-icon fas fa-copy"></i> Copy</button>
                         <a href="<?php echo base_url('products') ?>" class="btn btn-danger float-right mr-2 btn-xs" >Back</a>
                     </div>
                     <div class="col-md-12" id="message" style="margin-top: 10px">
@@ -129,6 +130,7 @@
                     <table id="example2" class="table table-bordered table-striped">
                         <thead>
                             <tr>
+                                <th><input type="checkbox" onclick="allCheckedDemo(this)" ></th>
                                 <th class="colum_id row_show ">
                                     Id</th>
                                 <th class="colum_image row_show "> Image</th>
@@ -170,6 +172,9 @@
                         foreach ($product as $key => $val) {
                         ?>
                             <tr>
+                                <td width="10">
+                                    <input type="checkbox" name="productId[]" value="<?php echo $val->product_id;?>" >
+                                </td>
                                 <td class="colum_id row_show "> <?php echo $val->product_id; ?></td>
                                 <td class="colum_image row_show "> <?php echo image_view('uploads/products',$val->product_id,'100_'.$val->image,'noimage.png',$class='img-100-100');?></td>
                                 <td class="colum_name row_show ">

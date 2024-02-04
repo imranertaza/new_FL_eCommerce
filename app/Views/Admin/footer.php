@@ -116,6 +116,52 @@
 
     });
 
+
+    $(document).ready(function () {
+        var asyncData;
+        getdata();
+        function getdata(){
+            const getPeople = async () => {
+                const data = await fetch('<?php echo base_url("datatable_data")?>', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                const jsondata = await data.json();
+                asyncData=jsondata.data;
+                initialiseTable();
+                return jsondata;
+            };
+            getPeople();
+        }
+
+        function initialiseTable(){
+            var table = $("#records").DataTable({
+                data: asyncData,
+                // columns: [
+                //     {
+                //         data: "product_id",
+                //     },
+                //
+                //     {
+                //         data: "name",
+                //     },
+                //     {
+                //         data: "model"
+                //     },
+                //     {
+                //         data: "quantity"
+                //     }
+                //     ,
+                //     {
+                //         data: "price"
+                //     }
+                // ]
+            });
+        }
+    });
+
 </script>
 <?php require_once(FCPATH .'admin_assets/dist/js/ajaxScript.php'); ?>
 
