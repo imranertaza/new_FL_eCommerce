@@ -1140,7 +1140,8 @@ class Products extends BaseController
         $view = '<ul class="list-unstyled list-op-aj" >';
         foreach ($option as $op){
             $optionname = "'$op->name'";
-            $view .= '<li><a href="#" onclick="optionViewPro('.$op->option_id.','.$optionname.')" >'.$op->name.'</a></li>';
+            $optionname2 = "'".strtolower(str_replace(' ','',$op->name))."'";
+            $view .= '<li><a href="#" onclick="optionViewPro('.$op->option_id.','.$optionname2.','.$optionname.')" >'.$op->name.'</a></li>';
         }
         $view .= '</ul>';
 

@@ -521,12 +521,12 @@ function searchOptionUp(key) {
     });
 }
 
-function optionViewPro(option_id, name) {
+function optionViewPro(option_id, name,nameTitle) {
     var n = "'" + name + "_op'";
     var rl = "'" + name + "_remove'";
     var nr = "'" + name + "'";
     var link = '<a class="nav-link active text-dark" id="' + name + '_remove"  data-toggle="pill" href="#' + name +
-        '" role="tab" aria-controls="vert-tabs-home" aria-selected="true">' + name +
+        '" role="tab" aria-controls="vert-tabs-home" aria-selected="true">' + nameTitle +
         '<button type="button" class="btn btn-sm" onclick="remove_option_new_ajax(' + rl + ',' + nr +
         ')"><i class="fa fa-trash text-danger"></i></button></a>';
     var con = '<div class="tab-pane text-left fade  show active" id="' + name +
@@ -677,10 +677,10 @@ function bulk_status(label) {
 }
 
 
-function updateFunction(proId, input, value, viewId, formName) {
+function updateFunction(proId, input, value, viewId, formName,updateRow) {
     var formID = "'" + formName + "'"
     var data = '<form id="' + formName +
-        '" action="<?php echo base_url('bulk_data_update') ?>" method="post"><input type="text" name="' +
+        '" action="<?php echo base_url('bulk_data_update') ?>" data-row="'+updateRow+'" method="post"><input type="text" name="' +
         input +
         '" class="form-control mb-2" value="' + value +
         '" ><input type="hidden" name="product_id" class="form-control mb-2" value="' + proId +
@@ -690,10 +690,10 @@ function updateFunction(proId, input, value, viewId, formName) {
     $('#' + viewId).html(data);
 }
 
-function descriptionTableDataUpdateFunction(proId, input, value, viewId, formName) {
+function descriptionTableDataUpdateFunction(proId, input, value, viewId, formName,updateRow) {
     var formID = "'" + formName + "'"
     var data = '<form id="' + formName +
-        '" action="<?php echo base_url('description_data_update') ?>" method="post"><input type="text" name="' +
+        '" action="<?php echo base_url('description_data_update') ?>" data-row="'+updateRow+'" method="post"><input type="text" name="' +
         input +
         '" class="form-control mb-2" value="' + value +
         '" ><input type="hidden" name="product_desc_id" class="form-control mb-2" value="' + proId +
@@ -709,6 +709,8 @@ function hideInput(data) {
 
 function submitFormBulk(formID) {
     var form = document.getElementById(formID);
+    var upRow = $(form).attr('data-row');
+
     var done = false;
     $.ajax({
         url: $(form).prop('action'),
@@ -718,21 +720,23 @@ function submitFormBulk(formID) {
         cache: false,
         processData: false,
         success: function(data) {
-            $("#message").html(data);
-            // $('#tablereload').load(document.URL + ' #example2', '', checkShowHideRow);
-            $("#tablereload").load(document.URL+ ' #example2', function(){
-                $('#example2').DataTable({
-                    "paging": true,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                    "drawCallback": function( settings ) {
-                        checkShowHideRow();
-                    }
-                });
-            });
+            // $("#message").html(data);
+            $("#mess").show();
+            $("#"+upRow).html(data);
+            checkShowHideRow();
+            // $("#tablereload").load(document.URL+ ' #example2', function(){
+            //     $('#example2').DataTable({
+            //         "paging": true,
+            //         "lengthChange": true,
+            //         "searching": true,
+            //         "ordering": true,
+            //         "autoWidth": false,
+            //         "responsive": true,
+            //         "drawCallback": function( settings ) {
+            //             checkShowHideRow();
+            //         }
+            //     });
+            // });
 
         }
     });
@@ -755,7 +759,8 @@ function checkShowHideRow() {
 }
 
 
-function bulkAllStatusUpdate(proId, value, field) {
+function bulkAllStatusUpdate(proId, value, field,upRow) {
+
     $.ajax({
         url: '<?php echo base_url('bulk_all_status_update') ?>',
         type: "POST",
@@ -765,20 +770,23 @@ function bulkAllStatusUpdate(proId, value, field) {
             fieldName: field
         },
         success: function(data) {
-            $("#message").html(data);
-            $("#tablereload").load(document.URL+ ' #example2', function(){
-                $('#example2').DataTable({
-                    "paging": true,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                    "drawCallback": function( settings ) {
-                        checkShowHideRow();
-                    }
-                });
-            });
+            //$("#message").html(data);
+            $("#mess").show();
+            $("#"+upRow).html(data);
+            checkShowHideRow();
+            // $("#tablereload").load(document.URL+ ' #example2', function(){
+            //     $('#example2').DataTable({
+            //         "paging": true,
+            //         "lengthChange": true,
+            //         "searching": true,
+            //         "ordering": true,
+            //         "autoWidth": false,
+            //         "responsive": true,
+            //         "drawCallback": function( settings ) {
+            //             checkShowHideRow();
+            //         }
+            //     });
+            // });
         }
     });
 }
@@ -802,6 +810,7 @@ function categoryBulkUpdate(proId) {
 
 function categoryBulkUpdateAction() {
     var form = document.getElementById('categoryForm');
+    var upRow = $(form).attr('data-row');
     $.ajax({
         url: $(form).prop('action'),
         type: "POST",
@@ -811,20 +820,24 @@ function categoryBulkUpdateAction() {
         processData: false,
         success: function(data) {
             $('#categoryModal').modal('hide');
-            $("#message").html(data);
-            $("#tablereload").load(document.URL+ ' #example2', function(){
-                $('#example2').DataTable({
-                    "paging": true,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                    "drawCallback": function( settings ) {
-                        checkShowHideRow();
-                    }
-                });
-            });
+            // $("#message").html(data);
+            $("#mess").show();
+            $("#"+upRow).html(data);
+            checkShowHideRow();
+
+            // $("#tablereload").load(document.URL+ ' #example2', function(){
+            //     $('#example2').DataTable({
+            //         "paging": true,
+            //         "lengthChange": true,
+            //         "searching": true,
+            //         "ordering": true,
+            //         "autoWidth": false,
+            //         "responsive": true,
+            //         "drawCallback": function( settings ) {
+            //             checkShowHideRow();
+            //         }
+            //     });
+            // });
         }
     });
 }
