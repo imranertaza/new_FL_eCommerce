@@ -84,22 +84,27 @@ class Advanced_products extends BaseController
         $quantity = $this->request->getPost('quantity');
 
         if (!empty($name)) {
-            $data['name'] = $name;
+            $dataSearch['name'] = $name;
         }
         if (!empty($model)) {
-            $data['model'] = $model;
+            $dataSearch['model'] = $model;
         }
         if (!empty($price)) {
-            $data['price'] = $price;
+            $dataSearch['price'] = $price;
         }
         if (!empty($quantity)) {
-            $data['quantity'] = $quantity;
+            $dataSearch['quantity'] = $quantity;
         }
 
         $table = DB()->table('cc_products');
-        $table->where('product_id', $product_id)->update($data);
+        $table->where('product_id', $product_id)->update($dataSearch);
 
-        print '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        $table2 = DB()->table('cc_products');
+        $data['val'] = $table2->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id')->where('cc_products.product_id', $product_id)->get()->getRow();
+
+        echo view('Admin/Advanced_products/row', $data);
+
+
     }
 
     public function description_data_update(){
@@ -109,22 +114,26 @@ class Advanced_products extends BaseController
         $meta_keyword = $this->request->getPost('meta_keyword');
 
         if (isset($meta_title)) {
-            $data['meta_title'] = !empty($meta_title)?$meta_title:null;
+            $data2['meta_title'] = !empty($meta_title)?$meta_title:null;
         }
 
         if (isset($meta_description)) {
-            $data['meta_description'] = !empty($meta_description)?$meta_description:null;
+            $data2['meta_description'] = !empty($meta_description)?$meta_description:null;
         }
 
         if (isset($meta_keyword)) {
-            $data['meta_keyword'] = !empty($meta_keyword)?$meta_keyword:null;
+            $data2['meta_keyword'] = !empty($meta_keyword)?$meta_keyword:null;
         }
 
 
         $table = DB()->table('cc_product_description');
-        $table->where('product_desc_id', $product_desc_id)->update($data);
+        $table->where('product_desc_id', $product_desc_id)->update($data2);
 
-        print '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        $product_id = get_data_by_id('product_id','cc_product_description','product_desc_id',$product_desc_id);
+        $table2 = DB()->table('cc_products');
+        $data['val'] = $table2->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id')->where('cc_products.product_id', $product_id)->get()->getRow();
+
+        echo view('Admin/Advanced_products/row', $data);
     }
 
     public function bulk_all_status_update()
@@ -138,7 +147,10 @@ class Advanced_products extends BaseController
         $table = DB()->table('cc_products');
         $table->where('product_id', $product_id)->update($data);
 
-        print '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        $table2 = DB()->table('cc_products');
+        $data['val'] = $table2->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id')->where('cc_products.product_id', $product_id)->get()->getRow();
+
+        echo view('Admin/Advanced_products/row', $data);
     }
 
     public function bulk_category_view()
@@ -151,28 +163,6 @@ class Advanced_products extends BaseController
         $data['prodCatSel'] = $tablecat->where('product_id', $product_id)->get()->getResult();
 
         $data['product_id'] = $product_id;
-
-//        $view = '';
-//        $view .= '<div class="form-group category">
-//            <label>Category <span class="requi">*</span></label>
-//            <select class="select2bs4" name="categorys[]" multiple="multiple" data-placeholder="Select a State" style="width: 100%;" required>';
-//        $i = 1;
-//        foreach ($data['prodCat'] as $key => $cat) {
-//            $pName = (!empty($cat->parent_id)) ? get_data_by_id('category_name', 'cc_product_category', 'prod_cat_id', $cat->parent_id) . '->' : '';
-//
-//            $view .= '<option value="' . $cat->prod_cat_id . '"';
-//            foreach ($data['prodCatSel'] as $valC) {
-//                $view .= ($valC->category_id == $cat->prod_cat_id) ? 'selected' : '';
-//            };
-//            $view .= ' > ' . $pName . $cat->category_name . '</option>';
-//
-////            $view .= '<option value="'.$cat->prod_cat_id.'"  >'.$cat->category_name.'</option>';
-//        }
-//
-//        $view .= '</select>
-//            </div><input type="hidden" name="product_id" class="form-control mb-2" value="' . $product_id . '" >';
-//
-//        print $view;
 
         echo view('Admin/Advanced_products/category', $data);
     }
@@ -194,7 +184,12 @@ class Advanced_products extends BaseController
             $catTable->insert($catData);
         }
 
-        print '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+
+        $table2 = DB()->table('cc_products');
+        $data['val'] = $table2->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id')->where('cc_products.product_id', $product_id)->get()->getRow();
+
+        echo view('Admin/Advanced_products/row', $data);
+
     }
 
 
