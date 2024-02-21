@@ -722,21 +722,10 @@ function submitFormBulk(formID) {
         success: function(data) {
             // $("#message").html(data);
             $("#mess").show();
-            $("#"+upRow).html(data);
+            var div = $("#"+upRow).html(data);
+            div.animate({opacity: '0.5'});
+            div.animate({opacity: '1'});
             checkShowHideRow();
-            // $("#tablereload").load(document.URL+ ' #example2', function(){
-            //     $('#example2').DataTable({
-            //         "paging": true,
-            //         "lengthChange": true,
-            //         "searching": true,
-            //         "ordering": true,
-            //         "autoWidth": false,
-            //         "responsive": true,
-            //         "drawCallback": function( settings ) {
-            //             checkShowHideRow();
-            //         }
-            //     });
-            // });
 
         }
     });
@@ -745,7 +734,7 @@ function submitFormBulk(formID) {
 
 function checkShowHideRow() {
 
-    var fields = ['id','image', 'name', 'model', 'quantity', 'category', 'price', 'status', 'featured','meta_title','meta_keyword','meta_description', 'action'];
+    var fields = ['id','image', 'name', 'model', 'quantity', 'category', 'price', 'status', 'featured','option','meta_title','meta_keyword','meta_description', 'action'];
 
     for (let i = 0; i < fields.length; ++i) {
         if ($('input[name="' + fields[i] + '"]').is(':checked')) {
@@ -772,21 +761,10 @@ function bulkAllStatusUpdate(proId, value, field,upRow) {
         success: function(data) {
             //$("#message").html(data);
             $("#mess").show();
-            $("#"+upRow).html(data);
+            var div = $("#"+upRow).html(data);
+            div.animate({opacity: '0.5'});
+            div.animate({opacity: '1'});
             checkShowHideRow();
-            // $("#tablereload").load(document.URL+ ' #example2', function(){
-            //     $('#example2').DataTable({
-            //         "paging": true,
-            //         "lengthChange": true,
-            //         "searching": true,
-            //         "ordering": true,
-            //         "autoWidth": false,
-            //         "responsive": true,
-            //         "drawCallback": function( settings ) {
-            //             checkShowHideRow();
-            //         }
-            //     });
-            // });
         }
     });
 }
@@ -808,6 +786,44 @@ function categoryBulkUpdate(proId) {
     });
 }
 
+function optionBulkUpdate(proId){
+    $('#optionModal').modal('show');
+    $.ajax({
+        url: '<?php echo base_url('bulk_option_view') ?>',
+        type: "POST",
+        data: {
+            product_id: proId
+        },
+        success: function(data) {
+            $("#optionData").html(data);
+
+        }
+    });
+}
+
+function optionBulkUpdateAction() {
+    var form = document.getElementById('optionForm');
+    var upRow = $(form).attr('data-row');
+    $.ajax({
+        url: $(form).prop('action'),
+        type: "POST",
+        data: new FormData(form),
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function(data) {
+            $('#optionModal').modal('hide');
+            // $("#message").html(data);
+            $("#mess").show();
+            var div = $("#"+upRow).html(data);
+            div.animate({opacity: '0.5'});
+            div.animate({opacity: '1'});
+            checkShowHideRow();
+
+        }
+    });
+}
+
 function categoryBulkUpdateAction() {
     var form = document.getElementById('categoryForm');
     var upRow = $(form).attr('data-row');
@@ -822,22 +838,11 @@ function categoryBulkUpdateAction() {
             $('#categoryModal').modal('hide');
             // $("#message").html(data);
             $("#mess").show();
-            $("#"+upRow).html(data);
+            var div = $("#"+upRow).html(data);
+            div.animate({opacity: '0.5'});
+            div.animate({opacity: '1'});
             checkShowHideRow();
 
-            // $("#tablereload").load(document.URL+ ' #example2', function(){
-            //     $('#example2').DataTable({
-            //         "paging": true,
-            //         "lengthChange": true,
-            //         "searching": true,
-            //         "ordering": true,
-            //         "autoWidth": false,
-            //         "responsive": true,
-            //         "drawCallback": function( settings ) {
-            //             checkShowHideRow();
-            //         }
-            //     });
-            // });
         }
     });
 }
@@ -955,6 +960,14 @@ function allchecked(source) {
 
 function allCheckedDemo(source) {
     var checkboxes = document.querySelectorAll('#example2 input[type="checkbox"]');
+    for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i] != source)
+            checkboxes[i].checked = source.checked;
+    }
+}
+
+function allCheckedDemo2(source) {
+    var checkboxes = document.querySelectorAll('#record input[type="checkbox"]');
     for (var i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i] != source)
             checkboxes[i].checked = source.checked;

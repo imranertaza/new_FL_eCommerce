@@ -257,7 +257,10 @@ $routes->post('/bulk_category_update', 'Admin\Advanced_products::bulk_category_u
 $routes->post('/bulk_product_cpoy', 'Admin\Advanced_products::bulk_product_cpoy');
 
 $routes->get('/datatable_test', 'Admin\Advanced_products::datatable_test');
-$routes->get('/datatable_data', 'Admin\Advanced_products::datatable_data');
+$routes->post('/datatable_data', 'Admin\Advanced_products::datatable_data');
+
+$routes->post('/bulk_option_view', 'Admin\Advanced_products::bulk_option_view');
+$routes->post('/bulk_option_update', 'Admin\Advanced_products::bulk_option_update');
 
 
 //login routes

@@ -94,9 +94,16 @@
                         </div>
                         <div class="form-check form-check-inline">
                             <input type="checkbox" name="featured" class="form-check-input"
-                                onclick="bulk_status('featured')" id="check_8" checked="" >
+                                onclick="bulk_status('featured')" id="check_8"  >
                             <label class="form-check-label" for="check_8">
                                 Featured </label>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" name="option" class="form-check-input"
+                                   onclick="bulk_status('option')" id="check_14" checked="" >
+                            <label class="form-check-label" for="check_14">
+                                Option </label>
                         </div>
 
                         <div class="form-check form-check-inline">
@@ -147,7 +154,8 @@
                                     Price</th>
                                 <th class="colum_status row_show ">
                                     Status</th>
-                                <th class="colum_featured row_show "> Featured</th>
+                                <th class="colum_featured row_hide "> Featured</th>
+                                <th class="colum_option row_show "> Option</th>
                                 <th class="colum_meta_title row_hide "> Meta Title</th>
                                 <th class="colum_meta_keyword row_hide "> Meta Keyword</th>
                                 <th class="colum_meta_description row_hide "> Meta Description</th>
@@ -200,12 +208,15 @@
                                     <?php } ?>
 
                                 </td>
-                                <td class="colum_featured row_show">
+                                <td class="colum_featured row_hide">
                                     <?php if ($val->featured == '1') { ?>
                                     <button type="button" onclick="bulkAllStatusUpdate('<?php echo $val->product_id; ?>','0','featured','update_<?php echo $val->product_id?>')"  class="btn btn-success btn-xs">On</button>
                                     <?php } else { ?>
                                     <button type="button" onclick="bulkAllStatusUpdate('<?php echo $val->product_id; ?>','1','featured','update_<?php echo $val->product_id?>')" class="btn btn-warning btn-xs">Off</button>
                                     <?php } ?>
+                                </td>
+                                <td class="colum_option row_show">
+                                    <button type="button" onclick="optionBulkUpdate('<?php echo $val->product_id; ?>')" class="btn btn-xs btn-secondary" >Show</button>
                                 </td>
 
                                 <td class="colum_meta_title row_hide">
@@ -246,7 +257,13 @@
     <div class="modal fade" id="categoryModal">
         <div class="modal-dialog">
             <div class="modal-content" id="catData">
+            </div>
+        </div>
+    </div>
 
+    <div class="modal fade" id="optionModal">
+        <div class="modal-dialog modal-xl ">
+            <div class="modal-content" id="optionData">
             </div>
         </div>
     </div>
