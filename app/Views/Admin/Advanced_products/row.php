@@ -41,12 +41,16 @@
     <?php } ?>
 
 </td>
-<td class="colum_featured row_show">
+<td class="colum_featured row_hide">
     <?php if ($val->featured == '1') { ?>
         <button type="button" onclick="bulkAllStatusUpdate('<?php echo $val->product_id; ?>','0','featured','update_<?php echo $val->product_id?>')" class="btn btn-success btn-xs">On</button>
     <?php } else { ?>
         <button type="button" onclick="bulkAllStatusUpdate('<?php echo $val->product_id; ?>','1','featured','update_<?php echo $val->product_id?>')" class="btn btn-warning btn-xs">Off</button>
     <?php } ?>
+</td>
+
+<td class="colum_option row_show">
+    <button type="button" onclick="optionBulkUpdate('<?php echo $val->product_id; ?>')" class="btn btn-xs btn-secondary" >Show</button>
 </td>
 
 <td class="colum_meta_title row_hide">
