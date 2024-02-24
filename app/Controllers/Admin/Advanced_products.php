@@ -192,6 +192,49 @@ class Advanced_products extends BaseController
 
     }
 
+    public function bulk_option_view(){
+        $product_id = $this->request->getPost('product_id');
+        $data['product_id'] = $product_id;
+
+        $table = DB()->table('cc_product_option');
+        $data['prodOption'] = $table->where('product_id', $product_id)->groupBy('option_id')->get()->getResult();
+        echo view('Admin/Advanced_products/option', $data);
+    }
+
+    public function bulk_option_update(){
+        $product_id = $this->request->getPost('product_id');
+
+        $option = $this->request->getPost('option[]');
+        $opValue = $this->request->getPost('opValue[]');
+        $qty = $this->request->getPost('qty[]');
+        $subtract = $this->request->getPost('subtract[]');
+        $price_op = $this->request->getPost('price_op[]');
+
+        $optionTableDel = DB()->table('cc_product_option');
+        $optionTableDel->where('product_id',$product_id)->delete();
+
+        if (!empty($qty)){
+            foreach ($qty as $key => $val){
+                $optionData['product_id'] = $product_id;
+                $optionData['option_id'] = $option[$key];
+                $optionData['option_value_id'] = $opValue[$key];
+                $optionData['quantity'] = $qty[$key];
+                $optionData['subtract'] = ($subtract[$key] == 'plus')?null:1;
+                $optionData['price'] = $price_op[$key];
+
+                $optionTable = DB()->table('cc_product_option');
+                $optionTable->insert($optionData);
+            }
+        }
+
+
+
+        $table2 = DB()->table('cc_products');
+        $data['val'] = $table2->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id')->where('cc_products.product_id', $product_id)->get()->getRow();
+
+        echo view('Admin/Advanced_products/row', $data);
+    }
+
 
 
     public function datatable_test(){
@@ -231,21 +274,43 @@ class Advanced_products extends BaseController
 
 
     public function datatable_data(){
+
+        $flimit = $this->request->getPost('flimit');
+        $lLimit = $this->request->getPost('lLimit');
+
         $data['data'] = array();
 
         $table = DB()->table('cc_products');
         $table->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id');
-        $product = $table->get()->getResult();
+        $product = $table->limit($flimit,$lLimit)->get()->getResult();
 
 
 
         foreach ($product as $key => $val){
+
+//            $nFun = "'".$val->product_id."','name','".$val->name."','view_name_". $val->product_id."','bulkForm_name_".$val->product_id."','update_". $val->product_id."'";
+//            $nN = !empty($val->name)?$val->name:'<i style="color: #ccc;">NULL</i>';
+//            $name = '<p  onclick="updateFunction('.$nFun.')">'.$nN.'</p> <span id="view_name_'.$val->product_id.'"></span>';
+
+
+
+
+
             $data['data'][$key] = array(
+                '<input type="checkbox" name="productId[]" value="'.$val->product_id.'" >',
                 $val->product_id,
-                $val->name,
-                $val->model,
-                $val->quantity,
-                $val->price,
+                image_view('uploads/products',$val->product_id,'100_'.$val->image,'noimage.png',$class='img-100-100'),
+                $this->data_url_show($val->product_id,$val->name,'name'),
+                $this->data_url_show($val->product_id,$val->model,'model'),
+                $this->data_url_show($val->product_id,$val->quantity,'quantity'),
+                $this->category_url($val->product_id),
+                $this->data_url_show($val->product_id,$val->price,'price'),
+                $this->status_url_view($val),
+                $this->featured_url_view($val),
+                $this->meta_url_show($val->product_desc_id,$val->meta_title,'meta_title'),
+                $this->meta_url_show($val->product_desc_id,$val->meta_keyword,'meta_keyword'),
+                $this->meta_url_show($val->product_desc_id,$val->meta_description,'meta_description'),
+                '<a href="'.base_url('product_update/' . $val->product_id).'" class="btn btn-sm btn-info">Edit</a>',
             );
         }
 
@@ -253,6 +318,45 @@ class Advanced_products extends BaseController
 
     }
 
+    private function data_url_show($product_id,$title,$prefix){
+        $nFun = "'".$product_id."','".$prefix."','".$title."','view_".$prefix."_". $product_id."','bulkForm_".$prefix."_".$product_id."','update_".$product_id."'";
+        $nN = !empty($title)?$title:'<i style="color: #ccc;">NULL</i>';
+        $data = '<p  onclick="updateFunction('.$nFun.')">'.$nN.'</p> <span id="view_'.$prefix.'_'.$product_id.'"></span>';
+        return $data;
+    }
+    private function category_url($product_id){
+        $data['product_id'] = $product_id;
+        return view('Admin/Advanced_products/category_view', $data);
+    }
+
+    private function status_url_view($val){
+        if ($val->status == 'Active') {
+            $sUrl ="'".$val->product_id."','Inactive','status','update_".$val->product_id."'";
+            $status = '<button type="button" onclick="bulkAllStatusUpdate('.$sUrl.')" class="btn btn-success btn-xs">'.$val->status.'</button>';
+        }else{
+            $sUrl ="'".$val->product_id."','Active','status','update_".$val->product_id."'";
+            $status = '<button type="button" onclick="bulkAllStatusUpdate('.$sUrl.')" class="btn btn-warning btn-xs">'.$val->status.'</button>';
+        }
+        return $status;
+    }
+
+    private function featured_url_view($val){
+        if ($val->featured == '1') {
+            $sUrl ="'".$val->product_id."','0','featured','update_".$val->product_id."'";
+            $status = '<button type="button" onclick="bulkAllStatusUpdate('.$sUrl.')" class="btn btn-success btn-xs">On</button>';
+        }else{
+            $sUrl ="'".$val->product_id."','1','featured','update_".$val->product_id."'";
+            $status = '<button type="button" onclick="bulkAllStatusUpdate('.$sUrl.')" class="btn btn-warning btn-xs">Off</button>';
+        }
+        return $status;
+    }
+
+    private function meta_url_show($product_id,$title,$prefix){
+        $nFun = "'".$product_id."','".$prefix."', '".$title."' , 'view_".$prefix."_".$product_id."', 'desc_".$prefix."_".$product_id."','update_".$product_id."'";
+        $nN = !empty($title)?$title:'<i style="color: #ccc;">NULL</i>';
+        $data = '<p  onclick="descriptionTableDataUpdateFunction('.$nFun.')">'.$nN.'</p> <span id="view_'.$prefix.'_'.$product_id.'"></span>';
+        return $data;
+    }
 
     public function bulk_product_cpoy(){
 
