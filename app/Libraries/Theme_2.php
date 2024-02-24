@@ -25,6 +25,10 @@ class Theme_2{
             'width'=>'437',
             'height'=>'400',
         ),
+        array(
+            'width'=>'50',
+            'height'=>'50',
+        ),
     );
 
 }
