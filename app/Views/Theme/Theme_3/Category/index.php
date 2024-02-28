@@ -311,7 +311,7 @@
 
                                        <?php echo $brandView;?>
 
-                                       <?php echo $ratingView;?>
+                                       <?php //echo $ratingView;?>
 
                                     </div>
                                 </div>`;

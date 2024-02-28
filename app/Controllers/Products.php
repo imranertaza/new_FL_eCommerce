@@ -109,7 +109,11 @@ class Products extends BaseController {
 
 
         if (!empty($keyword)){
-            $data['products'] = $this->$searchModel->where($where)->like('cc_products.name', $keyword)->all_join()->orderBy($shortBy)->paginate($lemit);
+            if(empty($this->request->getGetPost('option'))) {
+                $data['products'] = $this->$searchModel->where($where)->like('cc_products.name', $keyword)->query()->orderBy($shortBy)->paginate($lemit);
+            }else{
+                $data['products'] = $this->$searchModel->where($where)->like('cc_products.name', $keyword)->all_join()->orderBy($shortBy)->paginate($lemit);
+            }
         }
 
         $data['pager'] = $this->$searchModel->pager;
