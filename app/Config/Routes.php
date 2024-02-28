@@ -92,6 +92,8 @@ $routes->get('/related_product', 'Admin\Products::related_product');
 $routes->post('/product_option_search', 'Admin\Products::product_option_search');
 $routes->post('/product_option_value_search', 'Admin\Products::product_option_value_search');
 
+$routes->post('/product_image_crop_action', 'Admin\Products::image_crop');
+
 //User
 $routes->get('/user', 'Admin\User::index');
 $routes->get('/user_create', 'Admin\User::create');
@@ -255,9 +257,6 @@ $routes->post('/bulk_category_view', 'Admin\Advanced_products::bulk_category_vie
 $routes->post('/bulk_category_update', 'Admin\Advanced_products::bulk_category_update');
 
 $routes->post('/bulk_product_cpoy', 'Admin\Advanced_products::bulk_product_cpoy');
-
-$routes->get('/datatable_test', 'Admin\Advanced_products::datatable_test');
-$routes->post('/datatable_data', 'Admin\Advanced_products::datatable_data');
 
 $routes->post('/bulk_option_view', 'Admin\Advanced_products::bulk_option_view');
 $routes->post('/bulk_option_update', 'Admin\Advanced_products::bulk_option_update');
