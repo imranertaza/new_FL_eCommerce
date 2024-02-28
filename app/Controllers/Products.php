@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Libraries\Filter;
 use App\Models\CategoryproductsModel;
 use App\Models\ProductsSearchModel;
 
@@ -11,6 +12,7 @@ class Products extends BaseController {
     protected $session;
     protected $categoryproductsModel;
     protected $productsSearchModel;
+    protected $filter;
 
     public function __construct()
     {
@@ -18,6 +20,7 @@ class Products extends BaseController {
         $this->session = \Config\Services::session();
         $this->categoryproductsModel = new CategoryproductsModel();
         $this->productsSearchModel = new ProductsSearchModel();
+        $this->filter = new Filter();
     }
 
     public function search(){
@@ -25,9 +28,10 @@ class Products extends BaseController {
         $keyword = $this->request->getGetPost('keywordTop');
         $data['top_category'] = $cat_id;
         $data['keywordTop'] = $keyword;
+        $data['keywordSearch'] = $keyword;
 
 
-        $lemit = !empty($this->request->getGetPost('show'))?$this->request->getGetPost('show'):'9';
+        $lemit = !empty($this->request->getGetPost('show'))?$this->request->getGetPost('show'):get_lebel_by_value_in_settings('category_product_limit');
 
         $shortBy = !empty($this->request->getGetPost('shortBy'))?$this->request->getGetPost('shortBy'):'';
         if ($shortBy == 'price_asc'){
@@ -53,9 +57,6 @@ class Products extends BaseController {
             }
             $allOption = '('.rtrim($optionWhere, ' OR ').')';
             $data['optionval'] = $options;
-
-//            print_r($allOption);
-//            die();
         }
 
         $data['brandval'] = array();
@@ -108,11 +109,28 @@ class Products extends BaseController {
 
 
         if (!empty($keyword)){
-            $data['products'] = $this->$searchModel->where($where)->like('cc_products.name',$keyword)->query()->orderBy($shortBy)->paginate($lemit);
+            $data['products'] = $this->$searchModel->where($where)->like('cc_products.name', $keyword)->all_join()->orderBy($shortBy)->paginate($lemit);
         }
 
         $data['pager'] = $this->$searchModel->pager;
         $data['links'] = $data['pager']->links('default','custome_link');
+
+
+
+        if (!empty($cat_id)) {
+            $productsArr = $this->$searchModel->where($categoryWhere)->query()->paginate();
+        }else{
+            $productsArr = $this->$searchModel->like('cc_products.name', $keyword)->query()->paginate();
+        }
+
+        $filter = $this->filter->getSettings($productsArr);
+        $data['price'] = $filter->product_array_by_price_range();
+        $data['optionView'] = $filter->product_array_by_options($data['optionval']);
+        $data['brandView'] = $filter->product_array_by_brand($data['brandval']);
+        $data['ratingView'] = $filter->product_array_by_rating_view($data['ratingval']);
+
+//        print_r($data['brandView']);
+//        die();
 
 //        print $this->$searchModel->getLastQuery();
 //        print_r($data['products']);

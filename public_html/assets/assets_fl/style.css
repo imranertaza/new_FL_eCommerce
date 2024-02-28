@@ -33,8 +33,11 @@ body {
 }
 
 a {
-    color: #707070;
+    color: #ffffff;
     text-decoration: none;
+}
+.category a:hover{
+    color: #ffffff;
 }
 
 .text-black {
@@ -1120,6 +1123,7 @@ a {
     border-bottom: 1px dashed #D4D4D4;
     padding-bottom: 15px;
     margin-bottom: 15px;
+    padding-right: 25px;
 }
 
 .product-filter a {

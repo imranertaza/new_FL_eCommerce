@@ -312,25 +312,7 @@
     });
 </script>
 <script>
-    jQuery(function($) {
-        $(".slider-range").slider({
-            range: true,
-            min: 0,
-            max: 10000,
-            values: [<?php print isset($fstprice) ? $fstprice : 5; ?>,
-                <?php print isset($lstPrice) ? $lstPrice : 6000; ?>
-            ],
-            slide: function(event, ui) {
-                $("#amount").val("" + ui.values[0] + " - " + ui.values[1]);
-                $("#price").val("" + ui.values[0] + "," + ui.values[1]);
-                $("#searchForm").submit();
-            }
-        });
-        $("#amount").val("" + $(".slider-range").slider("values", 0) +
-            " - " + $(".slider-range").slider("values", 1));
-        $("#price").val("" + $(".slider-range").slider("values", 0) +
-            "," + $(".slider-range").slider("values", 1));
-    });
+
     
      function addToCompare(pro_id) {
         $.ajax({
