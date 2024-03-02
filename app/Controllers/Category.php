@@ -2,12 +2,14 @@
 
 namespace App\Controllers;
 
+use App\Libraries\Filter;
 use App\Models\CategoryproductsModel;
 
 class Category extends BaseController {
 
     protected $validation;
     protected $session;
+    protected $filter;
     protected $categoryproductsModel;
 
     public function __construct()
@@ -15,14 +17,17 @@ class Category extends BaseController {
         $this->validation = \Config\Services::validation();
         $this->session = \Config\Services::session();
         $this->categoryproductsModel = new CategoryproductsModel();
+        $this->filter = new Filter();
     }
 
     public function index($cat_id){
+
         $categoryWhere = !empty($this->request->getGetPost('category'))? 'category_id = '.$this->request->getGetPost('category'): 'category_id = '.$cat_id;
 
         $data['optionval'] = array();
         $data['brandval'] = array();
         $data['ratingval'] = array();
+        $data['keywordSearch'] = '';
 
         $limit = get_lebel_by_value_in_settings('category_product_limit');
 
@@ -37,6 +42,19 @@ class Category extends BaseController {
         $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
         $data['description'] = get_lebel_by_value_in_settings('meta_description');
         $data['title'] = get_data_by_id('category_name','cc_product_category','prod_cat_id',$cat_id);
+
+
+
+        $filter = $this->filter->getSettings($data['products']);
+        $data['price'] = $filter->product_array_by_price_range();
+        $data['optionView'] = $filter->product_array_by_options($data['optionval']);
+        $data['brandView'] = $filter->product_array_by_brand($data['brandval']);
+        $data['ratingView'] = $filter->product_array_by_rating_view($data['ratingval']);
+
+//        print_r($data['ratingView']);
+//        die();
+
+
 
         $data['prod_cat_id'] = $cat_id;
         $data['page_title'] = 'Category products';
@@ -56,6 +74,7 @@ class Category extends BaseController {
         $rating = $this->request->getPost('rating[]');
         $price = $this->request->getPost('price');
         $show = $this->request->getPost('show');
+        $global_search = $this->request->getPost('global_search');
 
 
 
@@ -98,6 +117,10 @@ class Category extends BaseController {
                 $rat .= $ratVal . ',';
             }
             $vars ['rating'] = rtrim($rat,',');
+        }
+
+        if (!empty($global_search)){
+            $vars ['keywordTop'] = $global_search;
         }
 
         $querystring = http_build_query($vars);
