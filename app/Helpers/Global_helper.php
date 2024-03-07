@@ -450,7 +450,7 @@ function get_array_data_by_id($table, $whereInfo, $whereId)
 function category_id_by_product_count($category_id)
 {
     $table = DB()->table('cc_product_to_category');
-    $count = $table->where('category_id', $category_id)->countAllResults();
+    $count = $table->join('cc_products', 'cc_products.product_id = cc_product_to_category.product_id')->where('cc_product_to_category.category_id', $category_id)->where('cc_products.status','Active')->countAllResults();
     return $count;
 }
 
@@ -1078,5 +1078,7 @@ function zone_rate_type(){
     ];
     return $status;
 }
+
+
 
 
