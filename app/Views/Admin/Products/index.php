@@ -23,10 +23,10 @@
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <h3 class="card-title">Product List</h3>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
 
                         <a href="<?php echo base_url('product_create') ?>" class="btn btn-primary btn-xs float-right"><i class="fas fa-plus"></i> Add</a>
                         <?php if(modules_key_by_access('bulk_edit_products') == '1' ){?>
@@ -38,6 +38,8 @@
                         <?php if(modules_key_by_access('image_crop') == '1' ){?>
                         <button type="submit"  formaction="<?php echo base_url('product_image_crop_action'); ?>" class="btn btn-info btn-xs float-right mr-2"><i class="fas fa-file"></i> Crop image</button>
                         <?php } ?>
+
+                        <button type="submit"  formaction="<?php echo base_url('product_multi_delete_action'); ?>" class="btn btn-danger btn-xs float-right mr-2"><i class="fas fa-trash"></i> Multi delete</button>
                     </div>
                     <div class="col-md-12" style="margin-top: 10px" id="message">
                         <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
@@ -59,7 +61,7 @@
                     </thead>
                     <tbody>
                         <?php $i=1; foreach ($product as $val){ ?>
-                        <tr>
+                        <tr id="hide_<?php echo $val->product_id;?>">
                             <td width="10">
                                 <input type="checkbox" name="productId[]" value="<?php echo $val->product_id;?>" >
                             </td>
@@ -70,7 +72,7 @@
                             <td> <?php echo $val->quantity;?></td>
                             <td width="120">
                                 <a href="<?php echo base_url('product_update/'.$val->product_id)?>" class="btn btn-sm btn-info">Edit</a>
-                                <a href="<?php echo base_url('product_delete/'.$val->product_id)?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to Delete?')">delete</a>
+                                <a href="javascript:void(0)" class="btn btn-sm btn-danger" onclick="product_delete('<?php echo $val->product_id;?>')">delete</a>
                             </td>
                         </tr>
                         <?php } ?>

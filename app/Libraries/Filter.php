@@ -62,7 +62,7 @@ class Filter{
         $brandArray = array_column($this->productArray, 'brand_id');
         $view = '';
         if ($this->allValuesNotEmpty($brandArray)) {
-            $view .='<div class="product-filter"><p class="mb-2">Manufacturer</p>';
+            $view .='<div class="product-filter"><p class="mb-2">Brand</p>';
             foreach (array_unique($brandArray) as $brand){
                 if (!empty($brand)){
                     $name = get_data_by_id('name', 'cc_brand', 'brand_id', $brand);
