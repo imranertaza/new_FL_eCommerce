@@ -50,16 +50,18 @@
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" onclick="allchecked(this)" ></th>
-                            <th>Sl</th>
-                            <th>Image</th>
-                            <th>Name</th>
-                            <th>Model</th>
-                            <th>Quantity</th>
-                            <th>Action</th>
+                            <td><input type="checkbox" onclick="allchecked(this)" ></td>
+                            <td>Sl</td>
+                            <td>Image</td>
+                            <td>Name</td>
+                            <td>Model</td>
+                            <td>Quantity</td>
+                            <td>Action</td>
                         </tr>
                     </thead>
                     <tbody>
+
+
                         <?php $i=1; foreach ($product as $val){ ?>
                         <tr id="hide_<?php echo $val->product_id;?>">
                             <td width="10">

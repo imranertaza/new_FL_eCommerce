@@ -12,6 +12,8 @@ $(function() {
         "responsive": true,
         "lengthChange": true,
         "autoWidth": false,
+        "targets": 'no-sort',
+        "bSort": false,
         "order": [
             [0, "desc"]
         ],
@@ -23,9 +25,11 @@ $(function() {
         "paging": true,
         "lengthChange": true,
         "searching": true,
-        "ordering": true,
+        "ordering": false,
         "autoWidth": false,
         "responsive": true,
+        "targets": 'no-sort',
+        "bSort": false,
         "drawCallback": function( settings ) {
             checkShowHideRow();
         }
@@ -989,9 +993,11 @@ function bulk_product_copy(){
                     "paging": true,
                     "lengthChange": true,
                     "searching": true,
-                    "ordering": true,
+                    "ordering": false,
                     "autoWidth": false,
                     "responsive": true,
+                    "targets": 'no-sort',
+                    "bSort": false,
                     "drawCallback": function( settings ) {
                         checkShowHideRow();
                     }
