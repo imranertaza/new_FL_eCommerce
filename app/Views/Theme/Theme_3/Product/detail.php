@@ -365,7 +365,7 @@
                                 aria-controls="more-info-tab-pane" aria-selected="false">More Information
                             </button>
                         </li>
-
+                        <?php if(modules_key_by_access('review') == '1' ){?>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link text-uppercase" id="review-tab" data-bs-toggle="tab"
                                 data-bs-target="#review-tab-pane" type="button" role="tab"
@@ -373,6 +373,7 @@
                                 (<?php echo count($review); ?>)
                             </button>
                         </li>
+                        <?php } ?>
                     </ul>
                     <div class="tab-content" id="myTabContent3">
                         <div class="tab-pane fade show active" id="about-tab-pane" role="tabpanel"
@@ -405,6 +406,7 @@
                                 </tr>
                             </table>
                         </div>
+                        <?php if(modules_key_by_access('review') == '1' ){?>
                         <div class="tab-pane fade" id="review-tab-pane" role="tabpanel" aria-labelledby="review-tab"
                             tabindex="0">
                             <?php foreach ($review as $rev) { ?>
@@ -443,6 +445,7 @@
                                 <?php } ?>
                             </form>
                         </div>
+                        <?php } ?>
                     </div>
                 </div>
                 <div class="col-lg-4 mb-3">

@@ -87,12 +87,13 @@ $routes->post('/product_copy_action', 'Admin\Products::copy_action');
 $routes->post('/product_update_action', 'Admin\Products::update_action');
 $routes->post('/product_image_delete', 'Admin\Products::image_delete');
 $routes->get('/product_update/(:num)', 'Admin\Products::update/$1');
-$routes->get('/product_delete/(:num)', 'Admin\Products::delete/$1');
+$routes->post('/product_delete', 'Admin\Products::delete');
 $routes->get('/related_product', 'Admin\Products::related_product');
 $routes->post('/product_option_search', 'Admin\Products::product_option_search');
 $routes->post('/product_option_value_search', 'Admin\Products::product_option_value_search');
 
 $routes->post('/product_image_crop_action', 'Admin\Products::image_crop');
+$routes->post('/product_multi_delete_action', 'Admin\Products::multi_delete_action');
 
 //User
 $routes->get('/user', 'Admin\User::index');
