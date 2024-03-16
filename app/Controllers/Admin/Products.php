@@ -54,6 +54,8 @@ class Products extends BaseController
                 echo view('Admin/no_permission');
             }
             echo view('Admin/footer');
+
+            if (isset(newSession()->resetDatatable)){unset($_SESSION['resetDatatable']);}
         }
     }
 
@@ -428,7 +430,7 @@ class Products extends BaseController
                 //product table data insert(start)
                 $storeId = get_data_by_id('store_id', 'cc_stores', 'is_default', '1');
                 $proData['store_id'] = $storeId;
-                $proData['name'] = $pro->name;
+                $proData['name'] = 'Copy of '.$pro->name;
                 $proData['model'] = $pro->model;
                 $proData['brand_id'] = !empty($pro->brand_id) ? $pro->brand_id : null;
                 $proData['price'] = $pro->price;
@@ -572,7 +574,7 @@ class Products extends BaseController
             DB()->transComplete();
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Create Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('products');
+            return redirect()->to('products?page=1');
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('products');

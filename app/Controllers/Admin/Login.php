@@ -62,7 +62,8 @@ class Login extends BaseController {
                     'adName' => $result->name,
                     'adRoleId' => $result->role_id,
                     'adminAll' => $result,
-                    'isLoggedInEcAdmin' => TRUE
+                    'isLoggedInEcAdmin' => TRUE,
+                    'resetDatatable' => TRUE
                 );
                 $this->session->set($sessionArray);
 
@@ -100,6 +101,7 @@ class Login extends BaseController {
         unset($_SESSION['adminAll']);
         unset($_SESSION['adRoleId']);
         unset($_SESSION['isLoggedInEcAdmin']);
+        unset($_SESSION['resetDatatable']);
 
 //        $this->session->destroy();
         return redirect()->to('admin');

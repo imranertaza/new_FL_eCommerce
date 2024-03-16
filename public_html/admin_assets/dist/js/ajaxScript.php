@@ -34,8 +34,62 @@ $(function() {
             checkShowHideRow();
         }
     });
+
+    $('#productBulkEdit').DataTable({
+        "paging": true,
+        "responsive": true,
+        "lengthChange": true,
+        "autoWidth": false,
+        "stateSave": true,
+        "targets": 'no-sort',
+        "bSort": false,
+        "drawCallback": function( settings ) {
+            checkShowHideRow();
+        }
+    });
+
+
+
+    $("#productListData").DataTable({
+        "responsive": true,
+        "lengthChange": true,
+        "autoWidth": false,
+        "stateSave": true,
+        "targets": 'no-sort',
+        "bSort": false,
+        "order": [
+            [0, "desc"]
+        ],
+        "buttons": ["csv", "excel", "pdf", "print" ]
+        // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#productListData_wrapper .col-md-6:eq(0)');
+
+    <?php if (isset(newSession()->resetDatatable) && (newSession()->resetDatatable == true)){  ?>
+        var table = $("#productListData").DataTable();
+        table.search('').draw();
+        table.page('first').draw('page');
+        table.page.len(10).draw();
+
+    <?php } if (isset($_GET['page'])){  ?>
+    $('#productListData').DataTable().page(<?= $_GET['page']-1;?>).draw('page');
+    $('#productBulkEdit').DataTable().page(<?= $_GET['page']-1;?>).draw('page');
+    <?php } ?>
+
+    if(sessionStorage.getItem("bulkDataTableReset") == '1'){
+        var table = $("#productBulkEdit").DataTable();
+        // Reset search query
+        table.search('').draw();
+        table.page('first').draw('page');
+        table.page.len(10).draw();
+    }
+    sessionStorage.removeItem("bulkDataTableReset");
 });
 // This is for DataTable -- End --
+
+function bulk_datatable_reset(){
+    sessionStorage.setItem("bulkDataTableReset", '1' );
+}
+
 
 $(function() {
     //Initialize Select2 Elements
@@ -54,12 +108,12 @@ $(function() {
                     results: $.map(data, function(item) {
                         var img = '<img src="<?php echo base_url('uploads/products')?>/'+item.product_id+'/100_'+item.image+'" class="" loading="lazy" />' + item.name;
                         // var img = "<span ><img src='<?php echo base_url('uploads/products')?>/"+item.product_id+"/100_"+item.image+"' c/>" + item.name+"</span >";
-                        return {                            
+                        return {
                             text: item.name,
                             id: item.product_id,
-                            
+
                         }
-                        
+
                     })
                 };
             },
@@ -963,7 +1017,7 @@ function allchecked(source) {
 }
 
 function allCheckedDemo(source) {
-    var checkboxes = document.querySelectorAll('#example2 input[type="checkbox"]');
+    var checkboxes = document.querySelectorAll('#productBulkEdit input[type="checkbox"]');
     for (var i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i] != source)
             checkboxes[i].checked = source.checked;
@@ -988,20 +1042,19 @@ function bulk_product_copy(){
         },
         success: function(data) {
             $("#message").html(data);
-            $("#tablereload").load(document.URL+ ' #example2', function(){
-                $('#example2').DataTable({
+            $("#tablereload").load(document.URL+ ' #productBulkEdit', function(){
+                $('#productBulkEdit').DataTable({
                     "paging": true,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": false,
-                    "autoWidth": false,
                     "responsive": true,
+                    "lengthChange": true,
+                    "autoWidth": false,
+                    "stateSave": true,
                     "targets": 'no-sort',
                     "bSort": false,
                     "drawCallback": function( settings ) {
                         checkShowHideRow();
                     }
-                });
+                }).page(0).draw('page');
             });
         }
 

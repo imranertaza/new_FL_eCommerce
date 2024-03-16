@@ -257,7 +257,7 @@ class Advanced_products extends BaseController
                 //product table data insert(start)
                 $storeId = get_data_by_id('store_id', 'cc_stores', 'is_default', '1');
                 $proData['store_id'] = $storeId;
-                $proData['name'] = $pro->name;
+                $proData['name'] = 'Copy of '.$pro->name;
                 $proData['model'] = $pro->model;
                 $proData['brand_id'] = !empty($pro->brand_id) ? $pro->brand_id : null;
                 $proData['price'] = $pro->price;
