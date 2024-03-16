@@ -84,3 +84,10 @@
     width: 100px !important;
     height: 100px !important;
 }
+
+
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting_desc {
+    background : none;
+}

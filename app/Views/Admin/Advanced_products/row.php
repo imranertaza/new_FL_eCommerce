@@ -37,7 +37,7 @@
     <?php } ?>
 
 </td>
-<td class="colum_featured row_hide">
+<td class="colum_featured row_show">
     <?php if ($val->featured == '1') { ?>
         <button type="button" onclick="bulkAllStatusUpdate('<?php echo $val->product_id; ?>','0','featured','update_<?php echo $val->product_id?>')" class="btn btn-success btn-xs">On</button>
     <?php } else { ?>
@@ -61,7 +61,4 @@
 <td class="colum_meta_description row_hide">
     <p onclick="descriptionTableDataUpdateFunction('<?php echo $val->product_desc_id; ?>','meta_description', '<?php echo $val->meta_description;?>' , 'view_meta_description_<?php echo $val->product_id; ?>', 'desc_meta_description_<?php echo $val->product_id; ?>','update_<?php echo $val->product_id?>')"><?php echo !empty($val->meta_description)?$val->meta_description:'<i style="color: #ccc;">NULL</i>';?></p>
     <span id="view_meta_description_<?php echo $val->product_id; ?>"></span>
-</td>
-<td class="colum_action row_show">
-    <a href="<?php echo base_url('product_update/' . $val->product_id) ?>" class="btn btn-sm btn-info">Edit</a>
 </td>

@@ -76,57 +76,60 @@ class Category extends BaseController {
         $show = $this->request->getPost('show');
         $global_search = $this->request->getPost('global_search');
 
-
+        $category_cookie = isset($_COOKIE['category_cookie']) ? $_COOKIE['category_cookie'] : '';
 
         $vars = array();
-        if (!empty($brand)) {
-            $menu = '';
-            foreach ($brand as $key => $brVal) {
-                $menu .= $brVal . ',';
+
+        if (($category_cookie == $category) || (!empty($global_search))){
+
+            if (!empty($brand)) {
+                $menu = '';
+                foreach ($brand as $key => $brVal) {
+                    $menu .= $brVal . ',';
+                }
+                $vars ['manufacturer'] = rtrim($menu, ',');
             }
-            $vars ['manufacturer'] = rtrim($menu,',');
-        }
 
-        if (!empty($options)) {
-            $option = '';
-            foreach ($options as $key => $optVal) {
-                $option .= $optVal.',' ;
+            if (!empty($options)) {
+                $option = '';
+                foreach ($options as $key => $optVal) {
+                    $option .= $optVal . ',';
+                }
+                $vars ['option'] = rtrim($option, ',');
             }
-            $vars ['option'] = rtrim($option, ',');
-        }
 
-        if (!empty($category)){
-            $vars ['category'] = $category;
-        }
-
-        if (!empty($shortBy)){
-            $vars ['shortBy'] = $shortBy;
-        }
-
-        if (!empty($price)){
-            $vars ['price'] = $price;
-        }
-
-        if (!empty($show)){
-            $vars ['show'] = $show;
-        }
-
-        if (!empty($rating)) {
-            $rat = '';
-            foreach ($rating as $key => $ratVal) {
-                $rat .= $ratVal . ',';
+            if (!empty($price)) {
+                $vars ['price'] = $price;
             }
-            $vars ['rating'] = rtrim($rat,',');
+
+            if (!empty($rating)) {
+                $rat = '';
+                foreach ($rating as $key => $ratVal) {
+                    $rat .= $ratVal . ',';
+                }
+                $vars ['rating'] = rtrim($rat, ',');
+            }
+        }else{
+            setcookie('category_cookie',$category,time()+86400, "/");
         }
 
-        if (!empty($global_search)){
+        if (!empty($global_search)) {
             $vars ['keywordTop'] = $global_search;
         }
 
+        if (!empty($category)) {
+            $vars ['category'] = $category;
+        }
+
+        if (!empty($shortBy)) {
+            $vars ['shortBy'] = $shortBy;
+        }
+        if (!empty($show)) {
+            $vars ['show'] = $show;
+        }
+
+
         $querystring = http_build_query($vars);
-//        print $querystring;
-//        die();
-//        return redirect()->to('category/'.$prod_cat_id.'?'.$querystring);
         return redirect()->to('products/search?cat='.$cat.'&'.$querystring);
 
     }

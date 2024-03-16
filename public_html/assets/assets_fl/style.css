@@ -33,6 +33,11 @@ body {
 }
 
 a {
+    color: #0A6AAD;
+    text-decoration: none;
+}
+
+.category a {
     color: #ffffff;
     text-decoration: none;
 }
