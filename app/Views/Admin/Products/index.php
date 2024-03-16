@@ -30,16 +30,14 @@
 
                         <a href="<?php echo base_url('product_create') ?>" class="btn btn-primary btn-xs float-right"><i class="fas fa-plus"></i> Add</a>
                         <?php if(modules_key_by_access('bulk_edit_products') == '1' ){?>
-                        <a href="<?php echo base_url('bulk_edit_products') ?>"
-                            class="btn btn-info btn-xs float-right mr-2"><i class="fas fa-plus"></i> Bulk Edit
-                            Products</a>
+                        <a href="<?php echo base_url('bulk_edit_products') ?>" onclick="bulk_datatable_reset()" class="btn btn-info btn-xs float-right mr-2"><i class="fas fa-plus"></i> Bulk Edit Products</a>
                         <?php } ?>
                         <button type="submit" class="btn btn-secondary btn-xs float-right mr-2"><i class="nav-icon fas fa-copy"></i> Copy</button>
                         <?php if(modules_key_by_access('image_crop') == '1' ){?>
                         <button type="submit"  formaction="<?php echo base_url('product_image_crop_action'); ?>" class="btn btn-info btn-xs float-right mr-2"><i class="fas fa-file"></i> Crop image</button>
                         <?php } ?>
 
-                        <button type="submit"  formaction="<?php echo base_url('product_multi_delete_action'); ?>" class="btn btn-danger btn-xs float-right mr-2"><i class="fas fa-trash"></i> Multi delete</button>
+                        <button type="submit" formaction="<?php echo base_url('product_multi_delete_action'); ?>" class="btn btn-danger btn-xs float-right mr-2"><i class="fas fa-trash"></i> Multi delete</button>
                     </div>
                     <div class="col-md-12" style="margin-top: 10px" id="message">
                         <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
@@ -47,21 +45,19 @@
                 </div>
             </div>
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="productListData" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <td><input type="checkbox" onclick="allchecked(this)" ></td>
-                            <td>Sl</td>
-                            <td>Image</td>
-                            <td>Name</td>
-                            <td>Model</td>
-                            <td>Quantity</td>
-                            <td>Action</td>
+                            <th><input type="checkbox" onclick="allchecked(this)" ></th>
+                            <th>Sl</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Model</th>
+                            <th>Quantity</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-
-
                         <?php $i=1; foreach ($product as $val){ ?>
                         <tr id="hide_<?php echo $val->product_id;?>">
                             <td width="10">
@@ -104,3 +100,4 @@
     </section>
     <!-- /.content -->
 </div>
+
