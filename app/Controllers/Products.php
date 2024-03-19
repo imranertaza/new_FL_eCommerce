@@ -133,14 +133,6 @@ class Products extends BaseController {
         $data['brandView'] = $filter->product_array_by_brand($data['brandval']);
         $data['ratingView'] = $filter->product_array_by_rating_view($data['ratingval']);
 
-//        print_r($data['brandView']);
-//        die();
-
-//        print $this->$searchModel->getLastQuery();
-//        print_r($data['products']);
-//        print $shortBy;
-//        die();
-
         $table = DB()->table('cc_product_category');
         $data['parent_Cat'] = $table->where('parent_id',$cat_id)->get()->getResult();
 

@@ -85,11 +85,10 @@
 <!-- AdminLTE App -->
 <script src="<?php echo base_url() ?>/admin_assets/dist/js/adminlte.js"></script>
 
-
 <script>
     $(function () {
         // Summernote
-        $('#editor').summernote()
+        $('#editor').summernote();
     })
 
     $(document).ready(function(){

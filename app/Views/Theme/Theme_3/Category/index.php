@@ -8,10 +8,7 @@
                 <input type="hidden" name="global_search" value="<?php echo $keywordSearch;?>">
 
                 <div class="row">
-                    <div class="col-md-3" id="side-data">
-
-
-                    </div>
+                    <div class="col-md-3" id="side-data"></div>
                     <div class="col-md-9 " style="padding-left: 3px;">
                         <div class="top-bar border">
                             <div class="row">
