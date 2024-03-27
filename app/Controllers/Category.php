@@ -43,18 +43,15 @@ class Category extends BaseController {
         $data['description'] = get_lebel_by_value_in_settings('meta_description');
         $data['title'] = get_data_by_id('category_name','cc_product_category','prod_cat_id',$cat_id);
 
+        $productsArr = $this->categoryproductsModel->where($where)->orderBy('cc_products.product_id','DESC')->query()->findAll();
 
-
-        $filter = $this->filter->getSettings($data['products']);
+        $filter = $this->filter->getSettings($productsArr);
         $data['price'] = $filter->product_array_by_price_range();
         $data['optionView'] = $filter->product_array_by_options($data['optionval']);
         $data['brandView'] = $filter->product_array_by_brand($data['brandval']);
         $data['ratingView'] = $filter->product_array_by_rating_view($data['ratingval']);
 
-//        print_r($data['ratingView']);
-//        die();
-
-
+        setcookie('category_cookie',$cat_id,time()+86400, "/");
 
         $data['prod_cat_id'] = $cat_id;
         $data['page_title'] = 'Category products';

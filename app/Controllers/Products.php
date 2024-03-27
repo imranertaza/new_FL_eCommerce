@@ -122,9 +122,9 @@ class Products extends BaseController {
 
 
         if (!empty($cat_id)) {
-            $productsArr = $this->$searchModel->where($categoryWhere)->query()->paginate();
+            $productsArr = $this->$searchModel->where($categoryWhere)->query()->findAll();
         }else{
-            $productsArr = $this->$searchModel->like('cc_products.name', $keyword)->query()->paginate();
+            $productsArr = $this->$searchModel->like('cc_products.name', $keyword)->query()->findAll();
         }
 
         $filter = $this->filter->getSettings($productsArr);
