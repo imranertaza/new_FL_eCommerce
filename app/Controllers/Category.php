@@ -50,6 +50,7 @@ class Category extends BaseController {
         $data['optionView'] = $filter->product_array_by_options($data['optionval']);
         $data['brandView'] = $filter->product_array_by_brand($data['brandval']);
         $data['ratingView'] = $filter->product_array_by_rating_view($data['ratingval']);
+        $data['productsArr'] = $productsArr;
 
         setcookie('category_cookie',$cat_id,time()+86400, "/");
 
