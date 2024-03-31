@@ -1087,6 +1087,9 @@ class Products extends BaseController
         $proReltableDel = DB()->table('cc_product_related');
         $proReltableDel->where('product_id',$product_id)->delete();
 
+        $relProTableDel = DB()->table('cc_product_related');
+        $relProTableDel->where('related_id', $product_id)->delete();
+
         DB()->transComplete();
 
         print '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
@@ -1270,6 +1273,9 @@ class Products extends BaseController
                 $proReltableDel = DB()->table('cc_product_related');
                 $proReltableDel->where('product_id', $product_id)->delete();
 
+                $relProTableDel = DB()->table('cc_product_related');
+                $relProTableDel->where('related_id', $product_id)->delete();
+
             }
             DB()->transComplete();
 
@@ -1280,6 +1286,15 @@ class Products extends BaseController
             return redirect()->to('products');
         }
     }
+
+    public function product_image_sort_action(){
+        $product_image_id =  $this->request->getPost('product_image_id');
+
+        $data['sort_order'] = $this->request->getPost('value');
+        $table = DB()->table('cc_product_image');
+        $table->where('product_image_id',$product_image_id)->update($data);
+    }
+
 
 
 }
