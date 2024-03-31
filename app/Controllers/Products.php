@@ -78,8 +78,7 @@ class Products extends BaseController {
             $firstPrice = 'cc_products.price >= '.$price[0];
             $lastPrice = 'cc_products.price <= '.$price[1];
         }
-        $data['fstprice'] = !empty($price[0]) ? $price[0] : 5;
-        $data['lstPrice'] = !empty($price[1]) ? $price[1] : 6000;
+
 
         $data['ratingval'] = array();
         if(empty($this->request->getGetPost('rating'))){
@@ -132,6 +131,10 @@ class Products extends BaseController {
         $data['optionView'] = $filter->product_array_by_options($data['optionval']);
         $data['brandView'] = $filter->product_array_by_brand($data['brandval']);
         $data['ratingView'] = $filter->product_array_by_rating_view($data['ratingval']);
+        $data['productsArr'] = $productsArr;
+
+        $data['fstprice'] = !empty($price[0]) ? $price[0] : $data['price']['minPrice'];
+        $data['lstPrice'] = !empty($price[1]) ? $price[1] : $data['price']['maxPrice'];
 
         $table = DB()->table('cc_product_category');
         $data['parent_Cat'] = $table->where('parent_id',$cat_id)->get()->getResult();
