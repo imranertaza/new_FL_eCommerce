@@ -282,6 +282,7 @@
                                                         <?php } ?>
                                                     </ul>
                                                     <?php } else{ if (!empty($main_Cat)){?>
+                                                    <p class="mb-2">Category</p>
                                                     <ul class="lh-lg text-capitalize">
                                                         <?php  foreach ($main_Cat as $cat) { ?>
                                                         <li><a href="<?php echo base_url('category/' . $cat->prod_cat_id);?>"><?php echo $cat->category_name;?></a></li>
@@ -358,6 +359,7 @@
                                                 </ul>
 
                                                 <?php } else{ if (!empty($main_Cat)){?>
+                                                <p class="mb-2">Category</p>
                                                     <ul class="lh-lg text-capitalize">
                                                         <?php  foreach ($main_Cat as $cat) { ?>
                                                         <li><a href="<?php echo base_url('category/' . $cat->prod_cat_id);?>"><?php echo $cat->category_name;?></a></li>

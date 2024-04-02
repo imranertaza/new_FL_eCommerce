@@ -38,6 +38,7 @@ class Category extends BaseController {
 
         $table = DB()->table('cc_product_category');
         $data['parent_Cat'] = $table->where('parent_id',$cat_id)->get()->getResult();
+        $data['main_Cat'] = $table->where('parent_id',null)->get()->getResult();
 
         $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
         $data['description'] = get_lebel_by_value_in_settings('meta_description');
@@ -76,9 +77,11 @@ class Category extends BaseController {
 
         $category_cookie = isset($_COOKIE['category_cookie']) ? $_COOKIE['category_cookie'] : '';
 
+        $selCategory = !empty($category)?$category:$cat;
+
         $vars = array();
 
-        if (($category_cookie == $category) || (!empty($global_search))){
+        if (($category_cookie == $selCategory) || (!empty($global_search))){
 
             if (!empty($brand)) {
                 $menu = '';
