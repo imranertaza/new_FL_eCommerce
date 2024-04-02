@@ -34,11 +34,13 @@ class Products extends BaseController {
         $lemit = !empty($this->request->getGetPost('show'))?$this->request->getGetPost('show'):get_lebel_by_value_in_settings('category_product_limit');
 
         $shortBy = !empty($this->request->getGetPost('shortBy'))?$this->request->getGetPost('shortBy'):'';
+
         if ($shortBy == 'price_asc'){
             $shortBy = "`cc_products.price` ASC";
-        }
-        if ($shortBy == 'price_desc'){
+        }elseif($shortBy == 'price_desc'){
             $shortBy = "`cc_products.price` DESC";
+        }else{
+            $shortBy = "`cc_products.product_id` DESC";
         }
         $categoryWhere = !empty($this->request->getGetPost('category'))? 'category_id = '.$this->request->getGetPost('category'): 'category_id = '.$cat_id;
 
@@ -117,7 +119,6 @@ class Products extends BaseController {
 
         $data['pager'] = $this->$searchModel->pager;
         $data['links'] = $data['pager']->links('default','custome_link');
-
 
 
         if (!empty($cat_id)) {
