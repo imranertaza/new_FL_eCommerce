@@ -1079,4 +1079,18 @@ function product_delete(id){
     }
 }
 
+function image_sort_update(product_image_id,val){
+    $.ajax({
+        method: "POST",
+        url: "<?php echo base_url('product_image_sort_action') ?>",
+        data: {product_image_id: product_image_id,value:val},
+        beforeSend: function () {
+            $("#loading-image").show();
+        },
+        success: function (data) {
+            $("#success").show(0).delay(1000).fadeOut();
+        }
+    });
+}
+
 </script>

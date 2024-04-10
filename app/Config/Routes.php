@@ -95,6 +95,8 @@ $routes->post('/product_option_value_search', 'Admin\Products::product_option_va
 $routes->post('/product_image_crop_action', 'Admin\Products::image_crop');
 $routes->post('/product_multi_delete_action', 'Admin\Products::multi_delete_action');
 
+$routes->post('/product_image_sort_action', 'Admin\Products::product_image_sort_action');
+
 //User
 $routes->get('/user', 'Admin\User::index');
 $routes->get('/user_create', 'Admin\User::create');

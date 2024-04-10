@@ -426,9 +426,12 @@
                                             <h3>Multiple Image</h3>
                                         </div>
                                         <div class="col-md-8 mt-3" >
+                                            <div id="success"  style="display:none;"  class="alert alert-success alert-dismissible w-50 mb-1 text-center " role="alert">Update Success </div>
                                             <div class="row mb-4" >
                                             <?php foreach ($prodimage as $img){ ?>
                                                 <div class="col-md-2 img_view">
+
+                                                    <input type="text" onchange="image_sort_update('<?=$img->product_image_id?>',this.value)" class="form-control mb-2 text-center" style="height: 25px;" name="sort_order" value="<?= $img->sort_order;?>">
                                                     <?php echo multi_image_view('uploads/products', $img->product_id, $img->product_image_id, '100_' . $img->image, 'noimage.png', 'img-fluid');?>
                                                     <a href="javascript:void(0)" onclick="removeImg(<?php echo $img->product_image_id;?>)" class="btn del-btn"><i class="fas fa-trash"></i> Delete</a>
                                                 </div>
