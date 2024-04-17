@@ -24,7 +24,7 @@ class Products extends BaseController {
 
         //image
         $imgTable = DB()->table('cc_product_image');
-        $data['proImg'] = $imgTable->where('product_id',$product_id)->where('Product_option_id',null)->get()->getResult();
+        $data['proImg'] = $imgTable->where('product_id',$product_id)->where('Product_option_id',null)->orderBy('sort_order','ASC')->get()->getResult();
 
         //related product
         $relatedProduct = array();

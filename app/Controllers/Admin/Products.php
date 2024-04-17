@@ -1090,6 +1090,12 @@ class Products extends BaseController
         $relProTableDel = DB()->table('cc_product_related');
         $relProTableDel->where('related_id', $product_id)->delete();
 
+        $proBotTableDel = DB()->table('cc_product_bought_together');
+        $proBotTableDel->where('product_id',$product_id)->delete();
+
+        $bothTableDel = DB()->table('cc_product_bought_together');
+        $bothTableDel->where('related_id', $product_id)->delete();
+
         DB()->transComplete();
 
         print '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
@@ -1275,6 +1281,12 @@ class Products extends BaseController
 
                 $relProTableDel = DB()->table('cc_product_related');
                 $relProTableDel->where('related_id', $product_id)->delete();
+
+                $proBotTableDel = DB()->table('cc_product_bought_together');
+                $proBotTableDel->where('product_id',$product_id)->delete();
+
+                $bothTableDel = DB()->table('cc_product_bought_together');
+                $bothTableDel->where('related_id', $product_id)->delete();
 
             }
             DB()->transComplete();
