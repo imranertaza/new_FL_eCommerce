@@ -293,6 +293,8 @@
                                         </div>
                                         <?php } ?>
 
+                                        <?php echo $brandView;?>
+
                                         <?php if (!empty($productsArr)){ ?>
                                         <div class="product-filter">
                                             <p class="mb-2">Filter Price</p>
@@ -306,8 +308,6 @@
 
                                        <?php echo $optionView;?>
 
-
-                                       <?php echo $brandView;?>
 
                                        <?php //echo $ratingView;?>
 
@@ -368,6 +368,9 @@
                                                 <?php } }?>
                                             </div>
                                             <?php } ?>
+
+                                            <?php echo $brandView;?>
+
                                             <?php if (!empty($productsArr)){ ?>
                                             <div class="product-filter">
                                                 <p class="mb-2">Filter Price</p>
@@ -382,11 +385,7 @@
 
                                             <?php echo $optionView;?>
 
-
-                                           <?php echo $brandView;?>
-
-
-                                            <?php echo $ratingView;?>
+                                            <?php //echo $ratingView;?>
                                         </div>
                                     </div>
                                 </div>
