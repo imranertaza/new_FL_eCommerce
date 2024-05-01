@@ -112,7 +112,7 @@ class Products extends BaseController {
         if(empty($this->request->getGetPost('option'))) {
             $data['products'] = $this->$searchModel->where($where)->query()->orderBy($shortBy)->paginate($lemit);
         }else{
-            $data['products'] = $this->$searchModel->where($where)->all_join()->having('COUNT(*) >=', count(array_unique($countOption)))->orderBy($shortBy)->paginate($lemit);
+            $data['products'] = $this->$searchModel->where($where)->all_join()->having('COUNT(cc_products.product_id) >=', count(array_unique($countOption)))->orderBy($shortBy)->paginate($lemit);
         }
 //        print $this->$searchModel->getLastQuery();
 //        die();
