@@ -57,7 +57,6 @@ class Advanced_products extends BaseController
             echo view('Admin/footer');
         }
     }
-
     public function bulk_status_update()
     {
         $module_settings_id = $this->request->getPost('module_settings_id');
@@ -73,7 +72,6 @@ class Advanced_products extends BaseController
 
         print '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
     }
-
     public function bulk_data_update()
     {
 
@@ -106,7 +104,6 @@ class Advanced_products extends BaseController
 
 
     }
-
     public function description_data_update(){
         $product_desc_id = $this->request->getPost('product_desc_id');
         $meta_title = $this->request->getPost('meta_title');
@@ -135,7 +132,6 @@ class Advanced_products extends BaseController
 
         echo view('Admin/Advanced_products/row', $data);
     }
-
     public function bulk_all_status_update()
     {
         $product_id = $this->request->getPost('product_id');
@@ -152,7 +148,6 @@ class Advanced_products extends BaseController
 
         echo view('Admin/Advanced_products/row', $data);
     }
-
     public function bulk_category_view()
     {
         $product_id = $this->request->getPost('product_id');
@@ -166,7 +161,6 @@ class Advanced_products extends BaseController
 
         echo view('Admin/Advanced_products/category', $data);
     }
-
     public function bulk_category_update()
     {
         $product_id = $this->request->getPost('product_id');
@@ -191,7 +185,6 @@ class Advanced_products extends BaseController
         echo view('Admin/Advanced_products/row', $data);
 
     }
-
     public function bulk_option_view(){
         $product_id = $this->request->getPost('product_id');
         $data['product_id'] = $product_id;
@@ -200,7 +193,6 @@ class Advanced_products extends BaseController
         $data['prodOption'] = $table->where('product_id', $product_id)->groupBy('option_id')->get()->getResult();
         echo view('Admin/Advanced_products/option', $data);
     }
-
     public function bulk_option_update(){
         $product_id = $this->request->getPost('product_id');
 
@@ -234,11 +226,6 @@ class Advanced_products extends BaseController
 
         echo view('Admin/Advanced_products/row', $data);
     }
-
-
-
-
-
     public function bulk_product_cpoy(){
 
 
@@ -407,9 +394,175 @@ class Advanced_products extends BaseController
 
         }
     }
+    public function product_multi_delete(){
+        $allProductId =  $this->request->getPost('productId[]');
+        if (!empty($allProductId)) {
+            helper('filesystem');
+
+            DB()->transStart();
+            foreach ($allProductId as $product_id) {
+
+                $target_dir = FCPATH . '/uploads/products/' . $product_id;
+                if (file_exists($target_dir)) {
+                    delete_files($target_dir, TRUE);
+                    rmdir($target_dir);
+                }
+
+                $proTable = DB()->table('cc_products');
+                $proTable->where('product_id', $product_id)->delete();
+
+                $proImgTable = DB()->table('cc_product_image');
+                $proImgTable->where('product_id', $product_id)->delete();
+
+                $catTableDel = DB()->table('cc_product_to_category');
+                $catTableDel->where('product_id', $product_id)->delete();
+
+                $proFreetable = DB()->table('cc_product_free_delivery');
+                $proFreetable->where('product_id', $product_id)->delete();
+
+                $proDescTable = DB()->table('cc_product_description');
+                $proDescTable->where('product_id', $product_id)->delete();
+
+                $optionTableDel = DB()->table('cc_product_option');
+                $optionTableDel->where('product_id', $product_id)->delete();
+
+                $attributeTableDel = DB()->table('cc_product_attribute');
+                $attributeTableDel->where('product_id', $product_id)->delete();
+
+                $specialTable = DB()->table('cc_product_special');
+                $specialTable->where('product_id', $product_id)->delete();
+
+                $proReltableDel = DB()->table('cc_product_related');
+                $proReltableDel->where('product_id', $product_id)->delete();
+
+                $relProTableDel = DB()->table('cc_product_related');
+                $relProTableDel->where('related_id', $product_id)->delete();
+
+                $proBotTableDel = DB()->table('cc_product_bought_together');
+                $proBotTableDel->where('product_id',$product_id)->delete();
+
+                $bothTableDel = DB()->table('cc_product_bought_together');
+                $bothTableDel->where('related_id', $product_id)->delete();
+
+            }
+            DB()->transComplete();
+
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('bulk_edit_products');
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('bulk_edit_products');
+        }
+    }
+    public function multi_option_edit(){
+        $allProductId =  $this->request->getPost('productId[]');
+        if (!empty($allProductId)){
+
+            $data['all_product'] = $allProductId;
+
+            $table = DB()->table('cc_product_option');
+            $data['prodOption'] = $table->groupBy('option_id')->get()->getResult();
 
 
 
+            echo view('Admin/header');
+            echo view('Admin/sidebar');
+            echo view('Admin/Advanced_products/multi_option', $data);
+            echo view('Admin/footer');
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('bulk_edit_products');
+        }
+    }
+    public function multi_option_action(){
+        $all_product = $this->request->getPost('productId[]');
+
+        $option = $this->request->getPost('option[]');
+        $opValue = $this->request->getPost('opValue[]');
+        $qty = $this->request->getPost('qty[]');
+        $subtract = $this->request->getPost('subtract[]');
+        $price_op = $this->request->getPost('price_op[]');
+
+
+
+        if (!empty($qty)){
+            foreach ($all_product as $p) {
+                $optionTableDel = DB()->table('cc_product_option');
+                $optionTableDel->where('product_id',$p)->delete();
+
+                foreach ($qty as $key => $val) {
+                    $optionData['product_id'] = $p;
+                    $optionData['option_id'] = $option[$key];
+                    $optionData['option_value_id'] = $opValue[$key];
+                    $optionData['quantity'] = $qty[$key];
+                    $optionData['subtract'] = ($subtract[$key] == 'plus') ? null : 1;
+                    $optionData['price'] = $price_op[$key];
+
+                    $optionTable = DB()->table('cc_product_option');
+                    $optionTable->insert($optionData);
+                }
+            }
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('bulk_edit_products');
+
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Invalid input! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('bulk_edit_products');
+        }
+
+
+    }
+    public function multi_attribute_edit(){
+        $allProductId =  $this->request->getPost('productId[]');
+        if (!empty($allProductId)){
+
+            $data['all_product'] = $allProductId;
+
+            $table = DB()->table('cc_product_option');
+            $data['prodOption'] = $table->groupBy('option_id')->get()->getResult();
+
+
+
+            echo view('Admin/header');
+            echo view('Admin/sidebar');
+            echo view('Admin/Advanced_products/multi_attribute', $data);
+            echo view('Admin/footer');
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('bulk_edit_products');
+        }
+    }
+    public function multi_attribute_action(){
+        $all_product = $this->request->getPost('productId[]');
+
+        $attribute_group_id = $this->request->getPost('attribute_group_id[]');
+        $name = $this->request->getPost('name[]');
+        $details = $this->request->getPost('details[]');
+
+        if (!empty($attribute_group_id)){
+            foreach ($all_product as $p) {
+                $optionTableDel = DB()->table('cc_product_attribute');
+                $optionTableDel->where('product_id', $p)->delete();
+
+                foreach ($attribute_group_id as $key => $val) {
+                    $attributeData['product_id'] = $p;
+                    $attributeData['attribute_group_id'] = $attribute_group_id[$key];
+                    $attributeData['name'] = $name[$key];
+                    $attributeData['details'] = $details[$key];
+
+                    $attributeTable = DB()->table('cc_product_attribute');
+                    $attributeTable->insert($attributeData);
+                }
+            }
+
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('bulk_edit_products');
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Invalid input! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('bulk_edit_products');
+        }
+
+    }
 
 
 }

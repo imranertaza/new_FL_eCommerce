@@ -36,8 +36,9 @@
                         <?php if(modules_key_by_access('image_crop') == '1' ){?>
                         <button type="submit"  formaction="<?php echo base_url('product_image_crop_action'); ?>" class="btn btn-info btn-xs float-right mr-2"><i class="fas fa-file"></i> Crop image</button>
                         <?php } ?>
-
+                        <?php if(modules_key_by_access('multi_delete') == '1' ){ ?>
                         <button type="submit" formaction="<?php echo base_url('product_multi_delete_action'); ?>" class="btn btn-danger btn-xs float-right mr-2"><i class="fas fa-trash"></i> Multi delete</button>
+                        <?php } ?>
                     </div>
                     <div class="col-md-12" style="margin-top: 10px" id="message">
                         <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
