@@ -30,9 +30,10 @@ class Advanced_products extends BaseController
             return redirect()->to(site_url('admin'));
         } else {
 
-            $module_id = get_data_by_id('module_id', 'cc_modules', 'module_key', 'bulk_edit_products');
-            $data['moduleSettings'] = get_array_data_by_id('cc_module_settings', 'module_id', $module_id);
-            $data['module_id'] = $module_id;
+            $tableModules = DB()->table('cc_modules');
+            $tableModules->join('cc_module_settings', 'cc_module_settings.module_id = cc_modules.module_id');
+            $data['moduleSettings'] = $tableModules->where('cc_modules.module_key','bulk_edit_products')->get()->getResult();
+
 
 
             $table = DB()->table('cc_products');
@@ -562,6 +563,14 @@ class Advanced_products extends BaseController
             return redirect()->to('bulk_edit_products');
         }
 
+    }
+
+    public function image_show(){
+        $product_id = $this->request->getPost('product_id');
+        $image = get_data_by_id('image','cc_products','product_id',$product_id);
+        $result = image_view('uploads/products',$product_id,'50_'.$image,'50_noimage.png', '');
+
+        return $result;
     }
 
 

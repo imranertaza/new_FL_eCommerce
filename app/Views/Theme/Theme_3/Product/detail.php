@@ -187,7 +187,7 @@
                                     </tr>
                                     <?php  } }?>
                                 </table>
-                                <a href="javascript:void(0)" class="btn-see" onclick="myFunction()" id="myBtn">See more
+                                <br><a href="javascript:void(0)" class="btn-see" onclick="myFunction()" id="myBtn">See more
                                 </a>
                             </div>
 
