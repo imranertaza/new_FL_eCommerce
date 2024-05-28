@@ -45,6 +45,7 @@ $(function() {
         "bSort": false,
         "drawCallback": function( settings ) {
             checkShowHideRow();
+            image_load();
         }
     });
 
@@ -618,7 +619,7 @@ function add_option_new_ajax(id, option_id) {
             var new_input = "<div class='col-md-12 mt-3' id='new_" + new_chq_no +
                 "' ><input type='hidden' name='option[]' value='" + option_id +
                 "' ><select name='opValue[]' id='valId_" + new_chq_no +
-                "' style='padding: 3px;'><option value=''>Please select</option>" + data +
+                "' style='padding: 3px;' required><option value=''>Please select</option>" + data +
                 "</select><select name='subtract[]' style='padding: 3px;'><option value='plus'>Plus</option><option value='minus'>Minus</option></select><input type='number' placeholder='Quantity' name='qty[]' required> <input type='number' placeholder='Price' name='price_op[]' required> <a href='javascript:void(0)' onclick='remove_option(this)' class='btn btn-sm btn-danger' style='margin-top: -5px;'>X</a></div>";
 
             $('#' + id).append(new_input);
@@ -792,7 +793,7 @@ function submitFormBulk(formID) {
 
 function checkShowHideRow() {
 
-    var fields = ['id','image', 'name', 'model', 'quantity', 'category', 'price', 'status', 'featured','option','meta_title','meta_keyword','meta_description', 'action'];
+    var fields = ['id','image', 'name', 'model', 'quantity', 'category', 'price', 'status', 'featured','optionrow','meta_title','meta_keyword','meta_description', 'action'];
 
     for (let i = 0; i < fields.length; ++i) {
         if ($('input[name="' + fields[i] + '"]').is(':checked')) {
@@ -860,29 +861,58 @@ function optionBulkUpdate(proId){
 }
 
 function optionBulkUpdateAction() {
-    var form = document.getElementById('optionForm');
-    var upRow = $(form).attr('data-row');
-    $.ajax({
-        url: $(form).prop('action'),
-        type: "POST",
-        data: new FormData(form),
-        contentType: false,
-        cache: false,
-        processData: false,
-        success: function(data) {
-            $('#optionModal').modal('hide');
-            // $("#message").html(data);
-            $("#mess").show();
-            var div = $("#"+upRow).html(data);
-            div.animate({opacity: '0.5'});
-            div.animate({opacity: '1'});
-            checkShowHideRow();
+    var result = true;
+    var mess = '<div class="alert alert-danger alert-dismissible" role="alert">All field are required! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
 
+    $('[name^="qty"]').each(function() {
+        qty = parseInt(this.value);
+        if (isNaN(qty)){
+            result = false;
         }
     });
+
+    $('[name^="price_op"]').each(function() {
+        price = parseInt(this.value);
+        if (isNaN(price)){
+            result = false;
+        }
+    });
+
+    $('[name^="opValue"]').each(function() {
+        opValue = parseInt(this.value);
+        if (isNaN(opValue)){
+            result = false;
+        }
+    });
+
+    if (result == false) {
+        $('#mesError').html(mess);
+    }else {
+        var form = document.getElementById('optionForm');
+        var upRow = $(form).attr('data-row');
+        $.ajax({
+            url: $(form).prop('action'),
+            type: "POST",
+            data: new FormData(form),
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (data) {
+                $('#optionModal').modal('hide');
+                // $("#message").html(data);
+                $("#mess").show();
+                var div = $("#" + upRow).html(data);
+                div.animate({opacity: '0.5'});
+                div.animate({opacity: '1'});
+                checkShowHideRow();
+
+            }
+        });
+    }
 }
 
 function categoryBulkUpdateAction() {
+
     var form = document.getElementById('categoryForm');
     var upRow = $(form).attr('data-row');
     $.ajax({
@@ -892,11 +922,11 @@ function categoryBulkUpdateAction() {
         contentType: false,
         cache: false,
         processData: false,
-        success: function(data) {
+        success: function (data) {
             $('#categoryModal').modal('hide');
             // $("#message").html(data);
             $("#mess").show();
-            var div = $("#"+upRow).html(data);
+            var div = $("#" + upRow).html(data);
             div.animate({opacity: '0.5'});
             div.animate({opacity: '1'});
             checkShowHideRow();
@@ -1091,6 +1121,27 @@ function image_sort_update(product_image_id,val){
             $("#success").show(0).delay(1000).fadeOut();
         }
     });
+}
+
+async function image_load(){
+    $('input[name^="productId"]').each( function() {
+        productId = parseInt(this.value);
+        // $("#img_v_"+productId).html(productId);
+        $.ajax({
+            method: "POST",
+            async: false,
+            url: "<?php echo base_url('product_image_show_action') ?>",
+            data: {product_id: productId},
+            beforeSend: function () {
+                $("#img_v_"+productId).html('Loading...');
+            },
+            success: function (data) {
+                $("#img_v_"+productId).html(data);
+            }
+        });
+    });
+
+
 }
 
 </script>

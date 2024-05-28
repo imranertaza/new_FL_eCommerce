@@ -271,6 +271,13 @@ $routes->post('/bulk_multi_option_action', 'Admin\Advanced_products::multi_optio
 $routes->post('/bulk_product_multi_attribute_edit', 'Admin\Advanced_products::multi_attribute_edit');
 $routes->post('/bulk_multi_attribute_action', 'Admin\Advanced_products::multi_attribute_action');
 
+$routes->post('/product_image_show_action', 'Admin\Advanced_products::image_show');
+
+//$routes->post('/bulk_product_multi_option_edit', static function () {
+//
+//    print_r($_POST['productId']);
+//
+//});
 //login routes
 $routes->get('/register', 'Login::register');
 $routes->get('/login', 'Login::index');

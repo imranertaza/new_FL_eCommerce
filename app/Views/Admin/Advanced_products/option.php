@@ -1,5 +1,5 @@
 
-
+<div class="col-md-12 mt-2" id="mesError"></div>
 <form id="optionForm" action="<?php echo base_url('bulk_option_update') ?>" data-row="update_<?php echo $product_id;?>" method="post">
     <div class="modal-header">
         <h4 class="modal-title">Options</h4>

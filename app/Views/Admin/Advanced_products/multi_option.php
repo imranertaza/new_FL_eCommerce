@@ -64,7 +64,7 @@
 
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <button type="submit"  class="btn btn-primary">Save changes</button>
+                        <button type="submit" onclick="check_required_option()"  class="btn btn-primary">Save changes</button>
                     </div>
                 </form>
 
