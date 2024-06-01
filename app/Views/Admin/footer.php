@@ -115,7 +115,64 @@
 
     });
 
+    function check_required_option(){
+        var result = true;
+        var mess = '<div class="alert alert-danger alert-dismissible" role="alert">All field are required! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
 
+        $('[name^="qty"]').each(function() {
+            qty = parseInt(this.value);
+            if (isNaN(qty)){
+                result = false;
+            }
+        });
+
+        $('[name^="price_op"]').each(function() {
+            price = parseInt(this.value);
+            if (isNaN(price)){
+                result = false;
+            }
+        });
+
+        $('[name^="opValue"]').each(function() {
+            opValue = parseInt(this.value);
+            if (isNaN(opValue)){
+                result = false;
+            }
+        });
+
+
+        if (result == false) {
+            $('#message').html(mess);
+        }else{
+            $('#message').html('');
+        }
+    }
+
+    function check_required_attribute(){
+        var result = true;
+        var mess = '<div class="alert alert-danger alert-dismissible" role="alert">All field are required! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
+
+        $('[name^="attribute_group_id"]').each(function() {
+            group = parseInt(this.value);
+            if (isNaN(group)){
+                result = false;
+            }
+        });
+
+        $('[name^="name"]').each(function() {
+            name = parseInt(this.value);
+            if (isNaN(name)){
+                result = false;
+            }
+        });
+
+
+        if (result == false) {
+            $('#message').html(mess);
+        }else{
+            $('#message').html('');
+        }
+    }
 
 
 </script>

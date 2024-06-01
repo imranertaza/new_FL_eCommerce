@@ -107,8 +107,8 @@
                             </div>
 
                             <div class="form-check form-check-inline">
-                                <input type="checkbox" name="option" class="form-check-input"
-                                       onclick="bulk_status('option')" id="check_14" checked="" >
+                                <input type="checkbox" name="optionrow" class="form-check-input"
+                                       onclick="bulk_status('optionrow')" id="check_14" checked="" >
                                 <label class="form-check-label" for="check_14">
                                     Option </label>
                             </div>
@@ -141,8 +141,7 @@
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" onclick="allCheckedDemo(this)" ></th>
-                                    <th class="colum_id row_show ">
-                                        Id</th>
+                                    <th class="colum_id row_show "> Id</th>
                                     <th class="colum_image row_show "> Image</th>
                                     <th class="colum_name row_show ">
                                         Name</th>
@@ -157,7 +156,7 @@
                                     <th class="colum_status row_show ">
                                         Status</th>
                                     <th class="colum_featured row_show "> Featured</th>
-                                    <th class="colum_option row_show "> Option</th>
+                                    <th class="colum_optionrow row_show "> Option</th>
                                     <th class="colum_meta_title row_hide "> Meta Title</th>
                                     <th class="colum_meta_keyword row_hide "> Meta Keyword</th>
                                     <th class="colum_meta_description row_hide "> Meta Description</th>
@@ -165,14 +164,16 @@
                             </thead>
                             <!-- row_hide -->
                             <tbody id="tbody">
-                                <?php
-                                foreach ($product as $key => $val) { ?>
+                                <?php foreach ($product as $key => $val) { ?>
                                 <tr id="update_<?php echo $val->product_id?>">
                                     <td width="10">
                                         <input type="checkbox" name="productId[]" value="<?php echo $val->product_id;?>" >
                                     </td>
                                     <td class="colum_id row_show "> <?php echo $val->product_id; ?></td>
-                                    <td class="colum_image row_show "> <?php echo image_view('uploads/products',$val->product_id,'50_'.$val->image,'50_noimage.png', '');?></td>
+                                    <td class="colum_image row_show ">
+                                        <?php //echo image_view('uploads/products',$val->product_id,'50_'.$val->image,'50_noimage.png', '');?>
+                                        <p id="img_v_<?php echo $val->product_id; ?>"></p>
+                                    </td>
                                     <td class="colum_name row_show ">
                                         <p  onclick="updateFunction('<?php echo $val->product_id; ?>','name','<?php echo $val->name; ?>','view_name_<?php echo $val->product_id; ?>','bulkForm_name_<?php echo $val->product_id; ?>','update_<?php echo $val->product_id?>')">
                                             <?php echo !empty($val->name)?$val->name:'<i style="color: #ccc;">NULL</i>'; ?></p>
@@ -212,7 +213,7 @@
                                         <button type="button" onclick="bulkAllStatusUpdate('<?php echo $val->product_id; ?>','1','featured','update_<?php echo $val->product_id?>')" class="btn btn-warning btn-xs">Off</button>
                                         <?php } ?>
                                     </td>
-                                    <td class="colum_option row_show">
+                                    <td class="colum_optionrow row_show">
                                         <button type="button" onclick="optionBulkUpdate('<?php echo $val->product_id; ?>')" class="btn btn-xs btn-secondary" >Show</button>
                                     </td>
 
