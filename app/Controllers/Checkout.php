@@ -37,6 +37,7 @@ class Checkout extends BaseController
 
     public function index()
     {
+        $settings = get_settings();
         if (!empty($this->cart->contents())) {
             $table = DB()->table('cc_customer');
             $data['customer'] = $table->where('customer_id', $this->session->cusUserId)->get()->getRow();
@@ -44,14 +45,14 @@ class Checkout extends BaseController
             $tableSet = DB()->table('cc_payment_settings');
             $data['paypalEmail'] = $tableSet->where('payment_method_id', '3')->where('label', 'email')->get()->getRow();
 
-            $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
-            $data['description'] = get_lebel_by_value_in_settings('meta_description');
+            $data['keywords'] = $settings['meta_keyword'];
+            $data['description'] = $settings['meta_description'];
             $data['title'] = 'Checkout';
 
             $data['page_title'] = 'Checkout';
-            echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/header', $data);
-            echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/Checkout/index', $data);
-            echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/footer');
+            echo view('Theme/' . $settings['Theme'] . '/header', $data);
+            echo view('Theme/' . $settings['Theme'] . '/Checkout/index', $data);
+            echo view('Theme/' . $settings['Theme'] . '/footer');
         } else {
             return redirect()->to('cart');
         }
@@ -380,38 +381,41 @@ class Checkout extends BaseController
 
     public function success()
     {
-        $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
-        $data['description'] = get_lebel_by_value_in_settings('meta_description');
+        $settings = get_settings();
+        $data['keywords'] = $settings['meta_keyword'];
+        $data['description'] = $settings['meta_description'];
         $data['title'] = 'Order Success';
 
         $data['page_title'] = 'Checkout Success';
-        echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/header', $data);
-        echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/Checkout/success', $data);
-        echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/footer');
+        echo view('Theme/' . $settings['Theme'] . '/header', $data);
+        echo view('Theme/' . $settings['Theme'] . '/Checkout/success', $data);
+        echo view('Theme/' . $settings['Theme'] . '/footer');
     }
 
     public function failed()
     {
-        $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
-        $data['description'] = get_lebel_by_value_in_settings('meta_description');
+        $settings = get_settings();
+        $data['keywords'] = $settings['meta_keyword'];
+        $data['description'] = $settings['meta_description'];
         $data['title'] = 'Order Failed';
 
         $data['page_title'] = 'Checkout Failed';
-        echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/header', $data);
-        echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/Checkout/failed', $data);
-        echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/footer');
+        echo view('Theme/' . $settings['Theme'] . '/header', $data);
+        echo view('Theme/' . $settings['Theme'] . '/Checkout/failed', $data);
+        echo view('Theme/' . $settings['Theme'] . '/footer');
     }
 
     public function canceled()
     {
-        $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
-        $data['description'] = get_lebel_by_value_in_settings('meta_description');
+        $settings = get_settings();
+        $data['keywords'] = $settings['meta_keyword'];
+        $data['description'] = $settings['meta_description'];
         $data['title'] = 'Order Canceled';
 
         $data['page_title'] = 'Checkout Canceled';
-        echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/header', $data);
-        echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/Checkout/canceled', $data);
-        echo view('Theme/' . get_lebel_by_value_in_settings('Theme') . '/footer');
+        echo view('Theme/' . $settings['Theme'] . '/header', $data);
+        echo view('Theme/' . $settings['Theme'] . '/Checkout/canceled', $data);
+        echo view('Theme/' . $settings['Theme'] . '/footer');
     }
 
 

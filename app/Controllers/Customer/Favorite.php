@@ -26,7 +26,7 @@ class Favorite extends BaseController
         if (!isset($isLoggedInCustomer) || $isLoggedInCustomer != TRUE) {
             return redirect()->to(site_url('Login'));
         } else {
-
+            $settings = get_settings();
             $data['allProd'] = $this->favoriteModel->where('cc_customer_wishlist.customer_id',$this->session->cusUserId)->query()->paginate(10);
             $data['pager'] = $this->favoriteModel->pager;
             $data['links'] = $data['pager']->links('default','custome_link');
@@ -34,14 +34,14 @@ class Favorite extends BaseController
             $data['menu_active'] = 'favorite';
             $data['page_title'] = 'Favorite';
 
-            $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
-            $data['description'] = get_lebel_by_value_in_settings('meta_description');
+            $data['keywords'] = $settings['meta_keyword'];
+            $data['description'] = $settings['meta_description'];
             $data['title'] = 'Favorite';
 
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Customer/menu');
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Customer/favorite',$data);
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/footer');
+            echo view('Theme/'.$settings['Theme'].'/header',$data);
+            echo view('Theme/'.$settings['Theme'].'/Customer/menu');
+            echo view('Theme/'.$settings['Theme'].'/Customer/favorite',$data);
+            echo view('Theme/'.$settings['Theme'].'/footer');
         }
     }
 

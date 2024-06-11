@@ -310,6 +310,21 @@ function admin_user_name()
     return $query;
 }
 
+function get_settings(){
+    $table = DB()->table('cc_settings');
+    $data = $table->get()->getResult();
+
+    $settings = array();
+    foreach ($data as $key=>$val){
+        foreach($val as $k=>$v) {
+            if ($k == 'label'){
+                $settings[$v] = $data[$key]->value;
+            }
+        }
+    }
+    return $settings;
+}
+
 function get_lebel_by_value_in_settings($lable)
 {
     $table = DB()->table('cc_settings');

@@ -17,7 +17,7 @@ class Products extends BaseController {
 
     public function detail($product_id)
     {
-
+        $settings = get_settings();
         $table = DB()->table('cc_products');
         $table->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id ');
         $data['products'] = $table->where('cc_products.product_id',$product_id)->get()->getRow();
@@ -74,9 +74,9 @@ class Products extends BaseController {
         $data['title'] = $data['products']->meta_title;
 
         $data['page_title'] = 'Product Detail';
-        echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
-        echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Product/detail');
-        echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/footer');
+        echo view('Theme/'.$settings['Theme'].'/header',$data);
+        echo view('Theme/'.$settings['Theme'].'/Product/detail');
+        echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
     public function optionPriceCalculate(){
