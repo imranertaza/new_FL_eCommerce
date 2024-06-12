@@ -10,17 +10,21 @@
                     <div class="products h-100">
                         <div class="row gx-0 row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-5 h-100">
 
-                            <?php foreach ($products as $pro){ ?>
+                            <?php
+                                $symbol = get_lebel_by_value_in_settings('currency_symbol');
+                                $modules = modules_access();
+                                foreach ($products as $pro){
+                            ?>
                                 <div class="col border p-2">
                                     <div class="product-grid h-100 d-flex align-items-stretch flex-column position-relative">
-                                        <?php if (modules_key_by_access('wishlist') == 1) { ?>
+                                        <?php if ($modules['wishlist'] == 1) { ?>
                                         <?php if (!isset(newSession()->isLoggedInCustomer)){ ?>
                                             <a href="<?php echo base_url('login');?>" class="btn-wishlist position-absolute start-0 top-0 mt-2 ms-2"><i class="fa-solid fa-heart"></i></a>
                                         <?php }else{ ?>
                                             <a href="javascript:void(0)" class="btn-wishlist position-absolute start-0 top-0 mt-2 ms-2" onclick="addToWishlist(<?php echo $pro->product_id ?>)"><i class="fa-solid fa-heart"></i></a>
                                         <?php } ?>
                                         <?php } ?>
-                                        <?php if (modules_key_by_access('compare') == 1) { ?>
+                                        <?php if ($modules['compare'] == 1) { ?>
                                         <a href="javascript:void(0)" onclick="addToCompare(<?php echo $pro->product_id ?>)" class="btn-compare position-absolute start-0 top-0 mt-5 ms-2"><i class="fa-solid fa-code-compare"></i></a>
                                         <?php } ?>
                                         <div class="product-top">
@@ -38,9 +42,9 @@
                                             </div>
                                             <div class="price mb-3">
                                                 <?php $spPric = get_data_by_id('special_price','cc_product_special','product_id',$pro->product_id);  if (empty($spPric)){ ?>
-                                                    <?php echo currency_symbol($pro->price);?>
+                                                    <?php echo currency_symbol_with_symbol($pro->price,$symbol);?>
                                                 <?php }else{ ?>
-                                                    <small> <del><?php echo currency_symbol($pro->price);?></del></small>/<?php echo currency_symbol($spPric);?>
+                                                    <small> <del><?php echo currency_symbol_with_symbol($pro->price,$symbol);?></del></small>/<?php echo currency_symbol_with_symbol($spPric,$symbol);?>
                                                 <?php } ?>
                                             </div>
                                             <a href="javascript:void(0)" onclick="addToCart(<?php echo $pro->product_id ?>)" class="btn btn-cart w-100 rounded-0 mt-3">Add to Cart</a>

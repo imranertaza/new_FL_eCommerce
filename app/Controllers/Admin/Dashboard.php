@@ -27,9 +27,13 @@ class Dashboard extends BaseController
         if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
             return redirect()->to(site_url('admin'));
         } else {
-            $pending = get_data_by_id('order_status_id','cc_order_status','name','Pending');
-            $processing = get_data_by_id('order_status_id','cc_order_status','name','Processing');
-            $canceled = get_data_by_id('order_status_id','cc_order_status','name','Canceled');
+            $tableOrderStatus = DB()->table('cc_order_status');
+            $orStatus = $tableOrderStatus->get()->getResult();
+            foreach ($orStatus as $val){
+                $pending = ($val->name == 'Pending')?$val->order_status_id:'';
+                $processing = ($val->name == 'Processing')?$val->order_status_id:'';
+                $canceled = ($val->name == 'Canceled')?$val->order_status_id:'';
+            }
 
             $table = DB()->table('cc_order');
             $data['allOrder'] = $table->countAllResults();
@@ -62,12 +66,6 @@ class Dashboard extends BaseController
             $data['orderLast'] = $tableOrder->orderBy('order_id','DESC')->limit(10)->get()->getResult();
 
 
-
-
-//            print DB()->getLastQuery();
-
-//            print date("Y-m-d H:i:s");
-//            die();
             //$perm = array('create','read','update','delete','mod_access');
             $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
             foreach ($perm as $key => $val) {

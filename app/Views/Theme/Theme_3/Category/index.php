@@ -91,11 +91,12 @@
 
                         <div class="products cat-pro-mob">
                             <div class="row gx-0 row-cols-1 row-cols-sm-2 row-cols-md-3 h-100 " id="grid-view">
-                                <?php if (!empty($products)) {
+                                <?php $modules = modules_access(); $symbol = get_lebel_by_value_in_settings('currency_symbol');
+                                if (!empty($products)) {
                                     foreach ($products as $pro) { ?>
                                         <div class="col border p-2">
                                             <div class="product-grid h-100 d-flex align-items-stretch flex-column position-relative">
-                                                <?php if (modules_key_by_access('wishlist') == 1) { ?>
+                                                <?php if ($modules['wishlist'] == 1) { ?>
                                                     <?php if (!isset(newSession()->isLoggedInCustomer)) { ?>
 
                                                         <a href="<?php echo base_url('login'); ?>"
@@ -115,7 +116,7 @@
 
                                                     <?php } ?>
                                                 <?php } ?>
-                                                <?php if (modules_key_by_access('compare') == 1) { ?>
+                                                <?php if ($modules['compare'] == 1) { ?>
 
                                                     <a href="javascript:void(0)"
                                                        onclick="addToCompare(<?php echo $pro->product_id ?>)"
@@ -139,11 +140,11 @@
                                                     <div class="price mb-3">
                                                         <?php $spPric = get_data_by_id('special_price', 'cc_product_special', 'product_id', $pro->product_id);
                                                         if (empty($spPric)) { ?>
-                                                            <?php echo currency_symbol($pro->price); ?>
+                                                            <?php echo currency_symbol_with_symbol($pro->price,$symbol); ?>
                                                         <?php } else { ?>
                                                             <small class="off-price">
-                                                                <del><?php echo currency_symbol($pro->price); ?></del>
-                                                            </small> <?php echo currency_symbol($spPric); ?>
+                                                                <del><?php echo currency_symbol_with_symbol($pro->price,$symbol); ?></del>
+                                                            </small> <?php echo currency_symbol_with_symbol($spPric,$symbol); ?>
                                                         <?php } ?>
                                                     </div>
                                                     <?php echo addToCartBtn($pro->product_id); ?>
@@ -162,7 +163,7 @@
                                 <?php foreach ($products as $pro) { ?>
                                     <div class="col-md-12 border p-2 ">
                                         <div class="product-grid h-100 d-flex align-items-stretch  position-relative">
-                                            <?php if (modules_key_by_access('wishlist') == 1) { ?>
+                                            <?php if ($modules['wishlist'] == 1) { ?>
                                                 <?php if (!isset(newSession()->isLoggedInCustomer)) { ?>
 
                                                     <a href="<?php echo base_url('login'); ?>"
@@ -183,7 +184,7 @@
 
                                                 <?php } ?>
                                             <?php } ?>
-                                            <?php if (modules_key_by_access('compare') == 1) { ?>
+                                            <?php if ($modules['compare'] == 1) { ?>
 
                                                 <a href="javascript:void(0)"
                                                    onclick="addToCompare(<?php echo $pro->product_id ?>)"
@@ -215,11 +216,11 @@
                                                 <div class="price mb-3">
                                                     <?php $spPric = get_data_by_id('special_price', 'cc_product_special', 'product_id', $pro->product_id);
                                                     if (empty($spPric)) { ?>
-                                                        <?php echo currency_symbol($pro->price); ?>
+                                                        <?php echo currency_symbol_with_symbol($pro->price,$symbol); ?>
                                                     <?php } else { ?>
                                                         <small class="off-price">
-                                                            <del><?php echo currency_symbol($pro->price); ?></del>
-                                                        </small> <?php echo currency_symbol($spPric); ?>
+                                                            <del><?php echo currency_symbol_with_symbol($pro->price,$symbol); ?></del>
+                                                        </small> <?php echo currency_symbol_with_symbol($spPric,$symbol); ?>
                                                     <?php } ?>
                                                 </div>
                                                 <?php echo addToCartBtn($pro->product_id); ?>

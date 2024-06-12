@@ -163,6 +163,7 @@
                             </ul>
                         </div>                        
                     </div>
+                    <?php $settings = get_settings();?>
                     <div class="col-md-3 col-12">
                         <h4 class="f-title toggleButton">Contact Us</h4>
                         <div class="elementToToggle d-none d-md-block">
@@ -173,7 +174,7 @@
                                         <path d="M16.95 18C14.8 18 12.7043 17.5207 10.663 16.562C8.621 15.604 6.81267 14.3373 5.238 12.762C3.66267 11.1873 2.396 9.379 1.438 7.337C0.479334 5.29567 0 3.2 0 1.05C0 0.75 0.0999999 0.5 0.3 0.3C0.5 0.0999999 0.75 0 1.05 0H5.1C5.33333 0 5.54167 0.0749999 5.725 0.225C5.90833 0.375 6.01667 0.566667 6.05 0.8L6.7 4.3C6.73333 4.53333 6.72933 4.74567 6.688 4.937C6.646 5.129 6.55 5.3 6.4 5.45L3.975 7.9C4.675 9.1 5.55433 10.225 6.613 11.275C7.671 12.325 8.83333 13.2333 10.1 14L12.45 11.65C12.6 11.5 12.796 11.3873 13.038 11.312C13.2793 11.2373 13.5167 11.2167 13.75 11.25L17.2 11.95C17.4333 12 17.625 12.1123 17.775 12.287C17.925 12.4623 18 12.6667 18 12.9V16.95C18 17.25 17.9 17.5 17.7 17.7C17.5 17.9 17.25 18 16.95 18ZM3.025 6L4.675 4.35L4.25 2H2.025C2.10833 2.68333 2.225 3.35833 2.375 4.025C2.525 4.69167 2.74167 5.35 3.025 6ZM11.975 14.95C12.625 15.2333 13.2877 15.4583 13.963 15.625C14.6377 15.7917 15.3167 15.9 16 15.95V13.75L13.65 13.275L11.975 14.95Z"
                                             fill="#FFFFFF"/>
                                         </svg></span>
-                                    <span class="f-text-add">(+1) <?php echo get_lebel_by_value_in_settings('phone'); ?></span>
+                                    <span class="f-text-add">(+1) <?php echo $settings['phone']; ?></span>
                                 </li>
                                 <li class="d-flex fot-about">
                                     <span>                                        
@@ -189,7 +190,7 @@
                                         <path d="M20 2C20 0.9 19.1 0 18 0H2C0.9 0 0 0.9 0 2V14C0 15.1 0.9 16 2 16H18C19.1 16 20 15.1 20 14V2ZM18 2L10 7L2 2H18ZM18 14H2V4L10 9L18 4V14Z"
                                             fill="#FFFFFF"/>
                                         </svg></span>
-                                    <span class="f-text-add"><?php echo get_lebel_by_value_in_settings('email'); ?></span>
+                                    <span class="f-text-add"><?php echo $settings['email']; ?></span>
                                 </li>
 
                                 <li class="d-flex fot-about">
@@ -199,7 +200,7 @@
                                             fill="#FFFFFF"/>
                                     </svg> </span>
                                     <span class="f-text-add">
-                                        <?php echo get_lebel_by_value_in_settings('address'); ?>
+                                        <?php echo $settings['address']; ?>
                                     </span>
                                 </li>    
                                 <?php if(modules_key_by_access('contact_with_whatsapp') ==1){ $modulId = get_data_by_id('module_id','cc_modules','module_key','contact_with_whatsapp');?>
@@ -227,13 +228,13 @@
         </div>
         <div class="footer-social">
             <div class="container text-center">
-                <a class="facebook" target="_blank" href="<?php echo get_lebel_by_value_in_settings('fb_url'); ?>"><i
+                <a class="facebook" target="_blank" href="<?php echo $settings['fb_url']; ?>"><i
                     class="fa-brands fa-facebook-f"></i></a>
-                <a class="ms-4 twitter" target="_blank" href="<?php echo get_lebel_by_value_in_settings('twitter_url'); ?>"><i
+                <a class="ms-4 twitter" target="_blank" href="<?php echo $settings['twitter_url']; ?>"><i
                             class="fa-brands fa-twitter"></i></a>
-                <a class="ms-4 tiktok" target="_blank" href="<?php echo get_lebel_by_value_in_settings('tiktok_url'); ?>"><i
+                <a class="ms-4 tiktok" target="_blank" href="<?php echo $settings['tiktok_url']; ?>"><i
                             class="fa-brands fa-tiktok"></i></a>
-                <a class="ms-4 instagram" target="_blank" href="<?php echo get_lebel_by_value_in_settings('instagram_url'); ?>"><i
+                <a class="ms-4 instagram" target="_blank" href="<?php echo $settings['instagram_url']; ?>"><i
                             class="fa-brands fa-instagram"></i></a>
             </div>
         </div>
@@ -580,7 +581,7 @@
     }
 
     function checkout_data_calculate(data){
-        <?php $symbol = get_lebel_by_value_in_settings('currency_symbol'); ?>
+        <?php $symbol = $settings['currency_symbol']; ?>
 
         var total = Number(data);
 
@@ -650,7 +651,7 @@
         $('#total').html('<?php echo $symbol; ?> ' + totalAmount);
         $('#check_total').html('<?php echo $symbol; ?> ' + totalAmount);
 
-        <?php $symbol = get_lebel_by_value_in_settings('currency_symbol'); ?>
+        <?php $symbol = $settings['currency_symbol']; ?>
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('shipping_rate') ?>",
