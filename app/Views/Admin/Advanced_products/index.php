@@ -18,7 +18,6 @@
 
     <!-- Main content -->
     <section class="content">
-        <form action="<?= base_url('bulk_product_multi_delete')?>" method="post">
             <!-- Default box -->
             <div class="card">
                 <div class="card-header">
@@ -32,6 +31,7 @@
                             <a href="<?php echo base_url('product_create') ?>" class="btn btn-primary  btn-xs float-right "><i class="fas fa-plus"></i> Add</a>
                             <a class="btn btn-xs btn-info float-right mr-2" data-toggle="collapse" href="#collapseProduct" role="button" aria-expanded="false" aria-controls="collapseProduct">Settings</a>
                             <a type="button" onclick="bulk_product_copy()" class="btn btn-secondary btn-xs float-right mr-2"><i class="nav-icon fas fa-copy"></i> Copy</a>
+                            <form id="multiActionForm" action="<?= base_url('bulk_product_multi_delete')?>" method="post">
                             <?php if(modules_key_by_access('multi_delete') == '1' ){ ?>
                             <button type="submit" class="btn btn-danger btn-xs float-right mr-2"><i class="fas fa-trash"></i> Multi delete</button>
                             <?php } ?>
@@ -41,6 +41,7 @@
                             <?php if(modules_key_by_access('multi_attribute') == '1' ){ ?>
                             <button type="submit" formaction="<?php echo base_url('bulk_product_multi_attribute_edit'); ?>" class="btn btn-info btn-xs float-right mr-2"><i class="fas fa-edit"></i> Multi attribute edit</button>
                             <?php } ?>
+                            </form>
                             <a href="<?php echo base_url('products') ?>" class="btn btn-danger float-right mr-2 btn-xs" >Back</a>
                         </div>
                         <div class="col-md-12" id="message" style="margin-top: 10px">
@@ -140,7 +141,7 @@
                         <table id="productBulkEdit" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th><input type="checkbox" onclick="allCheckedDemo(this)" ></th>
+                                    <th><input type="checkbox" onclick="allCheckedDemo(this)"  ></th>
                                     <th class="colum_id row_show "> Id</th>
                                     <th class="colum_image row_show "> Image</th>
                                     <th class="colum_name row_show ">
@@ -167,11 +168,10 @@
                                 <?php foreach ($product as $key => $val) { ?>
                                 <tr id="update_<?php echo $val->product_id?>">
                                     <td width="10">
-                                        <input type="checkbox" name="productId[]" value="<?php echo $val->product_id;?>" >
+                                        <input type="checkbox" name="productId[]" value="<?php echo $val->product_id;?>" form="multiActionForm" >
                                     </td>
                                     <td class="colum_id row_show "> <?php echo $val->product_id; ?></td>
                                     <td class="colum_image row_show ">
-                                        <?php //echo image_view('uploads/products',$val->product_id,'50_'.$val->image,'50_noimage.png', '');?>
                                         <p id="img_v_<?php echo $val->product_id; ?>"></p>
                                     </td>
                                     <td class="colum_name row_show ">
@@ -244,7 +244,6 @@
                 <!-- /.card-footer-->
             </div>
             <!-- /.card -->
-        </form>
     </section>
     <!-- /.content -->
     <!-- /.category modal -->

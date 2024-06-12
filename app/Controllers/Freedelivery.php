@@ -14,16 +14,17 @@ class Freedelivery extends BaseController {
     }
 
     public function index(){
+        $settings = get_settings();
         $table = DB()->table('products');
         $data['products'] = $table->where('status','Active')->get()->getResult();
 
-        $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
-        $data['description'] = get_lebel_by_value_in_settings('meta_description');
+        $data['keywords'] = $settings['meta_keyword'];
+        $data['description'] = $settings['meta_description'];
         $data['title'] = 'Free delivery';
 
         $data['page_title'] = 'About Us';
-        echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
-        echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Home/index',$data);
-        echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/footer');
+        echo view('Theme/'.$settings['Theme'].'/header',$data);
+        echo view('Theme/'.$settings['Theme'].'/Home/index',$data);
+        echo view('Theme/'.$settings['Theme'].'/footer');
     }
 }

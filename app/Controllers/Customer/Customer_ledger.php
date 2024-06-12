@@ -23,19 +23,20 @@ class Customer_ledger extends BaseController
         if (!isset($isLoggedInCustomer) || $isLoggedInCustomer != TRUE) {
             return redirect()->to(site_url('Login'));
         } else {
+            $settings = get_settings();
             $table = DB()->table('cc_customer_ledger');
             $data['ledger'] = $table->where('customer_id',$this->session->cusUserId)->get()->getResult();
 
-            $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
-            $data['description'] = get_lebel_by_value_in_settings('meta_description');
+            $data['keywords'] = $settings['meta_keyword'];
+            $data['description'] = $settings['meta_description'];
             $data['title'] = 'Account Ledger';
 
             $data['page_title'] = 'Ledger';
             $data['menu_active'] = 'ledger';
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Customer/menu');
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Customer/customer_ledger');
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/footer');
+            echo view('Theme/'.$settings['Theme'].'/header',$data);
+            echo view('Theme/'.$settings['Theme'].'/Customer/menu');
+            echo view('Theme/'.$settings['Theme'].'/Customer/customer_ledger');
+            echo view('Theme/'.$settings['Theme'].'/footer');
         }
     }
 

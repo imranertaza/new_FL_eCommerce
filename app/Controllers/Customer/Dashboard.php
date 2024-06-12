@@ -23,6 +23,7 @@ class Dashboard extends BaseController
         if (!isset($isLoggedInCustomer) || $isLoggedInCustomer != TRUE) {
             return redirect()->to(site_url('Login'));
         } else {
+            $settings = get_settings();
             $table = DB()->table('cc_order');
             $order = $table->where('customer_id',$this->session->cusUserId)->get()->getLastRow();
 
@@ -34,16 +35,16 @@ class Dashboard extends BaseController
                 $data['orderItem'] = $tableItem->where('order_id', $order->order_id)->get()->getResult();
             }
 
-            $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
-            $data['description'] = get_lebel_by_value_in_settings('meta_description');
+            $data['keywords'] = $settings['meta_keyword'];
+            $data['description'] = $settings['meta_description'];
             $data['title'] = 'Dashboard';
 
             $data['page_title'] = 'Dashboard';
             $data['menu_active'] = 'dashboard';
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Customer/menu');
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Customer/dashboard');
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/footer');
+            echo view('Theme/'.$settings['Theme'].'/header',$data);
+            echo view('Theme/'.$settings['Theme'].'/Customer/menu');
+            echo view('Theme/'.$settings['Theme'].'/Customer/dashboard');
+            echo view('Theme/'.$settings['Theme'].'/footer');
         }
     }
 
