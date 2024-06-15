@@ -93,12 +93,15 @@ class Option extends BaseController
             $table->insert($data);
             $optionID = DB()->insertID();
 
-            foreach ($value as $val){
-                $dataval['option_id'] = $optionID;
-                $dataval['name'] = $val;
-                $tableVal = DB()->table('cc_option_value');
-                $tableVal->insert($dataval);
+            $dataval = [];
+            foreach ($value as $key => $val){
+                $dataval[$key] = [
+                    'option_id' => $optionID,
+                    'name' => $val,
+                ];
             }
+            $tableVal = DB()->table('cc_option_value');
+            $tableVal->insertBatch($dataval);
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Create Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('option');
