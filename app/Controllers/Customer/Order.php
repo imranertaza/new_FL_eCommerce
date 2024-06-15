@@ -26,19 +26,20 @@ class Order extends BaseController
         if (!isset($isLoggedInCustomer) || $isLoggedInCustomer != TRUE) {
             return redirect()->to(site_url('Login'));
         } else {
+            $settings = get_settings();
             $table = DB()->table('cc_order');
             $data['order'] = $table->where('customer_id',$this->session->cusUserId)->get()->getResult();
 
             $data['menu_active'] = 'order';
             $data['page_title'] = 'My Order';
 
-            $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
-            $data['description'] = get_lebel_by_value_in_settings('meta_description');
+            $data['keywords'] = $settings['meta_keyword'];
+            $data['description'] = $settings['meta_description'];
             $data['title'] = 'Order List';
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Customer/menu');
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Customer/order',$data);
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/footer');
+            echo view('Theme/'.$settings['Theme'].'/header',$data);
+            echo view('Theme/'.$settings['Theme'].'/Customer/menu');
+            echo view('Theme/'.$settings['Theme'].'/Customer/order',$data);
+            echo view('Theme/'.$settings['Theme'].'/footer');
         }
     }
 
@@ -47,6 +48,7 @@ class Order extends BaseController
         if (!isset($isLoggedInCustomer) || $isLoggedInCustomer != TRUE) {
             return redirect()->to(site_url('Login'));
         } else {
+            $settings = get_settings();
             $table = DB()->table('cc_order');
             $data['order'] = $table->where('order_id',$order_id)->get()->getRow();
 
@@ -56,14 +58,14 @@ class Order extends BaseController
             $data['menu_active'] = 'order';
             $data['page_title'] = 'Invoice';
 
-            $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
-            $data['description'] = get_lebel_by_value_in_settings('meta_description');
+            $data['keywords'] = $settings['meta_keyword'];
+            $data['description'] = $settings['meta_description'];
             $data['title'] = 'Invoice';
 
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Customer/menu');
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Customer/invoice',$data);
-            echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/footer');
+            echo view('Theme/'.$settings['Theme'].'/header',$data);
+            echo view('Theme/'.$settings['Theme'].'/Customer/menu');
+            echo view('Theme/'.$settings['Theme'].'/Customer/invoice',$data);
+            echo view('Theme/'.$settings['Theme'].'/footer');
         }
     }
 

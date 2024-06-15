@@ -451,7 +451,8 @@
         });
     }
 
-    function addToCartdetail() {
+    // function addToCartdetail() {
+
         $("#addto-cart-form").on('submit', (function(e) {
             e.preventDefault();
             $.ajax({
@@ -469,7 +470,6 @@
                     $('.body-count').load(location.href + " .body-count");
                     $('#carticon2').css('transform', 'rotate(90deg)');
                     $('#collapseExample').addClass('show');
-
                     $('.message_alert').show();
                     setTimeout(function() {
                         $("#messAlt").fadeOut(1500);
@@ -478,7 +478,8 @@
                 }
             });
         }));
-    };
+
+    // };
 
     function checkoption(pro_id) {
         var result;

@@ -121,8 +121,7 @@
                                 <?php if (!empty($stock)) { ?>
                                 <input type="hidden" name="product_id" value="<?php echo $products->product_id ?>"
                                     required>
-                                <button type="submit" class="btn btn-cart rounded-0 mt-2"
-                                    onclick="addToCartdetail()">Add to Cart</button>
+                                <button type="submit" class="btn btn-cart rounded-0 mt-2" >Add to Cart</button>
                                 <?php } ?>
                             </form>
                             <div class="d-flex justify-content-between pro-w">
@@ -634,7 +633,7 @@
 
         <div class="row mb-4">
             <div class="col-lg-12 p-3 product-guides mo-text-center">
-                <p class="product-guides-title text-uppercase">Product guides and Documents</p><br>
+                <p class="product-guides-title text-uppercase px-3">Product guides and Documents</p><br>
                 <?php if (!empty($products->documentation_pdf)) { ?>
                 <a href="<?php echo base_url('uploads/products/' . $products->product_id . '/' . $products->documentation_pdf) ?>"
                     target="_blank" download class="link-product-guides">Product documentation (Pdf)</a><br><br>

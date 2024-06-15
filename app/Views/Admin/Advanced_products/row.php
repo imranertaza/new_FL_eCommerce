@@ -1,6 +1,6 @@
 
 <td width="10">
-    <input type="checkbox" name="productId[]" value="<?php echo $val->product_id;?>" >
+    <input type="checkbox" name="productId[]" value="<?php echo $val->product_id;?>" form="multiActionForm" >
 </td>
 <td class="colum_id row_show "> <?php echo $val->product_id; ?></td>
 <td class="colum_image row_show "> <?php echo image_view('uploads/products',$val->product_id,'50_'.$val->image,'50_noimage.png','');?></td>
@@ -45,7 +45,7 @@
     <?php } ?>
 </td>
 
-<td class="colum_option row_show">
+<td class="colum_optionrow row_show">
     <button type="button" onclick="optionBulkUpdate('<?php echo $val->product_id; ?>')" class="btn btn-xs btn-secondary" >Show</button>
 </td>
 

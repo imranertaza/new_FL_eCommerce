@@ -21,6 +21,7 @@ class Category extends BaseController {
     }
 
     public function index($cat_id){
+        $settings = get_settings();
 
         $categoryWhere = !empty($this->request->getGetPost('category'))? 'category_id = '.$this->request->getGetPost('category'): 'category_id = '.$cat_id;
 
@@ -29,7 +30,7 @@ class Category extends BaseController {
         $data['ratingval'] = array();
         $data['keywordSearch'] = '';
 
-        $limit = get_lebel_by_value_in_settings('category_product_limit');
+        $limit = $settings['category_product_limit'];
 
         $where = "$categoryWhere ";
         $data['products'] = $this->categoryproductsModel->where($where)->orderBy('cc_products.product_id','DESC')->query()->paginate($limit);
@@ -40,8 +41,8 @@ class Category extends BaseController {
         $data['parent_Cat'] = $table->where('parent_id',$cat_id)->get()->getResult();
         $data['main_Cat'] = $table->where('parent_id',null)->get()->getResult();
 
-        $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
-        $data['description'] = get_lebel_by_value_in_settings('meta_description');
+        $data['keywords'] = $settings['meta_keyword'];
+        $data['description'] = $settings['meta_description'];
         $data['title'] = get_data_by_id('category_name','cc_product_category','prod_cat_id',$cat_id);
 
         $productsArr = $this->categoryproductsModel->where($where)->orderBy('cc_products.product_id','DESC')->query()->findAll();
@@ -57,9 +58,9 @@ class Category extends BaseController {
 
         $data['prod_cat_id'] = $cat_id;
         $data['page_title'] = 'Category products';
-        echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
-        echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Category/index',$data);
-        echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/footer', $data);
+        echo view('Theme/'.$settings['Theme'].'/header',$data);
+        echo view('Theme/'.$settings['Theme'].'/Category/index',$data);
+        echo view('Theme/'.$settings['Theme'].'/footer', $data);
     }
 
     public function url_generate(){

@@ -18,18 +18,18 @@ class Featuredproducts extends BaseController {
     }
 
     public function index(){
-        $table = DB()->table('cc_products');
+        $settings = get_settings();
         $data['products'] = $this->productsModel->where('status','Active')->where('featured','1')->paginate(10);
         $data['pager'] = $this->productsModel->pager;
         $data['links'] = $data['pager']->links('default','custome_link');
 
-        $data['keywords'] = get_lebel_by_value_in_settings('meta_keyword');
-        $data['description'] = get_lebel_by_value_in_settings('meta_description');
+        $data['keywords'] = $settings['meta_keyword'];
+        $data['description'] = $settings['meta_description'];
         $data['title'] = 'Featured Products';
 
         $data['page_title'] = 'Featured Products';
-        echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/header',$data);
-        echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/Featuredproducts/index',$data);
-        echo view('Theme/'.get_lebel_by_value_in_settings('Theme').'/footer');
+        echo view('Theme/'.$settings['Theme'].'/header',$data);
+        echo view('Theme/'.$settings['Theme'].'/Featuredproducts/index',$data);
+        echo view('Theme/'.$settings['Theme'].'/footer');
     }
 }
