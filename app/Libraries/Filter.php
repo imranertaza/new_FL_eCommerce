@@ -16,59 +16,70 @@ class Filter{
         return $data;
     }
     public function product_array_by_options($optionSel){
-        $optionId = array();
-        foreach ($this->productArray as $val) {
-            $table = DB()->table('cc_product_option');
-            $option = $table->where('product_id', $val->product_id)->get()->getResult();
-            foreach ($option as $v) {
-                $optionId[$v->option_id] = true;
-            }
-        }
-        $view = '';
-        if (!empty($optionId)) {
-            foreach (array_keys($optionId) as $valOption) {
-                $view .= '<div class="product-filter">
-                <p class="mb-2">' . get_data_by_id('name', 'cc_option', 'option_id', $valOption) . '</p>
-                <ul class="list-unstyled filter-items">';
-                    foreach ($this->option_value_return($valOption) as $value) {
-                        $nameVal = get_data_by_id('name', 'cc_option_value', 'option_value_id', $value);
-                        $firstCar = mb_substr($nameVal, 0, 1);
-                        $length = strlen($nameVal);
-                        $isColor = (($firstCar == '#') && ($length == 7)) ? '' : $nameVal;
-                        $nameOp = !empty($isColor) ? $isColor : '';
-                        $style = empty($isColor) ? "background-color: $nameVal !important;padding: 15px; border: unset;" : "";
 
-                        $view .= '<li class="mt-2"><input type="checkbox" onclick="formSubmit()"';
-                        $view .= (in_array($value, $optionSel))?'checked ':'';
-                        $view .= 'class="btn-check" name="options[]" id="option_' . $value . '" value="' . $value . '"  autocomplete="off"><label class="btn btn-outline-secondary rounded-0"  style="' . $style . '" for="option_' . $value . '">' . $nameOp . '</label></li>';
-                    }
+        $table = DB()->table('cc_product_option');
+        $table->join('cc_option','cc_option.option_id = cc_product_option.option_id');
+        foreach ($this->productArray as $val){
+            $table->orWhere('cc_product_option.product_id', $val->product_id);
+        }
+        $table->groupBy('cc_option.option_id');
+        $option = $table->get()->getResult();
+
+        $view = '';
+        if (!empty($option)) {
+            foreach ($option as $valOption) {
+                $view .= '<div class="product-filter">
+                <p class="mb-2">' . $valOption->name. '</p>
+                <ul class="list-unstyled filter-items">';
+                foreach ($this->option_value_return($valOption->option_id) as $value) {
+                    $nameVal = $value->name;
+                    $firstCar = mb_substr($nameVal, 0, 1);
+                    $length = strlen($nameVal);
+                    $isColor = (($firstCar == '#') && ($length == 7)) ? '' : $nameVal;
+                    $nameOp = !empty($isColor) ? $isColor : '';
+                    $style = empty($isColor) ? "background-color: $nameVal !important;padding: 15px; border: unset;" : "";
+
+                    $view .= '<li class="mt-2"><input type="checkbox" onclick="formSubmit()"';
+                    $view .= (in_array($value->option_value_id, $optionSel))?'checked ':'';
+                    $view .= 'class="btn-check" name="options[]" id="option_' . $value->option_value_id . '" value="' . $value->option_value_id . '"  autocomplete="off"><label class="btn btn-outline-secondary rounded-0"  style="' . $style . '" for="option_' . $value->option_value_id . '">' . $nameOp . '</label></li>';
+                }
                 $view .= '</ul></div>';
             }
         }
         return $view;
     }
+
     private function option_value_return($optionId){
-        $optValue = array();
+
+        $table = DB()->table('cc_product_option');
+        $table->join('cc_option_value','cc_option_value.option_value_id = cc_product_option.option_value_id');
         foreach ($this->productArray as $val) {
-            $table = DB()->table('cc_product_option');
-            $option = $table->where('product_id', $val->product_id)->where('option_id', $optionId)->get()->getResult();
-            foreach ($option as $v) {
-                $optValue[$v->option_value_id] = true;
-            }
+            $table->orGroupStart();
+            $table->where('cc_product_option.product_id', $val->product_id)->where('cc_product_option.option_id', $optionId);
+            $table->groupEnd();
         }
-        return array_keys($optValue);
+        $table->groupBy('cc_option_value.option_value_id');
+        $option = $table->get()->getResult();
+        return $option;
     }
     public function product_array_by_brand($brandSel){
         $brandArray = array_column($this->productArray, 'brand_id');
         $view = '';
         if ($this->allValuesNotEmpty($brandArray)) {
-            $view .='<div class="product-filter"><p class="mb-2">Brand</p>';
-            foreach (array_unique($brandArray) as $brand){
-                if (!empty($brand)){
-                    $name = get_data_by_id('name', 'cc_brand', 'brand_id', $brand);
+            $view .='<div class="product-filter"><p class="mb-2">Brands</p>';
+
+            $table = DB()->table('cc_brand');
+            foreach (array_unique($brandArray) as $val){
+                $table->orWhere('brand_id',$val);
+            }
+            $result = $table->get()->getResult();
+
+            foreach ($result as $brand){
+                if (!empty($brand->brand_id)){
+                    $name = $brand->name;
                     $view .= '<label class="w-100 mb-2"><input type="checkbox" onclick="formSubmit()" name="manufacturer[]"';
-                    $view .= (in_array($brand, $brandSel)) ? 'checked ' : '';
-                    $view .= 'value="' . $brand . '"> ' . $name . '</label>';
+                    $view .= (in_array($brand->brand_id, $brandSel)) ? 'checked ' : '';
+                    $view .= 'value="' . $brand->brand_id . '"> ' . $name . '</label>';
                 }
             }
             $view .='</div>';

@@ -22,6 +22,7 @@ class Home extends BaseController {
         $data['brand'] = $tableBrand->limit(20)->get()->getResult();
 
         $tabPopuler = DB()->table('cc_product_category_popular');
+        $tabPopuler->join('cc_product_category','cc_product_category.prod_cat_id = cc_product_category_popular.prod_cat_id')->join('cc_icons','cc_icons.icon_id = cc_product_category.icon_id');
         $data['populerCat'] = $tabPopuler->limit(12)->get()->getResult();
 
         $data['home_menu'] = true;
@@ -92,6 +93,7 @@ class Home extends BaseController {
     }
     private function Theme_3(){
         $tabShopBy = DB()->table('cc_product_category_shop_by');
+        $tabShopBy->join('cc_product_category','cc_product_category.prod_cat_id = cc_product_category_shop_by.prod_cat_id')->join('cc_icons','cc_icons.icon_id = cc_product_category.icon_id');
         $data['shop_by'] = $tabShopBy->limit(10)->get()->getResult();
         return $data;
     }

@@ -34,8 +34,9 @@
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="<?php echo base_url('order_list'); ?>" class="small-box-footer">More info <i
-                                    class="fas fa-arrow-circle-right"></i></a>
+
+                        <a href="<?php echo base_url('admin/order_list');?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+
                     </div>
                 </div>
                 <!-- ./col -->
@@ -50,8 +51,10 @@
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="<?php echo base_url('order_list'); ?>" class="small-box-footer">More info <i
-                                    class="fas fa-arrow-circle-right"></i></a>
+
+                        <a href="<?php echo base_url('admin/order_list');?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+
+
                     </div>
                 </div>
                 <!-- ./col -->
@@ -66,8 +69,9 @@
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="<?php echo base_url('order_list'); ?>" class="small-box-footer">More info <i
-                                    class="fas fa-arrow-circle-right"></i></a>
+
+                        <a href="<?php echo base_url('admin/order_list');?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+
                     </div>
                 </div>
                 <!-- ./col -->
@@ -82,8 +86,9 @@
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="<?php echo base_url('order_list'); ?>" class="small-box-footer">More info <i
-                                    class="fas fa-arrow-circle-right"></i></a>
+
+                        <a href="<?php echo base_url('admin/order_list');?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+
                     </div>
                 </div>
                 <!-- ./col -->
@@ -154,7 +159,7 @@
                     <div class="row ">
                         <div class="col-md-3 col-sm-6 col-12">
                             <div class="description-block border-right">
-<!--                                <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 17%</span>-->
+                                <!--                                <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 17%</span>-->
                                 <h5 class="description-header"><?php echo $order;?></h5>
                                 <span class="description-text">TOTAL SALE</span>
                             </div>
@@ -164,18 +169,19 @@
                         <!-- /.col -->
                         <div class="col-md-3 col-sm-6 col-12">
                             <div class="description-block border-right">
-<!--                                <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 20%</span>-->
+                                <!--                                <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 20%</span>-->
                                 <h5 class="description-header"><?php echo $orderYear;?></h5>
                                 <span class="description-text">TOTAL SALE THIS YEAR</span>
+
                             </div>
                             <!-- /.description-block -->
                         </div>
-
+                        <?php $symbol = get_lebel_by_value_in_settings('currency_symbol');?>
                         <!-- /.col -->
                         <div class="col-md-3 col-sm-6 col-12">
                             <div class="description-block border-right">
-<!--                                <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span>-->
-                                <h5 class="description-header"><?php echo currency_symbol($orderAmo); ?></h5>
+                                <!--                                <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span>-->
+                                <h5 class="description-header"><?php echo currency_symbol_with_symbol($orderAmo,$symbol); ?></h5>
                                 <span class="description-text">SALE AMOUNT</span>
                             </div>
                             <!-- /.description-block -->
@@ -183,16 +189,19 @@
                         <!-- /.col -->
                         <div class="col-md-3 col-sm-6 col-12">
                             <div class="description-block">
-<!--                                <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span>-->
-                                <h5 class="description-header"><?php echo currency_symbol($orderAmoYear); ?></h5>
+                                <!--                                <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span>-->
+                                <h5 class="description-header"><?php echo currency_symbol_with_symbol($orderAmoYear,$symbol); ?></h5>
                                 <span class="description-text">SALE AMOUNT THIS YEAR</span>
+
                             </div>
                             <!-- /.description-block -->
                         </div>
 
+
                     </div>
                 </div>
             </div>
+
 
 
             <!-- Main row -->
@@ -231,7 +240,9 @@
                                         <td><?php echo $val->order_id;?></td>
                                         <td><?php echo $fname.' '.$lname;?></td>
                                         <td><span class="badge badge-default"><?php echo get_data_by_id('name','cc_order_status','order_status_id',$val->status);?></span></td>
-                                        <td><a href="<?php echo base_url('order_view/'.$val->order_id);?>" class="btn btn-success btn-xs"><i class="fas fa-eye"></i> View</a></td>
+
+                                        <td><a href="<?php echo base_url('admin/order_view/'.$val->order_id);?>" class="btn btn-success btn-xs"><i class="fas fa-eye"></i> View</a></td>
+
                                     </tr>
                                 <?php } ?>
 

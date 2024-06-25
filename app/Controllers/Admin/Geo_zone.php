@@ -98,15 +98,16 @@ class Geo_zone extends BaseController
                 $geo_zone_id = DB()->insertID();
 
 
+                $zoneData = array();
                 foreach ($country_id as $key => $val) {
-                    $zoneData['geo_zone_id'] = $geo_zone_id;
-                    $zoneData['country_id'] = $val;
-                    $zoneData['zone_id'] = $zone_id[$key];
-
-                    $tableZone = DB()->table('cc_geo_zone_details');
-                    $tableZone->insert($zoneData);
+                    $zoneData[$key] = [
+                        'geo_zone_id' => $geo_zone_id,
+                        'country_id' => $val,
+                        'zone_id' => $zone_id[$key],
+                    ];
                 }
-
+                $tableZone = DB()->table('cc_geo_zone_details');
+                $tableZone->insertBatch($zoneData);
 
                 $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Create Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
                 return redirect()->to('geo_zone_create');
@@ -173,6 +174,8 @@ class Geo_zone extends BaseController
             $table->where('geo_zone_id',$geo_zone_id)->update($data);
 
             $exist = $this->check_exist_to_create($country_id,$zone_id);
+
+
             foreach ($country_id as $key => $val){
                 if (empty($geo_zone_details_id[$key])) {
                     if ($exist == true) {
@@ -193,6 +196,8 @@ class Geo_zone extends BaseController
                     $tableZone->where('geo_zone_details_id',$geo_zone_details_id[$key])->update($zoneData);
                 }
             }
+
+
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('geo_zone_update/' . $geo_zone_id);
