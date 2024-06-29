@@ -1094,6 +1094,78 @@ function zone_rate_type(){
     return $status;
 }
 
+function get_theme_settings(){
+
+    $settings = get_settings();
+    $theme = $settings['Theme'];
+    $table = DB()->table('cc_theme_settings');
+    $data = $table->where('theme', $theme)->get()->getResult();
+    $settings = array();
+    foreach ($data as $key => $val){
+        foreach($val as $k=>$v) {
+            if ($k == 'label') {
+                $settings[$v] = $data[$key]->value;
+            }
+        }
+    }
+    return $settings;
+}
+function get_theme_title_settings(){
+
+    $settings = get_settings();
+    $theme = $settings['Theme'];
+    $table = DB()->table('cc_theme_settings');
+    $data = $table->where('theme', $theme)->get()->getResult();
+    $settings = array();
+    foreach ($data as $key => $val){
+        foreach($val as $k=>$v) {
+            if ($k == 'label') {
+                $settings[$v] = $data[$key]->title;
+            }
+        }
+    }
+    return $settings;
+}
+
+function currency_symbol_with_symbol($amount,$symbol) {
+    $cur = !empty($amount) ? $amount : 0;
+    $split = explode('.', $cur);
+    $flot = empty($split[1]) ? '00' : $split[1];
+    $result = $symbol . '' . $split[0] . '<sup>' . $flot . '</sup>';
+
+    return $result;
+}
+
+function modules_access()
+{
+    $table = DB()->table('cc_modules');
+    $data = $table->get()->getResult();
+    $settings = array();
+    foreach ($data as $key => $val){
+        foreach($val as $k=>$v) {
+            if ($k == 'module_key') {
+                $settings[$v] = $data[$key]->status;
+            }
+        }
+    }
+    return $settings;
+}
+
+function get_settings_title(){
+    $table = DB()->table('cc_settings');
+    $data = $table->get()->getResult();
+
+    $settings = array();
+    foreach ($data as $key=>$val){
+        foreach($val as $k=>$v) {
+            if ($k == 'label'){
+                $settings[$v] = $data[$key]->title;
+            }
+        }
+    }
+    return $settings;
+}
+
 
 
 

@@ -72,7 +72,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php foreach ($orderItem as $item){ ?>
+                            <?php $symbol = get_lebel_by_value_in_settings('currency_symbol'); foreach ($orderItem as $item){ ?>
                                 <tr>
                                     <td width="700">
                                         <div class="img-table" style="width:12%; float:left;">
@@ -100,9 +100,9 @@
 
                                         </div>
                                     </td>
-                                    <td><?php echo currency_symbol($item->price);?></td>
+                                    <td><?php echo currency_symbol_with_symbol($item->price,$symbol);?></td>
                                     <td><?php echo $item->quantity;?></td>
-                                    <td><?php echo currency_symbol($item->final_price);?></td>
+                                    <td><?php echo currency_symbol_with_symbol($item->final_price,$symbol);?></td>
                                 </tr>
                             <?php } ?>
                             </tbody>
@@ -112,15 +112,15 @@
                                 </tr>
                                 <tr>
                                     <td colspan="3" class="text-end pe-5 fw-bold">Sub Total</td>
-                                    <td class="fw-bold"><?php echo currency_symbol($order->total);?></td>
+                                    <td class="fw-bold"><?php echo currency_symbol_with_symbol($order->total,$symbol);?></td>
                                 </tr>
                                 <tr>
                                     <td colspan="3" class="text-end pe-5 ">Discount</td>
-                                    <td><?php echo currency_symbol($order->discount);?></td>
+                                    <td><?php echo currency_symbol_with_symbol($order->discount,$symbol);?></td>
                                 </tr>
                                 <tr>
                                     <td colspan="3" class="text-end pe-5 ">Shipping</td>
-                                    <td><?php echo currency_symbol($order->shipping_charge);?></td>
+                                    <td><?php echo currency_symbol_with_symbol($order->shipping_charge,$symbol);?></td>
                                 </tr>
                                 <tr>
                                     <td></td>
@@ -128,7 +128,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="3" class="text-end pe-5 fw-bold">Total Amount</td>
-                                    <td class="fw-bold"><?php echo currency_symbol($order->final_amount);?></td>
+                                    <td class="fw-bold"><?php echo currency_symbol_with_symbol($order->final_amount,$symbol);?></td>
                                 </tr>
                             </tfoot>
                         </table>

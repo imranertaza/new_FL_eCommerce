@@ -104,14 +104,18 @@
                                                     class="fa fa-plus"></i></button>
                                         </div>
                                     </div>
+                                    <?php
+                                    $symbol = get_lebel_by_value_in_settings('currency_symbol');
+                                    $modules = modules_access();
+                                    ?>
                                     <div class="price mb-3  " id="priceVal">
                                         <?php $spPric = get_data_by_id('special_price', 'cc_product_special', 'product_id', $products->product_id);
                                 if (empty($spPric)) { ?>
-                                        <?php $pp = $products->price;    echo currency_symbol($products->price); ?>
+                                        <?php $pp = $products->price;    echo currency_symbol_with_symbol($products->price,$symbol); ?>
                                         <?php } else { ?>
                                         <small class="off-price-det">
-                                            <del><?php echo currency_symbol($products->price); ?></del> </small>
-                                        <?php echo currency_symbol($spPric);$pp = $spPric;?>
+                                            <del><?php echo currency_symbol_with_symbol($products->price,$symbol); ?></del> </small>
+                                        <?php echo currency_symbol_with_symbol($spPric,$symbol);$pp = $spPric;?>
                                         <?php } ?>
 
                                     </div>
@@ -125,7 +129,7 @@
                                 <?php } ?>
                             </form>
                             <div class="d-flex justify-content-between pro-w">
-                                <?php if (modules_key_by_access('wishlist') == 1) { ?>
+                                <?php if ($modules['wishlist'] == 1) { ?>
                                 <?php if (!isset(newSession()->isLoggedInCustomer)) { ?>
                                 <a href="<?php echo base_url('login'); ?>"
                                     class="btn btn-wishlist-2 rounded-0 mt-2 me-1">
@@ -149,7 +153,7 @@
                                 <?php } ?>
                                 <?php } ?>
 
-                                <?php if (modules_key_by_access('compare') == 1) { ?>
+                                <?php if ($modules['compare'] == 1) { ?>
                                 <a href="javascript:void(0)" class="btn btn-wishlist-2 rounded-0 mt-2 ms-1"
                                     onclick="addToCompare(<?php echo $products->product_id ?>)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"
@@ -165,7 +169,8 @@
 
                             <div class="option mt-3">
                                 <table class="table table-responsive table-borderless" style="margin-bottom: unset;">
-                                    <?php foreach (attribute_array_by_product_id($products->product_id) as $key => $spec) { if ($key == 0){  ?>
+                                    <?php $attr = attribute_array_by_product_id($products->product_id); ?>
+                                    <?php foreach ($attr as $key => $spec) { if ($key == 0){  ?>
                                     <tr>
                                         <td width="110">
                                             <b><?php echo get_data_by_id('name', 'cc_product_attribute_group', 'attribute_group_id', $spec->attribute_group_id); ?>
@@ -176,7 +181,7 @@
                                     <?php  } }?>
                                 </table>
                                 <table class="table table-responsive table-borderless" id="more" style="display: none">
-                                    <?php foreach (attribute_array_by_product_id($products->product_id) as $key => $spec) { if ($key != 0){  ?>
+                                    <?php foreach ($attr as $key => $spec) { if ($key != 0){  ?>
                                     <tr>
                                         <td width="110">
                                             <b><?php echo get_data_by_id('name', 'cc_product_attribute_group', 'attribute_group_id', $spec->attribute_group_id); ?>
@@ -364,7 +369,7 @@
                                 aria-controls="more-info-tab-pane" aria-selected="false">More Information
                             </button>
                         </li>
-                        <?php if(modules_key_by_access('review') == '1' ){?>
+                        <?php if($modules['review'] == '1' ){?>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link text-uppercase" id="review-tab" data-bs-toggle="tab"
                                 data-bs-target="#review-tab-pane" type="button" role="tab"
@@ -391,7 +396,7 @@
                                 <tr>
                                     <td>
                                         <table class="table  ">
-                                            <?php foreach (attribute_array_by_product_id($products->product_id) as $spec) { ?>
+                                            <?php foreach ($attr as $spec) { ?>
                                             <tr>
                                                 <td><?php echo get_data_by_id('name', 'cc_product_attribute_group', 'attribute_group_id', $spec->attribute_group_id); ?>
                                                     :
@@ -405,7 +410,7 @@
                                 </tr>
                             </table>
                         </div>
-                        <?php if(modules_key_by_access('review') == '1' ){?>
+                        <?php if($modules['review'] == '1' ){?>
                         <div class="tab-pane fade" id="review-tab-pane" role="tabpanel" aria-labelledby="review-tab"
                             tabindex="0">
                             <?php foreach ($review as $rev) { ?>
@@ -496,9 +501,9 @@
                                                         <div class="price-2 mb-3">
                                                             <?php $spPric = get_data_by_id('special_price', 'cc_product_special', 'product_id', $both->product_id);
                                                                     if (empty($spPric)) { ?>
-                                                            <?php echo currency_symbol($both->price); ?>
+                                                            <?php echo currency_symbol_with_symbol($both->price,$symbol); ?>
                                                             <?php } else { ?>
-                                                            <?php echo currency_symbol($spPric); ?>
+                                                            <?php echo currency_symbol_with_symbol($spPric,$symbol); ?>
                                                             <?php } ?>
                                                         </div>
                                                     </div>
@@ -532,7 +537,7 @@
                                 </div>
                                 <div class="col-lg-4 align-items-center d-flex ">
                                     <div class=" w-100 text-center">
-                                        <p class="price-rel" id="price-both"><?php echo currency_symbol($totalPrice); ?>
+                                        <p class="price-rel" id="price-both"><?php echo currency_symbol_with_symbol($totalPrice,$symbol); ?>
                                         </p>
                                         <button type="button" class="btn w-100 bg-custom-color text-white mt-2"
                                             onclick="groupAdtoCart()">Add to Cart
@@ -566,7 +571,7 @@
                             <div class="col border p-2">
                                 <div
                                     class=" product-grid h-100 d-flex align-items-stretch flex-column position-relative">
-                                    <?php if (modules_key_by_access('wishlist') == 1) { ?>
+                                    <?php if ($modules['wishlist'] == 1) { ?>
                                     <?php if (!isset(newSession()->isLoggedInCustomer)) { ?>
                                     <a href="<?php echo base_url('login'); ?>"
                                         class="btn-wishlist position-absolute  mt-2 ms-2"><i
@@ -581,7 +586,7 @@
                                     </a>
                                     <?php } ?>
                                     <?php } ?>
-                                    <?php if (modules_key_by_access('compare') == 1) { ?>
+                                    <?php if ($modules['compare'] == 1) { ?>
                                     <a href="javascript:void(0)" onclick="addToCompare(<?php echo $rPro->product_id ?>)"
                                         class="btn-compare position-absolute  mt-5 ms-2"><i
                                             class="fa-solid fa-code-compare"></i>
@@ -603,11 +608,11 @@
                                         <div class="price-new mb-3">
                                             <?php $spPric = get_data_by_id('special_price', 'cc_product_special', 'product_id', $rPro->product_id);
                                                     if (empty($spPric)) { ?>
-                                            <?php echo currency_symbol($rPro->price); ?>
+                                            <?php echo currency_symbol_with_symbol($rPro->price,$symbol); ?>
                                             <?php } else { ?>
                                             <small class="off-price">
-                                                <del><?php echo currency_symbol($rPro->price); ?></del>
-                                            </small>/<?php echo currency_symbol($spPric); ?>
+                                                <del><?php echo currency_symbol_with_symbol($rPro->price,$symbol); ?></del>
+                                            </small>/<?php echo currency_symbol_with_symbol($spPric,$symbol); ?>
                                             <?php } ?>
                                         </div>
 
@@ -662,7 +667,7 @@
                             <div class="col border p-2">
                                 <div
                                     class=" product-grid h-100 d-flex align-items-stretch flex-column position-relative">
-                                    <?php if (modules_key_by_access('wishlist') == 1) { ?>
+                                    <?php if ($modules['wishlist'] == 1) { ?>
                                     <?php if (!isset(newSession()->isLoggedInCustomer)) { ?>
                                     <a href="<?php echo base_url('login'); ?>"
                                         class="btn-wishlist position-absolute  mt-2 ms-2"><i
@@ -677,7 +682,7 @@
                                     </a>
                                     <?php } ?>
                                     <?php } ?>
-                                    <?php if (modules_key_by_access('compare') == 1) { ?>
+                                    <?php if ($modules['compare'] == 1) { ?>
                                     <a href="javascript:void(0)" onclick="addToCompare(<?php echo $rPro->product_id ?>)"
                                         class="btn-compare position-absolute  mt-5 ms-2"><i
                                             class="fa-solid fa-code-compare"></i>
@@ -699,11 +704,11 @@
                                         <div class="price-new mb-3">
                                             <?php $spPric = get_data_by_id('special_price', 'cc_product_special', 'product_id', $rPro->product_id);
                                                     if (empty($spPric)) { ?>
-                                            <?php echo currency_symbol($rPro->price); ?>
+                                            <?php echo currency_symbol_with_symbol($rPro->price,$symbol); ?>
                                             <?php } else { ?>
                                             <small class="off-price">
-                                                <del><?php echo currency_symbol($rPro->price); ?></del>
-                                            </small>/<?php echo currency_symbol($spPric); ?>
+                                                <del><?php echo currency_symbol_with_symbol($rPro->price,$symbol); ?></del>
+                                            </small>/<?php echo currency_symbol_with_symbol($spPric,$symbol); ?>
                                             <?php } ?>
                                         </div>
                                         <?php echo addToCartBtn($rPro->product_id); ?>

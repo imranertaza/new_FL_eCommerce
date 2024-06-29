@@ -267,13 +267,15 @@ class Advanced_products extends BaseController
                 //product category insert(start)
                 $cTable = DB()->table('cc_product_to_category');
                 $categ = $cTable->where('product_id', $p)->get()->getResult();
-                foreach ($categ as $cat) {
-                    $catData['product_id'] = $productId;
-                    $catData['category_id'] = $cat->category_id;
-
-                    $catTable = DB()->table('cc_product_to_category');
-                    $catTable->insert($catData);
+                $catData = [];
+                foreach ($categ as $key => $cat) {
+                    $catData[$key] = [
+                        'product_id' => $productId,
+                        'category_id' => $cat->category_id,
+                    ];
                 }
+                $catTable = DB()->table('cc_product_to_category');
+                $catTable->insertBatch($catData);
                 //product category insert(end)
 
 
@@ -310,17 +312,19 @@ class Advanced_products extends BaseController
                 $optionTableGet = DB()->table('cc_product_option');
                 $optData = $optionTableGet->where('product_id', $p)->get()->getResult();
                 if (!empty($optData)) {
-                    foreach ($optData as $valOp) {
-                        $optionData['product_id'] = $productId;
-                        $optionData['option_id'] = $valOp->option_id;
-                        $optionData['option_value_id'] = $valOp->option_value_id;
-                        $optionData['quantity'] = $valOp->quantity;
-                        $optionData['subtract'] = $valOp->subtract;
-                        $optionData['price'] = $valOp->price;
-
-                        $optionTable = DB()->table('cc_product_option');
-                        $optionTable->insert($optionData);
+                    $optionData = [];
+                    foreach ($optData as $key => $valOp) {
+                        $optionData[$key] = [
+                            'product_id' => $productId,
+                            'option_id' =>  $valOp->option_id,
+                            'option_value_id' => $valOp->option_value_id,
+                            'quantity' => $valOp->quantity,
+                            'subtract' => $valOp->subtract,
+                            'price' => $valOp->price,
+                        ];
                     }
+                    $optionTable = DB()->table('cc_product_option');
+                    $optionTable->insertBatch($optionData);
                 }
 
                 //product options table data insert(end)
@@ -330,15 +334,17 @@ class Advanced_products extends BaseController
                 $attributeTableget = DB()->table('cc_product_attribute');
                 $attData = $attributeTableget->where('product_id', $p)->get()->getResult();
                 if (!empty($attData)) {
-                    foreach ($attData as $valAtt) {
-                        $attributeData['product_id'] = $productId;
-                        $attributeData['attribute_group_id'] = $valAtt->attribute_group_id;
-                        $attributeData['name'] = $valAtt->name;
-                        $attributeData['details'] = $valAtt->details;
-
-                        $attributeTable = DB()->table('cc_product_attribute');
-                        $attributeTable->insert($attributeData);
+                    $attributeData = [];
+                    foreach ($attData as $key => $valAtt) {
+                        $attributeData[$key] = [
+                            'product_id' => $productId,
+                            'attribute_group_id' => $valAtt->attribute_group_id,
+                            'name' => $valAtt->name,
+                            'details' => $valAtt->details,
+                        ];
                     }
+                    $attributeTable = DB()->table('cc_product_attribute');
+                    $attributeTable->insertBatch($attributeData);
                 }
 
                 //product Attribute table data insert(end)
@@ -363,12 +369,15 @@ class Advanced_products extends BaseController
                 $proReltableGet = DB()->table('cc_product_related');
                 $proReltableGetData = $proReltableGet->where('product_id', $p)->get()->getResult();
                 if (!empty($proReltableGetData)) {
-                    foreach ($proReltableGetData as $relp) {
-                        $proRelData['product_id'] = $productId;
-                        $proRelData['related_id'] = $relp->related_id;
-                        $proReltable = DB()->table('cc_product_related');
-                        $proReltable->insert($proRelData);
+                    $proRelData = [];
+                    foreach ($proReltableGetData as $key => $relp) {
+                        $proRelData[$key] = [
+                            'product_id' => $productId,
+                            'related_id' => $relp->related_id,
+                        ];
                     }
+                    $proReltable = DB()->table('cc_product_related');
+                    $proReltable->insertBatch($proRelData);
                 }
                 //product_related table data insert(end)
 
@@ -377,12 +386,15 @@ class Advanced_products extends BaseController
                 $proBothtableGet = DB()->table('cc_product_bought_together');
                 $proBothtableGetData = $proBothtableGet->where('product_id', $p)->get()->getResult();
                 if (!empty($proBothtableGetData)) {
-                    foreach ($proBothtableGetData as $bothp) {
-                        $proBothData['product_id'] = $productId;
-                        $proBothData['related_id'] = $bothp->related_id;
-                        $proBothtable = DB()->table('cc_product_bought_together');
-                        $proBothtable->insert($proBothData);
+                    $proBothData = [];
+                    foreach ($proBothtableGetData as $key => $bothp) {
+                        $proBothData[$key] = [
+                            'product_id' => $productId,
+                            'related_id' => $bothp->related_id,
+                        ];
                     }
+                    $proBothtable = DB()->table('cc_product_bought_together');
+                    $proBothtable->insertBatch($proBothData);
                 }
                 //product_bought_together table data insert(end)
             }
@@ -490,18 +502,19 @@ class Advanced_products extends BaseController
             foreach ($all_product as $p) {
                 $optionTableDel = DB()->table('cc_product_option');
                 $optionTableDel->where('product_id',$p)->delete();
-
+                $optionData = [];
                 foreach ($qty as $key => $val) {
-                    $optionData['product_id'] = $p;
-                    $optionData['option_id'] = $option[$key];
-                    $optionData['option_value_id'] = $opValue[$key];
-                    $optionData['quantity'] = $qty[$key];
-                    $optionData['subtract'] = ($subtract[$key] == 'plus') ? null : 1;
-                    $optionData['price'] = $price_op[$key];
-
-                    $optionTable = DB()->table('cc_product_option');
-                    $optionTable->insert($optionData);
+                    $optionData[$key] = [
+                        'product_id' => $p,
+                        'option_id' => $option[$key],
+                        'option_value_id' => $opValue[$key],
+                        'quantity' => $qty[$key],
+                        'subtract' => ($subtract[$key] == 'plus') ? null : 1,
+                        'price' => $price_op[$key],
+                    ];
                 }
+                $optionTable = DB()->table('cc_product_option');
+                $optionTable->insertBatch($optionData);
             }
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('bulk_edit_products');
@@ -544,16 +557,17 @@ class Advanced_products extends BaseController
             foreach ($all_product as $p) {
                 $optionTableDel = DB()->table('cc_product_attribute');
                 $optionTableDel->where('product_id', $p)->delete();
-
+                $attributeData = [];
                 foreach ($attribute_group_id as $key => $val) {
-                    $attributeData['product_id'] = $p;
-                    $attributeData['attribute_group_id'] = $attribute_group_id[$key];
-                    $attributeData['name'] = $name[$key];
-                    $attributeData['details'] = $details[$key];
-
-                    $attributeTable = DB()->table('cc_product_attribute');
-                    $attributeTable->insert($attributeData);
+                    $attributeData[$key] = [
+                        'product_id' => $p,
+                        'attribute_group_id' => $attribute_group_id[$key],
+                        'name' => $name[$key],
+                        'details' => $details[$key],
+                    ];
                 }
+                $attributeTable = DB()->table('cc_product_attribute');
+                $attributeTable->insertBatch($attributeData);
             }
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');

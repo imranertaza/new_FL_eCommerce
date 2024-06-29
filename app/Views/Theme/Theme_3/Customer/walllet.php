@@ -6,7 +6,7 @@
                     <div class="row mb-4">
                         <div class="col-md-12 px-5">
                             <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message');
-                            endif; ?>
+                            endif; $symbol = get_lebel_by_value_in_settings('currency_symbol'); ?>
                         </div>
                         <div class="col-md-12 px-5 text-center">
 
@@ -14,7 +14,7 @@
                             <div class="card" style="width: 10rem;">
                                 <div class="card-body text-center">
                                     <h5 class="card-title">My Balance</h5>
-                                    <p><?php echo currency_symbol($cust->balance);?></p>
+                                    <p><?php echo currency_symbol_with_symbol($cust->balance,$symbol);?></p>
                                 </div>
                             </div>
                             <!-- <div class="card " style="width: 18rem; float:left;margin-left: 15px;">
@@ -43,7 +43,7 @@
                                     <tr>
                                         <td><?php echo $i++?></td>
                                         <td><?php echo get_data_by_id('name','cc_payment_method','payment_method_id',$req->payment_method_id); ?></td>
-                                        <td><?php echo currency_symbol($req->amount)?></td>
+                                        <td><?php echo currency_symbol_with_symbol($req->amount,$symbol)?></td>
                                         <td><?php echo $req->status?></td>
                                     </tr>
                                     <?php } ?>

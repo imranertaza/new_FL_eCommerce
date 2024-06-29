@@ -72,11 +72,12 @@
 
 
                         <?php
-                        $coun = isset($customer->customer_id) ? get_data_by_id('country_id', 'cc_address', 'customer_id', $customer->customer_id) : '';
-                        $zon = isset($customer->customer_id) ? get_data_by_id('zone_id', 'cc_address', 'customer_id', $customer->customer_id) : '';
-                        $post = isset($customer->customer_id) ? get_data_by_id('postcode', 'cc_address', 'customer_id', $customer->customer_id) : '';
-                        $add1 = isset($customer->customer_id) ? get_data_by_id('address_1', 'cc_address', 'customer_id', $customer->customer_id) : '';
-                        $add2 = isset($customer->customer_id) ? get_data_by_id('address_2', 'cc_address', 'customer_id', $customer->customer_id) : '';
+                            $cusAddr = isset($customer->customer_id) ?get_all_row_data_by_id('cc_address', 'customer_id', $customer->customer_id):'';
+                            $coun = isset($customer->customer_id) ? $cusAddr->country_id:'';
+                            $zon = isset($customer->customer_id) ? $cusAddr->zone_id : '';
+                            $post = isset($customer->customer_id) ? $cusAddr->postcode : '';
+                            $add1 = isset($customer->customer_id) ? $cusAddr->address_1 : '';
+                            $add2 = isset($customer->customer_id) ? $cusAddr->address_2 : '';
                         ?>
 
 
@@ -295,7 +296,7 @@
                                         class="fa-solid fa-trash-can"></i></a>
                             </div>
                         </div>
-                        <?php } ?>
+                        <?php } $cSymbol = get_lebel_by_value_in_settings('currency_symbol') ?>
 
                     </div>
 
@@ -303,7 +304,7 @@
                         <div class="group-check mb-4">
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Price</span>
-                                <span id="check_total"><?php echo get_lebel_by_value_in_settings('currency_symbol') .Cart()->total() ?></span>
+                                <span id="check_total"><?php echo $cSymbol .Cart()->total() ?></span>
                             </div>
 
                             <div class="d-flex justify-content-between mb-2">
@@ -311,9 +312,9 @@
                                 <?php $disc = 0;
                                 if (isset(newSession()->coupon_discount)) {
                                     $disc = round((Cart()->total() * newSession()->coupon_discount) / 100); ?>
-                                <span><?php echo get_lebel_by_value_in_settings('currency_symbol') .$disc ?></span>
+                                <span><?php echo $cSymbol .$disc ?></span>
                                 <?php } else {
-                                    echo '<span>' . get_lebel_by_value_in_settings('currency_symbol') .$disc . '</span>';
+                                    echo '<span>' . $cSymbol .$disc . '</span>';
                                 }
                                 $total = (isset(newSession()->coupon_discount)) ? Cart()->total() - $disc : Cart()->total(); ?>
                             </div>
@@ -375,9 +376,11 @@
                         <div class="group-check ">
 
                             <div class="d-flex flex-column">
-                                <?php  $dataCount = count(get_array_data_by_id('cc_shipping_method','status','1'));
-                                foreach (get_array_data_by_id('cc_shipping_method','status','1') as $ship) {
-                                    ?>
+                                <?php
+                                    $sMethod = get_array_data_by_id('cc_shipping_method','status','1');
+                                    $dataCount = count($sMethod);
+                                    foreach ($sMethod as $ship) {
+                                ?>
                                 <div class="d-flex justify-content-between mt-3">
                                     <div class="form-check">
                                         <label class="form-check-label">
@@ -391,7 +394,7 @@
 
                             <div class="d-flex justify-content-between mt-3">
                                 <span>Shipping charge</span>
-                                <span id="chargeShip"><?php echo get_lebel_by_value_in_settings('currency_symbol') .'0' ?></span>
+                                <span id="chargeShip"><?php echo $cSymbol .'0' ?></span>
                                 <input type="hidden" name="shipping_charge" id="shipping_charge">
                             </div>
                         </div>
@@ -399,7 +402,7 @@
                         <div class="total py-3 group-check mb-4" style="border-top: unset !important;">
                             <div class="d-flex justify-content-between fw-bold">
                                 <span>Total</span>
-                                <span id="total"><?php echo get_lebel_by_value_in_settings('currency_symbol') .$total ?></span>
+                                <span id="total"><?php echo $cSymbol .$total ?></span>
                                 <input type="hidden" id="totalamo" value="<?php echo $total ?>">
                             </div>
                         </div>

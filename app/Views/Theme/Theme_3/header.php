@@ -37,6 +37,10 @@
         <div class="alert-success_web py-2 px-3 border-0 text-white fs-5 text-capitalize" id="mesVal">
             <?php print 'Successfully update to cart'; ?> </div>
     </div>
+    <?php
+        $settings = get_settings();
+        $modules = modules_access();
+    ?>
     <header class="header bg-white">
         <div class="topbar py-1 py-md-3">
             <div class="container">
@@ -54,21 +58,21 @@
                         </div>
                         <div class="vr"></div>
                         <div class="top-tel d-flex flex-sm-column flex-md-row gap-2">                            
-                            <a href="tel:<?php echo get_lebel_by_value_in_settings('phone'); ?>">
+                            <a href="tel:<?php echo $settings['phone']; ?>">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 18 18" fill="none">
                                     <path d="M16.95 18C14.8 18 12.7043 17.5207 10.663 16.562C8.621 15.604 6.81267 14.3373 5.238 12.762C3.66267 11.1873 2.396 9.379 1.438 7.337C0.479334 5.29567 0 3.2 0 1.05C0 0.75 0.0999999 0.5 0.3 0.3C0.5 0.0999999 0.75 0 1.05 0H5.1C5.33333 0 5.54167 0.0749999 5.725 0.225C5.90833 0.375 6.01667 0.566667 6.05 0.8L6.7 4.3C6.73333 4.53333 6.72933 4.74567 6.688 4.937C6.646 5.129 6.55 5.3 6.4 5.45L3.975 7.9C4.675 9.1 5.55433 10.225 6.613 11.275C7.671 12.325 8.83333 13.2333 10.1 14L12.45 11.65C12.6 11.5 12.796 11.3873 13.038 11.312C13.2793 11.2373 13.5167 11.2167 13.75 11.25L17.2 11.95C17.4333 12 17.625 12.1123 17.775 12.287C17.925 12.4623 18 12.6667 18 12.9V16.95C18 17.25 17.9 17.5 17.7 17.7C17.5 17.9 17.25 18 16.95 18ZM3.025 6L4.675 4.35L4.25 2H2.025C2.10833 2.68333 2.225 3.35833 2.375 4.025C2.525 4.69167 2.74167 5.35 3.025 6ZM11.975 14.95C12.625 15.2333 13.2877 15.4583 13.963 15.625C14.6377 15.7917 15.3167 15.9 16 15.95V13.75L13.65 13.275L11.975 14.95Z" fill="#939393"></path>
                                 </svg>  
                             </a>
-                            <a class="d-none d-md-block" href="tel:<?php echo get_lebel_by_value_in_settings('phone'); ?>"> <?php echo get_lebel_by_value_in_settings('phone'); ?></a>
+                            <a class="d-none d-md-block" href="tel:<?php echo $settings['phone']; ?>"> <?php echo $settings['phone']; ?></a>
                         </div>
                         <div class="vr"></div>
                         <div class="top-email d-flex flex-sm-column flex-md-row gap-2">
-                            <a href="tel:<?php echo get_lebel_by_value_in_settings('email'); ?>">
+                            <a href="tel:<?php echo $settings['email']; ?>">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 20 16" fill="none">
                                     <path d="M20 2C20 0.9 19.1 0 18 0H2C0.9 0 0 0.9 0 2V14C0 15.1 0.9 16 2 16H18C19.1 16 20 15.1 20 14V2ZM18 2L10 7L2 2H18ZM18 14H2V4L10 9L18 4V14Z" fill="#939393"></path>
                                 </svg>
                             </a>
-                            <a class="d-none d-md-block" href="tel:<?php echo get_lebel_by_value_in_settings('email'); ?>">Email: <?php echo get_lebel_by_value_in_settings('email'); ?></a>
+                            <a class="d-none d-md-block" href="tel:<?php echo $settings['email']; ?>">Email: <?php echo $settings['email']; ?></a>
                         </div>
                     </div>
                     <div class="col-12 col-sm-8 col-md-5 d-flex gap-3 justify-content-center justify-content-sm-end mb-2 mb-sm-0"> 
@@ -87,7 +91,7 @@
                                             class="dropdown-item mt-2 mb-2">Profile</a></li>
                                     <li><a href="<?php echo base_url('my_order'); ?>" class="dropdown-item mt-2 mb-2">My
                                             order</a></li>
-                                    <?php if (modules_key_by_access('wishlist') == 1) { ?>
+                                    <?php if ($modules['wishlist'] == 1) { ?>
                                     <li><a href="<?php echo base_url('favorite'); ?>" class="dropdown-item mt-2 mb-2">My
                                             Wish
                                             list</a></li>
@@ -174,7 +178,7 @@
 
                                                 </span>
                                                 <span><?php echo $pcat->category_name; ?></span>
-                                                <?php if (!empty(count(getCategoryBySubArray($pcat->prod_cat_id)))) { ?>
+                                                <?php $pCatAr = getCategoryBySubArray($pcat->prod_cat_id); if (!empty(count($pCatAr))) { ?>
                                                 <button class="btn ms-auto button-collapse py-2 collappse-btn"
                                                     id="<?="accordionPanelsStayOpen-".$pcat->prod_cat_id?>" type="button" data-bs-toggle="collapse"
                                                     data-bs-target= <?="#panelsStayOpen-collapse-".$pcat->prod_cat_id?> aria-expanded="false"
@@ -187,9 +191,9 @@
                                         <div id="<?="panelsStayOpen-collapse-".$pcat->prod_cat_id?>" class="accordion-collapse collapse"
                                             aria-labelledby=<?="panelsStayOpen-heading-".$pcat->prod_cat_id?> >
                                            
-                                            <?php if (!empty(count(getCategoryBySubArray($pcat->prod_cat_id)))) { ?> 
+                                            <?php if (!empty(count($pCatAr))) { ?>
                                                 <div class="accordion-body p-0">
-                                                <?php foreach (getCategoryBySubArray($pcat->prod_cat_id) as $sCat) { ?>
+                                                <?php foreach ($pCatAr as $sCat) { ?>
                                                     <div class="accordion-item border-0">
                                                         <h2 class="accordion-header" id="<?="panelsStayOpen-panelsStayOpen-heading".$pcat->prod_cat_id."-inner-heading".$sCat->prod_cat_id?>">
                                                             <a href=<?php echo base_url('category/' . $sCat->prod_cat_id); ?> class="accordion-button collapsed py-2 px-2 pl-20">
@@ -200,7 +204,7 @@
                                                                 </svg>
                                                             </span>
                                                                 <span> <?php echo $sCat->category_name; ?></span>
-                                                                <?php if (!empty(count(getCategoryBySubArray($sCat->prod_cat_id)))) { ?> 
+                                                                <?php $sCatAr = getCategoryBySubArray($sCat->prod_cat_id); if (!empty(count($sCatAr))) { ?>
                                                                 <button class="btn ms-auto button-collapse py-2 collappse-btn"
                                                                     id= "<?="accordionPanelsStayOpen-panelsStayOpen-heading".$pcat->prod_cat_id."-inner-heading".$sCat->prod_cat_id?>" type="button"
                                                                     data-bs-toggle="collapse"
@@ -214,9 +218,9 @@
                                                             aria-labelledby=<?="panelsStayOpen-panelsStayOpen-heading".$pcat->prod_cat_id."-inner-heading".$sCat->prod_cat_id?>>
                                                             <!-- Add your inner accordion content here -->
                                                             <!-- Example: -->
-                                                            <?php if (!empty(count(getCategoryBySubArray($sCat->prod_cat_id)))) { ?>
+                                                            <?php if (!empty(count($sCatAr))) { ?>
                                                                 <div class="accordion-body p-0">
-                                                                <?php foreach (getCategoryBySubArray($sCat->prod_cat_id) as $ssCat) { ?>
+                                                                <?php foreach ($sCatAr as $ssCat) { ?>
                                                                     <div class="accordion-item border-0 ">
                                                                         <h2 class="accordion-header" id="panelsStayOpen-panelsStayOpen-heading-2-inner-heading-2">
                                                                             <a href="<?php echo base_url('category/' . $ssCat->prod_cat_id); ?>" class="accordion-button collapsed py-2 px-2 pl-34">
@@ -260,7 +264,7 @@
                         <?php } ?>
                     </div>
                     <div class="col-xl-6 col-lg-6 col-sm-5 col-6 d-flex align-items-center justify-content-end">
-                    <?php if (modules_key_by_access('top_search') == 1) { ?>
+                    <?php if ($modules['top_search'] == 1) { ?>
                         <form id="first-form-top" action="<?php echo base_url('products/search'); ?>"
                             class="mini-search" method="GET">
                             <div class="input-group">
@@ -278,7 +282,7 @@
                     </div>
                     <div class="col-xl-3 col-lg-3 col-sm-4 col-6">
                         <div class="d-flex flex-row align-items-center justify-content-end gap-3 gap-lg-5 h-100">
-                        <?php if (modules_key_by_access('compare') == 1) { ?>
+                        <?php if ($modules['compare'] == 1) { ?>
                             <a  href="<?php echo base_url('compare') ?>">
                                 <div class="mini-cart d-flex position-relative" id="comparetReload">                                
                                     <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -289,7 +293,7 @@
                             </a>
                         <?php } ?>
                         
-                        <?php if (modules_key_by_access('wishlist') == 1) { ?>
+                        <?php if ($modules['wishlist'] == 1) { ?>
                             <a href="<?php echo base_url('favorite') ?>">
                             <div class="mini-cart d-flex position-relative" id="wishlistReload">
                                 <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">

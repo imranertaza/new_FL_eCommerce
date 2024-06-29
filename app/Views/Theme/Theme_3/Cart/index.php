@@ -20,7 +20,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach (Cart()->contents() as $val) { ?>
+                        <?php $symbol = get_lebel_by_value_in_settings('currency_symbol');  foreach (Cart()->contents() as $val) { ?>
                             <tr>
                                 <td class="product-remove mo-text-center">
                                     <a href="javascript:void(0)" onclick="removeCart('<?php echo $val['rowid']; ?>')"><i class="fa-solid fa-trash-can"></i></a>
@@ -36,7 +36,7 @@
                                 </td>
 
                                 <td class="product-price mo-text-center" width="100">
-                                    <span class="price"><?php echo currency_symbol($val['price']); ?></span>
+                                    <span class="price"><?php echo currency_symbol_with_symbol($val['price'],$symbol); ?></span>
                                 </td>
 
                                 <td class="product-quantity mo-text-center" width="180">
@@ -61,7 +61,7 @@
                                     </div>
                                 </td>
                                 <td class="product-subtotal mo-text-center">
-                                    <span class="price"><?php echo currency_symbol($val['subtotal']); ?></span>
+                                    <span class="price"><?php echo currency_symbol_with_symbol($val['subtotal'],$symbol); ?></span>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -88,11 +88,11 @@
                             <td class="mo-text-center mo-amount" style="text-align:left; width: 170px">
                                 <?php if (isset(newSession()->coupon_discount)) {
                                     $disc = round((Cart()->total() * newSession()->coupon_discount) / 100); ?>
-                                    <span class=" fs-4"><?php echo currency_symbol(Cart()->total()) ?></span><br>
-                                    <span class=" fs-4"><?php echo currency_symbol($disc) ?></span><br>
+                                    <span class=" fs-4"><?php echo currency_symbol_with_symbol(Cart()->total(),$symbol) ?></span><br>
+                                    <span class=" fs-4"><?php echo currency_symbol_with_symbol($disc,$symbol) ?></span><br>
                                 <?php }
                                 $total = (isset(newSession()->coupon_discount)) ? Cart()->total() - $disc : Cart()->total(); ?>
-                                <span class="fw-bold fs-4"><?php echo currency_symbol($total) ?></span>
+                                <span class="fw-bold fs-4"><?php echo currency_symbol_with_symbol($total,$symbol) ?></span>
                             </td>
                         </tr>
 
