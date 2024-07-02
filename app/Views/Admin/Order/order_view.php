@@ -270,7 +270,7 @@
                                         </table>
                                     </div>
                                     <div class="col-md-6">
-                                        <form action="<?php echo base_url('admin/order_history_action') ?>" method="post">
+                                        <form action="<?php echo base_url('order_history_action') ?>" method="post">
                                             <div class="form-group">
                                                 <label>Status <span class="requi">*</span></label>
 
