@@ -157,15 +157,18 @@ class Theme_settings_3 extends BaseController
             $this->crop->withFile($target_dir . '' . $namePic)->fit(1116, 211, 'center')->save($target_dir . '' . $news_img);
             unlink($target_dir . '' . $namePic);
             $data['value'] = $news_img;
-        }
-        
-        
+
             $table = DB()->table('cc_theme_settings');
             $table->where('label', 'banner_bottom')->update($data);
-        
 
-        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-        return redirect()->to('theme_settings?sel=home_settings');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('theme_settings?sel=home_settings');
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Image required <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('theme_settings?sel=home_settings');
+        }
+
+
     }
 
 
