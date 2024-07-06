@@ -174,6 +174,10 @@
         }
     }
 
+    function table_form_submit(){
+        $('#tableForm').submit();
+    }
+
 
 </script>
 <?php require_once(FCPATH .'admin_assets/dist/js/ajaxScript.php'); ?>
