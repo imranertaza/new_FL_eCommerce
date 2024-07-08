@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use App\Models\ProductsModel;
 
 class Advanced_products extends BaseController
 {
@@ -12,6 +13,7 @@ class Advanced_products extends BaseController
     protected $session;
     protected $permission;
     protected $crop;
+    protected $productsModel;
     private $module_name = 'Advanced_products';
 
     public function __construct()
@@ -20,9 +22,11 @@ class Advanced_products extends BaseController
         $this->session = \Config\Services::session();
         $this->permission = new Permission();
         $this->crop = \Config\Services::image();
+        $this->productsModel = new ProductsModel();
+
     }
 
-    public function index()
+    public function old_index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
@@ -58,6 +62,57 @@ class Advanced_products extends BaseController
             echo view('Admin/footer');
         }
     }
+    public function index()
+    {
+        $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
+        $adRoleId = $this->session->adRoleId;
+        if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
+            return redirect()->to(site_url('admin'));
+        } else {
+
+
+//            $table = DB()->table('cc_products');
+//            $table->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id');
+//            $data['product'] = $table->orderBy('cc_products.product_id','desc')->get()->getResult();
+
+            $length = $this->request->getGet('length');
+            $keyWord = $this->request->getGet('keyWord');
+            $pageNum = $this->request->getGet('page');
+
+            $perPage = !empty($length)?$length:10;
+            if (empty($keyWord)) {
+                $data['product'] = $this->productsModel->bulk_product_list()->paginate($perPage);
+            }else{
+                $data['product'] = $this->productsModel->search_data_bulk($keyWord)->paginate($perPage);
+            }
+
+            $data['pager'] = $this->productsModel->pager;
+            $data['links'] = $data['pager']->links('default','custom_pagination');
+//            $data['links'] = $data['pager']->makeLinks($page, $perPage, $total, 'custom_pagination');
+
+
+            $data['keyWord'] = $keyWord;
+            $data['length'] = $length;
+
+
+
+            //$perm = array('create','read','update','delete','mod_access');
+            $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
+            foreach ($perm as $key => $val) {
+                $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
+            }
+            echo view('Admin/header');
+            echo view('Admin/sidebar');
+            if (isset($data['mod_access']) and $data['mod_access'] == 1) {
+                echo view('Admin/Advanced_products/list', $data);
+            } else {
+                echo view('Admin/no_permission');
+            }
+            echo view('Admin/footer');
+        }
+    }
+
+
     public function bulk_status_update()
     {
         $module_settings_id = $this->request->getPost('module_settings_id');
@@ -400,11 +455,13 @@ class Advanced_products extends BaseController
             }
             DB()->transComplete();
 
-            print'<div class="alert alert-success alert-dismissible" role="alert">Create Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
-
+//            print'<div class="alert alert-success alert-dismissible" role="alert">Create Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Create Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('bulk_edit_products');
         }else{
-            print '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
-
+//            print '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->back();
         }
     }
     public function product_multi_delete(){
@@ -461,10 +518,12 @@ class Advanced_products extends BaseController
             DB()->transComplete();
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('bulk_edit_products');
+//            return redirect()->to('bulk_edit_products');
+            return redirect()->back();
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('bulk_edit_products');
+//            return redirect()->to('bulk_edit_products');
+            return redirect()->back();
         }
     }
     public function multi_option_edit(){
@@ -484,7 +543,8 @@ class Advanced_products extends BaseController
             echo view('Admin/footer');
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('bulk_edit_products');
+//            return redirect()->to('bulk_edit_products');
+            return redirect()->back();
         }
     }
     public function multi_option_action(){
@@ -543,7 +603,8 @@ class Advanced_products extends BaseController
             echo view('Admin/footer');
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('bulk_edit_products');
+//            return redirect()->to('bulk_edit_products');
+            return redirect()->back();
         }
     }
     public function multi_attribute_action(){

@@ -12,16 +12,16 @@
 
     <link rel="stylesheet" href="<?php echo base_url() ?>/assets/assets_fl/bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo base_url() ?>/assets/assets_fl/swiper-bundle.min.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>/assets/assets_fl/slick/slick.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>/assets/assets_fl/slick/slick-theme.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>/assets/assets_fl/slick/slick.min.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>/assets/assets_fl/slick/slick-theme.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <link rel="stylesheet" href="<?php echo base_url() ?>/assets/assets_fl/style.css">
+    <link rel="stylesheet" href="<?php echo base_url() ?>/assets/assets_fl/style.min.css">
 
     <script src="<?php echo base_url() ?>/assets/assets_fl/jquery.min.js"></script>
     <script src="<?php echo base_url() ?>/assets/assets_fl/bootstrap.bundle.min.js"></script>
     <script src="<?php echo base_url() ?>/assets/assets_fl/swiper-bundle.min.js"></script>
-    <script src="<?php echo base_url() ?>/assets/assets_fl/jquery.star-rating.js"></script>
-    <script src="<?php echo base_url() ?>/assets/assets_fl/jquery-ui.js"></script>
+    <script src="<?php echo base_url() ?>/assets/assets_fl/jquery.star-rating.min.js"></script>
+    <script src="<?php echo base_url() ?>/assets/assets_fl/jquery-ui.min.js"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
