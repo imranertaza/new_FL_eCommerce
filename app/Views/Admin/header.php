@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="<?php echo base_url() ?>/admin_assets/plugins/jqvmap/jqvmap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?php echo base_url() ?>/admin_assets/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="<?php echo base_url() ?>/admin_assets/dist/css/custome.css">
+    <link rel="stylesheet" href="<?php echo base_url() ?>/admin_assets/dist/css/custome.min.css">
     <!-- overlayScrollbars -->
     <link rel="stylesheet"
         href="<?php echo base_url() ?>/admin_assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">

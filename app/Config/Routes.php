@@ -97,6 +97,8 @@ $routes->post('/product_multi_delete_action', 'Admin\Products::multi_delete_acti
 
 $routes->post('/product_image_sort_action', 'Admin\Products::product_image_sort_action');
 
+$routes->get('/products_list', 'Admin\Products::products_list');
+
 //User
 $routes->get('/user', 'Admin\User::index');
 $routes->get('/user_create', 'Admin\User::create');
@@ -272,6 +274,13 @@ $routes->post('/bulk_product_multi_attribute_edit', 'Admin\Advanced_products::mu
 $routes->post('/bulk_multi_attribute_action', 'Admin\Advanced_products::multi_attribute_action');
 
 $routes->post('/product_image_show_action', 'Admin\Advanced_products::image_show');
+
+
+
+$routes->get('/bulk_product_list', 'Admin\Advanced_products::product_list');
+
+
+
 //login routes
 $routes->get('/register', 'Login::register');
 $routes->get('/login', 'Login::index');

@@ -1973,7 +1973,7 @@ a.active {
 
 .owl-theme .owl-nav {
     position: absolute !important;
-    ;
+;
     top: -87px;
     right: -4px;
     font-size: 38px;
@@ -2803,7 +2803,7 @@ input[type='radio']:checked {
     height: auto;
 }
 
-.accordion-cat::-webkit-scrollbar-thumb {   
+.accordion-cat::-webkit-scrollbar-thumb {
     background: #eee
 }
 

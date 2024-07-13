@@ -7,6 +7,7 @@ use App\Libraries\Permission;
 use App\Libraries\Theme_2;
 use App\Libraries\Theme_3;
 use App\Libraries\Theme_default;
+use App\Models\ProductsModel;
 
 class Products extends BaseController
 {
@@ -18,6 +19,7 @@ class Products extends BaseController
     protected $theme_2;
     protected $theme_default;
     protected $crop;
+    protected $productsModel;
     private $module_name = 'Products';
 
     public function __construct()
@@ -29,9 +31,10 @@ class Products extends BaseController
         $this->theme_3 = new Theme_3();
         $this->theme_2 = new Theme_2();
         $this->theme_default = new Theme_default();
+        $this->productsModel = new ProductsModel();
     }
 
-    public function index()
+    public function old_index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
@@ -1326,10 +1329,12 @@ class Products extends BaseController
             DB()->transComplete();
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('products');
+//            return redirect()->to('products');
+            return redirect()->back();
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('products');
+//            return redirect()->to('products');
+            return redirect()->back();
         }
     }
 
@@ -1339,6 +1344,58 @@ class Products extends BaseController
         $data['sort_order'] = $this->request->getPost('value');
         $table = DB()->table('cc_product_image');
         $table->where('product_image_id',$product_image_id)->update($data);
+    }
+
+
+    public function index()
+    {
+        $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
+        $adRoleId = $this->session->adRoleId;
+        if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
+            return redirect()->to(site_url('admin'));
+        } else {
+//            $table = DB()->table('cc_products');
+//            $data['product'] = $table->orderBy('product_id','desc')->get()->getResult();
+            $length = $this->request->getGet('length');
+            $keyWord = $this->request->getGet('keyWord');
+            $pageNum = $this->request->getGet('page');
+
+//            $p = !empty($pageNum)?$pageNum:1;
+//            $page = empty($keyWord)?$p:1;
+//            $page = $p;
+            $perPage = !empty($length)?$length:10;
+            if (empty($keyWord)) {
+                $data['product'] = $this->productsModel->orderBy('product_id', 'desc')->paginate($perPage);
+            }else{
+                $data['product'] = $this->productsModel->search_data($keyWord)->orderBy('product_id', 'desc')->paginate($perPage);
+            }
+
+//            $total = $this->productsModel->countAllResults();
+
+            $data['pager'] = $this->productsModel->pager;
+            $data['links'] = $data['pager']->links('default','custom_pagination');
+//            $data['links'] = $data['pager']->makeLinks($page, $perPage, $total, 'custom_pagination');
+
+
+            $data['keyWord'] = $keyWord;
+            $data['length'] = $length;
+
+            //$perm = array('create','read','update','delete','mod_access');
+            $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
+            foreach ($perm as $key => $val) {
+                $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
+            }
+            echo view('Admin/header');
+            echo view('Admin/sidebar');
+            if (isset($data['mod_access']) and $data['mod_access'] == 1) {
+                echo view('Admin/Products/list',$data);
+            } else {
+                echo view('Admin/no_permission');
+            }
+            echo view('Admin/footer');
+
+            if (isset(newSession()->resetDatatable)){unset($_SESSION['resetDatatable']);}
+        }
     }
 
 

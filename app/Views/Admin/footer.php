@@ -81,9 +81,9 @@
 <!-- AdminLTE App -->
 
 
-<script src="<?php echo base_url() ?>/admin_assets/dist/js/pages/dashboard.js"></script>
+<script src="<?php echo base_url() ?>/admin_assets/dist/js/pages/dashboard.min.js"></script>
 <!-- AdminLTE App -->
-<script src="<?php echo base_url() ?>/admin_assets/dist/js/adminlte.js"></script>
+<script src="<?php echo base_url() ?>/admin_assets/dist/js/adminlte.min.js"></script>
 
 <script>
     $(function () {
@@ -172,6 +172,10 @@
         }else{
             $('#message').html('');
         }
+    }
+
+    function table_form_submit(){
+        $('#tableForm').submit();
     }
 
 
