@@ -1046,8 +1046,16 @@ function allchecked(source) {
     }
 }
 
+// function allCheckedDemo(source) {
+//     var checkboxes = document.querySelectorAll('#productBulkEdit input[type="checkbox"]');
+//     for (var i = 0; i < checkboxes.length; i++) {
+//         if (checkboxes[i] != source)
+//             checkboxes[i].checked = source.checked;
+//     }
+// }
+
 function allCheckedDemo(source) {
-    var checkboxes = document.querySelectorAll('#productBulkEdit input[type="checkbox"]');
+    var checkboxes = document.querySelectorAll('#bulkTable input[type="checkbox"]');
     for (var i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i] != source)
             checkboxes[i].checked = source.checked;

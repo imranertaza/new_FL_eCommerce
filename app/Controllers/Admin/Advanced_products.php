@@ -70,10 +70,9 @@ class Advanced_products extends BaseController
             return redirect()->to(site_url('admin'));
         } else {
 
-
-//            $table = DB()->table('cc_products');
-//            $table->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id');
-//            $data['product'] = $table->orderBy('cc_products.product_id','desc')->get()->getResult();
+            $uri = service('uri');
+            $urlString = $uri->getPath() . '?' . $this->request->getServer('QUERY_STRING');
+            setcookie('bulk_url_path',$urlString,time()+86400, "/");
 
             $length = $this->request->getGet('length');
             $keyWord = $this->request->getGet('keyWord');
@@ -88,7 +87,7 @@ class Advanced_products extends BaseController
 
             $data['pager'] = $this->productsModel->pager;
             $data['links'] = $data['pager']->links('default','custom_pagination');
-//            $data['links'] = $data['pager']->makeLinks($page, $perPage, $total, 'custom_pagination');
+
 
 
             $data['keyWord'] = $keyWord;
@@ -548,6 +547,8 @@ class Advanced_products extends BaseController
         }
     }
     public function multi_option_action(){
+        $redirect_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
+
         $all_product = $this->request->getPost('productId[]');
 
         $option = $this->request->getPost('option[]');
@@ -577,11 +578,11 @@ class Advanced_products extends BaseController
                 $optionTable->insertBatch($optionData);
             }
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('bulk_edit_products');
+            return redirect()->to($redirect_url);
 
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Invalid input! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('bulk_edit_products');
+            return redirect()->to($redirect_url);
         }
 
 
@@ -608,6 +609,7 @@ class Advanced_products extends BaseController
         }
     }
     public function multi_attribute_action(){
+        $redirect_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
         $all_product = $this->request->getPost('productId[]');
 
         $attribute_group_id = $this->request->getPost('attribute_group_id[]');
@@ -632,10 +634,10 @@ class Advanced_products extends BaseController
             }
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('bulk_edit_products');
+            return redirect()->to($redirect_url);
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Invalid input! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('bulk_edit_products');
+            return redirect()->to($redirect_url);
         }
 
     }

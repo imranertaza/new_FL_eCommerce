@@ -159,12 +159,12 @@
                                 <div class="col-md-3 mx-auto">
                                     <div class="input-group ">
                                         <lable class="tab-lab">Search:</lable>
-                                        <input name="keyWord" class="form-control form-control-sm border-end-0 border search-tab ml-2" oninput="table_form_submit()"  type="search" value="<?= $keyWord?>" id="example-search-input">
+                                        <input name="keyWord" class="form-control form-control-sm border-end-0 border search-tab ml-2" onkeyup="table_form_submit()"  type="search" value="<?= $keyWord?>" id="example-search-input">
                                     </div>
                                 </div>
                             </div>
                         </form>
-                        <table  class="table table-bordered table-striped">
+                        <table id="bulkTable" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" onclick="allCheckedDemo(this)"  ></th>
