@@ -547,7 +547,7 @@ class Advanced_products extends BaseController
         }
     }
     public function multi_option_action(){
-        $demo_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
+        $redirect_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
 
         $all_product = $this->request->getPost('productId[]');
 
@@ -578,11 +578,11 @@ class Advanced_products extends BaseController
                 $optionTable->insertBatch($optionData);
             }
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to($demo_url);
+            return redirect()->to($redirect_url);
 
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Invalid input! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to($demo_url);
+            return redirect()->to($redirect_url);
         }
 
 
@@ -609,7 +609,7 @@ class Advanced_products extends BaseController
         }
     }
     public function multi_attribute_action(){
-        $demo_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
+        $redirect_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
         $all_product = $this->request->getPost('productId[]');
 
         $attribute_group_id = $this->request->getPost('attribute_group_id[]');
@@ -634,10 +634,10 @@ class Advanced_products extends BaseController
             }
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to($demo_url);
+            return redirect()->to($redirect_url);
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Invalid input! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to($demo_url);
+            return redirect()->to($redirect_url);
         }
 
     }
