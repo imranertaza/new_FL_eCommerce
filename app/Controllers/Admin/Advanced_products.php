@@ -72,7 +72,7 @@ class Advanced_products extends BaseController
 
             $uri = service('uri');
             $urlString = $uri->getPath() . '?' . $this->request->getServer('QUERY_STRING');
-            setcookie('demo_url_path',$urlString,time()+86400, "/");
+            setcookie('bulk_url_path',$urlString,time()+86400, "/");
 
             $length = $this->request->getGet('length');
             $keyWord = $this->request->getGet('keyWord');
@@ -547,7 +547,7 @@ class Advanced_products extends BaseController
         }
     }
     public function multi_option_action(){
-        $demo_url = isset($_COOKIE['demo_url_path']) ? $_COOKIE['demo_url_path'] : '';
+        $demo_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
 
         $all_product = $this->request->getPost('productId[]');
 
@@ -609,7 +609,7 @@ class Advanced_products extends BaseController
         }
     }
     public function multi_attribute_action(){
-        $demo_url = isset($_COOKIE['demo_url_path']) ? $_COOKIE['demo_url_path'] : '';
+        $demo_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
         $all_product = $this->request->getPost('productId[]');
 
         $attribute_group_id = $this->request->getPost('attribute_group_id[]');
