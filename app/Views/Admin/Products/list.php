@@ -67,7 +67,7 @@
                         <div class="col-md-3 mx-auto">
                             <div class="input-group ">
                                 <lable class="tab-lab">Search:</lable>
-                                <input name="keyWord" class="form-control form-control-sm border-end-0 border search-tab ml-2" oninput="table_form_submit()"  type="search" value="<?= $keyWord?>" id="example-search-input">
+                                <input name="keyWord" class="form-control form-control-sm border-end-0 border search-tab ml-2" onkeyup="table_form_submit()"  type="search" value="<?= $keyWord?>" id="example-search-input">
                             </div>
                         </div>
                     </div>

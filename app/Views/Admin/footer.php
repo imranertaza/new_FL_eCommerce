@@ -174,8 +174,16 @@
         }
     }
 
+    //form submit code (start)
+    var timeout = null;
     function table_form_submit(){
-        $('#tableForm').submit();
+        if (timeout !== null) {
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout(function () {
+            $('#tableForm').submit();
+        }, 1000);
+        // $('#tableForm').submit();
     }
 
 

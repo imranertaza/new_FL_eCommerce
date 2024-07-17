@@ -569,7 +569,7 @@ class Products extends BaseController
             return redirect()->to('products?page=1');
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('products');
+            return redirect()->back();
         }
 
     }
@@ -1155,10 +1155,10 @@ class Products extends BaseController
             }
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('products');
+            return redirect()->back();
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('products');
+            return redirect()->back();
         }
 
     }
