@@ -27,7 +27,8 @@
                             <h3 class="card-title">Product update</h3>
                         </div>
                         <div class="col-md-4" style="text-align: right;">
-                            <a href="<?php echo base_url('products');?>" class="btn btn-danger ">Back</a>
+                            <?php $redirect_url = isset($_COOKIE['product_url_path']) ? $_COOKIE['product_url_path'] : 'products'; ?>
+                            <a href="<?php echo base_url($redirect_url);?>" class="btn btn-danger ">Back</a>
                             <a href="<?php echo base_url('product_create');?>" class="btn btn-success"> Add New</a>
                             <button type="submit" class="btn btn-primary">Update</button>
                         </div>

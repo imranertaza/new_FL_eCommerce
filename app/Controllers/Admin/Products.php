@@ -1243,6 +1243,9 @@ class Products extends BaseController
         if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
             return redirect()->to(site_url('admin'));
         } else {
+            $uri = service('uri');
+            $urlString = $uri->getPath() . '?' . $this->request->getServer('QUERY_STRING');
+            setcookie('product_url_path',$urlString,time()+86400, "/");
 
             $length = $this->request->getGet('length');
             $keyWord = $this->request->getGet('keyWord');
