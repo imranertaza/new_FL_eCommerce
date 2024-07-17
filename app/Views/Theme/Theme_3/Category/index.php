@@ -128,7 +128,7 @@
                                                 <?php } ?>
 
                                                 <div class="product-top text-center">
-                                                    <a href="<?php echo base_url('detail/' . $pro->product_id) ?>"><?php echo image_view('uploads/products', $pro->product_id, '191_' . $pro->image, 'noimage.png', 'img-fluid ') ?></a>
+                                                    <a href="<?php echo base_url('detail/' . $pro->product_id) ?>"><?php echo image_view('uploads/products', $pro->product_id, '191_wm_' . $pro->image, 'noimage.png', 'img-fluid ') ?></a>
                                                     <div class="rating text-center my-2">
                                                         <?php echo product_id_by_rating($pro->product_id); ?>
                                                     </div>
@@ -196,7 +196,7 @@
                                             <?php } ?>
 
                                             <div class="product-top text-center" style="width:40%;float:left; ">
-                                                <a href="<?php echo base_url('detail/' . $pro->product_id) ?>"><?php echo image_view('uploads/products', $pro->product_id, '198_' . $pro->image, 'noimage.png', 'img-fluid ') ?></a>
+                                                <a href="<?php echo base_url('detail/' . $pro->product_id) ?>"><?php echo image_view('uploads/products', $pro->product_id, '198_wm_' . $pro->image, 'noimage.png', 'img-fluid ') ?></a>
 
                                             </div>
 

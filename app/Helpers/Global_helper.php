@@ -1015,7 +1015,7 @@ function get_category_id_by_product_show_home_slide($category_id)
         }
 
         $view .= '<div class="product-top mb-2">
-                    ' . image_view('uploads/products', $pro->product_id, '191_' . $pro->image, 'noimage.png', 'img-fluid w-100') . '                    
+                    ' . image_view('uploads/products', $pro->product_id, '191_wm_' . $pro->image, 'noimage.png', 'img-fluid w-100') . '                    
                 </div>
                 <div class="product-bottom mt-auto">
                     <div class="product-title product_title_area mb-2">

@@ -99,6 +99,7 @@ $routes->post('/product_image_sort_action', 'Admin\Products::product_image_sort_
 
 $routes->get('/products_list', 'Admin\Products::products_list');
 
+
 //User
 $routes->get('/user', 'Admin\User::index');
 $routes->get('/user_create', 'Admin\User::create');
