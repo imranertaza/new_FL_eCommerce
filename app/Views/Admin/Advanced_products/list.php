@@ -27,20 +27,23 @@
 
                         </div>
                         <div class="col-md-8">
-
+                            <?php $modules = modules_access();?>
                             <a href="<?php echo base_url('product_create') ?>" class="btn btn-primary  btn-xs float-right "><i class="fas fa-plus"></i> Add</a>
                             <a class="btn btn-xs btn-info float-right mr-2" data-toggle="collapse" href="#collapseProduct" role="button" aria-expanded="false" aria-controls="collapseProduct">Settings</a>
 
                             <form id="multiActionForm" action="<?= base_url('bulk_product_multi_delete')?>" method="post">
                             <button type="submit" formaction="<?= base_url('bulk_product_cpoy')?>" class="btn btn-secondary btn-xs float-right mr-2"><i class="nav-icon fas fa-copy"></i> Copy</button>
-                            <?php if(modules_key_by_access('multi_delete') == '1' ){ ?>
+                            <?php if($modules['multi_delete'] == '1' ){ ?>
                             <button type="submit" class="btn btn-danger btn-xs float-right mr-2"><i class="fas fa-trash"></i> Multi delete</button>
                             <?php } ?>
-                            <?php if(modules_key_by_access('multi_option') == '1' ){ ?>
+                            <?php if($modules['multi_option'] == '1' ){ ?>
                             <button type="submit" formaction="<?php echo base_url('bulk_product_multi_option_edit'); ?>" class="btn btn-primary btn-xs float-right mr-2"><i class="fas fa-edit"></i> Multi option edit</button>
                             <?php } ?>
-                            <?php if(modules_key_by_access('multi_attribute') == '1' ){ ?>
+                            <?php if($modules['multi_attribute'] == '1' ){ ?>
                             <button type="submit" formaction="<?php echo base_url('bulk_product_multi_attribute_edit'); ?>" class="btn btn-info btn-xs float-right mr-2"><i class="fas fa-edit"></i> Multi attribute edit</button>
+                            <?php } ?>
+                            <?php if($modules['multi_category'] == '1' ){ ?>
+                                <button type="submit" formaction="<?php echo base_url('bulk_product_multi_category_edit'); ?>" class="btn btn-success btn-xs float-right mr-2"><i class="fas fa-edit"></i> Multi category edit</button>
                             <?php } ?>
                             </form>
                             <a href="<?php echo base_url('products') ?>" class="btn btn-danger float-right mr-2 btn-xs" >Back</a>
@@ -164,7 +167,8 @@
                                 </div>
                             </div>
                         </form>
-                        <table id="bulkTable" class="table table-bordered table-striped">
+                        <div class="table-responsive">
+                            <table id="bulkTable" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" onclick="allCheckedDemo(this)"  ></th>
@@ -261,6 +265,7 @@
                             </tbody>
 
                         </table>
+                        </div>
 
                         <div class="col-md-12">
                             <?php echo $links; ?>

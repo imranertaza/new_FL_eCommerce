@@ -970,7 +970,12 @@
     })();
 
 
-
+    function download_btn_show(){
+        $('.dw-btn-group').show();
+    }
+    function show_form(){
+        $('.dw-input-group').show();
+    }
 
 
 </script>

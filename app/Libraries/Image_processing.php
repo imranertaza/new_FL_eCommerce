@@ -97,15 +97,18 @@ class Image_processing {
     }
 
     public function product_image_upload_and_crop_all_size($img,$dir){
+        $modules = modules_access();
         $news_img = $this->product_image_upload($img,$dir);
         //image crop
         $image = str_replace('pro_', '', $news_img);
         $this->image_crop($dir,$image, $news_img);
-        //image watermark
-        $this->watermark_main_image($dir,$image);
-        $this->watermark_on_resized_image($dir,$image);
-        //image watermark crop
-        $this->image_crop($dir,'600_wm_'.$image, 'wm_'.$news_img);
+        if ($modules['watermark'] == '1') {
+            //image watermark
+            $this->watermark_main_image($dir, $image);
+            $this->watermark_on_resized_image($dir, $image);
+            //image watermark crop
+            $this->image_crop($dir, '600_wm_' . $image, 'wm_' . $news_img);
+        }
 
         return $news_img;
     }
