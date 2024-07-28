@@ -989,13 +989,15 @@ function get_category_id_by_product_show_home_slide($category_id)
     $table->join('cc_product_to_category', 'cc_product_to_category.product_id = cc_products.product_id')->where('cc_products.status', 'Active');
     $result = $table->where('cc_product_to_category.category_id', $category_id)->orderBy('cc_products.product_id','DESC')->limit(20)->get()->getResult();
 
+    $modules = modules_access();
+    $img_size = ($modules['watermark'] == '1')?'191_wm_':'191_';
     $view = '';
     $count = 0;
     foreach ($result as $pro) {
         if ($count % 2 == 0) $view .= '<div class="swiper-slide">' . "\n";
         $view .= '<div class="border p-3 product-grid h-100 d-flex align-items-stretch flex-column position-relative">
             <div class="product-grid position-relative">';
-        if (modules_key_by_access('wishlist') == 1) {
+        if ($modules['wishlist'] == 1) {
             if (!isset(newSession()->isLoggedInCustomer)) {
                 $view .= '<a href="' . base_url('login') . '" class="btn-wishlist position-absolute mt-2 ms-2"  ><i class="fa-solid fa-heart"></i>
                     <span class="btn-wishlist-text position-absolute  mt-5 ms-2">Favorite</span>
@@ -1008,14 +1010,14 @@ function get_category_id_by_product_show_home_slide($category_id)
 
         }
 
-        if (modules_key_by_access('compare') == 1) {
+        if ($modules['compare'] == 1) {
             $view .= '<a href="javascript:void(0)" onclick="addToCompare(' . $pro->product_id . ')" class="btn-compare position-absolute  mt-5 ms-2"><i class="fa-solid fa-code-compare"></i>
                     <span class="btn-compare-text position-absolute  mt-5 ms-2">Compare</span>
                 </a>';
         }
 
         $view .= '<div class="product-top mb-2">
-                    ' . image_view('uploads/products', $pro->product_id, '191_wm_' . $pro->image, 'noimage.png', 'img-fluid w-100') . '                    
+                    ' . image_view('uploads/products', $pro->product_id, $img_size . $pro->image, 'noimage.png', 'img-fluid w-100') . '                    
                 </div>
                 <div class="product-bottom mt-auto">
                     <div class="product-title product_title_area mb-2">

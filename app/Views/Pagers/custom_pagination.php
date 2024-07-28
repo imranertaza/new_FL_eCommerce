@@ -1,5 +1,5 @@
 <?php
-    $pager->setSurroundCount(5);
+    $pager->setSurroundCount(3);
 ?>
 
 <!--<nav aria-label="Page navigation example" class="mt-3 d-flex  justify-content-end">-->

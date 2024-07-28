@@ -1111,7 +1111,7 @@ class Products extends BaseController
         $allProductId =  $this->request->getPost('productId[]');
 
         if (!empty($allProductId)) {
-
+            $modules = modules_access();
             foreach ($allProductId as $productId) {
 
                 //product main image crop
@@ -1122,11 +1122,12 @@ class Products extends BaseController
                     if (file_exists($target_dir . '/' . $mainImg)) {
 
                         $this->imageProcessing->image_crop($target_dir,$mainImg,$oldImg);
+                        if ($modules['watermark'] == '1') {
+                            $this->imageProcessing->watermark_main_image($target_dir, $mainImg);
 
-                        $this->imageProcessing->watermark_main_image($target_dir,$mainImg);
-
-                        $this->imageProcessing->watermark_on_resized_image($target_dir,$mainImg);
-                        $this->imageProcessing->image_crop($target_dir,'600_wm_'.$mainImg,'wm_'.$oldImg);
+                            $this->imageProcessing->watermark_on_resized_image($target_dir, $mainImg);
+                            $this->imageProcessing->image_crop($target_dir, '600_wm_' . $mainImg, 'wm_' . $oldImg);
+                        }
 
                     }
                 }
@@ -1143,11 +1144,12 @@ class Products extends BaseController
                             $mainImgMul = str_replace('pro_', '', $oldImgMul);
                             if (file_exists($target_dir_mult . '/' . $mainImgMul)) {
                                 $this->imageProcessing->image_crop($target_dir_mult,$mainImgMul,$oldImgMul);
+                                if ($modules['watermark'] == '1') {
+                                    $this->imageProcessing->watermark_main_image($target_dir_mult, $mainImgMul);
 
-                                $this->imageProcessing->watermark_main_image($target_dir_mult,$mainImgMul);
-
-                                $this->imageProcessing->watermark_on_resized_image($target_dir_mult,$mainImgMul);
-                                $this->imageProcessing->image_crop($target_dir_mult,'600_wm_'.$mainImgMul,'wm_'.$oldImgMul);
+                                    $this->imageProcessing->watermark_on_resized_image($target_dir_mult, $mainImgMul);
+                                    $this->imageProcessing->image_crop($target_dir_mult, '600_wm_' . $mainImgMul, 'wm_' . $oldImgMul);
+                                }
                             }
                         }
                     }

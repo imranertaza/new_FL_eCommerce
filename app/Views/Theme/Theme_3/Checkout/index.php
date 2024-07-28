@@ -258,14 +258,17 @@
                     </div>
                     <div class="checkout-items mb-4">
 
-                        <?php foreach (Cart()->contents() as $val) { ?>
+                        <?php
+                        $modules = modules_access();
+                        $img_size = ($modules['watermark'] == '1')?'100_wm_':'100_';
+                        foreach (Cart()->contents() as $val) { ?>
                         <div class="list-item d-flex gap-2 mb-2">
                             <div class="d-flex gap-2 bg-gray p-2 rounded-2 pro-bg-check">
                                 <?php
                                     $img = get_data_by_id('image', 'cc_products', 'product_id', $val['id']);
                                     $des = get_data_by_id('description', 'cc_product_description', 'product_id', $val['id']);
                                     ?>
-                                <?php echo image_view('uploads/products', $val['id'], '100_wm_' . $img, 'noimage.png', 'img-fluid w-h-100') ?>
+                                <?php echo image_view('uploads/products', $val['id'], $img_size . $img, 'noimage.png', 'img-fluid w-h-100') ?>
                                 <div>
                                     <p class="fw-semibold mb-2"><?php echo $val['name']; ?></p>
                                     <p class="lh-sm">

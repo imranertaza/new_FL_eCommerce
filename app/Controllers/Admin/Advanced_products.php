@@ -650,5 +650,55 @@ class Advanced_products extends BaseController
         return $result;
     }
 
+    public function multi_category_edit(){
+        $allProductId =  $this->request->getPost('productId[]');
+        if (!empty($allProductId)){
+
+            $data['all_product'] = $allProductId;
+
+            $table = DB()->table('cc_product_category');
+            $data['prodCat'] = $table->get()->getResult();
+
+
+            echo view('Admin/header');
+            echo view('Admin/sidebar');
+            echo view('Admin/Advanced_products/category_edit', $data);
+            echo view('Admin/footer');
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->back();
+        }
+    }
+
+    public function multi_category_action(){
+        $redirect_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
+
+        $all_product = $this->request->getPost('productId[]');
+        $categorys = $this->request->getPost('categorys[]');
+
+        if (!empty($categorys)) {
+            $arrayData = [];
+            $catTable = DB()->table('cc_product_to_category');
+            foreach ($all_product as $pro) {
+                $catTable->where('product_id', $pro)->delete();
+                foreach ($categorys as $cat) {
+                    $arrayData[] = ['product_id' => $pro, 'category_id' => $cat];
+                }
+            }
+
+            $catTable->insertBatch($arrayData);
+
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to($redirect_url);
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any category <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to($redirect_url);
+        }
+
+
+
+
+    }
+
 
 }

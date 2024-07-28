@@ -72,7 +72,8 @@
                         </div>
                     </div>
                 </form>
-                <table class="table table-bordered table-striped">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th><input type="checkbox" onclick="allchecked(this)" ></th>
@@ -102,6 +103,7 @@
                     </tbody>
 
                 </table>
+                </div>
 
                 <div class="col-md-12">
                     <?php echo $links; ?>
