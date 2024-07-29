@@ -91,7 +91,10 @@
 
                         <div class="products cat-pro-mob">
                             <div class="row gx-0 row-cols-1 row-cols-sm-2 row-cols-md-3 h-100 " id="grid-view">
-                                <?php $modules = modules_access(); $symbol = get_lebel_by_value_in_settings('currency_symbol');
+                                <?php $modules = modules_access();
+                                $img_size = ($modules['watermark'] == '1')?'191_wm_':'191_';
+                                $img_size_198 = ($modules['watermark'] == '1')?'198_wm_':'198_';
+                                $symbol = get_lebel_by_value_in_settings('currency_symbol');
                                 if (!empty($products)) {
                                     foreach ($products as $pro) { ?>
                                         <div class="col border p-2">
@@ -128,7 +131,7 @@
                                                 <?php } ?>
 
                                                 <div class="product-top text-center">
-                                                    <a href="<?php echo base_url('detail/' . $pro->product_id) ?>"><?php echo image_view('uploads/products', $pro->product_id, '191_' . $pro->image, 'noimage.png', 'img-fluid ') ?></a>
+                                                    <a href="<?php echo base_url('detail/' . $pro->product_id) ?>"><?php echo image_view('uploads/products', $pro->product_id, $img_size . $pro->image, 'noimage.png', 'img-fluid ') ?></a>
                                                     <div class="rating text-center my-2">
                                                         <?php echo product_id_by_rating($pro->product_id); ?>
                                                     </div>
@@ -196,7 +199,7 @@
                                             <?php } ?>
 
                                             <div class="product-top text-center" style="width:40%;float:left; ">
-                                                <a href="<?php echo base_url('detail/' . $pro->product_id) ?>"><?php echo image_view('uploads/products', $pro->product_id, '198_' . $pro->image, 'noimage.png', 'img-fluid ') ?></a>
+                                                <a href="<?php echo base_url('detail/' . $pro->product_id) ?>"><?php echo image_view('uploads/products', $pro->product_id, $img_size_198 . $pro->image, 'noimage.png', 'img-fluid ') ?></a>
 
                                             </div>
 

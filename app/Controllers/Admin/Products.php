@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Libraries\Image_processing;
 use App\Libraries\Permission;
 use App\Libraries\Theme_2;
 use App\Libraries\Theme_3;
@@ -18,6 +19,7 @@ class Products extends BaseController
     protected $theme_3;
     protected $theme_2;
     protected $theme_default;
+    protected $imageProcessing;
     protected $crop;
     protected $productsModel;
     private $module_name = 'Products';
@@ -32,6 +34,7 @@ class Products extends BaseController
         $this->theme_2 = new Theme_2();
         $this->theme_default = new Theme_default();
         $this->productsModel = new ProductsModel();
+        $this->imageProcessing = new Image_processing();
     }
 
     public function old_index()
@@ -92,16 +95,6 @@ class Products extends BaseController
     }
 
     public function create_action() {
-        $theme = get_lebel_by_value_in_settings('Theme');
-        if($theme == 'Theme_3'){
-            $theme_libraries = $this->theme_3;
-        }
-        if($theme == 'Default'){
-            $theme_libraries = $this->theme_default;
-        }
-        if($theme == 'Theme_2'){
-            $theme_libraries = $this->theme_2;
-        }
 
         $adUserId = $this->session->adUserId;
 
@@ -154,22 +147,12 @@ class Products extends BaseController
 
             if (!empty($_FILES['image']['name'])) {
                 $target_dir = FCPATH . '/uploads/products/'.$productId.'/';
-                if (!file_exists($target_dir)) {
-                    mkdir($target_dir, 0777);
-                }
+                $this->imageProcessing->directory_create($target_dir);
 
                 //new image upload
                 $pic = $this->request->getFile('image');
-                $namePic = $pic->getRandomName();
-                $pic->move($target_dir, $namePic);
-                $news_img = 'pro_' . $pic->getName();
-                // $this->crop->withFile($target_dir . '' . $namePic)->fit(191, 191, 'center')->save($target_dir . '191_'.$news_img);
-                // $this->crop->withFile($target_dir . '' . $namePic)->fit(198, 198, 'center')->save($target_dir . '198_'.$news_img);
-                // $this->crop->withFile($target_dir . '' . $namePic)->fit(100, 100, 'center')->save($target_dir . '100_'.$news_img);
-                // $this->crop->withFile($target_dir . '' . $namePic)->fit(437, 400, 'center')->save($target_dir . '437_'.$news_img);
-                foreach($theme_libraries->product_image as $pro_img){
-                    $this->crop->withFile($target_dir . '' . $namePic)->fit($pro_img['width'], $pro_img['height'], 'center')->save($target_dir . $pro_img['width'].'_'.$news_img);
-                } 
+                $news_img = $this->imageProcessing->product_image_upload_and_crop_all_size($pic,$target_dir);
+
                 $dataImg['image'] = $news_img;
 
                 $proUpTable = DB()->table('cc_products');
@@ -182,9 +165,7 @@ class Products extends BaseController
             if($this->request->getFileMultiple('multiImage')){
 
                 $target_dir = FCPATH . '/uploads/products/'.$productId.'/';
-                if (!file_exists($target_dir)) {
-                    mkdir($target_dir, 0777);
-                }
+                $this->imageProcessing->directory_create($target_dir);
 
                 $files = $this->request->getFileMultiple('multiImage');
                 foreach ($files as $file) {
@@ -197,17 +178,9 @@ class Products extends BaseController
                         $proImgId = DB()->insertID();
 
                         $target_dir2 = FCPATH . '/uploads/products/'.$productId.'/'.$proImgId.'/';
-                        if (!file_exists($target_dir2)) {
-                            mkdir($target_dir2, 0777);
-                        }
+                        $this->imageProcessing->directory_create($target_dir2);
 
-                        $nameMulPic = $file->getRandomName();
-                        $file->move($target_dir2, $nameMulPic);
-                        $news_img2 = 'pro_' . $file->getName();
-                        
-                        foreach($theme_libraries->product_image as $pro_img){
-                            $this->crop->withFile($target_dir2 . '' . $nameMulPic)->fit($pro_img['width'], $pro_img['height'], 'center')->save($target_dir2 . $pro_img['width'].'_'.$news_img2);
-                        } 
+                        $news_img2 = $this->imageProcessing->product_image_upload_and_crop_all_size($file,$target_dir2);
 
                         $dataMultiImg2['image'] = $news_img2;
 
@@ -265,9 +238,7 @@ class Products extends BaseController
 
             if (!empty($_FILES['description_image']['name'])) {
                 $target_dir = FCPATH . '/uploads/products/'.$productId.'/';
-                if (!file_exists($target_dir)) {
-                    mkdir($target_dir, 0777);
-                }
+                $this->imageProcessing->directory_create($target_dir);
 
                 //new image upload
                 $despic = $this->request->getFile('description_image');
@@ -279,9 +250,7 @@ class Products extends BaseController
 
             if (!empty($_FILES['documentation_pdf']['name'])) {
                 $target_dir = FCPATH . '/uploads/products/'.$productId.'/';
-                if (!file_exists($target_dir)) {
-                    mkdir($target_dir, 0777);
-                }
+                $this->imageProcessing->directory_create($target_dir);
 
                 //new image upload
                 $docPdf = $this->request->getFile('documentation_pdf');
@@ -293,9 +262,7 @@ class Products extends BaseController
 
             if (!empty($_FILES['safety_pdf']['name'])) {
                 $target_dir = FCPATH . '/uploads/products/'.$productId.'/';
-                if (!file_exists($target_dir)) {
-                    mkdir($target_dir, 0777);
-                }
+                $this->imageProcessing->directory_create($target_dir);
 
                 //new image upload
                 $safPdf = $this->request->getFile('safety_pdf');
@@ -307,9 +274,7 @@ class Products extends BaseController
 
             if (!empty($_FILES['instructions_pdf']['name'])) {
                 $target_dir = FCPATH . '/uploads/products/'.$productId.'/';
-                if (!file_exists($target_dir)) {
-                    mkdir($target_dir, 0777);
-                }
+                $this->imageProcessing->directory_create($target_dir);
 
                 //new image upload
                 $insPdf = $this->request->getFile('instructions_pdf');
@@ -666,16 +631,6 @@ class Products extends BaseController
     }
 
     public function update_action(){
-        $theme = get_lebel_by_value_in_settings('Theme');
-        if($theme == 'Theme_3'){
-            $theme_libraries = $this->theme_3;
-        }
-        if($theme == 'Default'){
-            $theme_libraries = $this->theme_default;
-        }
-        if($theme == 'Theme_2'){
-            $theme_libraries = $this->theme_2;
-        }
 
         $adUserId = $this->session->adUserId;
 
@@ -730,40 +685,11 @@ class Products extends BaseController
             if (!empty($_FILES['image']['name'])) {
                 $target_dir = FCPATH . '/uploads/products/'.$product_id.'/';
 
-                //un link
+                //unlink
                 $oldImg = get_data_by_id('image','cc_products','product_id',$product_id);
-                if ((!empty($oldImg)) && (file_exists($target_dir))) {
-                    $mainImg = str_replace('pro_', '', $oldImg);
-                    if (file_exists($target_dir . '/' . $mainImg)) {
-                        unlink($target_dir . '' . $mainImg);
-                    }
-                    if (file_exists($target_dir . '/191_' . $oldImg)) {
-                        unlink($target_dir . '191_' . $oldImg);
-                    }
-                    if (file_exists($target_dir . '/198_' . $oldImg)) {
-                        unlink($target_dir . '198_' . $oldImg);
-                    }
-                    if (file_exists($target_dir . '/100_' . $oldImg)) {
-                        unlink($target_dir . '100_' . $oldImg);
-                    }
-                    if (file_exists($target_dir . '/437_' . $oldImg)) {
-                        unlink($target_dir . '437_' . $oldImg);
-                    }
-                }
-
-
-                if (!file_exists($target_dir)) {
-                    mkdir($target_dir, 0777);
-                }
-
-                //new image upload
                 $pic = $this->request->getFile('image');
-                $namePic = $pic->getRandomName();
-                $pic->move($target_dir, $namePic);
-                $news_img = 'pro_' . $pic->getName();
-                foreach($theme_libraries->product_image as $pro_img){
-                    $this->crop->withFile($target_dir . '' . $namePic)->fit($pro_img['width'], $pro_img['height'], 'center')->save($target_dir . $pro_img['width'].'_'.$news_img);
-                } 
+                $news_img = $this->imageProcessing->single_product_image_unlink($target_dir,$oldImg)->directory_create($target_dir)->product_image_upload_and_crop_all_size($pic,$target_dir);
+
                 $dataImg['image'] = $news_img;
 
                 $proUpTable = DB()->table('cc_products');
@@ -776,9 +702,7 @@ class Products extends BaseController
             if($this->request->getFileMultiple('multiImage')){
 
                 $target_dir = FCPATH . '/uploads/products/'.$product_id.'/';
-                if (!file_exists($target_dir)) {
-                    mkdir($target_dir, 0777);
-                }
+                $this->imageProcessing->directory_create($target_dir);
 
                 $files = $this->request->getFileMultiple('multiImage');
                 foreach ($files as $key => $file) {
@@ -791,17 +715,7 @@ class Products extends BaseController
                         $proImgId = DB()->insertID();
 
                         $target_dir2 = FCPATH . '/uploads/products/'.$product_id.'/'.$proImgId.'/';
-                        if (!file_exists($target_dir2)) {
-                            mkdir($target_dir2, 0777);
-                        }
-
-                        $nameMulPic = $file->getRandomName();
-                        $file->move($target_dir2, $nameMulPic);
-                        $news_img2 = 'pro_' . $file->getName();
-
-                        foreach($theme_libraries->product_image as $pro_img){
-                            $this->crop->withFile($target_dir2 . '' . $nameMulPic)->fit($pro_img['width'], $pro_img['height'], 'center')->save($target_dir2 . $pro_img['width'].'_'.$news_img2);
-                        } 
+                        $news_img2 = $this->imageProcessing->directory_create($target_dir2)->product_image_upload_and_crop_all_size($file,$target_dir2);
 
                         $dataMultiImg2['image'] = $news_img2;
 
@@ -813,9 +727,6 @@ class Products extends BaseController
 
             }
             //multi image upload(start)
-
-
-
 
 
             //product category insert(start)
@@ -866,16 +777,12 @@ class Products extends BaseController
 
             if (!empty($_FILES['description_image']['name'])) {
                 $target_dir = FCPATH . '/uploads/products/'.$product_id.'/';
-                if (!file_exists($target_dir)) {
-                    mkdir($target_dir, 0777);
-                }
+                $this->imageProcessing->directory_create($target_dir);
 
                 //unlink
                 $oldImg = get_data_by_id('description_image','cc_product_description','product_id',$product_id);
                 if ((!empty($oldImg)) && (file_exists($target_dir))) {
-                    if (file_exists($target_dir . '/' . $oldImg)) {
-                        unlink($target_dir . '' . $oldImg);
-                    }
+                    $this->imageProcessing->image_unlink($target_dir . '/' . $oldImg);
                 }
 
 
@@ -889,16 +796,12 @@ class Products extends BaseController
 
             if (!empty($_FILES['documentation_pdf']['name'])) {
                 $target_dir = FCPATH . '/uploads/products/'.$product_id.'/';
-                if (!file_exists($target_dir)) {
-                    mkdir($target_dir, 0777);
-                }
+                $this->imageProcessing->directory_create($target_dir);
 
                 //unlink
                 $oldImg = get_data_by_id('documentation_pdf','cc_product_description','product_id',$product_id);
                 if ((!empty($oldImg)) && (file_exists($target_dir))) {
-                    if (file_exists($target_dir . '/' . $oldImg)) {
-                        unlink($target_dir . '' . $oldImg);
-                    }
+                    $this->imageProcessing->image_unlink($target_dir . '/' . $oldImg);
                 }
 
                 //new image upload
@@ -911,16 +814,12 @@ class Products extends BaseController
 
             if (!empty($_FILES['safety_pdf']['name'])) {
                 $target_dir = FCPATH . '/uploads/products/'.$product_id.'/';
-                if (!file_exists($target_dir)) {
-                    mkdir($target_dir, 0777);
-                }
+                $this->imageProcessing->directory_create($target_dir);
 
                 //unlink
                 $oldImg = get_data_by_id('safety_pdf','cc_product_description','product_id',$product_id);
                 if ((!empty($oldImg)) && (file_exists($target_dir))) {
-                    if (file_exists($target_dir . '/' . $oldImg)) {
-                        unlink($target_dir . '' . $oldImg);
-                    }
+                    $this->imageProcessing->image_unlink($target_dir . '/' . $oldImg);
                 }
 
                 //new image upload
@@ -933,16 +832,12 @@ class Products extends BaseController
 
             if (!empty($_FILES['instructions_pdf']['name'])) {
                 $target_dir = FCPATH . '/uploads/products/'.$product_id.'/';
-                if (!file_exists($target_dir)) {
-                    mkdir($target_dir, 0777);
-                }
+                $this->imageProcessing->directory_create($target_dir);
 
                 //unlink
                 $oldImg = get_data_by_id('instructions_pdf','cc_product_description','product_id',$product_id);
                 if ((!empty($oldImg)) && (file_exists($target_dir))) {
-                    if (file_exists($target_dir . '/' . $oldImg)) {
-                        unlink($target_dir . '' . $oldImg);
-                    }
+                    $this->imageProcessing->image_unlink($target_dir . '/' . $oldImg);
                 }
 
                 //new image upload
@@ -1216,17 +1111,7 @@ class Products extends BaseController
         $allProductId =  $this->request->getPost('productId[]');
 
         if (!empty($allProductId)) {
-            $theme = get_lebel_by_value_in_settings('Theme');
-            if ($theme == 'Theme_3') {
-                $theme_libraries = $this->theme_3;
-            }
-            if ($theme == 'Default') {
-                $theme_libraries = $this->theme_default;
-            }
-            if ($theme == 'Theme_2') {
-                $theme_libraries = $this->theme_2;
-            }
-
+            $modules = modules_access();
             foreach ($allProductId as $productId) {
 
                 //product main image crop
@@ -1235,11 +1120,15 @@ class Products extends BaseController
                 if ((!empty($oldImg)) && (file_exists($target_dir))) {
                     $mainImg = str_replace('pro_', '', $oldImg);
                     if (file_exists($target_dir . '/' . $mainImg)) {
-                        foreach ($theme_libraries->product_image as $pro_img) {
-                            if (!file_exists($target_dir . '/' . $pro_img['width'] . '_pro_' . $oldImg)) {
-                                $this->crop->withFile($target_dir . '' . $mainImg)->fit($pro_img['width'], $pro_img['height'], 'center')->save($target_dir . $pro_img['width'] . '_pro_' . $mainImg,'100');
-                            }
+
+                        $this->imageProcessing->image_crop($target_dir,$mainImg,$oldImg);
+                        if ($modules['watermark'] == '1') {
+                            $this->imageProcessing->watermark_main_image($target_dir, $mainImg);
+
+                            $this->imageProcessing->watermark_on_resized_image($target_dir, $mainImg);
+                            $this->imageProcessing->image_crop($target_dir, '600_wm_' . $mainImg, 'wm_' . $oldImg);
                         }
+
                     }
                 }
                 //product main image crop end
@@ -1254,10 +1143,12 @@ class Products extends BaseController
                         if ((!empty($oldImgMul)) && (file_exists($target_dir_mult))) {
                             $mainImgMul = str_replace('pro_', '', $oldImgMul);
                             if (file_exists($target_dir_mult . '/' . $mainImgMul)) {
-                                foreach ($theme_libraries->product_image as $pro_img) {
-                                    if (!file_exists($target_dir_mult . '/' . $pro_img['width'] . '_pro_' . $oldImgMul)) {
-                                        $this->crop->withFile($target_dir_mult . '' . $mainImgMul)->fit($pro_img['width'], $pro_img['height'], 'center')->save($target_dir_mult . $pro_img['width'] . '_pro_' . $mainImgMul,'100');
-                                    }
+                                $this->imageProcessing->image_crop($target_dir_mult,$mainImgMul,$oldImgMul);
+                                if ($modules['watermark'] == '1') {
+                                    $this->imageProcessing->watermark_main_image($target_dir_mult, $mainImgMul);
+
+                                    $this->imageProcessing->watermark_on_resized_image($target_dir_mult, $mainImgMul);
+                                    $this->imageProcessing->image_crop($target_dir_mult, '600_wm_' . $mainImgMul, 'wm_' . $oldImgMul);
                                 }
                             }
                         }
@@ -1354,15 +1245,14 @@ class Products extends BaseController
         if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
             return redirect()->to(site_url('admin'));
         } else {
-//            $table = DB()->table('cc_products');
-//            $data['product'] = $table->orderBy('product_id','desc')->get()->getResult();
+            $uri = service('uri');
+            $urlString = $uri->getPath() . '?' . $this->request->getServer('QUERY_STRING');
+            setcookie('product_url_path',$urlString,time()+86400, "/");
+
             $length = $this->request->getGet('length');
             $keyWord = $this->request->getGet('keyWord');
             $pageNum = $this->request->getGet('page');
 
-//            $p = !empty($pageNum)?$pageNum:1;
-//            $page = empty($keyWord)?$p:1;
-//            $page = $p;
             $perPage = !empty($length)?$length:10;
             if (empty($keyWord)) {
                 $data['product'] = $this->productsModel->orderBy('product_id', 'desc')->paginate($perPage);
@@ -1370,11 +1260,10 @@ class Products extends BaseController
                 $data['product'] = $this->productsModel->search_data($keyWord)->orderBy('product_id', 'desc')->paginate($perPage);
             }
 
-//            $total = $this->productsModel->countAllResults();
 
             $data['pager'] = $this->productsModel->pager;
             $data['links'] = $data['pager']->links('default','custom_pagination');
-//            $data['links'] = $data['pager']->makeLinks($page, $perPage, $total, 'custom_pagination');
+
 
 
             $data['keyWord'] = $keyWord;
@@ -1397,6 +1286,61 @@ class Products extends BaseController
             if (isset(newSession()->resetDatatable)){unset($_SESSION['resetDatatable']);}
         }
     }
+
+    public function products_list(){
+
+        $theme = get_lebel_by_value_in_settings('Theme');
+        if ($theme == 'Theme_3') {
+            $theme_libraries = $this->theme_3;
+        }
+        if ($theme == 'Default') {
+            $theme_libraries = $this->theme_default;
+        }
+        if ($theme == 'Theme_2') {
+            $theme_libraries = $this->theme_2;
+        }
+
+//        print 'ok w.png';
+        $target_dir = FCPATH . '/uploads/';
+
+//        $this->crop->withFile($target_dir . 'img.jpg')->fit('600', '600', 'center')->save($target_dir . 'new_crop2.jpg','100');
+        $bg = imagecreatefromjpeg($target_dir.'new_crop2.jpg');
+        $wm = imagecreatefrompng($target_dir.'wt.png');
+
+//        $wm_size = getimagesize($target_dir.'wt.png');
+//        imagecopy($bg, $wm, 160, 320, 0, 0, $wm_size[0], $wm_size[1]);
+//        imagecopy($bg, $wm, 160, 320, 0, 0, $wm_size[0], $wm_size[1]);
+
+
+        $marge_right = 50;
+        $marge_bottom = 60;
+        $sx = imagesx($wm);
+        $sy = imagesy($wm);
+//
+        imagecopy($bg, $wm, imagesx($bg) - $sx - $marge_right, imagesy($bg) - $sy - $marge_bottom, 0, 0, imagesx($wm), imagesy($wm));
+
+//        $w = 200;
+//        $h = $w * $size[1] / $size[0];
+
+//        $imf = imagecreatetruecolor($w, $h);
+//        imagecopyresampled($bg, $wm, 230, 330,0,0, $w,$h,$size[0],$size[1]);
+
+        ob_start();
+        imagejpeg($bg, null, 100);
+        $data = ob_get_clean();
+
+        echo '<img src="data:image/jpeg;base64,' . base64_encode( $data ) . '" />';
+//        imagePng($bg, $target_dir.'image4.jpg');
+//
+//        foreach ($theme_libraries->product_image as $pro_img) {
+//                $this->crop->withFile($target_dir . 'image4.jpg')->fit($pro_img['width'], $pro_img['height'], 'center')->save($target_dir . $pro_img['width'] . 'image4.jpg','100');
+//
+//        }
+
+
+    }
+
+
 
 
 
