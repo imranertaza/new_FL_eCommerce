@@ -739,7 +739,7 @@ function bulk_status(label) {
 function updateFunction(proId, input, value, viewId, formName,updateRow) {
     var formID = "'" + formName + "'"
     var data = '<form id="' + formName +
-        '" action="<?php echo base_url('bulk_data_update') ?>" data-row="'+updateRow+'" method="post"><input type="text" name="' +
+        '" action="<?php echo base_url('bulk_data_update') ?>" onkeydown="if(event.keyCode === 13) {return false;}" data-row="'+updateRow+'" method="post"><input type="text" name="' +
         input +
         '" class="form-control mb-2" value="' + value +
         '" ><input type="hidden" name="product_id" class="form-control mb-2" value="' + proId +
@@ -752,7 +752,7 @@ function updateFunction(proId, input, value, viewId, formName,updateRow) {
 function descriptionTableDataUpdateFunction(proId, input, value, viewId, formName,updateRow) {
     var formID = "'" + formName + "'"
     var data = '<form id="' + formName +
-        '" action="<?php echo base_url('description_data_update') ?>" data-row="'+updateRow+'" method="post"><input type="text" name="' +
+        '" action="<?php echo base_url('description_data_update') ?>" onkeydown="if(event.keyCode === 13) {return false;}" data-row="'+updateRow+'" method="post"><input type="text" name="' +
         input +
         '" class="form-control mb-2" value="' + value +
         '" ><input type="hidden" name="product_desc_id" class="form-control mb-2" value="' + proId +
