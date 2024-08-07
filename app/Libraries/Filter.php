@@ -81,7 +81,7 @@ class Filter{
                     $name = $brand->name;
                     $view .= '<label class="w-100 mb-2"><input type="checkbox" onclick="formSubmit()" name="manufacturer[]"';
                     $view .= (in_array($brand->brand_id, $brandSel)) ? 'checked ' : '';
-                    $view .= 'value="' . $brand->brand_id . '"> ' . $name . '</label>';
+                    $view .= 'value="' . $brand->brand_id . '"> ' . $name . ' <span class="count">'.product_count_by_brand_id($brand->brand_id).'</span></label>';
                 }
             }
             $view .='</div>';

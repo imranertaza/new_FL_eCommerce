@@ -23,7 +23,7 @@ class Theme_3{
         ),
         array(
             'width'=>'437',
-            'height'=>'400',
+            'height'=>'437',
         ),
         array(
             'width'=>'50',
