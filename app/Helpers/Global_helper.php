@@ -1168,11 +1168,10 @@ function get_settings_title(){
     return $settings;
 }
 
-function brand_id_by_product_count($brand_id)
+function product_count_by_brand_id($brand_id)
 {
     $table = DB()->table('cc_products');
-    $count = $table->where('brand_id', $brand_id)->where('status','Active')->countAllResults();
-    return $count;
+    return $table->where('brand_id', $brand_id)->where('status','Active')->countAllResults();
 }
 
 
