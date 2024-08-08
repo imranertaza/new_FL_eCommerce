@@ -6,8 +6,8 @@ use Config\Services;
 class Image_processing {
 
     private $wm;
-    private $marge_right = 50;
-    private $marge_bottom = 60;
+    private $marge_right = 30;
+    private $marge_bottom = 30;
     private $sx;
     private $sy;
     private $crop;
