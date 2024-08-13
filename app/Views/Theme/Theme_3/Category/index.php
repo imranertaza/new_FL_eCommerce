@@ -4,8 +4,8 @@
         <div class="product-category mb-5">
 
 
-            <form action="<?php echo base_url('category_url_generate') ?>" method="post" id="searchForm">
-                <input type="hidden" name="global_search" value="<?php echo $keywordSearch;?>">
+            <form action="<?php echo base_url('category_url_generate') ?>" method="post" id="searchForm"> </form>
+                <input type="hidden" name="global_search" form="searchForm" value="<?php echo $keywordSearch;?>">
 
                 <div class="row">
                     <div class="col-md-3" id="side-data"></div>
@@ -44,7 +44,7 @@
 
                                     <div class="form-group float-end">
                                         <label class="d-none d-sm-inline">Sort By</label>
-                                        <select name="shortBy" onchange="formSubmit()" class="shortBy border">
+                                        <select name="shortBy" form="searchForm" onchange="formSubmit()" class="shortBy border">
                                             <option value="" <?php echo ((isset($_GET['shortBy'])) && ($_GET['shortBy'] == '')) ? 'selected' : ''; ?>>
                                                 Position
                                             </option>
@@ -62,7 +62,7 @@
 
                                     <div class="form-group float-end me-2">
                                         <label class="d-none d-sm-inline">Show</label>
-                                        <select name="show" onchange="formSubmit()" class="shortBy border">
+                                        <select name="show" form="searchForm" onchange="formSubmit()" class="shortBy border">
                                             <option value="<?php echo get_lebel_by_value_in_settings('category_product_limit'); ?>" <?php echo ((isset($_GET['show'])) && ($_GET['show'] == get_lebel_by_value_in_settings('category_product_limit'))) ? 'selected' : ''; ?>><?php echo get_lebel_by_value_in_settings('category_product_limit'); ?></option>
                                             <option value="10" <?php echo ((isset($_GET['show'])) && ($_GET['show'] == '10')) ? 'selected' : ''; ?>>
                                                 10
@@ -243,12 +243,14 @@
                         <?php echo $links; ?>
                     </div>
                 </div>
-            </form>
+
 
         </div>
     </div>
 </section>
-
+<?php
+    $sSel = !empty($searchPrice)?'form="searchForm"':'';
+?>
 <script>
     if ($(window).width() > 767) {
         var sidebarDesktop = `<div class="d-none d-md-block">
@@ -267,15 +269,15 @@
                                     <div class="card p-3 rounded-0 ">
                                         <?php if (empty($keywordSearch)){ ?>
                                         <div class="product-filter">
-                                        <input type="hidden" name="prod_cat_id" value="<?php echo $prod_cat_id?>">
-                                            <input type="hidden" name="cat" value="<?php echo $prod_cat_id?>">
+                                        <input type="hidden" name="prod_cat_id" form="searchForm" value="<?php echo $prod_cat_id?>">
+                                            <input type="hidden" name="cat" form="searchForm" value="<?php echo $prod_cat_id?>">
                                             <?php if(!empty($parent_Cat)){ ?>
                                                 <p class="mb-2">Sub Category</p>
                                                     <ul class="list-unstyled lh-lg">
                                                         <?php $i = 1;$j = 1; foreach ($parent_Cat as $cat){ ?>
                                                         <li>
                                                             <div class="form-check d-flex flex-row align-items-center gap-1">
-                                                                <input class="form-check-input" onclick="formSubmit()" <?php echo ((isset($_GET['category'])) && ($_GET['category'] == $cat->prod_cat_id)) ? 'checked' : ''; ?>  name="category" type="radio" value="<?php echo $cat->prod_cat_id;?>" id="flexCheck_<?php echo $i++;?>">
+                                                                <input class="form-check-input" form="searchForm" onclick="formSubmit()" <?php echo ((isset($_GET['category'])) && ($_GET['category'] == $cat->prod_cat_id)) ? 'checked' : ''; ?>  name="category" type="radio" value="<?php echo $cat->prod_cat_id;?>" id="flexCheck_<?php echo $i++;?>">
                                                                     <label class="form-check-label w-100 mb-0" for="flexCheck_<?php echo $j++;?>">
                                                                         <?php echo $cat->category_name;?> <span class="count"><?php echo category_id_by_product_count($cat->prod_cat_id)?></span>
                                                                     </label>
@@ -304,7 +306,7 @@
                                             <p class="mb-2">Filter Price</p>
                                             <p>
                                                 <input type="text" id="amount"  readonly style="border:0;">
-                                                    <input type="hidden" name="price" id="price"  >
+                                                    <input type="hidden" name="price" id="price" <?php echo $sSel?> >
                                             </p>
                                             <div class="slider-range" ></div>
                                         </div>
@@ -347,13 +349,13 @@
                                             <div class="product-filter">
                                                 <?php if(!empty($parent_Cat)){ ?>
                                                 <p class="mb-2">Sub Category</p>
-                                                <input type="hidden" name="prod_cat_id" value="<?php echo $prod_cat_id?>">
-                                                <input type="hidden" name="cat" value="<?php echo $prod_cat_id?>">
+                                                <input type="hidden" form="searchForm" name="prod_cat_id" value="<?php echo $prod_cat_id?>">
+                                                <input type="hidden" form="searchForm" name="cat" value="<?php echo $prod_cat_id?>">
                                                 <ul class="list-unstyled lh-lg">
                                                     <?php $i = 1;$j = 1; foreach ($parent_Cat as $cat){ ?>
                                                     <li>
                                                         <div class="form-check d-flex flex-row align-items-center gap-1">
-                                                            <input class="form-check-input" onclick="formSubmit()" <?php echo ((isset($_GET['category'])) && ($_GET['category'] == $cat->prod_cat_id)) ? 'checked' : ''; ?>  name="category" type="radio" value="<?php echo $cat->prod_cat_id;?>" id="flexCheck_<?php echo $i++;?>">
+                                                            <input class="form-check-input" form="searchForm" onclick="formSubmit()" <?php echo ((isset($_GET['category'])) && ($_GET['category'] == $cat->prod_cat_id)) ? 'checked' : ''; ?>  name="category" type="radio" value="<?php echo $cat->prod_cat_id;?>" id="flexCheck_<?php echo $i++;?>">
                                                             <label class="form-check-label w-100 mb-0" for="flexCheck_<?php echo $j++;?>">
                                                                 <?php echo $cat->category_name;?> <span class="count"><?php echo category_id_by_product_count($cat->prod_cat_id)?></span>
                                                             </label>
@@ -380,7 +382,7 @@
                                                 <p class="mb-2">Filter Price</p>
                                                 <p>
                                                     <input type="text" id="amount"  readonly style="border:0;">
-                                                    <input type="hidden" name="price" id="price"  >
+                                                    <input type="hidden" name="price"  id="price" <?php echo $sSel?> >
                                                 </p>
                                                 <div class="slider-range" ></div>
                                             </div>
@@ -410,6 +412,7 @@
             slide: function(event, ui) {
                 $("#amount").val("" + ui.values[0] + " - " + ui.values[1]);
                 $("#price").val("" + ui.values[0] + "," + ui.values[1]);
+                $("#price").attr('form','searchForm');
                 $("#searchForm").submit();
             }
         });
