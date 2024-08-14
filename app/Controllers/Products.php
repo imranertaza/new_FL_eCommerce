@@ -124,8 +124,6 @@ class Products extends BaseController {
                 $data['products'] = $this->$searchModel->where($where)->all_join()->having('COUNT(cc_products.product_id) >=', count(array_unique($countOption)))->orderBy($shortBy)->paginate($lemit);
             }
         }
-//        print $this->$searchModel->getLastQuery();
-//        die();
 
 
 
@@ -172,10 +170,8 @@ class Products extends BaseController {
         if (!empty($manufacturer) && !empty($keyword)) {
             $data['brandView'] = $filter->getSettings($productsBas)->product_array_by_brand($data['brandval']);
         }
-//        print_r($data['optionView']);
-//        die();
 
-
+        $data['searchPrice'] = !empty($price[0]) ? $price[0] : '';
         $data['fstprice'] = !empty($price[0]) ? $price[0] : $data['price']['minPrice'];
         $data['lstPrice'] = !empty($price[1]) ? $price[1] : $data['price']['maxPrice'];
 
