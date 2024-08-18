@@ -146,7 +146,13 @@ class Products extends BaseController {
 
 
         if (!empty($cat_id)) {
-            $productsArr = $this->$searchModel->where($categoryWhere)->query()->findAll();
+            if (empty($manufacturer)) {
+                $productsArr = $this->$searchModel->where($categoryWhere)->query()->findAll();
+            }else{
+                $productsArr = $this->$searchModel->where($categoryWhere)->where($allbrand)->query()->findAll();
+                $productsArrCatBas = $this->$searchModel->where($categoryWhere)->query()->findAll();
+            }
+
         }else{
             if (empty($manufacturer)) {
                 if(!empty($keyword)) {
@@ -158,14 +164,17 @@ class Products extends BaseController {
                 $productsBas = $this->$searchModel->like('cc_products.name', $keyword)->query()->findAll();
             }
         }
-
-
+        
         $filter = $this->filter->getSettings($productsArr);
         $data['price'] = $filter->product_array_by_price_range();
         $data['optionView'] = $filter->product_array_by_options($data['optionval']);
         $data['brandView'] = $filter->product_array_by_brand($data['brandval']);
         $data['ratingView'] = $filter->product_array_by_rating_view($data['ratingval']);
         $data['productsArr'] = $productsArr;
+
+        if (!empty($manufacturer) && !empty($cat_id)) {
+            $data['brandView'] = $filter->getSettings($productsArrCatBas)->product_array_by_brand($data['brandval']);
+        }
 
         if (!empty($manufacturer) && !empty($keyword)) {
             $data['brandView'] = $filter->getSettings($productsBas)->product_array_by_brand($data['brandval']);
