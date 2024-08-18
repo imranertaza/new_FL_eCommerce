@@ -366,6 +366,7 @@ $routes->post('/optionPriceCalculate', 'Products\Products::optionPriceCalculate'
 
 $routes->get('/featuredproducts', 'Featuredproducts::index');
 
+
 //Compare
 $routes->get('/compare', 'Compare::index');
 $routes->post('/addtoCompare', 'Compare::addtoCompare');
