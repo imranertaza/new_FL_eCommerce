@@ -164,7 +164,7 @@ class Products extends BaseController {
                 $productsBas = $this->$searchModel->like('cc_products.name', $keyword)->query()->findAll();
             }
         }
-        
+
         $filter = $this->filter->getSettings($productsArr);
         $data['price'] = $filter->product_array_by_price_range();
         $data['optionView'] = $filter->product_array_by_options($data['optionval']);

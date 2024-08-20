@@ -74,7 +74,7 @@ class Filter{
             foreach (array_unique($brandArray) as $val){
                 $table->orWhere('brand_id',$val);
             }
-            $result = $table->get()->getResult();
+            $result = $table->orderBy('name')->get()->getResult();
 
             foreach ($result as $brand){
                 if (!empty($brand->brand_id)){

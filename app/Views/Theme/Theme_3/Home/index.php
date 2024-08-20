@@ -57,7 +57,7 @@
             <div class="cat-title">
                 <div class="row">
                     <div class="col-6 col-md-3">
-                        <h3 class="title-header">Featured Category</h3>
+                        <h3 class="title-header">Buy 5 Ship for Free</h3>
                     </div>
                 </div>
             </div>
