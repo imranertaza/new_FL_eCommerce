@@ -54,7 +54,7 @@ class Image_processing {
     }
     public function watermark_on_resized_image($dir,$image){
         if (!file_exists($dir . '/600_wm_' . $image)) {
-            $this->crop->withFile($dir . '' . $image)->fit(600, 600, 'center')->save($dir . '600_' . $image);
+            $this->crop->withFile($dir . $image)->fit(600, 600, 'center')->save($dir . '600_' . $image);
 
             $mImg = imagecreatefromjpeg($dir . '600_' . $image);
             imagecopy($mImg, $this->wm, imagesx($mImg) - $this->sx - $this->marge_right, imagesy($mImg) - $this->sy - $this->marge_bottom, 0, 0, imagesx($this->wm), imagesy($this->wm));

@@ -1107,26 +1107,33 @@ class Products extends BaseController
 
 
     public function image_crop(){
-
         $allProductId =  $this->request->getPost('productId[]');
 
         if (!empty($allProductId)) {
             $modules = modules_access();
-            foreach ($allProductId as $productId) {
+
+            //old image query
+            $oldProArr = $this->old_image($allProductId);
+
+            //multi image
+            $allImage = $this->multi_image($allProductId);
+
+
+            foreach ($allProductId as $k => $productId) {
+                $single = $oldProArr[$k];
 
                 //product main image crop
-                $target_dir = FCPATH . '/uploads/products/' . $productId . '/';
-                $oldImg = get_data_by_id('image', 'cc_products', 'product_id', $productId);
-                if ((!empty($oldImg)) && (file_exists($target_dir))) {
-                    $mainImg = str_replace('pro_', '', $oldImg);
+                $target_dir = FCPATH . '/uploads/products/' . $single->product_id . '/';
+                if ((!empty($single->image)) && (file_exists($target_dir))) {
+                    $mainImg = str_replace('pro_', '', $single->image);
                     if (file_exists($target_dir . '/' . $mainImg)) {
 
-                        $this->imageProcessing->image_crop($target_dir,$mainImg,$oldImg);
+                        $this->imageProcessing->image_crop($target_dir,$mainImg,$single->image);
                         if ($modules['watermark'] == '1') {
                             $this->imageProcessing->watermark_main_image($target_dir, $mainImg);
 
                             $this->imageProcessing->watermark_on_resized_image($target_dir, $mainImg);
-                            $this->imageProcessing->image_crop($target_dir, '600_wm_' . $mainImg, 'wm_' . $oldImg);
+                            $this->imageProcessing->image_crop($target_dir, '600_wm_' . $mainImg, 'wm_' . $single->image);
                         }
 
                     }
@@ -1134,36 +1141,87 @@ class Products extends BaseController
                 //product main image crop end
 
 
-                //multi image crop
-                $allImage = get_array_data_by_id('cc_product_image', 'product_id', $productId);
-                if (!empty($allImage)) {
-                    foreach ($allImage as $val) {
-                        $target_dir_mult = FCPATH . '/uploads/products/' . $productId . '/' . $val->product_image_id . "/";
-                        $oldImgMul = $val->image;
-                        if ((!empty($oldImgMul)) && (file_exists($target_dir_mult))) {
-                            $mainImgMul = str_replace('pro_', '', $oldImgMul);
-                            if (file_exists($target_dir_mult . '/' . $mainImgMul)) {
-                                $this->imageProcessing->image_crop($target_dir_mult,$mainImgMul,$oldImgMul);
-                                if ($modules['watermark'] == '1') {
-                                    $this->imageProcessing->watermark_main_image($target_dir_mult, $mainImgMul);
+                // Disable output buffering
+                if (ob_get_level() > 0) {
+                    ob_end_flush();
+                }
+                ob_implicit_flush(true);
 
-                                    $this->imageProcessing->watermark_on_resized_image($target_dir_mult, $mainImgMul);
-                                    $this->imageProcessing->image_crop($target_dir_mult, '600_wm_' . $mainImgMul, 'wm_' . $oldImgMul);
+
+                // ob_start();
+
+                echo "Starting process...<br>";
+                flush(); // Send the output to the browser
+
+
+                //multi image crop
+                if (!empty($allImage)) {
+                    $i=0;
+                    foreach ($allImage as $key => $val) {
+                        if ($val->product_id == $single->product_id) {
+                            $target_dir_mult = FCPATH . '/uploads/products/' . $val->product_id . '/' . $val->product_image_id . "/";
+                            $oldImgMul = $val->image;
+                            if ((!empty($oldImgMul)) && (file_exists($target_dir_mult))) {
+                                $mainImgMul = str_replace('pro_', '', $oldImgMul);
+                                if (file_exists($target_dir_mult . '/' . $mainImgMul)) {
+                                    $this->imageProcessing->image_crop($target_dir_mult, $mainImgMul, $oldImgMul);
+                                    if ($modules['watermark'] == '1') {
+                                        $this->imageProcessing->watermark_main_image($target_dir_mult, $mainImgMul);
+
+                                        $this->imageProcessing->watermark_on_resized_image($target_dir_mult, $mainImgMul);
+                                        $this->imageProcessing->image_crop($target_dir_mult, '600_wm_' . $mainImgMul, 'wm_' . $oldImgMul);
+                                    }
                                 }
                             }
+
+                            echo "Processing step ".$i++." ...<br>";
+                            // ob_flush();
+                            flush(); // Send the output to the browser
+                            // sleep(1); // Simulate delay
                         }
+
+
                     }
                 }
             }
 
+
+            echo "Process completed!<br>";
+            flush(); // Send the final output
+
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->back();
+            $redirect_url = isset($_COOKIE['product_url_path']) ? $_COOKIE['product_url_path'] : 'products';
+            echo "<script>
+                    window.location.href = '" . site_url($redirect_url) . "';
+              </script>";
+            flush(); // Ensure the redirect script is sent
+
+
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->back();
         }
 
     }
+
+    private function old_image($productarray){
+        $table = DB()->table('cc_products');
+        $table->select('product_id, image');
+        foreach ($productarray as $productId) {
+            $table->orWhere('product_id', $productId);
+        }
+        return $table->get()->getResult();
+    }
+
+    private function multi_image($productarray){
+        $table = DB()->table('cc_product_image');
+        $table->select('product_image_id,product_id, image');
+        foreach ($productarray as $productId) {
+            $table->orWhere('product_id', $productId);
+        }
+        return $table->get()->getResult();
+    }
+
 
     public function multi_delete_action(){
         $allProductId =  $this->request->getPost('productId[]');

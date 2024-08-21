@@ -829,6 +829,107 @@ function order_email_template($orderId)
 
     return $view;
 }
+function order_email_template_card($orderId)
+{
+    $table = DB()->table('cc_order');
+    $val = $table->where('order_id', $orderId)->get()->getRow();
+
+    $tableItem = DB()->table('cc_order_card_details');
+    $cardDetail = $tableItem->where('order_id', $orderId)->get()->getRow();
+
+    $logoImg = get_lebel_by_value_in_theme_settings('side_logo');
+    $logo = image_view('uploads/logo', '', $logoImg, 'noimage.png', 'logo-css');
+
+    $titleStore = get_lebel_by_value_in_settings('store_name');
+
+    $paymentMet = get_data_by_id('name','cc_payment_method','payment_method_id',$val->payment_method);
+
+    $view = '';
+    $view .= "<div style='width:680px'><style> .logo-css{ margin-bottom:20px;border:none; } </style>
+    <a href='#' title='$titleStore' target='_blank' >
+        $logo
+    </a>
+    <p style='margin-top:0px;margin-bottom:20px'>
+        Thank you for your interest in        
+        <span class='il'> $titleStore </span> products. Your
+        <span class='il'>order</span>
+        has been received and will be processed once payment has been confirmed.
+    </p>
+    
+    <table style='border-collapse:collapse;width:100%;border-top:1px solid #dddddd;border-left:1px solid #dddddd;margin-bottom:20px'>
+        <thead>
+        <tr>
+            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222'
+                colspan='2'><span class='il'>Order</span> Details
+            </td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                <b><span class='il'>Order</span> ID:</b> $val->order_id<br>
+                <b>Date Added:</b> $val->createdDtm<br>
+                <b>Payment Method:</b> $paymentMet<br>
+                <b>Shipping Method:</b> $val->shipping_method
+            </td>
+            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                <b>Email:</b> <a href='mailto:$val->payment_email' target='_blank'>$val->payment_email</a><br>
+                <b>Telephone:</b> $val->payment_phone<br>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table style='border-collapse:collapse;width:100%;border-top:1px solid #dddddd;border-left:1px solid #dddddd;margin-bottom:20px'>
+        <thead>
+        <tr>
+            <td colspan='2' style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222'>
+                Credit Card / Debit Card Details
+            </td>
+            
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                Card Name:
+            </td>
+            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                ".$cardDetail->card_name."
+            </td>
+        </tr>
+        <tr>
+            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                Card Number:
+            </td>
+            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                ".$cardDetail->card_number."
+            </td>
+        </tr>
+        <tr>
+            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                Expiration:
+            </td>
+            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                ".$cardDetail->card_expiration."
+            </td>
+        </tr>
+        <tr>
+            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                CVC:
+            </td>
+            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                ".$cardDetail->card_cvc."
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    
+</div>";
+
+    return $view;
+}
 
 function success_email_template($title, $message, $url)
 {
