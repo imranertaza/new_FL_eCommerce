@@ -7,8 +7,8 @@
                             <div class="d-flex flex-row gap-2 border-end">
                                 <svg width="30px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke-width="3" stroke="#000000" fill="none"><path d="M19.55,43.93H38.1a2,2,0,0,0,2-2V16.28a2,2,0,0,0-2-2H8.68a2,2,0,0,0-2,2V41.91a2,2,0,0,0,2,2h2.6"/><path d="M44.33,43.93H40.19V23.23H50a1,1,0,0,1,.76.35l6.3,7.55a1,1,0,0,1,.23.64V43.93H53"/><ellipse cx="15.53" cy="45.23" rx="4.44" ry="4.5"/><ellipse cx="48.58" cy="45.23" rx="4.44" ry="4.5"/></svg>
                                 <div class="icon-box">
-                                    <h6 class="mb-0">Free Delivery</h6>
-                                    <p>Orders from all item</p>
+                                    <h6 class="mb-0">Secure Payment Gateway</h6>
+                                    <p>Your money is protected</p>
                                 </div>
                             </div>
                         </div>
@@ -16,8 +16,8 @@
                             <div class="d-flex flex-row gap-2 border-end">
                                 <svg width="40px" viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg" aria-labelledby="dolarIconTitle" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none" color="#000000"> <title id="dolarIconTitle">Dolar</title> <path d="M12 4L12 6M12 18L12 20M15.5 8C15.1666667 6.66666667 14 6 12 6 9 6 8.5 7.95652174 8.5 9 8.5 13.140327 15.5 10.9649412 15.5 15 15.5 16.0434783 15 18 12 18 10 18 8.83333333 17.3333333 8.5 16"/> </svg>
                                 <div class="icon-box">
-                                    <h6 class="mb-0">Return and Refund</h6>
-                                    <p>Money back guarantee</p>
+                                    <h6 class="mb-0">Monthly Promo</h6>
+                                    <p>Save as you buy</p>
                                 </div>
                             </div>
                         </div>
@@ -30,8 +30,8 @@
                                     <path d="M9.49451 9.5H9.50349" stroke="#292D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
                                 <div class="icon-box">
-                                    <h6 class="mb-0">Member Discount</h6>
-                                    <p>On every order over $140.00</p>
+                                    <h6 class="mb-0">Reputable Courier</h6>
+                                    <p>Address protect from custom</p>
                                 </div>
                             </div>
                         </div>
@@ -103,7 +103,7 @@
                         <h4 class="f-title toggleButton">Information</h4>
                         <div class="elementToToggle d-none d-md-block">
                             <ul class="list-unstyled ul-link mt-md-4">
-                                <li><a href="#">
+                                <li><a href="<?php echo base_url('page/core-values-of-finer-labels') ?>">
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
@@ -118,7 +118,7 @@
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
                                     Privacy Policy</a></li>
-                                <li><a href="#">
+                                <li><a href="<?php echo base_url('page/returns-and-refunds-policy') ?>">
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
@@ -135,7 +135,7 @@
                         <h4 class="f-title toggleButton">Extras</h4>
                         <div class="elementToToggle d-none d-md-block">
                             <ul class="list-unstyled ul-link mt-md-4">
-                                <li><a href="#">
+                                <li><a href="<?php echo base_url('category/59') ?>">
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
@@ -155,7 +155,7 @@
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
                                     Wish List</a></li>
-                                <li><a href="#">
+                                <li><a href="<?php echo base_url('page/newsletter-signup') ?>">
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
@@ -176,14 +176,7 @@
                                         </svg></span>
                                     <span class="f-text-add">(+1) <?php echo $settings['phone']; ?></span>
                                 </li>
-                                <li class="d-flex fot-about">
-                                    <span>                                        
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M9 3.75V7.5H7.5V6H3V19.5H4.5V20.25C4.5 21.4834 5.5166 22.5 6.75 22.5C7.9834 22.5 9 21.4834 9 20.25V19.5H21V7.5H18V3.75H9ZM10.5 5.25H16.5V9H10.5V5.25ZM4.5 7.5H6V18H4.5V7.5ZM7.5 9H9V10.5H18V9H19.5V18H7.5V9ZM9.75 12V13.5H11.25V12H9.75ZM12.75 12V13.5H14.25V12H12.75ZM15.75 12V13.5H17.25V12H15.75ZM9.75 15V16.5H11.25V15H9.75ZM12.75 15V16.5H14.25V15H12.75ZM15.75 15V16.5H17.25V15H15.75ZM6 19.5H7.5V20.25C7.5 20.666 7.16602 21 6.75 21C6.33398 21 6 20.666 6 20.25V19.5Z" fill="white"/>
-                                        </svg>
-                                    </span>
-                                    <span class="f-text-add">012 345 6789</span>
-                                </li>
+
                                 <li class="d-flex fot-about">
                                     <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" viewBox="0 0 20 16"
                                             fill="none">

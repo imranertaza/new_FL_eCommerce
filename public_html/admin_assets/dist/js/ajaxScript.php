@@ -17,7 +17,7 @@ $(function() {
         "order": [
             [0, "desc"]
         ],
-        "buttons": ["csv", "excel", "pdf", "print" ]
+        // "buttons": ["csv", "excel", "pdf", "print" ]
         // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 

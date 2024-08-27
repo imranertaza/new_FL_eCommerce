@@ -339,6 +339,14 @@ class Checkout extends BaseController
                 $messageAd = $temMes;
                 email_send($email, $subjectAd, $messageAd);
 
+                
+                //email send admin card detail
+                if ($data['payment_method'] == '7') {
+                    $messageAdCard = order_email_template_card($order_id);
+                    $subjectAdCard = 'Product order - Order ID ' . $order_id;
+                    email_send($email, $subjectAdCard, $messageAdCard);
+                }
+
                 unset($_SESSION['coupon_discount']);
                 $this->cart->destroy();
 
