@@ -4,7 +4,7 @@
             <div class="col-xl-9 offset-xl-3 d-flex flex-column flex-lg-row">
                 <div class="swiper bannerSlide me-1">
                     <div class="swiper-wrapper">
-                    <?php $sli_1 = get_lebel_by_value_in_theme_settings('slider_1'); ?>
+                        <?php $sli_1 = get_lebel_by_value_in_theme_settings('slider_1'); ?>
                         <div class="swiper-slide">
                             <?php echo image_view('uploads/slider', '', $sli_1, 'noimage.png', 'img-fluid w-100 '); ?>
                         </div>
@@ -15,6 +15,14 @@
                         <?php $sli_3 = get_lebel_by_value_in_theme_settings('slider_3'); ?>
                         <div class="swiper-slide">
                             <?php echo image_view('uploads/slider', '', $sli_3, 'noimage.png', 'img-fluid w-100 '); ?>
+                        </div>
+                        <?php $sli_4 = get_lebel_by_value_in_theme_settings('slider_4'); ?>
+                        <div class="swiper-slide">
+                            <?php echo image_view('uploads/slider', '', $sli_4, 'noimage.png', 'img-fluid w-100 '); ?>
+                        </div>
+                        <?php $sli_5 = get_lebel_by_value_in_theme_settings('slider_5'); ?>
+                        <div class="swiper-slide">
+                            <?php echo image_view('uploads/slider', '', $sli_5, 'noimage.png', 'img-fluid w-100 '); ?>
                         </div>
                     </div>
                     <div class="swiper-pagination"></div>
@@ -74,6 +82,14 @@
                 <?php } ?>
             </div>
         </div>
+
+        <div class="home-banner mb-5">
+            <?php
+            $banner_bottom = $theme_settings['banner_featured_category'];
+            echo image_view('uploads/banner_featured_category', '', $banner_bottom, 'noimage.png', 'w-100');
+            ?>
+        </div>
+
         <div class="product-category mb-5">
             <div class="cat-title">
                 <div class="row">
