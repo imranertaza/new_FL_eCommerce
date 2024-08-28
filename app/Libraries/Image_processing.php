@@ -46,7 +46,15 @@ class Image_processing {
 
     public function watermark_main_image($dir,$image){
         if (!file_exists($dir . '/wm_' . $image)) {
-            $mainImg = imagecreatefromjpeg($dir . $image);
+
+            $path = $image;
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+
+            if ($ext == 'png'){
+                $mainImg = imagecreatefrompng($dir . $image);
+            }else {
+                $mainImg = imagecreatefromjpeg($dir . $image);
+            }
             imagecopy($mainImg, $this->wm, imagesx($mainImg) - $this->sx - $this->marge_right, imagesy($mainImg) - $this->sy - $this->marge_bottom, 0, 0, imagesx($this->wm), imagesy($this->wm));
             imagePng($mainImg, $dir . 'wm_' . $image);
         }
@@ -55,8 +63,14 @@ class Image_processing {
     public function watermark_on_resized_image($dir,$image){
         if (!file_exists($dir . '/600_wm_' . $image)) {
             $this->crop->withFile($dir . $image)->fit(600, 600, 'center')->save($dir . '600_' . $image);
+            $path = $image;
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
 
-            $mImg = imagecreatefromjpeg($dir . '600_' . $image);
+            if ($ext == 'png'){
+                $mImg = imagecreatefrompng($dir . $image);
+            }else {
+                $mImg = imagecreatefromjpeg($dir . '600_' . $image);
+            }
             imagecopy($mImg, $this->wm, imagesx($mImg) - $this->sx - $this->marge_right, imagesy($mImg) - $this->sy - $this->marge_bottom, 0, 0, imagesx($this->wm), imagesy($this->wm));
             imagePng($mImg, $dir . '600_wm_' . $image);
 
