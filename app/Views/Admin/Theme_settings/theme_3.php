@@ -286,6 +286,21 @@
             <button class="btn btn-primary">Save</button>
 
         </form>
+
+        <form action="<?php echo base_url('banner_featured_category_update') ?>" method="post" enctype="multipart/form-data">
+            <h3 class="mt-5"><?php echo $themeSettingTitle['banner_featured_category'];?></h3>
+            <div class="form-group">
+                <?php
+                $banner_featured_category = $themeSetting['banner_featured_category'];
+                echo image_view('uploads/banner_featured_category', '', $banner_featured_category, 'noimage.png', 'w-100');
+                ?><br>
+                <label><?php echo $themeSettingTitle['banner_featured_category'];?></label>
+                <input type="file" class="form-control" name="banner_featured_category">
+                <span>Recommended Size: 1116 x 211</span>
+            </div>
+            <button class="btn btn-primary">Save</button>
+
+        </form>
     </div>
 
 </div>

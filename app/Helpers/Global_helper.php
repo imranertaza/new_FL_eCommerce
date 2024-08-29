@@ -954,7 +954,6 @@ function success_email_template($title, $message, $url)
 
     <div style='width:100%;'>
         <div style='padding:20px;'>
-            <p>Hello</p>
             <p style='margin-bottom: 30px;'>
                 $message
             </p>
@@ -963,7 +962,7 @@ function success_email_template($title, $message, $url)
             <center> <a href='#'>$fbIcon</a> <a href='#'>$twi</a> <a href='#'>$link</a></center>
             <center> <p>$address</p></center>
             <center><hr style='width:300px;'></center>
-            <center> <p>© 2023 $titleStore || All rights reserved.</p></center>
+            <center> <p>© 2015 $titleStore || All rights reserved.</p></center>
         </div>
 
     </div>

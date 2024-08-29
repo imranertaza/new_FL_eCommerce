@@ -10,7 +10,7 @@
                         <tr>
                             <th>Sl</th>
                             <th>Particulars</th>
-                            <th>Trangaction Type</th>
+                            <th>Transaction Type</th>
                             <th>Date</th>
                             <th>Amount</th>
                             <th>Rest Balance</th>

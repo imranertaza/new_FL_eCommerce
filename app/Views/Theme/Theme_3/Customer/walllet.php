@@ -10,48 +10,41 @@
                         </div>
                         <div class="col-md-12 px-5 text-center">
 
-                            <a href="<?php echo base_url('add_funds');?>" class="btn btn-primary" style="float: right;">Add funds</a>
-                            <div class="card" style="width: 10rem;">
-                                <div class="card-body text-center">
-                                    <h5 class="card-title">My Balance</h5>
-                                    <p><?php echo currency_symbol_with_symbol($cust->balance,$symbol);?></p>
-                                </div>
-                            </div>
-                            <!-- <div class="card " style="width: 18rem; float:left;margin-left: 15px;">
-                                <div class="card-body text-center">
-                                    <h5 class="card-title">Pending request</h5>
-                                    <p>100</p>
-                                </div>
-                            </div> -->
-                            
-
+<!--                            <a href="--><?php //echo base_url('add_funds');?><!--" class="btn btn-primary" style="float: right;">Add funds</a>-->
+<!--                            <div class="card" style="width: 10rem;">-->
+<!--                                <div class="card-body text-center">-->
+<!--                                    <h5 class="card-title">My Balance</h5>-->
+<!--                                    <p>--><?php //echo currency_symbol_with_symbol($cust->balance,$symbol);?><!--</p>-->
+<!--                                </div>-->
+<!--                            </div>                            -->
+                            <p class="text-danger">We are currently developing this page to serve you better</p>
                         </div>
 
-                        <div class="col-md-12 px-5 mt-5">
-
-                            <table class="cart-table w-100 text-center">
-                                <thead>
-                                    <tr>
-                                        <th>Sl</th>
-                                        <th>Payment method</th>
-                                        <th>Amount</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php $i=1; foreach($fund_request as $req ){ ?>
-                                    <tr>
-                                        <td><?php echo $i++?></td>
-                                        <td><?php echo get_data_by_id('name','cc_payment_method','payment_method_id',$req->payment_method_id); ?></td>
-                                        <td><?php echo currency_symbol_with_symbol($req->amount,$symbol)?></td>
-                                        <td><?php echo $req->status?></td>
-                                    </tr>
-                                    <?php } ?>
-                                </tbody>
-                            </table>
-
-
-                        </div>
+<!--                        <div class="col-md-12 px-5 mt-5">-->
+<!---->
+<!--                            <table class="cart-table w-100 text-center">-->
+<!--                                <thead>-->
+<!--                                    <tr>-->
+<!--                                        <th>Sl</th>-->
+<!--                                        <th>Payment method</th>-->
+<!--                                        <th>Amount</th>-->
+<!--                                        <th>Status</th>-->
+<!--                                    </tr>-->
+<!--                                </thead>-->
+<!--                                <tbody>-->
+<!--                                    --><?php //$i=1; foreach($fund_request as $req ){ ?>
+<!--                                    <tr>-->
+<!--                                        <td>--><?php //echo $i++?><!--</td>-->
+<!--                                        <td>--><?php //echo get_data_by_id('name','cc_payment_method','payment_method_id',$req->payment_method_id); ?><!--</td>-->
+<!--                                        <td>--><?php //echo currency_symbol_with_symbol($req->amount,$symbol)?><!--</td>-->
+<!--                                        <td>--><?php //echo $req->status?><!--</td>-->
+<!--                                    </tr>-->
+<!--                                    --><?php //} ?>
+<!--                                </tbody>-->
+<!--                            </table>-->
+<!---->
+<!---->
+<!--                        </div>-->
 
 
 

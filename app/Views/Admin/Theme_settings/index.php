@@ -120,7 +120,46 @@
                                             </div>
                                             <button type="submit" class="btn btn-primary">Save</button>
                                         </form>
+
+                                        <form action="<?php echo base_url('slider_update') ?>" method="post"
+                                              enctype="multipart/form-data">
+                                            <div class="form-group mt-5">
+                                                <?php
+                                                $sli_4 = get_lebel_by_value_in_theme_settings('slider_4');
+                                                echo image_view('uploads/slider', '', $sli_4, 'noimage.png', 'width-full-100');
+                                                ?>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Slider 4</label>
+                                                <input type="file" name="slider" class="form-control" required>
+                                                <input type="hidden" name="nameslider" class="form-control"
+                                                       value="slider_4" required>
+                                                <small>Recommended Size: <?php echo $theme_libraries->slider_width; ?> x <?php echo $theme_libraries->slider_height; ?></small>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </form>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <form action="<?php echo base_url('slider_update') ?>" method="post"
+                                              enctype="multipart/form-data">
+                                            <div class="form-group mt-5">
+                                                <?php
+                                                $sli_5 = get_lebel_by_value_in_theme_settings('slider_5');
+                                                echo image_view('uploads/slider', '', $sli_5, 'noimage.png', 'width-full-100');
+                                                ?>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Slider 5</label>
+                                                <input type="file" name="slider" class="form-control" required>
+                                                <input type="hidden" name="nameslider" class="form-control"
+                                                       value="slider_5" required>
+                                                <small>Recommended Size: <?php echo $theme_libraries->slider_width; ?> x <?php echo $theme_libraries->slider_height; ?></small>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </form>
+                                    </div>
+
                                 </div>
 
                             </div>

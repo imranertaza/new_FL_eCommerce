@@ -139,9 +139,11 @@ class Login extends BaseController {
                 $table = DB()->table('cc_customer');
                 $table->insert($data);
 
-                $title = 'Your registration is completed!';
-                $message = 'Thank you. Your registration has been successfully completed. 
-                Login details  Email: '.$data['email'].' Password: '.$this->request->getPost('password');
+                $title = 'Welcome to Finer Labels!';
+                $message = 'Dear '.$data['firstname'].' '.$data['lastname'].'<br><br>
+                Thank you for registering with Finer Labels! We are excited to have you onto our fashion walkway. 
+                Your account has been successfully created, and here are your login details:<br>
+                User ID: '.$data['email'].'<br> Password: '.$this->request->getPost('password').'<br>Please keep this information secure. You can log in to your account at any time to explore our products and services. If you have any questions or need assistance, feel free to reach out to our support team. We are here to help!<br>Welcome once again, and we look forward to serving you.<br>Best regards,<br>Ben<br>Finer Labels<br>Whatsapp: +86 18529237990<br>Wechat: Berg1234567<br>Telegram: Replicaking2727';
                 $url = base_url('login');
                 $temp = success_email_template($title,$message,$url);
 
