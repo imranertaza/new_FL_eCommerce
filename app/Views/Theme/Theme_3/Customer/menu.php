@@ -12,7 +12,7 @@
                 <?php if (modules_key_by_access('wishlist') == 1) { ?>
                     <a href="<?php echo base_url('favorite'); ?>" class="btn btn-default border rounded-0 <?php echo ($menu_active == 'favorite') ? 'text-white bg-custom-color' : ''; ?>">My Wish List</a>
                 <?php } ?>
-                <a href="<?php echo base_url('my_wallet'); ?>" class="btn btn-default border rounded-0 <?php echo ($menu_active == 'walllet') ? 'text-white bg-custom-color' : ''; ?>">Wallet</a>
+                <a href="<?php echo base_url('my_wallet'); ?>" class="btn text-danger btn-default border rounded-0 <?php echo ($menu_active == 'walllet') ? 'text-white bg-custom-color' : ''; ?>">Wallet</a>
                 <a href="<?php echo base_url('ledger'); ?>" class="btn btn-default border rounded-0 <?php echo ($menu_active == 'ledger') ? 'text-white bg-custom-color' : ''; ?>">Ledger</a>
                 <a href="<?php echo base_url('logout'); ?>" class="btn btn-default border rounded-0">Logout</a>
             </div>

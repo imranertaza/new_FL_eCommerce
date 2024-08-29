@@ -121,7 +121,10 @@
                                   <li class="nav-item">
                                     <a class="nav-link" aria-current="page" href="<?php echo base_url() ?>">Home</a>
                                   </li>
-                                  <?php echo top_menu(); ?>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-danger" href="<?php echo base_url('page/new-arrivals') ?>">New Arrivals</a>
+                                    </li>
+                                  <?php //echo top_menu(); ?>
                                   <li class="nav-item">
                                     <a class="nav-link" href="<?php echo base_url('page/about-us') ?>">About Us</a>
                                   </li>

@@ -47,10 +47,7 @@ class Image_processing {
     public function watermark_main_image($dir,$image){
         if (!file_exists($dir . '/wm_' . $image)) {
 
-            $path = $image;
-            $ext = pathinfo($path, PATHINFO_EXTENSION);
-
-            if ($ext == 'png'){
+            if (pathinfo($image, PATHINFO_EXTENSION) == 'png'){
                 $mainImg = imagecreatefrompng($dir . $image);
             }else {
                 $mainImg = imagecreatefromjpeg($dir . $image);
@@ -63,10 +60,8 @@ class Image_processing {
     public function watermark_on_resized_image($dir,$image){
         if (!file_exists($dir . '/600_wm_' . $image)) {
             $this->crop->withFile($dir . $image)->fit(600, 600, 'center')->save($dir . '600_' . $image);
-            $path = $image;
-            $ext = pathinfo($path, PATHINFO_EXTENSION);
 
-            if ($ext == 'png'){
+            if (pathinfo($image, PATHINFO_EXTENSION) == 'png'){
                 $mImg = imagecreatefrompng($dir . $image);
             }else {
                 $mImg = imagecreatefromjpeg($dir . '600_' . $image);
