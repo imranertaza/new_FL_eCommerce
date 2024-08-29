@@ -11,7 +11,7 @@
                         <th>Order Date</th>
                         <th>Total</th>
                         <th>Discount</th>
-                        <th>Shipping charge</th>
+                        <th>Shipping Charge</th>
                         <th>Amount</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -34,6 +34,8 @@
                     </tbody>
                 </table>
             </div>
+
+            <a href="https://www.17track.net/en" class="btn btn-success mt-5" target="_blank">Track My Order</a>
         </div>
     </div>
 </section>

@@ -78,26 +78,20 @@
                     <div class="col-12 col-sm-8 col-md-5 d-flex gap-3 justify-content-center justify-content-sm-end mb-2 mb-sm-0"> 
                     <?php if (!isset(newSession()->isLoggedInCustomer)) { ?>                       
                         <a class="btn" href="<?php echo base_url('login') ?>">Sign In</a>
-                        <a class="btn btn-create px-4 py-2" href="<?php echo base_url('register') ?>">Create an account</a>
+                        <a class="btn btn-create px-4 py-2" href="<?php echo base_url('register') ?>">Create An Account</a>
                         <?php } else { ?>
                             
                                 <a class="dropdown-toggle btn btn-create" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    My account
+                                    My Account
                                 </a>
                                 <ul class="dropdown-menu ">
-                                    <li><a class="dropdown-item mt-2 mb-2 "
-                                            href="<?php echo base_url('dashboard') ?>">Dashboard</a></li>
-                                    <li><a href="<?php echo base_url('profile'); ?>"
-                                            class="dropdown-item mt-2 mb-2">Profile</a></li>
-                                    <li><a href="<?php echo base_url('my_order'); ?>" class="dropdown-item mt-2 mb-2">My
-                                            order</a></li>
+                                    <li><a class="dropdown-item mt-2 mb-2 " href="<?php echo base_url('dashboard') ?>">Dashboard</a></li>
+                                    <li><a href="<?php echo base_url('profile'); ?>" class="dropdown-item mt-2 mb-2">Profile</a></li>
+                                    <li><a href="<?php echo base_url('my_order'); ?>" class="dropdown-item mt-2 mb-2">My Order</a></li>
                                     <?php if ($modules['wishlist'] == 1) { ?>
-                                    <li><a href="<?php echo base_url('favorite'); ?>" class="dropdown-item mt-2 mb-2">My
-                                            Wish
-                                            list</a></li>
+                                    <li><a href="<?php echo base_url('favorite'); ?>" class="dropdown-item mt-2 mb-2">My Wish List</a></li>
                                     <?php } ?>
-                                    <li><a href="<?php echo base_url('logout'); ?>" class="dropdown-item mt-2 mb-2">Log
-                                            out</a></li>
+                                    <li><a href="<?php echo base_url('logout'); ?>" class="dropdown-item mt-2 mb-2">Logout</a></li>
                                 </ul>
                             
                         <?php } ?>
@@ -127,12 +121,15 @@
                                   <li class="nav-item">
                                     <a class="nav-link" aria-current="page" href="<?php echo base_url() ?>">Home</a>
                                   </li>
-                                  <?php echo top_menu(); ?>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-danger" href="<?php echo base_url('page/new-arrivals') ?>">New Arrivals</a>
+                                    </li>
+                                  <?php //echo top_menu(); ?>
                                   <li class="nav-item">
                                     <a class="nav-link" href="<?php echo base_url('page/about-us') ?>">About Us</a>
                                   </li>
                                   <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo base_url('page/contact-us') ?>">Contact us</a>
+                                    <a class="nav-link" href="<?php echo base_url('page/contact-us') ?>">Contact Us</a>
                                   </li>
                                 </ul>
                               </div>
