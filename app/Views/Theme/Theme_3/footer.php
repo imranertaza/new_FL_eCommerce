@@ -1,4 +1,21 @@
 <section class="section-footer">
+
+    <div class="newsletter">
+        <div class="container">
+            <div class="row gx-0 align-items-center">
+                <div class="col-md-6">
+                    <h2>Subscribe Our Newsletter!</h2>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="text" name="subscribe_email" id="subscribe_email"  class="form-control" placeholder="Enter your Email address" aria-label="Search" aria-describedby="search-addon" />
+                        <button type="button" class="btn btn-subscribe" onclick="subscribe()" >Subscribe Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
         <div class="footer-box">
             <div class="container">
                 <div class="border p-4">
@@ -81,21 +98,7 @@
             </div>
         </div>
 
-        <div class="newsletter">
-            <div class="container">
-                <div class="row gx-0 align-items-center">
-                    <div class="col-md-6">
-                        <h2>Subscribe Our Newsletter!</h2>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <input type="text" name="subscribe_email" id="subscribe_email"  class="form-control" placeholder="Enter your Email address" aria-label="Search" aria-describedby="search-addon" />
-                            <button type="button" class="btn btn-subscribe" onclick="subscribe()" >Subscribe Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
 
         <div class="footer-middle">
             <div class="container">  
