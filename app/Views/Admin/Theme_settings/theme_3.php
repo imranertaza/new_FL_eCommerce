@@ -281,7 +281,7 @@
                 ?><br>
                 <label><?php echo $themeSettingTitle['banner_bottom'];?></label>
                 <input type="file" class="form-control" name="banner_bottom">
-                <span>Recommended Size: 1116 x 211</span>
+                <span>Recommended Size: 1116 x 422</span>
             </div>
             <button class="btn btn-primary">Save</button>
 
