@@ -944,7 +944,7 @@ function success_email_template($title, $message, $url)
     $view = '';
     $view .= "<div style='width:680px'>
             <style> .logo-css{ margin-top:20px;border:none; } </style>
-    <div style='width:100%;background-color: #FFC107; min-height:250px; text-align: center;'>        
+    <div style='width:100%; min-height:250px; text-align: center;'>        
         $logo
         <h1 style='color:#000000; '>Welcome!</h1>
         <center><p style='background-color: #ffffff;color:#000000;width: 300px;font-size: 20px;padding: 5px; '>
