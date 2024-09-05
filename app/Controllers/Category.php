@@ -54,6 +54,8 @@ class Category extends BaseController {
         $data['ratingView'] = $filter->product_array_by_rating_view($data['ratingval']);
         $data['productsArr'] = $productsArr;
 
+//        print $data['optionView'];
+//        die();
         setcookie('category_cookie',$cat_id,time()+86400, "/");
 
         $data['prod_cat_id'] = $cat_id;

@@ -154,7 +154,7 @@ class Theme_settings_3 extends BaseController
             $namePic = $pic->getRandomName();
             $pic->move($target_dir, $namePic);
             $news_img = 'banner_bottom_' . $pic->getName();
-            $this->crop->withFile($target_dir . '' . $namePic)->fit(1116, 211, 'center')->save($target_dir . '' . $news_img);
+            $this->crop->withFile($target_dir . '' . $namePic)->fit(1116, 422, 'center')->save($target_dir . '' . $news_img);
             unlink($target_dir . '' . $namePic);
             $data['value'] = $news_img;
 
