@@ -131,7 +131,7 @@
                                         </td>
                                     </tr>
                                     <?php
-                                    $paymentDet =  get_all_row_data_by_id('cc_order_card_details', 'payment_method_id', $order->payment_method);
+                                    $paymentDet =  get_all_row_data_by_id('cc_order_card_details', 'order_id', $order->order_id);
                                     if (!empty($paymentDet)) {
                                         ?>
                                         <tr>
