@@ -7,11 +7,11 @@
 
         ?>
 
-        <a type="button"  class="collapsible" >
+        <a type="button"  id="message_social">
             <i class="fas fa-4x fa-comment-dots" style="color:#0594eb;"></i>
         </a>
 
-        <div class="content_mess" style="display:none;">
+        <div class="content_mess" id="content_mess" style="display:none;">
             <a target="_blank" href="https://wa.me/<?php echo get_model_settings_value_by_modelId_or_label($modulId, 'whatsapp_number');?>" ><i class="fa-brands fa-square-whatsapp"></i> Whatsapp</a><br>
             <a target="_blank" href="https://t.me/<?php echo get_model_settings_value_by_modelId_or_label($modulIdTelegram, 'telegram_user');?>"><i class="fa-brands fa-telegram"></i> Telegram</a>
         </div>
@@ -296,20 +296,19 @@
 <script src="<?php echo base_url() ?>/assets/assets_fl/slick/slick.js" type="text/javascript" charset="utf-8"> </script>
 
 <script>
+    //social message script (start)
+    var chatBtn = document.getElementById("message_social");
+    chatBtn.addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+            content.style.display = "none";
+        } else {
+            content.style.display = "block";
+        }
+    });
+    //social message script (end)
 
-    var coll = document.getElementsByClassName("collapsible");
-    var i;
-    for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function() {
-            this.classList.toggle("active");
-            var content = this.nextElementSibling;
-            if (content.style.display === "block") {
-                content.style.display = "none";
-            } else {
-                content.style.display = "block";
-            }
-        });
-    }
 
 
 
