@@ -296,7 +296,7 @@
 <script src="<?php echo base_url() ?>/assets/assets_fl/slick/slick.js" type="text/javascript" charset="utf-8"> </script>
 
 <script>
-    //social message script (start)
+    //social chat script (start)
     var chatBtn = document.getElementById("message_social");
     chatBtn.addEventListener("click", function() {
         this.classList.toggle("active");
@@ -307,7 +307,7 @@
             content.style.display = "block";
         }
     });
-    //social message script (end)
+    //social chat script (end)
 
 
 
