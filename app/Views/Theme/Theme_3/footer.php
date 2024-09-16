@@ -1,4 +1,25 @@
 <section class="section-footer">
+    <div class="massager">
+
+        <?php
+            $modulId = get_data_by_id('module_id','cc_modules','module_key','contact_with_whatsapp');
+            $modulIdTelegram = get_data_by_id('module_id','cc_modules','module_key','telegram');
+
+        ?>
+
+        <a type="button"  class="collapsible" >
+            <i class="fas fa-4x fa-comment-dots" style="color:#0594eb;"></i>
+        </a>
+
+        <div class="content_mess" style="display:none;">
+            <a target="_blank" href="https://wa.me/<?php echo get_model_settings_value_by_modelId_or_label($modulId, 'whatsapp_number');?>" ><i class="fa-brands fa-square-whatsapp"></i> Whatsapp</a><br>
+            <a target="_blank" href="https://t.me/<?php echo get_model_settings_value_by_modelId_or_label($modulIdTelegram, 'telegram_user');?>"><i class="fa-brands fa-telegram"></i> Telegram</a>
+        </div>
+
+    </div>
+
+
+
 
     <div class="newsletter">
         <div class="container">
@@ -120,7 +141,7 @@
                                     Contact us
                                 </a></li>
                                 <li>
-                                    <a href="<?php echo base_url('sitemape.xml')?>" target="_blank">
+                                    <a href="<?php echo base_url('sitemap.xml')?>" target="_blank">
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
@@ -275,6 +296,23 @@
 <script src="<?php echo base_url() ?>/assets/assets_fl/slick/slick.js" type="text/javascript" charset="utf-8"> </script>
 
 <script>
+
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        });
+    }
+
+
+
     function myFunction() {
         var dots = document.getElementById("dots");
         var moreText = document.getElementById("more");
