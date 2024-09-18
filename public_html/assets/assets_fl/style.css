@@ -2950,3 +2950,20 @@ input[type='radio']:checked {
     transform: scale(0.90);
 }
 /*captcha css*/
+
+.massager{
+    position: fixed;
+    right: 20px;
+    z-index: 10000000;
+    bottom: 51px;
+}
+.content_mess{
+    position: absolute;
+    bottom: 70px;
+    width: 150px;
+    right: 0px;
+    border: 2px solid #0594eb;
+    background-color: rgb(255, 255, 255);
+    padding: 10px;
+    border-radius: 15px;
+}
