@@ -8,20 +8,21 @@
                     <?php
                         $xml = simplexml_load_file($_SERVER['DOCUMENT_ROOT'] . "/sitemap.xml");
 
-                        echo "<ul>";
+                        $view = "<ul>";
                         foreach ($xml->page as $val){
-                            echo "<li> ";
+                            $view .= "<li> ";
                             if ($val->parent == '0'){
-                                echo "<a href=".$val->url.">".htmlspecialchars($val->title)."</a>";
+                                $view .= "<a href=".$val->url.">".htmlspecialchars($val->title)."</a>";
                             }
-                            echo "<ul>";
+                            $view .= "<ul>";
                             if ($val->parent == '1'){
-                                echo "<li><div><a href=".$val->url.">".htmlspecialchars($val->title)."</a></div></li>";
+                                $view .= "<li><div><a href=".$val->url.">".htmlspecialchars($val->title)."</a></div></li>";
                             }
-                             echo "</ul></li>";
+                            $view .= "</ul></li>";
 
                         }
-                        echo "</ul>";
+                        $view .= "</ul>";
+                        echo $view;
                     ?>
 
 
