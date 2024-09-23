@@ -16,7 +16,7 @@
                             }
                             $view .= "<ul>";
                             if ($val->parent == '1'){
-                                $view .= "<li><div><a href=".$val->url.">".htmlspecialchars($val->title)."</a></div></li>";
+                                $view .= "<li class='li-css'><div><a href=".$val->url.">".htmlspecialchars($val->title)."</a></div></li>";
                             }
                             $view .= "</ul></li>";
 
