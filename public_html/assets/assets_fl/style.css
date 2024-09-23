@@ -2983,7 +2983,7 @@ li div {
     padding-left: 1em;
     position: relative;
 }
-li div::before {
+.li-css div::before {
     content:'';
     position: absolute;
     top: 0;
