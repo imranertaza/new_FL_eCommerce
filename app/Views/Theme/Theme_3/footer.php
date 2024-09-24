@@ -141,11 +141,12 @@
                                     Contact us
                                 </a></li>
                                 <li>
-                                    <a href="<?php echo base_url('sitemap.xml')?>" target="_blank">
+                                    <a href="<?php echo base_url('page/site-map')?>" >
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
-                                    Site Map</a></li>
+                                    Site Map</a>
+                                </li>
                             </ul>
                             <div class="footer-logo">
                                 <img src="<?php echo base_url() ?>/assets/assets_fl/img/logo-footer.png" class="img-fluid" alt="Logo">
