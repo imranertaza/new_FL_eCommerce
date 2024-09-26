@@ -1,6 +1,7 @@
 <?php namespace App\Controllers\Cart;
 use App\Controllers\BaseController;
 use App\Libraries\Mycart;
+use CodeIgniter\HTTP\ResponseInterface;
 
 class Cart extends BaseController {
 
@@ -15,6 +16,10 @@ class Cart extends BaseController {
         $this->cart = new Mycart();
     }
 
+    /**
+     * @description This method provides cart page view
+     * @return void
+     */
     public function index()
     {
         $settings = get_settings();
@@ -28,6 +33,10 @@ class Cart extends BaseController {
         echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
+    /**
+     * @description This method provides check option
+     * @return void
+     */
     public function checkoption(){
         $product_id = $this->request->getPost('product_id');
         $table = DB()->table('cc_product_option');
@@ -39,6 +48,10 @@ class Cart extends BaseController {
         }
     }
 
+    /**
+     * @description This method provides cart empty check
+     * @return void
+     */
     public function cart_empty_check(){
         if (empty($this->cart->contents())){
             $result = false;
@@ -48,6 +61,10 @@ class Cart extends BaseController {
         print $result;
     }
 
+    /**
+     * @description This method provides add to cart
+     * @return void
+     */
     public function addToCart(){
 
 
@@ -80,6 +97,10 @@ class Cart extends BaseController {
         }
     }
 
+    /**
+     * @description This method provides add to cart detail
+     * @return void
+     */
     public function addtocartdetail(){
         $product_id = $this->request->getPost('product_id');
         $qty = $this->request->getPost('qty');
@@ -127,6 +148,10 @@ class Cart extends BaseController {
         }
     }
 
+    /**
+     * @description This method provides add to cart group
+     * @return void
+     */
     public function addToCartGroup(){
 
         $productId = $this->request->getPost('both_product[]');
@@ -149,6 +174,10 @@ class Cart extends BaseController {
         print 'Successfully add to cart';
     }
 
+    /**
+     * @description This method provides update to cart
+     * @return ResponseInterface
+     */
     public function updateToCart(){
         $rowid = $this->request->getPost('rowid');
         $qty = $this->request->getPost('qty');
@@ -174,6 +203,10 @@ class Cart extends BaseController {
         return $this->response->setJSON($data);
     }
 
+    /**
+     * @description This method provides remove to cart
+     * @return void
+     */
     public function removeToCart(){
         $rowid = $this->request->getPost('rowid');
         $this->cart->remove($rowid);
@@ -185,6 +218,12 @@ class Cart extends BaseController {
         print Cart()->total();
     }
 
+    /**
+     * @description This method provides check qty
+     * @param int $productID
+     * @param int $qty
+     * @return bool
+     */
     private function check_qty($productID , $qty){
         $table = DB()->table('cc_products');
         $data = $table->where('product_id',$productID)->get()->getRow();

@@ -21,6 +21,10 @@ class Search extends BaseController {
 
     }
 
+    /**
+     * @description This method provides product search page view
+     * @return void
+     */
     public function index(){
         $settings = get_settings();
         $table = DB()->table('products');
@@ -43,6 +47,10 @@ class Search extends BaseController {
         echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
+    /**
+     * @description This method provides product search action page view
+     * @return void
+     */
     public function search_action(){
         $settings = get_settings();
         $top_category = $this->request->getPost('top_category');

@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Theme_settings_3 extends BaseController
 {
@@ -22,6 +23,10 @@ class Theme_settings_3 extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides theme settings 3 page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -50,6 +55,10 @@ class Theme_settings_3 extends BaseController
         }
     }
 
+    /**
+     * @description This method provides header section one update
+     * @return RedirectResponse
+     */
     public function header_section_one_update(){
         $data['head_side_title_1'] = $this->request->getPost('head_side_title_1');
         $data['head_side_category_1'] = $this->request->getPost('head_side_category_1');
@@ -80,6 +89,10 @@ class Theme_settings_3 extends BaseController
         return redirect()->to('theme_settings?sel=home_settings');
     }
 
+    /**
+     * @description This method provides header section two update
+     * @return RedirectResponse
+     */
     public function header_section_two_update(){
         $data['head_side_title_2'] = $this->request->getPost('head_side_title_2');
         $data['head_side_category_2'] = $this->request->getPost('head_side_category_2');
@@ -110,7 +123,10 @@ class Theme_settings_3 extends BaseController
         return redirect()->to('theme_settings?sel=home_settings');
     }
 
-
+    /**
+     * @description This method provides home category update
+     * @return RedirectResponse
+     */
     public function home_category_update(){
         $prefix = $this->request->getPost('prefix');
         $data['home_category_'.$prefix] = $this->request->getPost('home_category_'.$prefix);
@@ -142,6 +158,10 @@ class Theme_settings_3 extends BaseController
         return redirect()->to('theme_settings?sel=home_settings');
     }
 
+    /**
+     * @description This method provides banner bottom update
+     * @return RedirectResponse
+     */
     public function banner_bottom_update(){
         if (!empty($_FILES['banner_bottom']['name'])) {
             $target_dir = FCPATH . '/uploads/banner_bottom/';
@@ -170,6 +190,11 @@ class Theme_settings_3 extends BaseController
 
 
     }
+
+    /**
+     * @description This method provides banner featured category update
+     * @return RedirectResponse
+     */
     public function banner_featured_category_update(){
         if (!empty($_FILES['banner_featured_category']['name'])) {
             $target_dir = FCPATH . '/uploads/banner_featured_category/';

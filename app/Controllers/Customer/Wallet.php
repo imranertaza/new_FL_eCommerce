@@ -4,6 +4,7 @@ namespace App\Controllers\Customer;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Wallet extends BaseController
 {
@@ -17,6 +18,10 @@ class Wallet extends BaseController
         $this->session = \Config\Services::session();
     }
 
+    /**
+     * @description This method provides wallet page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInCustomer = $this->session->isLoggedInCustomer;
@@ -44,6 +49,10 @@ class Wallet extends BaseController
         }
     }
 
+    /**
+     * @description This method provides add funds view
+     * @return RedirectResponse|void
+     */
     public function add_funds()
     {
         $isLoggedInCustomer = $this->session->isLoggedInCustomer;
@@ -71,6 +80,10 @@ class Wallet extends BaseController
         }
     }
 
+    /**
+     * @description This method provides add funds action
+     * @return RedirectResponse
+     */
     public function fund_action(){
         $data['amount'] = $this->request->getPost('amount');
         $data['payment_method_id'] = $this->request->getPost('payment_method_id');

@@ -4,6 +4,7 @@ namespace App\Controllers\Customer;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Customer_ledger extends BaseController
 {
@@ -17,6 +18,10 @@ class Customer_ledger extends BaseController
         $this->session = \Config\Services::session();
     }
 
+    /**
+     * @description This method provides customer ledger page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInCustomer = $this->session->isLoggedInCustomer;

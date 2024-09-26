@@ -4,6 +4,10 @@ class Flat_shipping{
 
     private $flatRate;
 
+    /**
+     * @description This function provides get settings
+     * @return $this
+     */
     public function getSettings(){
         $shipping_method_id = get_data_by_id('shipping_method_id','cc_shipping_method','code','flat');
 
@@ -15,7 +19,10 @@ class Flat_shipping{
         return $this;
     }
 
-
+    /**
+     * @description This function provides calculate shipping
+     * @return string
+     */
     public function calculateShipping(){
         $eligible_product_array = $this->get_shipping_eligible_product();
         if (empty($eligible_product_array)){
@@ -25,6 +32,10 @@ class Flat_shipping{
         }
     }
 
+    /**
+     * @description This function provides get shipping eligible product
+     * @return array
+     */
     public function get_shipping_eligible_product(): array
     {
         $eligible_product = array();

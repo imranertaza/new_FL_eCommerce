@@ -1,6 +1,7 @@
 <?php namespace App\Controllers\Products;
 
 use App\Controllers\BaseController;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Products extends BaseController {
 
@@ -15,6 +16,11 @@ class Products extends BaseController {
         $this->cart = \Config\Services::cart();
     }
 
+    /**
+     * @description This method provides product detail page view
+     * @param int $product_id
+     * @return void
+     */
     public function detail($product_id)
     {
         $settings = get_settings();
@@ -79,6 +85,10 @@ class Products extends BaseController {
         echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
+    /**
+     * @description This method provides option price calculate
+     * @return void
+     */
     public function optionPriceCalculate(){
 
         $product_id = $this->request->getPost('product_id');
@@ -109,7 +119,10 @@ class Products extends BaseController {
         print currency_symbol($proPrice + $totalOptionPrice);
     }
 
-
+    /**
+     * @description This method provides product review update
+     * @return RedirectResponse
+     */
     public function review(){
         $data['product_id'] = $this->request->getPost('product_id');
         $data['customer_id'] = $this->session->cusUserId;
@@ -139,6 +152,10 @@ class Products extends BaseController {
         }
     }
 
+    /**
+     * @description This method provides both product price
+     * @return void
+     */
     public function both_product_price(){
         $productId = $this->request->getPost('both_product[]');
         $total = 0;
@@ -150,6 +167,11 @@ class Products extends BaseController {
         print currency_symbol($total);
     }
 
+    /**
+     * @description This method provides option view
+     * @param int $product_id
+     * @return string
+     */
     private function optionView($product_id){
         $productOption = DB()->table('cc_product_option');
         $allOptionsGroup = $productOption->where('product_id',$product_id)->groupBy('option_id')->get()->getResult();
@@ -165,6 +187,14 @@ class Products extends BaseController {
         return $view;
     }
 
+    /**
+     * @description This method provides option type
+     * @param string $type
+     * @param int $option_id
+     * @param int $product_id
+     * @param string $name
+     * @return string|void
+     */
     private function optionType($type,$option_id,$product_id,$name){
         if ($type == 'radio'){
             return $this->typeRadio($option_id,$product_id,$name);
@@ -175,6 +205,13 @@ class Products extends BaseController {
 
     }
 
+    /**
+     * @description This method provides type radio
+     * @param int $option_id
+     * @param int $product_id
+     * @param string $name
+     * @return string
+     */
     private function typeRadio($option_id,$product_id,$name){
         $table = DB()->table('cc_product_option');
         $data = $table->where('option_id',$option_id)->where('product_id',$product_id)->get()->getResult();
@@ -196,6 +233,13 @@ class Products extends BaseController {
         return $view;
     }
 
+    /**
+     * @description This method provides type Select
+     * @param int $option_id
+     * @param int $product_id
+     * @param string $name
+     * @return string
+     */
     private function typeSelect($option_id,$product_id,$name){
         $table = DB()->table('cc_product_option');
         $data = $table->where('option_id',$option_id)->where('product_id',$product_id)->get()->getResult();

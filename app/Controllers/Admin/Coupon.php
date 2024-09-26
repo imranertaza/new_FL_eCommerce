@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Coupon extends BaseController
 {
@@ -22,6 +23,10 @@ class Coupon extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides coupon page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -50,6 +55,10 @@ class Coupon extends BaseController
         }
     }
 
+    /**
+     * @description This method provides coupon create page view
+     * @return RedirectResponse|void
+     */
     public function create(){
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
@@ -73,6 +82,10 @@ class Coupon extends BaseController
         }
     }
 
+    /**
+     * @description This method provides coupon create action
+     * @return RedirectResponse
+     */
     public function create_action()
     {
         $data['name'] = $this->request->getPost('name');
@@ -109,6 +122,11 @@ class Coupon extends BaseController
         }
     }
 
+    /**
+     * @description This method provides coupon update page view
+     * @param int $coupon_id
+     * @return RedirectResponse|void
+     */
     public function update($coupon_id)
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -137,6 +155,10 @@ class Coupon extends BaseController
         }
     }
 
+    /**
+     * @description This method provides coupon update action
+     * @return RedirectResponse
+     */
     public function update_action()
     {
         $coupon_id = $this->request->getPost('coupon_id');
@@ -175,6 +197,11 @@ class Coupon extends BaseController
         }
     }
 
+    /**
+     * @description This method provides coupon delete
+     * @param $coupon_id
+     * @return RedirectResponse
+     */
     public function delete($coupon_id){
 
 
