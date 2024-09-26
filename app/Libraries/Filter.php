@@ -9,116 +9,218 @@ class Filter{
         $this->productArray = $products;
         return $this;
     }
+    
     public function product_array_by_price_range(){
         $priceArray = array_column($this->productArray, 'price');
         $data['minPrice'] = empty($priceArray) ? '0' : floor(min($priceArray));
         $data['maxPrice'] = empty($priceArray) ? '0' : floor(max($priceArray));
         return $data;
     }
+
+//    public function product_array_by_options($optionSel){
+//        $view = '';
+//        if (!empty($this->productArray)) {
+//            $table = DB()->table('cc_product_option');
+//            $table->join('cc_option','cc_option.option_id = cc_product_option.option_id');
+//            foreach ($this->productArray as $val){
+//                $table->orWhere('cc_product_option.product_id', $val->product_id);
+//            }
+//            $table->groupBy('cc_option.option_id');
+//            $option = $table->get()->getResult();
+//
+//            if (!empty($option)) {
+//                $allOptVal = $this->product_option_value($option);
+//
+//                foreach ($option as $valOption) {
+//                    $view .= '<div class="product-filter">
+//                <p class="mb-2">' . $valOption->name . '</p>
+//                <ul class="list-unstyled filter-items">';
+////                    foreach ($this->option_value_return($valOption->option_id) as $value) {
+//                    foreach ($allOptVal as $value) {
+//                        if ($valOption->option_id == $value->option_id) {
+//                            $nameVal = $value->name;
+//                            $firstCar = mb_substr($nameVal, 0, 1);
+//                            $length = strlen($nameVal);
+//                            $isColor = (($firstCar == '#') && ($length == 7)) ? '' : $nameVal;
+//                            $nameOp = !empty($isColor) ? $isColor : '';
+//                            $style = empty($isColor) ? "background-color: $nameVal !important;padding: 15px; border: unset;" : "";
+//
+//                            $view .= '<li class="mt-2"><input type="checkbox" form="searchForm" onclick="formSubmit()"';
+//                            $view .= (in_array($value->option_value_id, $optionSel)) ? 'checked ' : '';
+//                            $view .= 'class="btn-check" name="options[]" id="option_' . $value->option_value_id . '" value="' . $value->option_value_id . '"  autocomplete="off"><label class="btn btn-outline-secondary rounded-0"  style="' . $style . '" for="option_' . $value->option_value_id . '">' . $nameOp . '</label></li>';
+//                        }
+//                    }
+//                    $view .= '</ul></div>';
+//                }
+//            }
+//        }
+//        return $view;
+//    }
     public function product_array_by_options($optionSel){
         $view = '';
         if (!empty($this->productArray)) {
-            $table = DB()->table('cc_product_option');
-            $table->join('cc_option','cc_option.option_id = cc_product_option.option_id');
-            foreach ($this->productArray as $val){
-                $table->orWhere('cc_product_option.product_id', $val->product_id);
-            }
-            $table->groupBy('cc_option.option_id');
-            $option = $table->get()->getResult();
+            $productIds = array_column($this->productArray, 'product_id');
 
-            if (!empty($option)) {
-                $allOptVal = $this->product_option_value($option);
+            if (!empty($productIds)) {
+                $table = DB()->table('cc_product_option');
+                $table->join('cc_option', 'cc_option.option_id = cc_product_option.option_id')
+                    ->whereIn('cc_product_option.product_id', $productIds)
+                    ->groupBy('cc_option.option_id');
 
-                foreach ($option as $valOption) {
-                    $view .= '<div class="product-filter">
-                <p class="mb-2">' . $valOption->name . '</p>
-                <ul class="list-unstyled filter-items">';
-//                    foreach ($this->option_value_return($valOption->option_id) as $value) {
-                    foreach ($allOptVal as $value) {
-                        if ($valOption->option_id == $value->option_id) {
-                            $nameVal = $value->name;
-                            $firstCar = mb_substr($nameVal, 0, 1);
-                            $length = strlen($nameVal);
-                            $isColor = (($firstCar == '#') && ($length == 7)) ? '' : $nameVal;
-                            $nameOp = !empty($isColor) ? $isColor : '';
-                            $style = empty($isColor) ? "background-color: $nameVal !important;padding: 15px; border: unset;" : "";
+                $option = $table->get()->getResult();
 
-                            $view .= '<li class="mt-2"><input type="checkbox" form="searchForm" onclick="formSubmit()"';
-                            $view .= (in_array($value->option_value_id, $optionSel)) ? 'checked ' : '';
-                            $view .= 'class="btn-check" name="options[]" id="option_' . $value->option_value_id . '" value="' . $value->option_value_id . '"  autocomplete="off"><label class="btn btn-outline-secondary rounded-0"  style="' . $style . '" for="option_' . $value->option_value_id . '">' . $nameOp . '</label></li>';
+                if (!empty($option)) {
+                    $allOptVal = $this->product_option_value($option);
+
+                    foreach ($option as $valOption) {
+                        $view .= '<div class="product-filter">
+                        <p class="mb-2">' . $valOption->name . '</p>
+                        <ul class="list-unstyled filter-items">';
+
+                        foreach ($allOptVal as $value) {
+                            if ($valOption->option_id == $value->option_id) {
+                                $nameVal = $value->name;
+                                $firstCar = mb_substr($nameVal, 0, 1);
+                                $length = strlen($nameVal);
+                                $isColor = (($firstCar == '#') && ($length == 7)) ? '' : $nameVal;
+                                $nameOp = !empty($isColor) ? $isColor : '';
+                                $style = empty($isColor) ? "background-color: $nameVal !important;padding: 15px; border: unset;" : "";
+
+                                $view .= '<li class="mt-2">
+                                <input type="checkbox" form="searchForm" onclick="formSubmit()"';
+                                $view .= (in_array($value->option_value_id, $optionSel)) ? 'checked ' : '';
+                                $view .= 'class="btn-check" name="options[]" id="option_' . $value->option_value_id . '" value="' . $value->option_value_id . '"  autocomplete="off">
+                                <label class="btn btn-outline-secondary rounded-0"  style="' . $style . '" for="option_' . $value->option_value_id . '">' . $nameOp . '</label></li>';
+                            }
                         }
+                        $view .= '</ul></div>';
                     }
-                    $view .= '</ul></div>';
                 }
             }
         }
         return $view;
     }
+
+//    private function product_option_value($opt){
+//
+//        $table = DB()->table('cc_product_option');
+//        $table->join('cc_option_value','cc_option_value.option_value_id = cc_product_option.option_value_id');
+//        foreach ($opt as $row) {
+//            foreach ($this->productArray as $val) {
+//                $table->orGroupStart();
+//                $table->where('cc_product_option.product_id', $val->product_id);
+//                $table->where('cc_product_option.option_id', $row->option_id);
+//                $table->groupEnd();
+//            }
+//        }
+//        $table->groupBy('cc_option_value.option_value_id');
+//        $option = $table->get()->getResult();
+//        return $option;
+//    }
 
     private function product_option_value($opt){
+        $productIds = array_column($this->productArray, 'product_id');
+        $optionIds = array_column($opt, 'option_id');
 
-        $table = DB()->table('cc_product_option');
-        $table->join('cc_option_value','cc_option_value.option_value_id = cc_product_option.option_value_id');
-        foreach ($opt as $row) {
-            foreach ($this->productArray as $val) {
-                $table->orGroupStart();
-                $table->where('cc_product_option.product_id', $val->product_id);
-                $table->where('cc_product_option.option_id', $row->option_id);
-                $table->groupEnd();
-            }
+        if (!empty($productIds) && !empty($optionIds)) {
+            $table = DB()->table('cc_product_option');
+            $table->join('cc_option_value', 'cc_option_value.option_value_id = cc_product_option.option_value_id')
+                ->whereIn('cc_product_option.product_id', $productIds)
+                ->whereIn('cc_product_option.option_id', $optionIds)
+                ->groupBy('cc_option_value.option_value_id');
+
+            $option = $table->get()->getResult();
+            return $option;
         }
-        $table->groupBy('cc_option_value.option_value_id');
-        $option = $table->get()->getResult();
-        return $option;
+
+        return [];
     }
 
-    /*
-     * duplicate function
-     */
-    private function option_value_return($optionId){
 
-        $table = DB()->table('cc_product_option');
-        $table->join('cc_option_value','cc_option_value.option_value_id = cc_product_option.option_value_id');
-        foreach ($this->productArray as $val) {
-            $table->orGroupStart();
-            $table->where('cc_product_option.product_id', $val->product_id)->where('cc_product_option.option_id', $optionId);
-            $table->groupEnd();
-        }
-        $table->groupBy('cc_option_value.option_value_id');
-        $option = $table->get()->getResult();
-        return $option;
-    }
+//    public function product_array_by_brand($brandSel){
+//        $brandArray = array_column($this->productArray, 'brand_id');
+//        $view = '';
+//        if ($this->allValuesNotEmpty($brandArray)) {
+//            $view .='<div class="product-filter"><p class="mb-2">Brands</p>';
+//
+//            $table = DB()->table('cc_brand');
+//            foreach (array_unique($brandArray) as $val){
+//                $table->orWhere('brand_id',$val);
+//            }
+//            $result = $table->orderBy('name')->get()->getResult();
+//
+//            foreach ($result as $brand){
+//                if (!empty($brand->brand_id)){
+//                    $name = $brand->name;
+//                    $view .= '<label class="w-100 mb-2"><input type="checkbox" form="searchForm" onclick="formSubmit()" name="manufacturer[]"';
+//                    $view .= (in_array($brand->brand_id, $brandSel)) ? 'checked ' : '';
+//                    $view .= 'value="' . $brand->brand_id . '"> ' . $name . ' <span class="count">'.product_count_by_brand_id($brand->brand_id,$this->productArray).'</span></label>';
+//                }
+//            }
+//            $view .='</div>';
+//        }
+//        return $view;
+//    }
     public function product_array_by_brand($brandSel){
-        $brandArray = array_column($this->productArray, 'brand_id');
+        $brandArray = array_unique(array_column($this->productArray, 'brand_id'));
         $view = '';
+
         if ($this->allValuesNotEmpty($brandArray)) {
-            $view .='<div class="product-filter"><p class="mb-2">Brands</p>';
+            $view .= '<div class="product-filter"><p class="mb-2">Brands</p>';
 
             $table = DB()->table('cc_brand');
-            foreach (array_unique($brandArray) as $val){
-                $table->orWhere('brand_id',$val);
-            }
-            $result = $table->orderBy('name')->get()->getResult();
+            if (!empty($brandArray)) {
+                $table->whereIn('brand_id', $brandArray)
+                    ->orderBy('name');
 
-            foreach ($result as $brand){
-                if (!empty($brand->brand_id)){
-                    $name = $brand->name;
-                    $view .= '<label class="w-100 mb-2"><input type="checkbox" form="searchForm" onclick="formSubmit()" name="manufacturer[]"';
-                    $view .= (in_array($brand->brand_id, $brandSel)) ? 'checked ' : '';
-                    $view .= 'value="' . $brand->brand_id . '"> ' . $name . ' <span class="count">'.product_count_by_brand_id($brand->brand_id,$this->productArray).'</span></label>';
+                $result = $table->get()->getResult();
+
+                foreach ($result as $brand) {
+                    if (!empty($brand->brand_id)) {
+                        $name = $brand->name;
+                        $view .= '<label class="w-100 mb-2"><input type="checkbox" form="searchForm" onclick="formSubmit()" name="manufacturer[]"';
+                        $view .= (in_array($brand->brand_id, $brandSel)) ? 'checked ' : '';
+                        $view .= 'value="' . $brand->brand_id . '"> ' . $name . ' <span class="count">' . product_count_by_brand_id($brand->brand_id, $this->productArray) . '</span></label>';
+                    }
                 }
             }
-            $view .='</div>';
+            $view .= '</div>';
         }
         return $view;
     }
 
+
+//    public function product_array_by_rating_view($ratingSel){
+//        $ratingArray = array_column($this->productArray, 'average_feedback');
+//        $view = '';
+//        if ($this->allValuesNotEmpty($ratingArray)) {
+//            $view .= '<div class="product-filter"><p class="mb-2">Rating</p>';
+//            foreach (array_unique($ratingArray) as $val) {
+//                if ($val == '1') {
+//                    $view .= $this->rating_1($ratingSel);
+//                } elseif ($val == '2') {
+//                    $view .= $this->rating_2($ratingSel);
+//                } elseif ($val == '3') {
+//                    $view .= $this->rating_3($ratingSel);
+//                } elseif ($val == '4') {
+//                    $view .= $this->rating_4($ratingSel);
+//                } elseif ($val == '5') {
+//                    $view .= $this->rating_5($ratingSel);
+//                }
+//            }
+//            $view .= '</div>';
+//        }
+//        return $view;
+//    }
+
     public function product_array_by_rating_view($ratingSel){
-        $ratingArray = array_column($this->productArray, 'average_feedback');
+        $ratingArray = array_unique(array_column($this->productArray, 'average_feedback'));
         $view = '';
+
         if ($this->allValuesNotEmpty($ratingArray)) {
             $view .= '<div class="product-filter"><p class="mb-2">Rating</p>';
-            foreach (array_unique($ratingArray) as $val) {
+
+            foreach ($ratingArray as $val) {
                 if ($val == '1') {
                     $view .= $this->rating_1($ratingSel);
                 } elseif ($val == '2') {
@@ -131,6 +233,7 @@ class Filter{
                     $view .= $this->rating_5($ratingSel);
                 }
             }
+
             $view .= '</div>';
         }
         return $view;
