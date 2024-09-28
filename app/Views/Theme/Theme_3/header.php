@@ -17,6 +17,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="<?php echo base_url() ?>/assets/assets_fl/style.min.css">
 
+
+    <!-- Select2 -->
+    <link rel="stylesheet" href="<?php echo base_url() ?>/admin_assets/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="<?php echo base_url() ?>/admin_assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <!-- Select2 -->
+
+
     <script src="<?php echo base_url() ?>/assets/assets_fl/jquery.min.js"></script>
     <script src="<?php echo base_url() ?>/assets/assets_fl/bootstrap.bundle.min.js"></script>
     <script src="<?php echo base_url() ?>/assets/assets_fl/swiper-bundle.min.js"></script>
@@ -28,8 +35,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 <!--    <script src="https://www.google.com/recaptcha/api.js" async defer></script>-->
-
-
 
 </head>
 <body>

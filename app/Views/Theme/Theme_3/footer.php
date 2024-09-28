@@ -295,8 +295,14 @@
 
 <script src="<?php echo base_url() ?>/assets/assets_fl/script.js"></script>
 <script src="<?php echo base_url() ?>/assets/assets_fl/slick/slick.js" type="text/javascript" charset="utf-8"> </script>
-
+<script src="<?php echo base_url() ?>/admin_assets/plugins/select2/js/select2.full.min.js"></script>
 <script>
+
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+        theme: 'bootstrap4'
+    })
+
     //social chat script (start)
     var chatBtn = document.getElementById("message_social");
     chatBtn.addEventListener("click", function() {
@@ -310,7 +316,18 @@
     });
     //social chat script (end)
 
+    function watermark_image_download(){
+        var activeImage = $('.slick-active').children().children().children('img').attr('src');
+        var newName = activeImage.replace("437_wm_pro_", 'wm_');
+        var a = $("<a>").attr("href", newName).attr("download", "download_img.jpg").appendTo("body");
+        a[0].click();
+        a.remove();
+        $('.dw-btn-group').hide();
 
+        // var newName = activeImage.replace("437_wm_pro_", '');
+        // alert(newName);
+
+    }
 
 
     function myFunction() {

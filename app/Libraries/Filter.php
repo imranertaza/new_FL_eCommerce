@@ -84,7 +84,7 @@ class Filter{
                     foreach ($option as $valOption) {
                         $view .= '<div class="product-filter">
                         <p class="mb-2">' . $valOption->name . '</p>
-                        <ul class="list-unstyled filter-items">';
+                        <select name="options[]" class="form-control select2bs4" multiple="multiple" form="searchForm" onchange="formSubmit()" >';
 
                         foreach ($allOptVal as $value) {
                             if ($valOption->option_id == $value->option_id) {
@@ -94,15 +94,13 @@ class Filter{
                                 $isColor = (($firstCar == '#') && ($length == 7)) ? '' : $nameVal;
                                 $nameOp = !empty($isColor) ? $isColor : '';
                                 $style = empty($isColor) ? "background-color: $nameVal !important;padding: 15px; border: unset;" : "";
+                                $sel = (in_array($value->option_value_id, $optionSel)) ? 'selected' : '';
 
-                                $view .= '<li class="mt-2">
-                                <input type="checkbox" form="searchForm" onclick="formSubmit()"';
-                                $view .= (in_array($value->option_value_id, $optionSel)) ? 'checked ' : '';
-                                $view .= 'class="btn-check" name="options[]" id="option_' . $value->option_value_id . '" value="' . $value->option_value_id . '"  autocomplete="off">
-                                <label class="btn btn-outline-secondary rounded-0"  style="' . $style . '" for="option_' . $value->option_value_id . '">' . $nameOp . '</label></li>';
+                                $view .= '<option value="'.$value->option_value_id .'"  '.$sel.'  style="' . $style . '" >' . $nameOp . '</option>' ;
+
                             }
                         }
-                        $view .= '</ul></div>';
+                        $view .= '</select></div>';
                     }
                 }
             }
