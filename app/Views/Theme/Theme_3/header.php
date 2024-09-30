@@ -38,9 +38,11 @@
 
 </head>
 <body>
-    <div class="message_alert" id="messAlt">
+    <div class="message_alert" <?php if (session()->getFlashdata('message') !== NULL) : echo "style='display:block !important'"; endif; ?> id="messAlt">
+
         <div class="alert-success_web py-2 px-3 border-0 text-white fs-5 text-capitalize" id="mesVal">
-            <?php print 'Successfully update to cart'; ?> </div>
+            <?php echo (session()->getFlashdata('message') !== NULL) ?  session()->getFlashdata('message'):'Successfully update to cart';  ?>
+        </div>
     </div>
     <?php
         $settings = get_settings();
