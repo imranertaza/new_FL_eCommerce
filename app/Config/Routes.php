@@ -38,6 +38,7 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
 $routes->post('/user_subscribe', 'Home::user_subscribe');
+$routes->get('/user_subscribe_verify', 'Home::verify');
 
 $routes->get('/admin', 'Admin\Login::index');
 $routes->post('/admin_login_action', 'Admin\Login::login_action');
