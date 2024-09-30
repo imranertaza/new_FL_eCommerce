@@ -4,6 +4,7 @@ namespace App\Controllers\Admin\Payment;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Western_union extends BaseController
 {
@@ -22,6 +23,11 @@ class Western_union extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides western union settings page view
+     * @param int $payment_method_id
+     * @return RedirectResponse|void
+     */
     public function settings($payment_method_id)
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -54,6 +60,10 @@ class Western_union extends BaseController
         }
     }
 
+    /**
+     * @description This method provides western union update action
+     * @return RedirectResponse
+     */
     public function update_action()
     {
         $payment_method_id = $this->request->getPost('payment_method_id');

@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Role extends BaseController
 {
@@ -22,6 +23,10 @@ class Role extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides role page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -50,6 +55,10 @@ class Role extends BaseController
         }
     }
 
+    /**
+     * @description This method provides role create page view
+     * @return RedirectResponse|void
+     */
     public function create(){
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
@@ -77,6 +86,10 @@ class Role extends BaseController
         }
     }
 
+    /**
+     * @description This method provides role create action
+     * @return RedirectResponse
+     */
     public function create_action()
     {
         $data['role'] = $this->request->getPost('role');
@@ -100,6 +113,11 @@ class Role extends BaseController
         }
     }
 
+    /**
+     * @description This method provides role update page view
+     * @param int $role_id
+     * @return RedirectResponse|void
+     */
     public function update($role_id)
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -134,6 +152,10 @@ class Role extends BaseController
         }
     }
 
+    /**
+     * @description This method provides role update action
+     * @return RedirectResponse
+     */
     public function update_action()
     {
         $role_id = $this->request->getPost('role_id');
@@ -158,6 +180,11 @@ class Role extends BaseController
         }
     }
 
+    /**
+     * @description This method provides role delete
+     * @param int $role_id
+     * @return RedirectResponse
+     */
     public function delete($role_id){
 
 

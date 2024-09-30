@@ -23,6 +23,10 @@ class Products extends BaseController {
         $this->filter = new Filter();
     }
 
+    /**
+     * @description This method provides product search page view
+     * @return void
+     */
     public function search(){
         $cat_id = $this->request->getGetPost('cat');
         $keyword = $this->request->getGetPost('keywordTop');

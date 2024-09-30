@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Settings extends BaseController
 {
@@ -22,6 +23,10 @@ class Settings extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides settings page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -50,6 +55,10 @@ class Settings extends BaseController
         }
     }
 
+    /**
+     * @description This method provides settings update action
+     * @return RedirectResponse
+     */
     public function update_action()
     {
         $data['store_name'] = $this->request->getPost('store_name');

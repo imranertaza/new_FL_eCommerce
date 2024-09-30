@@ -17,6 +17,10 @@ class Featuredproducts extends BaseController {
         $this->productsModel = new ProductsModel();
     }
 
+    /**
+     * @description This method provides featured products page view
+     * @return void
+     */
     public function index(){
         $settings = get_settings();
         $data['products'] = $this->productsModel->where('status','Active')->where('featured','1')->paginate(10);

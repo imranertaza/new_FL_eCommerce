@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
 use App\Models\ProductsModel;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Advanced_products extends BaseController
 {
@@ -62,6 +63,11 @@ class Advanced_products extends BaseController
             echo view('Admin/footer');
         }
     }
+
+    /**
+     * @description This method provides advanced product page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -111,7 +117,10 @@ class Advanced_products extends BaseController
         }
     }
 
-
+    /**
+     * @description This method provides bulk status update
+     * @return void
+     */
     public function bulk_status_update()
     {
         $module_settings_id = $this->request->getPost('module_settings_id');
@@ -127,6 +136,11 @@ class Advanced_products extends BaseController
 
         print '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
     }
+
+    /**
+     * @description This method provides bulk data update
+     * @return void
+     */
     public function bulk_data_update()
     {
 
@@ -159,6 +173,11 @@ class Advanced_products extends BaseController
 
 
     }
+
+    /**
+     * @description This method provides description data update
+     * @return void
+     */
     public function description_data_update(){
         $product_desc_id = $this->request->getPost('product_desc_id');
         $meta_title = $this->request->getPost('meta_title');
@@ -187,6 +206,11 @@ class Advanced_products extends BaseController
 
         echo view('Admin/Advanced_products/row', $data);
     }
+
+    /**
+     * @description This method provides bulk all status update
+     * @return void
+     */
     public function bulk_all_status_update()
     {
         $product_id = $this->request->getPost('product_id');
@@ -203,6 +227,11 @@ class Advanced_products extends BaseController
 
         echo view('Admin/Advanced_products/row', $data);
     }
+
+    /**
+     * @description This method provides bulk category view
+     * @return void
+     */
     public function bulk_category_view()
     {
         $product_id = $this->request->getPost('product_id');
@@ -216,6 +245,11 @@ class Advanced_products extends BaseController
 
         echo view('Admin/Advanced_products/category', $data);
     }
+
+    /**
+     * @description This method provides bulk category update
+     * @return void
+     */
     public function bulk_category_update()
     {
         $product_id = $this->request->getPost('product_id');
@@ -240,6 +274,11 @@ class Advanced_products extends BaseController
         echo view('Admin/Advanced_products/row', $data);
 
     }
+
+    /**
+     * @description This method provides bulk option view
+     * @return void
+     */
     public function bulk_option_view(){
         $product_id = $this->request->getPost('product_id');
         $data['product_id'] = $product_id;
@@ -248,6 +287,11 @@ class Advanced_products extends BaseController
         $data['prodOption'] = $table->where('product_id', $product_id)->groupBy('option_id')->get()->getResult();
         echo view('Admin/Advanced_products/option', $data);
     }
+
+    /**
+     * @description This method provides bulk option update
+     * @return void
+     */
     public function bulk_option_update(){
         $product_id = $this->request->getPost('product_id');
 
@@ -281,6 +325,11 @@ class Advanced_products extends BaseController
 
         echo view('Admin/Advanced_products/row', $data);
     }
+
+    /**
+     * @description This method provides bulk product cpoy
+     * @return RedirectResponse
+     */
     public function bulk_product_cpoy(){
 
 
@@ -463,6 +512,11 @@ class Advanced_products extends BaseController
             return redirect()->back();
         }
     }
+
+    /**
+     * @description This method provides product multi delete
+     * @return RedirectResponse
+     */
     public function product_multi_delete(){
         $allProductId =  $this->request->getPost('productId[]');
         if (!empty($allProductId)) {
@@ -525,6 +579,11 @@ class Advanced_products extends BaseController
             return redirect()->back();
         }
     }
+
+    /**
+     * @description This method provides multi option edit
+     * @return RedirectResponse|void
+     */
     public function multi_option_edit(){
         $allProductId =  $this->request->getPost('productId[]');
         if (!empty($allProductId)){
@@ -546,6 +605,11 @@ class Advanced_products extends BaseController
             return redirect()->back();
         }
     }
+
+    /**
+     * @description This method provides multi option action
+     * @return RedirectResponse
+     */
     public function multi_option_action(){
         $redirect_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
 
@@ -587,6 +651,11 @@ class Advanced_products extends BaseController
 
 
     }
+
+    /**
+     * @description This method provides multi attribute edit
+     * @return RedirectResponse|void
+     */
     public function multi_attribute_edit(){
         $allProductId =  $this->request->getPost('productId[]');
         if (!empty($allProductId)){
@@ -608,6 +677,11 @@ class Advanced_products extends BaseController
             return redirect()->back();
         }
     }
+
+    /**
+     * @description This method provides multi attribute action
+     * @return RedirectResponse
+     */
     public function multi_attribute_action(){
         $redirect_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
         $all_product = $this->request->getPost('productId[]');
@@ -642,6 +716,10 @@ class Advanced_products extends BaseController
 
     }
 
+    /**
+     * @description This method provides image show
+     * @return string
+     */
     public function image_show(){
         $product_id = $this->request->getPost('product_id');
         $image = get_data_by_id('image','cc_products','product_id',$product_id);
@@ -650,6 +728,10 @@ class Advanced_products extends BaseController
         return $result;
     }
 
+    /**
+     * @description This method provides multi category edit
+     * @return RedirectResponse|void
+     */
     public function multi_category_edit(){
         $allProductId =  $this->request->getPost('productId[]');
         if (!empty($allProductId)){
@@ -670,6 +752,10 @@ class Advanced_products extends BaseController
         }
     }
 
+    /**
+     * @description This method provides multi category action
+     * @return RedirectResponse
+     */
     public function multi_category_action(){
         $redirect_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
 

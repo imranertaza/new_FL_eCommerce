@@ -4,6 +4,7 @@ namespace App\Controllers\Admin\Payment;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Payment extends BaseController
 {
@@ -22,6 +23,10 @@ class Payment extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides payment page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -50,6 +55,10 @@ class Payment extends BaseController
         }
     }
 
+    /**
+     * @description This method provides payment status update
+     * @return void
+     */
     public function status_update(){
         $payment_method_id = $this->request->getPost('id');
         $oldStatus = get_data_by_id('status','cc_payment_method','payment_method_id',$payment_method_id);

@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Module extends BaseController
 {
@@ -22,6 +23,10 @@ class Module extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides module page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -50,6 +55,11 @@ class Module extends BaseController
         }
     }
 
+    /**
+     * @description This method provides module settings
+     * @param int $id
+     * @return RedirectResponse|void
+     */
     public function module_settings($id)
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -79,6 +89,10 @@ class Module extends BaseController
         }
     }
 
+    /**
+     * @description This method provides module settings action
+     * @return RedirectResponse
+     */
     public function module_settings_action()
     {
 

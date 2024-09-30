@@ -13,6 +13,10 @@ class Compare extends BaseController {
         $this->session = \Config\Services::session();
     }
 
+    /**
+     * @description This method provides compare page view
+     * @return void
+     */
     public function index(){
         $settings = get_settings();
         $arrayCom = $this->session->compare_session;
@@ -36,6 +40,10 @@ class Compare extends BaseController {
         echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
+    /**
+     * @description This method provides add to compare
+     * @return void
+     */
     public function addtoCompare(){
         $product_id = $this->request->getPost('product_id');
         (empty($this->session->compare_session))?$compareArray = array():$compareArray = $this->session->compare_session;
@@ -58,6 +66,10 @@ class Compare extends BaseController {
 //        unset($_SESSION['compare_session']);
     }
 
+    /**
+     * @description This method provides remove to compare
+     * @return void
+     */
     public function removeToCompare(){
         $key_id = $this->request->getPost('key_id');
         if(isset($this->session->compare_session)){

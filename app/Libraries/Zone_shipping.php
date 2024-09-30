@@ -5,6 +5,10 @@ class Zone_shipping{
     private $inDhakaPrice;
     private $outDhakaPrice;
 
+    /**
+     * @description This function provides get settings
+     * @return $this
+     */
     public function getSettings(){
         $shipping_method_id = get_data_by_id('shipping_method_id','cc_shipping_method','code','zone');
 
@@ -20,6 +24,11 @@ class Zone_shipping{
         return $this;
     }
 
+    /**
+     * @description This function provides calculate shipping
+     * @param string $city
+     * @return string
+     */
     public function calculateShipping($city){
         if ($city == 322){
             $shippingRate = $this->inDhakaPrice;
@@ -35,6 +44,10 @@ class Zone_shipping{
         }
     }
 
+    /**
+     * @description This function provides get shipping eligible product
+     * @return array
+     */
     public function get_shipping_eligible_product(): array
     {
         $eligible_product = array();

@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class User extends BaseController
 {
@@ -22,6 +23,10 @@ class User extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides user page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -50,6 +55,10 @@ class User extends BaseController
         }
     }
 
+    /**
+     * @description This method provides user create page view
+     * @return RedirectResponse|void
+     */
     public function create(){
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
@@ -73,6 +82,10 @@ class User extends BaseController
         }
     }
 
+    /**
+     * @description This method provides user create action
+     * @return RedirectResponse
+     */
     public function create_action()
     {
         $data['name'] = $this->request->getPost('name');
@@ -116,6 +129,11 @@ class User extends BaseController
         }
     }
 
+    /**
+     * @description This method provides user update page view
+     * @param int $user_id
+     * @return RedirectResponse|void
+     */
     public function update($user_id)
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -144,6 +162,10 @@ class User extends BaseController
         }
     }
 
+    /**
+     * @description This method provides user update action
+     * @return RedirectResponse
+     */
     public function update_action()
     {
         $user_id = $this->request->getPost('user_id');
@@ -182,6 +204,10 @@ class User extends BaseController
         }
     }
 
+    /**
+     * @description This method provides user update general action
+     * @return RedirectResponse
+     */
     public function general_action()
     {
         $user_id = $this->request->getPost('user_id');
@@ -208,6 +234,10 @@ class User extends BaseController
         }
     }
 
+    /**
+     * @description This method provides user update image action
+     * @return RedirectResponse
+     */
     public function image_action(){
         $user_id = $this->request->getPost('user_id');
 
@@ -247,6 +277,11 @@ class User extends BaseController
 
     }
 
+    /**
+     * @description This method provides user delete
+     * @param int $user_id
+     * @return RedirectResponse
+     */
     public function delete($user_id){
 
         $target_dir = FCPATH . '/uploads/user/';

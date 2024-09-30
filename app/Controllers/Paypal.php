@@ -8,6 +8,7 @@ use App\Libraries\Weight_shipping;
 use App\Libraries\Zone_shipping;
 use App\Libraries\Flat_shipping;
 use App\Models\ProductsModel;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Paypal extends BaseController
 {
@@ -33,6 +34,10 @@ class Paypal extends BaseController
         $this->cart = new Mycart();
     }
 
+    /**
+     * @description This method provides paypal page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $amount = $this->request->getGet('amount');
@@ -72,6 +77,11 @@ class Paypal extends BaseController
             }
         }
     }
+
+    /**
+     * @description This method provides session data
+     * @return array
+     */
     private function session_data()
     {
         $data['payment_firstname'] = $this->request->getGet('payment_firstname');
@@ -109,6 +119,10 @@ class Paypal extends BaseController
         return $data;
     }
 
+    /**
+     * @description This method provides paypal checkout action
+     * @return RedirectResponse
+     */
     public function paypal_checkout_action()
     {
 
@@ -264,6 +278,10 @@ class Paypal extends BaseController
         }
     }
 
+    /**
+     * @description This method provides session destroy
+     * @return void
+     */
     private function sessionDestry()
     {
         unset($_SESSION['payment_firstname']);

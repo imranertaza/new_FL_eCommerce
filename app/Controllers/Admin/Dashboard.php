@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Dashboard extends BaseController
 {
@@ -20,6 +21,10 @@ class Dashboard extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides dashboard page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;

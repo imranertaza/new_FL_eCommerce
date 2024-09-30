@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Page_settings extends BaseController
 {
@@ -22,6 +23,10 @@ class Page_settings extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides page settings page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -50,6 +55,10 @@ class Page_settings extends BaseController
         }
     }
 
+    /**
+     * @description This method provides page settings create page view
+     * @return RedirectResponse|void
+     */
     public function create(){
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
@@ -73,6 +82,10 @@ class Page_settings extends BaseController
         }
     }
 
+    /**
+     * @description This method provides page settings create action
+     * @return RedirectResponse
+     */
     public function create_action()
     {
         $data['page_title'] = $this->request->getPost('page_title');
@@ -117,6 +130,11 @@ class Page_settings extends BaseController
         }
     }
 
+    /**
+     * @description This method provides page settings update page view
+     * @param int $page_id
+     * @return RedirectResponse|void
+     */
     public function update($page_id)
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -145,6 +163,10 @@ class Page_settings extends BaseController
         }
     }
 
+    /**
+     * @description This method provides page settings update action
+     * @return RedirectResponse
+     */
     public function update_action()
     {
         $page_id = $this->request->getPost('page_id');
@@ -177,6 +199,11 @@ class Page_settings extends BaseController
         }
     }
 
+    /**
+     * @description This method provides page settings delete
+     * @param int $page_id
+     * @return RedirectResponse
+     */
     public function delete($page_id){
 
         $table = DB()->table('cc_pages');

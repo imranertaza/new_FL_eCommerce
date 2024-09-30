@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Libraries\Filter;
 use App\Models\CategoryproductsModel;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Category extends BaseController {
 
@@ -20,6 +21,11 @@ class Category extends BaseController {
         $this->filter = new Filter();
     }
 
+    /**
+     * @description This method provides category page view
+     * @param int $cat_id
+     * @return void
+     */
     public function index($cat_id){
         $settings = get_settings();
 
@@ -65,6 +71,10 @@ class Category extends BaseController {
         echo view('Theme/'.$settings['Theme'].'/footer', $data);
     }
 
+    /**
+     * @description This method provides url generate
+     * @return RedirectResponse
+     */
     public function url_generate(){
 
         $prod_cat_id = $this->request->getPost('prod_cat_id');

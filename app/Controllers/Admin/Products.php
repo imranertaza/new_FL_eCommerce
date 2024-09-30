@@ -9,6 +9,8 @@ use App\Libraries\Theme_2;
 use App\Libraries\Theme_3;
 use App\Libraries\Theme_default;
 use App\Models\ProductsModel;
+use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\HTTP\ResponseInterface;
 
 class Products extends BaseController
 {
@@ -65,6 +67,10 @@ class Products extends BaseController
         }
     }
 
+    /**
+     * @description This method provides product create page view
+     * @return RedirectResponse|void
+     */
     public function create(){
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
@@ -94,6 +100,10 @@ class Products extends BaseController
         }
     }
 
+    /**
+     * @description This method provides product create action
+     * @return RedirectResponse
+     */
     public function create_action() {
 
         $adUserId = $this->session->adUserId;
@@ -394,6 +404,10 @@ class Products extends BaseController
         }
     }
 
+    /**
+     * @description This method provides product copy action
+     * @return RedirectResponse
+     */
     public function copy_action() {
         $allProductId =  $this->request->getPost('productId[]');
 
@@ -574,6 +588,11 @@ class Products extends BaseController
 
     }
 
+    /**
+     * @description This method provides product update page view
+     * @param int $product_id
+     * @return RedirectResponse|void
+     */
     public function update($product_id)
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -630,6 +649,10 @@ class Products extends BaseController
         }
     }
 
+    /**
+     * @description This method provides product update action
+     * @return RedirectResponse
+     */
     public function update_action(){
 
         $adUserId = $this->session->adUserId;
@@ -980,6 +1003,10 @@ class Products extends BaseController
         }
     }
 
+    /**
+     * @description This method provides product delete
+     * @return void
+     */
     public function delete(){
         $product_id = $this->request->getPost('product_id');
 
@@ -1034,6 +1061,10 @@ class Products extends BaseController
         print '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
     }
 
+    /**
+     * @description This method provides get subCategory
+     * @return void
+     */
     public function get_subCategory(){
         $categoryID = $this->request->getPost('cat_id');
         $table = DB()->table('cc_product_category');
@@ -1050,6 +1081,10 @@ class Products extends BaseController
         print $view;
     }
 
+    /**
+     * @description This method provides related product
+     * @return ResponseInterface
+     */
     public function related_product(){
         $product = [];
         $keyword = $this->request->getGet('q');
@@ -1059,6 +1094,10 @@ class Products extends BaseController
         return $this->response->setJSON($product);
     }
 
+    /**
+     * @description This method provides image delete
+     * @return void
+     */
     public function image_delete(){
         helper('filesystem');
 
@@ -1076,6 +1115,10 @@ class Products extends BaseController
         print '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
     }
 
+    /**
+     * @description This method provides product option search
+     * @return void
+     */
     public function product_option_search(){
         $keyword = $this->request->getPost('key');
         $table = DB()->table('cc_option');
@@ -1092,6 +1135,10 @@ class Products extends BaseController
         print $view;
     }
 
+    /**
+     * @description This method provides product option value search
+     * @return void
+     */
     public function product_option_value_search(){
         $option_id = $this->request->getPost('option_id');
         $table = DB()->table('cc_option_value');
@@ -1103,9 +1150,10 @@ class Products extends BaseController
         print $view;
     }
 
-
-
-
+    /**
+     * @description This method provides product image crop
+     * @return RedirectResponse|void
+     */
     public function image_crop(){
         $allProductId =  $this->request->getPost('productId[]');
 
@@ -1204,6 +1252,11 @@ class Products extends BaseController
 
     }
 
+    /**
+     * @description This method provides product old image
+     * @param array $productarray
+     * @return array
+     */
     private function old_image($productarray){
         $table = DB()->table('cc_products');
         $table->select('product_id, image');
@@ -1213,6 +1266,11 @@ class Products extends BaseController
         return $table->get()->getResult();
     }
 
+    /**
+     * @description This method provides multi image
+     * @param array $productarray
+     * @return array
+     */
     private function multi_image($productarray){
         $table = DB()->table('cc_product_image');
         $table->select('product_image_id,product_id, image');
@@ -1222,7 +1280,10 @@ class Products extends BaseController
         return $table->get()->getResult();
     }
 
-
+    /**
+     * @description This method provides multi delete action
+     * @return RedirectResponse
+     */
     public function multi_delete_action(){
         $allProductId =  $this->request->getPost('productId[]');
         if (!empty($allProductId)) {
@@ -1287,6 +1348,10 @@ class Products extends BaseController
         }
     }
 
+    /**
+     * @description This method provides product image sort action
+     * @return void
+     */
     public function product_image_sort_action(){
         $product_image_id =  $this->request->getPost('product_image_id');
 
@@ -1295,7 +1360,10 @@ class Products extends BaseController
         $table->where('product_image_id',$product_image_id)->update($data);
     }
 
-
+    /**
+     * @description This method provides product index page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -1345,6 +1413,10 @@ class Products extends BaseController
         }
     }
 
+    /**
+     * @description This method provides product list view
+     * @return void
+     */
     public function products_list(){
 
         $theme = get_lebel_by_value_in_settings('Theme');

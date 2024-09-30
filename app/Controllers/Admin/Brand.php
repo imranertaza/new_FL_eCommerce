@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Brand extends BaseController
 {
@@ -22,6 +23,10 @@ class Brand extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides brand page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -50,6 +55,10 @@ class Brand extends BaseController
         }
     }
 
+    /**
+     * @description This method provides brand create page view
+     * @return RedirectResponse|void
+     */
     public function create(){
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
@@ -73,6 +82,10 @@ class Brand extends BaseController
         }
     }
 
+    /**
+     * @description This method provides brand create action
+     * @return RedirectResponse
+     */
     public function create_action()
     {
         $data['name'] = $this->request->getPost('name');
@@ -110,6 +123,11 @@ class Brand extends BaseController
         }
     }
 
+    /**
+     * @description This method provides brand update page view
+     * @param int $brand_id
+     * @return RedirectResponse|void
+     */
     public function update($brand_id)
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -138,6 +156,10 @@ class Brand extends BaseController
         }
     }
 
+    /**
+     * @description This method provides brand update action
+     * @return RedirectResponse
+     */
     public function update_action()
     {
         $brand_id = $this->request->getPost('brand_id');
@@ -187,6 +209,11 @@ class Brand extends BaseController
         }
     }
 
+    /**
+     * @description This method provides brand delete
+     * @param $brand_id
+     * @return RedirectResponse
+     */
     public function delete($brand_id){
 
         $target_dir = FCPATH . '/uploads/brand/';

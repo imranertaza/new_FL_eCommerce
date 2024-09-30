@@ -5,6 +5,7 @@ namespace App\Controllers\Customer;
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
 use App\Models\FavoriteModel;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Order extends BaseController
 {
@@ -20,6 +21,10 @@ class Order extends BaseController
         $this->favoriteModel = new FavoriteModel();
     }
 
+    /**
+     * @description This method provides order page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInCustomer = $this->session->isLoggedInCustomer;
@@ -43,6 +48,11 @@ class Order extends BaseController
         }
     }
 
+    /**
+     * @description This method provides invoice view
+     * @param int $order_id
+     * @return RedirectResponse|void
+     */
     public function invoice($order_id){
         $isLoggedInCustomer = $this->session->isLoggedInCustomer;
         if (!isset($isLoggedInCustomer) || $isLoggedInCustomer != TRUE) {

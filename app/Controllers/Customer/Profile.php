@@ -5,6 +5,7 @@ namespace App\Controllers\Customer;
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
 use App\Models\FavoriteModel;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Profile extends BaseController
 {
@@ -20,6 +21,10 @@ class Profile extends BaseController
         $this->favoriteModel = new FavoriteModel();
     }
 
+    /**
+     * @description This method provides profile page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInCustomer = $this->session->isLoggedInCustomer;
@@ -47,6 +52,10 @@ class Profile extends BaseController
         }
     }
 
+    /**
+     * @description This method provides update action
+     * @return RedirectResponse
+     */
     public function update_action(){
         $data['firstname'] = $this->request->getPost('firstname');
         $data['lastname'] = $this->request->getPost('lastname');
@@ -146,6 +155,10 @@ class Profile extends BaseController
         }
     }
 
+    /**
+     * @description This method provides password action
+     * @return RedirectResponse
+     */
     public function password_action(){
 
 
@@ -184,6 +197,10 @@ class Profile extends BaseController
         }
     }
 
+    /**
+     * @description This method provides newsletter action
+     * @return void
+     */
     public function newsletter_action(){
         $check = get_data_by_id('newsletter','cc_customer','customer_id',$this->session->cusUserId);
 

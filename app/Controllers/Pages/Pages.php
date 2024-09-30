@@ -15,6 +15,11 @@ class Pages extends BaseController {
         $this->session = \Config\Services::session();
     }
 
+    /**
+     * @description This method provides page view
+     * @param string $slug
+     * @return void
+     */
     public function page($slug){
         $settings = get_settings();
         $table = DB()->table('cc_pages');
@@ -36,6 +41,10 @@ class Pages extends BaseController {
         echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
+    /**
+     * @description This method provides contact action
+     * @return void
+     */
     public function contact_action(){
 
         $data['email'] = $this->request->getPost('email');

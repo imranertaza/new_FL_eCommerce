@@ -13,6 +13,10 @@ class Freedelivery extends BaseController {
         $this->session = \Config\Services::session();
     }
 
+    /**
+     * @description This method provides free delivery page view
+     * @return void
+     */
     public function index(){
         $settings = get_settings();
         $table = DB()->table('products');

@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Order extends BaseController
 {
@@ -22,6 +23,10 @@ class Order extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides order page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -50,6 +55,11 @@ class Order extends BaseController
         }
     }
 
+    /**
+     * @description This method provides order view
+     * @param $order_id
+     * @return RedirectResponse|void
+     */
     public function order_view($order_id)
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -85,6 +95,10 @@ class Order extends BaseController
         }
     }
 
+    /**
+     * @description This method provides history action
+     * @return RedirectResponse
+     */
     public function history_action()
     {
         $data['order_id'] = $this->request->getPost('order_id');
