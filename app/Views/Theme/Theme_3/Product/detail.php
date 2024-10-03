@@ -63,9 +63,9 @@
                                                     </div>
                                                     <button class="btn btn-dow position-absolute" onclick="download_btn_show()" >Download</button>
                                                     <div class="dw-btn-group position-absolute">
-                                                        <a href="javascript:void(0)" onclick="watermark_image_download()" download class="btn-w-2nd">Watermark Image</a><br>
+                                                        <a href="javascript:void(0)" onclick="watermark_image_download('watermark')" download class="btn-w-2nd">Watermark Image</a><br>
                                                         <?php if (isset($_COOKIE['down_image'])){ ?>
-                                                            <a href="javascript:void(0)" onclick="without_watermark_image_download()" class="btn-w-2nd">Without Watermark Image</a>
+                                                            <a href="javascript:void(0)" onclick="watermark_image_download('nowatermark')" class="btn-w-2nd">Without Watermark Image</a>
                                                         <?php }else{?>
                                                             <a href="javascript:void(0)" onclick="show_form()" class="btn-w-2nd">Without Watermark Image</a>
                                                         <?php } ?>

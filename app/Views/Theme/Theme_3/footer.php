@@ -316,22 +316,19 @@
     });
     //social chat script (end)
 
-    function watermark_image_download(){
+    function watermark_image_download(condition){
         var activeImage = $('.slick-active').children().children().children('img').attr('src');
-        var newName = activeImage.replace("437_wm_pro_", 'wm_');
+        if (condition == 'watermark') {
+            var newName = activeImage.replace("437_wm_pro_", 'wm_');
+        }else{
+            var newName = activeImage.replace("437_wm_pro_", '');
+        }
         var a = $("<a>").attr("href", newName).attr("download", "download_img.jpg").appendTo("body");
         a[0].click();
         a.remove();
         $('.dw-btn-group').hide();
     }
-    function without_watermark_image_download(){
-        var activeImage = $('.slick-active').children().children().children('img').attr('src');
-        var newName = activeImage.replace("437_wm_pro_", '');
-        var a = $("<a>").attr("href", newName).attr("download", "download_img.jpg").appendTo("body");
-        a[0].click();
-        a.remove();
-        $('.dw-btn-group').hide();
-    }
+    
 
 
     function myFunction() {
