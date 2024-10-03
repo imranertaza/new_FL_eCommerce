@@ -4,6 +4,7 @@ namespace App\Controllers\Admin\Payment;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Bank_transfer extends BaseController
 {
@@ -22,6 +23,11 @@ class Bank_transfer extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides bank transfer page view
+     * @param int $payment_method_id
+     * @return RedirectResponse|void
+     */
     public function bank_settings($payment_method_id) {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
@@ -53,6 +59,10 @@ class Bank_transfer extends BaseController
         }
     }
 
+    /**
+     * @description This method provides bank transfer update action
+     * @return RedirectResponse
+     */
     public function update_action()
     {
         $payment_method_id = $this->request->getPost('payment_method_id');

@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Color_family extends BaseController
 {
@@ -22,6 +23,10 @@ class Color_family extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides color family page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -50,6 +55,10 @@ class Color_family extends BaseController
         }
     }
 
+    /**
+     * @description This method provides color family create page view
+     * @return RedirectResponse|void
+     */
     public function create(){
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
@@ -73,6 +82,10 @@ class Color_family extends BaseController
         }
     }
 
+    /**
+     * @description This method provides color family create action
+     * @return RedirectResponse
+     */
     public function create_action()
     {
         $data['color_name'] = $this->request->getPost('color_name');
@@ -97,6 +110,11 @@ class Color_family extends BaseController
         }
     }
 
+    /**
+     * @description This method provides color family update page view
+     * @param int $color_family_id
+     * @return RedirectResponse|void
+     */
     public function update($color_family_id)
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -125,6 +143,10 @@ class Color_family extends BaseController
         }
     }
 
+    /**
+     * @description This method provides color family update action
+     * @return RedirectResponse
+     */
     public function update_action()
     {
         $color_family_id = $this->request->getPost('color_family_id');
@@ -151,6 +173,11 @@ class Color_family extends BaseController
         }
     }
 
+    /**
+     * @description This method provides color family delete
+     * @param int $color_family_id
+     * @return RedirectResponse
+     */
     public function delete($color_family_id){
 
 

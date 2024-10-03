@@ -5,6 +5,11 @@ class Zone_rate_shipping{
     private $zone_rate_method;
     private $geo_zone_id;
 
+    /**
+     * @description This function provides get settings
+     * @param int $city
+     * @return $this
+     */
     public function getSettings($city)
     {
 
@@ -23,7 +28,10 @@ class Zone_rate_shipping{
         return $this;
     }
 
-
+    /**
+     * @description This function provides calculate shipping
+     * @return int
+     */
     public function calculateShipping() {
         $charge = 0;
         if (!empty($this->geo_zone_id)) {
@@ -49,7 +57,11 @@ class Zone_rate_shipping{
         return $charge;
     }
 
-
+    /**
+     * @description This function provides others rate calculation
+     * @param int $geo_zone_id
+     * @return int
+     */
     private function others_rate_calculation($geo_zone_id){
         $charge = 0;
         $shipping_method_id = get_data_by_id('shipping_method_id','cc_shipping_method','code','zone_rate');
@@ -68,7 +80,11 @@ class Zone_rate_shipping{
         return $charge;
     }
 
-
+    /**
+     * @description This function provides weight rate calculation
+     * @param int $geo_zone_id
+     * @return int
+     */
     private function weight_rate_calculation($geo_zone_id){
         $charge = 0;
         $totalWeight = 0;
@@ -97,6 +113,11 @@ class Zone_rate_shipping{
         return $charge;
     }
 
+    /**
+     * @description This function provides item rate calculation
+     * @param int $geo_zone_id
+     * @return int
+     */
     private function item_rate_calculation($geo_zone_id){
         $charge = 0;
         $totalItem = 0;
@@ -123,6 +144,11 @@ class Zone_rate_shipping{
 
     }
 
+    /**
+     * @description This function provides price rate calculation
+     * @param int $geo_zone_id
+     * @return int
+     */
     private function price_rate_calculation($geo_zone_id){
         $charge = 0;
 
@@ -148,8 +174,12 @@ class Zone_rate_shipping{
         return $charge;
     }
 
-
-
+    /**
+     * @description This function provides zone id
+     * @param int $country_id
+     * @param int $zone_id
+     * @return int
+     */
     private function zone_id($country_id,$zone_id){
         $table = DB()->table('cc_geo_zone_details');
         $datarow = $table->where('country_id', $country_id)->where('zone_id', $zone_id)->get()->getRow();
@@ -168,7 +198,10 @@ class Zone_rate_shipping{
 
     }
 
-
+    /**
+     * @description This function provides get shipping eligible product
+     * @return array
+     */
     public function get_shipping_eligible_product(): array
     {
         $eligible_product = array();

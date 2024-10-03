@@ -30,7 +30,7 @@
                 <div class="col-md-6">
                     <div class="input-group">
                         <input type="text" name="subscribe_email" id="subscribe_email"  class="form-control" placeholder="Enter your Email address" aria-label="Search" aria-describedby="search-addon" />
-                        <button type="button" class="btn btn-subscribe" onclick="subscribe()" >Subscribe Now</button>
+                        <button type="button" class="btn btn-subscribe" onclick="subscribe('subscribe_email')" >Subscribe Now</button>
                     </div>
                 </div>
             </div>
@@ -295,8 +295,14 @@
 
 <script src="<?php echo base_url() ?>/assets/assets_fl/script.js"></script>
 <script src="<?php echo base_url() ?>/assets/assets_fl/slick/slick.js" type="text/javascript" charset="utf-8"> </script>
-
+<script src="<?php echo base_url() ?>/admin_assets/plugins/select2/js/select2.full.min.js"></script>
 <script>
+
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+        theme: 'bootstrap4'
+    })
+
     //social chat script (start)
     var chatBtn = document.getElementById("message_social");
     chatBtn.addEventListener("click", function() {
@@ -310,7 +316,22 @@
     });
     //social chat script (end)
 
-
+    function watermark_image_download(){
+        var activeImage = $('.slick-active').children().children().children('img').attr('src');
+        var newName = activeImage.replace("437_wm_pro_", 'wm_');
+        var a = $("<a>").attr("href", newName).attr("download", "download_img.jpg").appendTo("body");
+        a[0].click();
+        a.remove();
+        $('.dw-btn-group').hide();
+    }
+    function without_watermark_image_download(){
+        var activeImage = $('.slick-active').children().children().children('img').attr('src');
+        var newName = activeImage.replace("437_wm_pro_", '');
+        var a = $("<a>").attr("href", newName).attr("download", "download_img.jpg").appendTo("body");
+        a[0].click();
+        a.remove();
+        $('.dw-btn-group').hide();
+    }
 
 
     function myFunction() {
@@ -804,8 +825,8 @@
         });
     }
 
-    function subscribe() {
-        var email = $('#subscribe_email').val();
+    function subscribe(emailID) {
+        var email = $('#'+emailID).val();
         if (email == '') {
             $('#mesVal').html('Email required');
             $('.message_alert').show();
@@ -820,9 +841,11 @@
                     email: email
                 },
                 success: function(response) {
-                    $('#subscribe_email').val('');
+                    $('#'+emailID).val('');
                     $('#mesVal').html(response);
                     $('.message_alert').show();
+                    $('.dw-input-group').hide();
+                    $('.dw-btn-group').hide();
                     setTimeout(function() {
                         $("#messAlt").fadeOut(1500);
                     }, 600);

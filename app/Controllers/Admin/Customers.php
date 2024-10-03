@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Customers extends BaseController
 {
@@ -22,6 +23,10 @@ class Customers extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides customer page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -50,6 +55,10 @@ class Customers extends BaseController
         }
     }
 
+    /**
+     * @description This method provides customer create page view
+     * @return RedirectResponse|void
+     */
     public function create(){
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
@@ -73,6 +82,10 @@ class Customers extends BaseController
         }
     }
 
+    /**
+     * @description This method provides customer create action
+     * @return RedirectResponse
+     */
     public function create_action()
     {
         $data['firstname'] = $this->request->getPost('firstname');
@@ -118,6 +131,11 @@ class Customers extends BaseController
         }
     }
 
+    /**
+     * @description This method provides customer update page view
+     * @param int $customer_id
+     * @return RedirectResponse|void
+     */
     public function update($customer_id)
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -146,6 +164,10 @@ class Customers extends BaseController
         }
     }
 
+    /**
+     * @description This method provides customer update action
+     * @return RedirectResponse
+     */
     public function update_action()
     {
         $customer_id = $this->request->getPost('customer_id');
@@ -190,6 +212,10 @@ class Customers extends BaseController
         }
     }
 
+    /**
+     * @description This method provides customer update general action
+     * @return RedirectResponse
+     */
     public function general_action()
     {
         $customer_id = $this->request->getPost('customer_id');
@@ -218,6 +244,10 @@ class Customers extends BaseController
         }
     }
 
+    /**
+     * @description This method provides customer update image action
+     * @return RedirectResponse
+     */
     public function image_action(){
         $customer_id = $this->request->getPost('customer_id');
 
@@ -257,6 +287,11 @@ class Customers extends BaseController
 
     }
 
+    /**
+     * @description This method provides customer delete
+     * @param int $customer_id
+     * @return RedirectResponse
+     */
     public function delete($customer_id){
 
         $table = DB()->table('cc_customer');
@@ -266,6 +301,11 @@ class Customers extends BaseController
         return redirect()->to('customers');
     }
 
+    /**
+     * @description This method provides customer ledger
+     * @param int $customer_id
+     * @return RedirectResponse|void
+     */
     public function ledger($customer_id)
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;

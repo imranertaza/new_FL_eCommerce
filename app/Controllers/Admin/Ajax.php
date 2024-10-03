@@ -22,7 +22,10 @@ class Ajax extends BaseController
         $this->permission = new Permission();
     }
 
-
+    /**
+     * @description This method provides get state
+     * @return void
+     */
     public function get_state(){
         $country_id = $this->request->getPost('country_id');
 
@@ -36,6 +39,10 @@ class Ajax extends BaseController
         print $options;
     }
 
+    /**
+     * @description This method provides module update
+     * @return void
+     */
     public function module_update(){
         $id = $this->request->getPost('id');
 
@@ -49,6 +56,10 @@ class Ajax extends BaseController
         }
     }
 
+    /**
+     * @description This method provides get option value
+     * @return void
+     */
     public function get_option_value(){
         $option_id = $this->request->getPost('option_id');
 
@@ -63,6 +74,11 @@ class Ajax extends BaseController
 
 
     }
+
+    /**
+     * @description This method provides get zone value
+     * @return void
+     */
 
     public function get_zone_value(){
         $country_id = $this->request->getPost('country_id');

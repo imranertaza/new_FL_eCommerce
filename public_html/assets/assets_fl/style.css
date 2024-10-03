@@ -2974,7 +2974,7 @@ ul {
     list-style-type: none;
     position: relative;
 }
-li {
+.li-site {
     list-style-type: none;
     /*border-left: 2px solid #000;*/
     margin-left: 1em;

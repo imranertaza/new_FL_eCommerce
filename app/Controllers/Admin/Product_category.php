@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Product_category extends BaseController
 {
@@ -22,6 +23,10 @@ class Product_category extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides product category page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -50,6 +55,10 @@ class Product_category extends BaseController
         }
     }
 
+    /**
+     * @description This method provides product category create page view
+     * @return RedirectResponse|void
+     */
     public function create()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -77,6 +86,10 @@ class Product_category extends BaseController
         }
     }
 
+    /**
+     * @description This method provides product category create action
+     * @return RedirectResponse
+     */
     public function create_action()
     {
         $data['category_name'] = $this->request->getPost('category_name');
@@ -116,6 +129,11 @@ class Product_category extends BaseController
         }
     }
 
+    /**
+     * @description This method provides product category update page view
+     * @param int $prod_cat_id
+     * @return RedirectResponse|void
+     */
     public function update($prod_cat_id)
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -146,6 +164,10 @@ class Product_category extends BaseController
         }
     }
 
+    /**
+     * @description This method provides product category update action
+     * @return RedirectResponse
+     */
     public function update_action()
     {
         $prod_cat_id = $this->request->getPost('prod_cat_id');
@@ -228,6 +250,10 @@ class Product_category extends BaseController
         }
     }
 
+    /**
+     * @description This method provides product category update action others
+     * @return RedirectResponse
+     */
     public function update_action_others()
     {
         $prod_cat_id = $this->request->getPost('prod_cat_id');
@@ -258,6 +284,11 @@ class Product_category extends BaseController
         }
     }
 
+    /**
+     * @description This method provides product category delete
+     * @param $prod_cat_id
+     * @return RedirectResponse
+     */
     public function delete($prod_cat_id)
     {
 
@@ -291,6 +322,10 @@ class Product_category extends BaseController
         return redirect()->to('product_category');
     }
 
+    /**
+     * @description This method provides product category sort update action
+     * @return void
+     */
     public function sort_update_action()
     {
         $prod_cat_id = $this->request->getPost('prod_cat_id');

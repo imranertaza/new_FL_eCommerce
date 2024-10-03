@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Option extends BaseController
 {
@@ -22,6 +23,10 @@ class Option extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides option page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -50,6 +55,10 @@ class Option extends BaseController
         }
     }
 
+    /**
+     * @description This method provides option create page view
+     * @return RedirectResponse|void
+     */
     public function create(){
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
@@ -73,6 +82,10 @@ class Option extends BaseController
         }
     }
 
+    /**
+     * @description This method provides option create action
+     * @return RedirectResponse
+     */
     public function create_action()
     {
         $data['name'] = $this->request->getPost('name');
@@ -108,6 +121,11 @@ class Option extends BaseController
         }
     }
 
+    /**
+     * @description This method provides option update page view
+     * @param int $option_id
+     * @return RedirectResponse|void
+     */
     public function update($option_id)
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -139,6 +157,10 @@ class Option extends BaseController
         }
     }
 
+    /**
+     * @description This method provides option update action
+     * @return RedirectResponse
+     */
     public function update_action()
     {
         $option_id = $this->request->getPost('option_id');
@@ -185,6 +207,11 @@ class Option extends BaseController
         }
     }
 
+    /**
+     * @description This method provides option delete
+     * @param int $option_id
+     * @return RedirectResponse
+     */
     public function delete($option_id){
 
         $tabOp = DB()->table('cc_product_option');
@@ -201,6 +228,10 @@ class Option extends BaseController
         return redirect()->to('option');
     }
 
+    /**
+     * @description This method provides option remove action
+     * @return void
+     */
     public function option_remove_action(){
         $option_value_id = $this->request->getPost('id');
 

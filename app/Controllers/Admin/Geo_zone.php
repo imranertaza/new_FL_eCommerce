@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Geo_zone extends BaseController
 {
@@ -22,6 +23,10 @@ class Geo_zone extends BaseController
         $this->permission = new Permission();
     }
 
+    /**
+     * @description This method provides geo zone page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -50,6 +55,10 @@ class Geo_zone extends BaseController
         }
     }
 
+    /**
+     * @description This method provides geo zone create page view
+     * @return RedirectResponse|void
+     */
     public function create(){
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
@@ -73,6 +82,10 @@ class Geo_zone extends BaseController
         }
     }
 
+    /**
+     * @description This method provides geo zone create action
+     * @return RedirectResponse
+     */
     public function create_action()
     {
         $data['geo_zone_name'] = $this->request->getPost('geo_zone_name');
@@ -120,6 +133,11 @@ class Geo_zone extends BaseController
         }
     }
 
+    /**
+     * @description This method provides geo zone update page view
+     * @param int $geo_zone_id
+     * @return RedirectResponse|void
+     */
     public function update($geo_zone_id)
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -151,6 +169,10 @@ class Geo_zone extends BaseController
         }
     }
 
+    /**
+     * @description This method provides geo zone update action
+     * @return RedirectResponse
+     */
     public function update_action()
     {
         $geo_zone_id = $this->request->getPost('geo_zone_id');
@@ -205,6 +227,11 @@ class Geo_zone extends BaseController
         }
     }
 
+    /**
+     * @description This method provides geo zone delete
+     * @param int $geo_zone_id
+     * @return RedirectResponse
+     */
     public function delete($geo_zone_id){
 
         $tableZone = DB()->table('cc_geo_zone_details');
@@ -217,6 +244,10 @@ class Geo_zone extends BaseController
         return redirect()->to('geo_zone');
     }
 
+    /**
+     * @description This method provides geo zone detail delete
+     * @return void
+     */
     public function geo_zone_detail_delete(){
 
         $geo_zone_details_id = $this->request->getPost('geo_zone_details_id');
@@ -228,6 +259,12 @@ class Geo_zone extends BaseController
 
     }
 
+    /**
+     * @description This method provides geo zone check exist to create
+     * @param int $country_id_array
+     * @param int $zone_id_array
+     * @return bool
+     */
     private function check_exist_to_create($country_id_array,$zone_id_array){
         foreach ($country_id_array as $key => $con) {
             if ($zone_id_array[$key] != 0) {

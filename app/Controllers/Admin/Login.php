@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Login extends BaseController {
 
@@ -15,6 +16,10 @@ class Login extends BaseController {
         $this->session = \Config\Services::session();
     }
 
+    /**
+     * @description This method provides login page view
+     * @return RedirectResponse|void
+     */
     public function index() {
 
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -25,6 +30,10 @@ class Login extends BaseController {
         }
     }
 
+    /**
+     * @description This method provides login action
+     * @return RedirectResponse
+     */
     public function login_action(){
         $this->validation->setRule('email', 'Email', 'required|valid_email|max_length[128]|trim');
         $this->validation->setRule('password', 'Password', 'required|max_length[32]');
@@ -78,6 +87,12 @@ class Login extends BaseController {
         }
     }
 
+    /**
+     * @description This method provides login data check
+     * @param string $email
+     * @param string $password
+     * @return array|mixed|object|\stdClass
+     */
     private function loginMe($email,$password){
         $table = DB()->table('cc_users');
         $user = $table->where('email',$email)->where('status','1')->get()->getRow();
@@ -93,6 +108,10 @@ class Login extends BaseController {
         }
     }
 
+    /**
+     * @description This method provides logout
+     * @return RedirectResponse
+     */
     public function logout()
     {
 

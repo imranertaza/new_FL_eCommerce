@@ -4,6 +4,7 @@ namespace App\Controllers\Customer;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Dashboard extends BaseController
 {
@@ -17,6 +18,10 @@ class Dashboard extends BaseController
         $this->session = \Config\Services::session();
     }
 
+    /**
+     * @description This method provides dashboard page view
+     * @return RedirectResponse|void
+     */
     public function index()
     {
         $isLoggedInCustomer = $this->session->isLoggedInCustomer;
@@ -48,6 +53,10 @@ class Dashboard extends BaseController
         }
     }
 
+    /**
+     * @description This method provides add to wishlist
+     * @return void
+     */
     public function addtoWishlist(){
         $data['product_id'] = $this->request->getPost('product_id');
         $data['customer_id'] = $this->session->cusUserId;
