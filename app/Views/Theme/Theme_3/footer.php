@@ -328,7 +328,7 @@
         a.remove();
         $('.dw-btn-group').hide();
     }
-    
+
 
 
     function myFunction() {
@@ -1012,6 +1012,14 @@
         }
     }
 
+     window.addEventListener('click', function(e){
+         if (document.getElementById('dowBtn').contains(e.target)){
+         } else{
+             $('.dw-btn-group').hide();
+             $('.dw-input-group').hide();
+         }
+     });
+
     (function(){
         const fonts = ["cursive"];
         let captchaValue = "";
@@ -1059,7 +1067,6 @@
     function show_form(){
         $('.dw-input-group').show();
     }
-
 
 </script>
 
