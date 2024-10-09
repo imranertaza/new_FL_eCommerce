@@ -61,11 +61,12 @@
                                                         ?>
 
                                                     </div>
-                                                    <button class="btn btn-dow position-absolute" onclick="download_btn_show()" >Download</button>
-                                                    <div class="dw-btn-group position-absolute">
-                                                        <a href="javascript:void(0)" onclick="watermark_image_download('watermark')" download class="btn-w-2nd">Watermark Image</a><br>
+                                                    <div id="dowBtn">
+                                                    <button class="btn btn-dow position-absolute" onclick="download_btn_show()"  ><i class="fa-solid fa-download "></i></button>
+                                                    <div class="dw-btn-group position-absolute"  >
+                                                        <a href="javascript:void(0)"  onclick="watermark_image_download('watermark')" download class=" btn-w-2nd">Watermark Image</a><br>
                                                         <?php if (isset($_COOKIE['download_image'])){ ?>
-                                                            <a href="javascript:void(0)" onclick="watermark_image_download('nowatermark')" class="btn-w-2nd">Without Watermark Image</a>
+                                                            <a href="javascript:void(0)" onclick="watermark_image_download('nowatermark')" class=" btn-w-2nd">Without Watermark Image</a>
                                                         <?php }else{?>
                                                             <a href="javascript:void(0)" onclick="show_form()" class="btn-w-2nd">Without Watermark Image</a>
                                                         <?php } ?>
@@ -73,6 +74,7 @@
                                                     <div class="dw-input-group position-absolute">
                                                         <input type="text" name="subs_email" id="subs_email" >
                                                         <button class="btn" onclick="subscribe('subs_email')" >Submit</button>
+                                                    </div>
                                                     </div>
                                                 </div>
                                             </div>
