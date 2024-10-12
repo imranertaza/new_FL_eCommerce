@@ -72,8 +72,8 @@
                                                         <?php } ?>
                                                     </div>
                                                     <div class="dw-input-group position-absolute">
-                                                        <input type="text" name="subs_email" id="subs_email" >
-                                                        <button class="btn" onclick="subscribe('subs_email')" >Submit</button>
+                                                        <input type="text" name="subs_email" placeholder="Input email" id="subs_email" >
+                                                        <button class="btn btn-email" onclick="subscribe('subs_email')" >Submit</button>
                                                     </div>
                                                     </div>
                                                 </div>
@@ -766,3 +766,13 @@
         </div>
     </div>
 </div>
+
+<script>
+    window.addEventListener('click', function(e){
+        if (document.getElementById('dowBtn').contains(e.target)){
+        } else{
+            $('.dw-btn-group').hide();
+            $('.dw-input-group').hide();
+        }
+    });
+</script>
