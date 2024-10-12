@@ -41,6 +41,9 @@
                             <?php if(modules_key_by_access('multi_attribute') == '1' ){ ?>
                             <button type="submit" formaction="<?php echo base_url('bulk_product_multi_attribute_edit'); ?>" class="btn btn-info btn-xs float-right mr-2"><i class="fas fa-edit"></i> Multi attribute edit</button>
                             <?php } ?>
+                            <?php if(modules_key_by_access('multi_price') == '1' ){ ?>
+                                <button type="submit" formaction="<?php echo base_url('bulk_product_multi_attribute_edit'); ?>" class="btn btn-info btn-xs float-right mr-2"><i class="fas fa-edit"></i> Multi price edit</button>
+                            <?php } ?>
                             </form>
                             <a href="<?php echo base_url('products') ?>" class="btn btn-danger float-right mr-2 btn-xs" >Back</a>
                         </div>
