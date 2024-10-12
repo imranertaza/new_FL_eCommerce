@@ -36,16 +36,32 @@ class Flat_shipping{
      * @description This function provides get shipping eligible product
      * @return array
      */
+//    public function get_shipping_eligible_product(): array
+//    {
+//        $eligible_product = array();
+//
+//        foreach (Cart()->contents() as $val){
+//            $table = DB()->table('cc_product_free_delivery');
+//            $exist = $table->where('product_id',$val['id'])->countAllResults();
+//            if (empty($exist)){
+//                $eligible_product[] = $val['id'];
+//            }
+//        }
+//
+//        return $eligible_product;
+//    }
+
     public function get_shipping_eligible_product(): array
     {
         $eligible_product = array();
+        $product_ids = array_column(Cart()->contents(), 'id');
 
-        foreach (Cart()->contents() as $val){
+        if (!empty($product_ids)) {
             $table = DB()->table('cc_product_free_delivery');
-            $exist = $table->where('product_id',$val['id'])->countAllResults();
-            if (empty($exist)){
-                $eligible_product[] = $val['id'];
-            }
+            $free_delivery_products = $table->whereIn('product_id', $product_ids)->get()->getResult();
+
+            $free_delivery_ids = array_column($free_delivery_products, 'product_id');
+            $eligible_product = array_diff($product_ids, $free_delivery_ids);
         }
 
         return $eligible_product;

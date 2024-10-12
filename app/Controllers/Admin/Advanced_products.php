@@ -786,5 +786,64 @@ class Advanced_products extends BaseController
 
     }
 
+    /**
+     * @description This method provides multi price edit
+     * @return RedirectResponse|void
+     */
+    public function multi_price_edit(){
+        $allProductId =  $this->request->getPost('productId[]');
+        if (!empty($allProductId)){
+
+            $data['all_product'] = $allProductId;
+
+            $table = DB()->table('cc_product_option');
+            $data['prodOption'] = $table->groupBy('option_id')->get()->getResult();
+
+
+
+            echo view('Admin/header');
+            echo view('Admin/sidebar');
+            echo view('Admin/Advanced_products/multi_price', $data);
+            echo view('Admin/footer');
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+//            return redirect()->to('bulk_edit_products');
+            return redirect()->back();
+        }
+    }
+
+    /**
+     * @description This method provides multi price action
+     * @return RedirectResponse
+     */
+
+    public function multi_price_action(){
+        $redirect_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
+
+        $all_product = $this->request->getPost('productId[]');
+        $price = $this->request->getPost('price');
+
+        if (!empty($price)) {
+
+            $data['price'] = $price;
+            $proTable = DB()->table('cc_products');
+            foreach ($all_product as $pro) {
+                $proTable->where('product_id',$pro);
+                $proTable->update($data);
+            }
+
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to($redirect_url);
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please input any price <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to($redirect_url);
+        }
+    }
+
+
+
+
+
+
 
 }
