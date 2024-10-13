@@ -263,6 +263,8 @@ class Product_category extends BaseController
         $data['sort_order'] = $this->request->getPost('sort_order');
         $data['header_menu'] = $this->request->getPost('header_menu');
         $data['side_menu'] = $this->request->getPost('side_menu');
+        $data['order_type'] = $this->request->getPost('order_type');
+        $data['order_by'] = $this->request->getPost('order_by');
 
 
         $data['updatedBy'] = $this->session->adUserId;

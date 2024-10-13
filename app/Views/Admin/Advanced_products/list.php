@@ -22,11 +22,11 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <h3 class="card-title">Bulk Edit Product List</h3><br>
 
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-10">
                             <?php $modules = modules_access();?>
                             <a href="<?php echo base_url('product_create') ?>" class="btn btn-primary  btn-xs float-right "><i class="fas fa-plus"></i> Add</a>
                             <a class="btn btn-xs btn-info float-right mr-2" data-toggle="collapse" href="#collapseProduct" role="button" aria-expanded="false" aria-controls="collapseProduct">Settings</a>
@@ -44,6 +44,9 @@
                             <?php } ?>
                             <?php if($modules['multi_category'] == '1' ){ ?>
                                 <button type="submit" formaction="<?php echo base_url('bulk_product_multi_category_edit'); ?>" class="btn btn-success btn-xs float-right mr-2"><i class="fas fa-edit"></i> Multi category edit</button>
+                            <?php } ?>
+                            <?php if(modules_key_by_access('multi_price') == '1' ){ ?>
+                                <button type="submit" formaction="<?php echo base_url('bulk_product_multi_price_edit'); ?>" class="btn btn-info btn-xs float-right mr-2"><i class="fas fa-edit"></i> Multi price edit</button>
                             <?php } ?>
                             </form>
                             <a href="<?php echo base_url('products') ?>" class="btn btn-danger float-right mr-2 btn-xs" >Back</a>

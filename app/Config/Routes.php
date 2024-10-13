@@ -38,6 +38,7 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
 $routes->post('/user_subscribe', 'Home::user_subscribe');
+$routes->get('/user_subscribe_verify', 'Home::verify');
 
 $routes->get('/admin', 'Admin\Login::index');
 $routes->post('/admin_login_action', 'Admin\Login::login_action');
@@ -280,7 +281,8 @@ $routes->post('/bulk_multi_category_action', 'Admin\Advanced_products::multi_cat
 
 $routes->post('/product_image_show_action', 'Admin\Advanced_products::image_show');
 
-
+$routes->post('/bulk_product_multi_price_edit', 'Admin\Advanced_products::multi_price_edit');
+$routes->post('/bulk_product_multi_price_action', 'Admin\Advanced_products::multi_price_action');
 
 $routes->get('/bulk_product_list', 'Admin\Advanced_products::product_list');
 

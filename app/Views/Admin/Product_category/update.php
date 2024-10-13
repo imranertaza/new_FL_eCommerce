@@ -158,6 +158,23 @@
 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
+                                                        <label>Order By</label>
+                                                        <select name="order_by" class="form-control">
+                                                            <option value="sort_order" <?php echo ($category->order_by == "sort_order")?'selected':''; ?> >Sort Order</option>
+                                                            <option value="prod_cat_id" <?php echo ($category->order_by == "prod_cat_id")?'selected':''; ?> >ID</option>
+                                                            <option value="category_name" <?php echo ($category->order_by == "category_name")?'selected':''; ?> >Name</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Order Type</label>
+                                                        <select name="order_type" class="form-control">
+                                                            <option value="ASC" <?php echo ($category->order_type == "ASC")?'selected':''; ?> >ASC</option>
+                                                            <option value="DESC" <?php echo ($category->order_type == "DESC")?'selected':''; ?> >DESC</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="form-group">
                                                         <label>Sort order</label>
                                                         <input type="text" name="sort_order" class="form-control" placeholder="Sort order" value="<?php echo $category->sort_order; ?>">
                                                     </div>

@@ -546,10 +546,10 @@ function getParentCategoryArray()
  * @param int $cat_id
  * @return array
  */
-function getCategoryBySubArray($cat_id)
+function getCategoryBySubArray($cat_id,$orderBy,$type)
 {
     $table = DB()->table('cc_product_category');
-    $query = $table->where('parent_id', $cat_id)->orderBy('sort_order', 'ASC')->get()->getResult();
+    $query = $table->where('parent_id', $cat_id)->orderBy($orderBy, $type)->get()->getResult();
     return $query;
 }
 

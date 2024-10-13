@@ -316,22 +316,19 @@
     });
     //social chat script (end)
 
-    function watermark_image_download(){
+    function watermark_image_download(condition){
         var activeImage = $('.slick-active').children().children().children('img').attr('src');
-        var newName = activeImage.replace("437_wm_pro_", 'wm_');
+        if (condition == 'watermark') {
+            var newName = activeImage.replace("437_wm_pro_", 'wm_');
+        }else{
+            var newName = activeImage.replace("437_wm_pro_", '');
+        }
         var a = $("<a>").attr("href", newName).attr("download", "download_img.jpg").appendTo("body");
         a[0].click();
         a.remove();
         $('.dw-btn-group').hide();
     }
-    function without_watermark_image_download(){
-        var activeImage = $('.slick-active').children().children().children('img').attr('src');
-        var newName = activeImage.replace("437_wm_pro_", '');
-        var a = $("<a>").attr("href", newName).attr("download", "download_img.jpg").appendTo("body");
-        a[0].click();
-        a.remove();
-        $('.dw-btn-group').hide();
-    }
+
 
 
     function myFunction() {
@@ -924,7 +921,6 @@
 
 
     $(document).ready(function() {
-        shippingCharge();
         $('.toggleButton').click(function() {
             $(this).toggleClass('active');
             $(this).siblings('.elementToToggle').slideToggle();
@@ -1015,45 +1011,9 @@
         }
     }
 
-    (function(){
-        const fonts = ["cursive"];
-        let captchaValue = "";
-        function gencaptcha()
-        {
-            let value = btoa(Math.random()*1000000000);
-            value = value.substr(0,5 + Math.random()*5);
-            captchaValue = value;
-        }
 
-        function setcaptcha()
-        {
-            let html = captchaValue.split("").map((char)=>{
-                const rotate = -20 + Math.trunc(Math.random()*30);
-                const font = Math.trunc(Math.random()*fonts.length);
-                return`<span
-		            style="
-		            transform:rotate(${rotate}deg);
-		            font-family:${font[font]};
-		            "
-		           >${char} </span>`;
-            }).join("");
-            document.querySelector(".login_form #captcha .preview").innerHTML = html;
-            document.querySelector(".login_form #genaretCapt").value = captchaValue;
-        }
 
-        function initCaptcha()
-        {
-            document.querySelector(".login_form #captcha .captcha_refersh").addEventListener("click",function(){
-                gencaptcha();
-                setcaptcha();
-            });
 
-            gencaptcha();
-            setcaptcha();
-        }
-        initCaptcha();
-
-    })();
 
 
     function download_btn_show(){
@@ -1062,7 +1022,6 @@
     function show_form(){
         $('.dw-input-group').show();
     }
-
 
 </script>
 

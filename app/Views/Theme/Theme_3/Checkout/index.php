@@ -452,3 +452,9 @@
         </form>
     </div>
 </section>
+
+<script>
+    $(document).ready(function() {
+        shippingCharge();
+    });
+</script>
