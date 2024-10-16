@@ -23,7 +23,7 @@ class Encryption extends BaseConfig
      *
      * @var string
      */
-    public $key = 'AES-256';
+    public $key = '124';
 
     /**
      * --------------------------------------------------------------------------
@@ -52,7 +52,7 @@ class Encryption extends BaseConfig
      *
      * @var int
      */
-    public $blockSize = 16;
+    public $blockSize = 1;
 
     /**
      * --------------------------------------------------------------------------
