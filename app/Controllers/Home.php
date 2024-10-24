@@ -2,8 +2,6 @@
 
 namespace App\Controllers;
 
-use function Sodium\add;
-
 class Home extends BaseController {
 
     protected $validation;
