@@ -17,6 +17,19 @@ class Image_processing {
         $this->sx = imagesx($this->wm);
         $this->sy = imagesy($this->wm);
         $this->crop = Services::image();
+
+    }
+
+    /**
+     * @description This function provides image quality key
+     * @return int
+     */
+    public function image_quality(){
+        $table = DB()->table('cc_modules');
+        $query = $table->where('module_key', 'image_quality')->get();
+        $result = $query->getRow();
+
+        return ($result->status == '1')?get_model_settings_value_by_modelId_or_label($result->module_id, 'quality'):'100';
     }
 
     /**
@@ -89,7 +102,7 @@ class Image_processing {
      */
     public function watermark_on_resized_image($dir,$image){
         if (!file_exists($dir . '/600_wm_' . $image)) {
-            $this->crop->withFile($dir . $image)->fit(600, 600, 'center')->save($dir . '600_' . $image);
+            $this->crop->withFile($dir . $image)->fit(600, 600, 'center')->save($dir . '600_' . $image ,$this->image_quality());
 
             if (pathinfo($image, PATHINFO_EXTENSION) == 'png'){
                 $mImg = imagecreatefrompng($dir . $image);
@@ -114,7 +127,7 @@ class Image_processing {
     public function image_crop($dir,$image,$image_name){
         foreach($this->selected_theme_libraries()->product_image as $pro_img){
             if (!file_exists($dir . '/' . $pro_img['width'] .'_' . $image_name)) {
-                $this->crop->withFile($dir . '' . $image)->fit($pro_img['width'], $pro_img['height'], 'center')->save($dir . $pro_img['width'] . '_' . $image_name,'100');
+                $this->crop->withFile($dir . '' . $image)->fit($pro_img['width'], $pro_img['height'], 'center')->save($dir . $pro_img['width'] . '_' . $image_name,$this->image_quality());
             }
         }
         return $this;
