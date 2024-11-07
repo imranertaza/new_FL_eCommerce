@@ -62,7 +62,7 @@ class Filter{
 //    }
     /**
      * @description This function provides product array by options
-     * @param int $optionSel
+     * @param array $optionSel
      * @return string
      */
     public function product_array_by_options($optionSel){
@@ -174,7 +174,7 @@ class Filter{
 //    }
     /**
      * @description This function provides product array by brand
-     * @param int $brandSel
+     * @param array $brandSel
      * @return string
      */
     public function product_array_by_brand($brandSel){
@@ -230,7 +230,7 @@ class Filter{
 //    }
     /**
      * @description This function provides product array by rating view
-     * @param int $ratingSel
+     * @param array $ratingSel
      * @return string
      */
     public function product_array_by_rating_view($ratingSel){

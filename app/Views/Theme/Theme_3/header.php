@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="<?php echo base_url() ?>/admin_assets/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="<?php echo base_url() ?>/admin_assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
     <!-- Select2 -->
-
+    <link rel="stylesheet" href="<?php echo base_url() ?>/assets/assets_fl/lightbox.min.css">
 
     <script src="<?php echo base_url() ?>/assets/assets_fl/jquery.min.js"></script>
     <script src="<?php echo base_url() ?>/assets/assets_fl/bootstrap.bundle.min.js"></script>
@@ -132,6 +132,9 @@
                                         <a class="nav-link text-danger" href="<?php echo base_url('page/new-arrivals') ?>">New Arrivals</a>
                                     </li>
                                   <?php //echo top_menu(); ?>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="<?php echo base_url('qc_picture') ?>">Qc Picture</a>
+                                    </li>
                                   <li class="nav-item">
                                     <a class="nav-link" href="<?php echo base_url('page/about-us') ?>">About Us</a>
                                   </li>
@@ -274,7 +277,7 @@
                             <div class="input-group">
                                 <input type="text" class="form-control" name="keywordTop" placeholder="Search for Products..." value="<?php echo isset($keywordTop) ? $keywordTop : ''; ?>">
                                 <span class="input-group-btn">
-                                <button class="btn btn-default bg-white rounded-0" onclick="topSearchValidation('first-form-top','first-cat','first-keywordTop','first-valid')" type="button">                                    
+                                <button class="btn btn-default bg-white rounded-0" onclick="topSearchValidation('first-form-top','first-cat','first-keywordTop','first-valid')" type="button">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M19.0002 19L14.6572 14.657M14.6572 14.657C15.4001 13.9141 15.9894 13.0321 16.3914 12.0615C16.7935 11.0909 17.0004 10.0506 17.0004 8.99996C17.0004 7.94936 16.7935 6.90905 16.3914 5.93842C15.9894 4.96779 15.4001 4.08585 14.6572 3.34296C13.9143 2.60007 13.0324 2.01078 12.0618 1.60874C11.0911 1.20669 10.0508 0.999756 9.00021 0.999756C7.9496 0.999756 6.90929 1.20669 5.93866 1.60874C4.96803 2.01078 4.08609 2.60007 3.34321 3.34296C1.84288 4.84329 1 6.87818 1 8.99996C1 11.1217 1.84288 13.1566 3.34321 14.657C4.84354 16.1573 6.87842 17.0002 9.00021 17.0002C11.122 17.0002 13.1569 16.1573 14.6572 14.657Z" stroke="#727272" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>    

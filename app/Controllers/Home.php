@@ -150,6 +150,11 @@ class Home extends BaseController {
             print 'Email required';
         }
     }
+
+    /**
+     * @description This method provides user subscribe verify
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
     public function verify(){
         $email = $this->request->getGetPost('email');
         $code = $this->request->getGetPost('code');

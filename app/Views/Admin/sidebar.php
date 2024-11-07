@@ -89,6 +89,21 @@
                 <?php } ?>
 
                 <?php
+                $modArrayPur = ['Album'];
+                $menuAccessPur = all_menu_permission_check($modArrayPur, $adRoleId);
+                if ($menuAccessPur == true) {
+                    ?>
+                    <li class="nav-item">
+                        <a href="<?php echo base_url('album'); ?>" class="nav-link">
+                            <i class="nav-icon far fa-calendar-alt"></i>
+                            <p>
+                                Album
+                            </p>
+                        </a>
+                    </li>
+                <?php } ?>
+
+                <?php
                 $modArrayPur = ['Coupon'];
                 $menuAccessPur = all_menu_permission_check($modArrayPur, $adRoleId);
                 if ($menuAccessPur == true) {
