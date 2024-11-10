@@ -4,7 +4,7 @@
 namespace App\Models;
 use CodeIgniter\Model;
 
-class QcpictureModel extends Model {
+class AlbumModel extends Model {
 
     protected $table = 'cc_album';
     protected $primaryKey = 'album_id';
