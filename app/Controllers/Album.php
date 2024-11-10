@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\QcpictureModel;
 
-class Qc_picture extends BaseController {
+class Album extends BaseController {
 
     protected $validation;
     protected $session;
