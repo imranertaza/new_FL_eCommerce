@@ -53,14 +53,11 @@ class Advanced_products extends BaseController
             foreach ($perm as $key => $val) {
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
-            echo view('Admin/header');
-            echo view('Admin/sidebar');
             if (isset($data['mod_access']) and $data['mod_access'] == 1) {
                 echo view('Admin/Advanced_products/index', $data);
             } else {
                 echo view('Admin/no_permission');
             }
-            echo view('Admin/footer');
         }
     }
 
@@ -106,14 +103,12 @@ class Advanced_products extends BaseController
             foreach ($perm as $key => $val) {
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
-            echo view('Admin/header');
-            echo view('Admin/sidebar');
+
             if (isset($data['mod_access']) and $data['mod_access'] == 1) {
                 echo view('Admin/Advanced_products/list', $data);
             } else {
                 echo view('Admin/no_permission');
             }
-            echo view('Admin/footer');
         }
     }
 
@@ -595,10 +590,8 @@ class Advanced_products extends BaseController
 
 
 
-            echo view('Admin/header');
-            echo view('Admin/sidebar');
+
             echo view('Admin/Advanced_products/multi_option', $data);
-            echo view('Admin/footer');
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 //            return redirect()->to('bulk_edit_products');
@@ -667,10 +660,8 @@ class Advanced_products extends BaseController
 
 
 
-            echo view('Admin/header');
-            echo view('Admin/sidebar');
+
             echo view('Admin/Advanced_products/multi_attribute', $data);
-            echo view('Admin/footer');
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 //            return redirect()->to('bulk_edit_products');
@@ -742,10 +733,7 @@ class Advanced_products extends BaseController
             $data['prodCat'] = $table->get()->getResult();
 
 
-            echo view('Admin/header');
-            echo view('Admin/sidebar');
             echo view('Admin/Advanced_products/category_edit', $data);
-            echo view('Admin/footer');
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->back();
@@ -801,10 +789,8 @@ class Advanced_products extends BaseController
 
 
 
-            echo view('Admin/header');
-            echo view('Admin/sidebar');
             echo view('Admin/Advanced_products/multi_price', $data);
-            echo view('Admin/footer');
+
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 //            return redirect()->to('bulk_edit_products');

@@ -1,3 +1,6 @@
+<?= $this->extend('Admin/layout') ?>
+
+<?= $this->section('content') ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -90,3 +93,23 @@
     </section>
     <!-- /.content -->
 </div>
+<?= $this->endSection() ?>
+
+<?= $this->section('java_script') ?>
+<script>
+    function found_request_update(val,id){
+        $.ajax({
+            url: '<?php echo base_url('fund_request_action') ?>',
+            type: "POST",
+            data: {
+                status: val,
+                fund_request_id: id
+            },
+            success: function(data) {
+                $("#message").html(data);
+                $('#tablereload').load(document.URL + ' #example1');
+            }
+        });
+    }
+</script>
+<?= $this->endSection() ?>

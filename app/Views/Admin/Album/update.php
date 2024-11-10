@@ -1,3 +1,6 @@
+<?= $this->extend('Admin/layout') ?>
+
+<?= $this->section('content') ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -107,3 +110,27 @@
     </section>
     <!-- /.content -->
 </div>
+<?= $this->endSection() ?>
+
+<?= $this->section('java_script') ?>
+<script>
+    function removeAlbumImg(album_details_id) {
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('album_image_delete') ?>",
+            data: {
+                album_details_id: album_details_id
+            },
+            beforeSend: function() {
+                $("#loading-image").show();
+            },
+            success: function(data) {
+                $("#message").html(data);
+                $('#reloadImg').load(document.URL + ' #reloadImg');
+            }
+
+        });
+    }
+
+</script>
+<?= $this->endSection() ?>

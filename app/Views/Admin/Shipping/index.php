@@ -1,3 +1,6 @@
+<?= $this->extend('Admin/layout') ?>
+
+<?= $this->section('content') ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -78,3 +81,26 @@
     </section>
     <!-- /.content -->
 </div>
+<?= $this->endSection() ?>
+
+<?= $this->section('java_script') ?>
+<script>
+    function update_shipping_status(id) {
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('update_shipping_status') ?>",
+            data: {
+                id: id
+            },
+            beforeSend: function() {
+                $("#loading-image").show();
+            },
+            success: function(data) {
+                $("#message").html(data);
+            }
+
+        });
+    }
+
+</script>
+<?= $this->endSection() ?>
