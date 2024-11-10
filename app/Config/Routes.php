@@ -100,6 +100,15 @@ $routes->post('/product_image_sort_action', 'Admin\Products::product_image_sort_
 
 $routes->get('/products_list', 'Admin\Products::products_list');
 
+//Album
+$routes->get('/album', 'Admin\Album::index');
+$routes->get('/album_create', 'Admin\Album::create');
+$routes->post('/album_create_action', 'Admin\Album::create_action');
+$routes->post('/album_update_action', 'Admin\Album::update_action');
+$routes->get('/album_update/(:num)', 'Admin\Album::update/$1');
+$routes->get('/album_delete/(:num)', 'Admin\Album::delete/$1');
+$routes->post('/album_image_sort_action', 'Admin\Album::album_image_sort_action');
+$routes->post('/album_image_delete', 'Admin\Album::image_delete');
 
 //User
 $routes->get('/user', 'Admin\User::index');
@@ -381,6 +390,10 @@ $routes->Post('/category_url_generate', 'Category::url_generate');
 
 //Search top
 $routes->post('/top_search', 'Search::search_action');
+
+//Qc picture
+$routes->get('/qc_picture', 'Album::index');
+$routes->get('/qc_picture_view/(:num)', 'Album::view/$1');
 
 //ajax controller
 $routes->post('/get_state', 'Admin\Ajax::get_state');

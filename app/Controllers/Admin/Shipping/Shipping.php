@@ -57,7 +57,7 @@ class Shipping extends BaseController
 
     /**
      * @description This method provides shipping settings
-     * @param $shipping_method_id
+     * @param int $shipping_method_id
      * @return RedirectResponse|void
      */
     public function shipping_settings($shipping_method_id) {

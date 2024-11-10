@@ -215,10 +215,10 @@ function package_expiry($shop_id)
 
 /**
  * @description This function provides get list in option
- * @param $selected
- * @param $tblId
- * @param $needCol
- * @param $table
+ * @param string $selected
+ * @param int $tblId
+ * @param string $needCol
+ * @param string $table
  * @return string
  */
 function getListInOption($selected, $tblId, $needCol, $table)
@@ -514,7 +514,7 @@ function get_lebel_by_title_in_settings($lable)
 
 /**
  * @description This function provides get list in parent category
- * @param $selected
+ * @param int $selected
  * @return string
  */
 function getListInParentCategory($selected)

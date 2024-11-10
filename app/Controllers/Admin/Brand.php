@@ -211,7 +211,7 @@ class Brand extends BaseController
 
     /**
      * @description This method provides brand delete
-     * @param $brand_id
+     * @param int $brand_id
      * @return RedirectResponse
      */
     public function delete($brand_id){

@@ -327,7 +327,7 @@ class Advanced_products extends BaseController
     }
 
     /**
-     * @description This method provides bulk product cpoy
+     * @description This method provides bulk product copy
      * @return RedirectResponse
      */
     public function bulk_product_cpoy(){

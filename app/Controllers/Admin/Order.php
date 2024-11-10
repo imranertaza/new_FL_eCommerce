@@ -57,7 +57,7 @@ class Order extends BaseController
 
     /**
      * @description This method provides order view
-     * @param $order_id
+     * @param int $order_id
      * @return RedirectResponse|void
      */
     public function order_view($order_id)
