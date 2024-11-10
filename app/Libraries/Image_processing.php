@@ -28,6 +28,7 @@ class Image_processing {
      * @return int
      */
     public function image_quality(){
+        helper('Global');
         $table = DB()->table('cc_modules');
         $query = $table->where('module_key', 'image_quality')->get();
         $result = $query->getRow();
