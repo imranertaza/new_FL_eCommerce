@@ -1,3 +1,6 @@
+<?= $this->extend('Admin/layout') ?>
+
+<?= $this->section('content') ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -106,3 +109,15 @@
     </section>
     <!-- /.content -->
 </div>
+<?= $this->endSection() ?>
+
+<?= $this->section('java_script') ?>
+<script>
+    function page_slug(Text) {
+        var slug = Text.toLowerCase()
+            .replace(/ /g, '-')
+            .replace(/[^\w-]+/g, '');
+        $("#slug").val(slug);
+    }
+</script>
+<?= $this->endSection() ?>

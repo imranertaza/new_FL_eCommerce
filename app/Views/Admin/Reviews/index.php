@@ -1,3 +1,6 @@
+<?= $this->extend('Admin/layout') ?>
+
+<?= $this->section('content') ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -90,3 +93,27 @@
     </section>
     <!-- /.content -->
 </div>
+<?= $this->endSection() ?>
+
+<?= $this->section('java_script') ?>
+<script>
+    function reviewStatusUpdate(val, feedback_id) {
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('reviews_status_update') ?>",
+            data: {
+                feedback_id: feedback_id,
+                status: val
+            },
+            beforeSend: function() {
+                $("#loading-image").show();
+            },
+            success: function(data) {
+                $("#message").html(data);
+
+            }
+
+        });
+    }
+</script>
+<?= $this->endSection() ?>

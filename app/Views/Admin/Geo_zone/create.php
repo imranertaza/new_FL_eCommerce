@@ -1,3 +1,6 @@
+<?= $this->extend('Admin/layout') ?>
+
+<?= $this->section('content') ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -87,3 +90,45 @@
     </section>
     <!-- /.content -->
 </div>
+<?= $this->endSection() ?>
+
+<?= $this->section('java_script') ?>
+<script>
+    function add_zone_detail() {
+        <?php $dat = getListInOption('', 'country_id', 'name', 'cc_country'); ?>
+        var data = `'<?php echo $dat; ?>'`;
+        var new_chq_no = parseInt($('#total_zone').val()) + 1;
+        var new_input = "<div class='col-md-12 mt-3' id='new_" + new_chq_no +
+            "' ><select class='form-input' name='country_id[]' onchange='zoneVal(this.value," + new_chq_no +
+            " )'  style='padding: 3px;width: 40%;' required><option value=''>Please select</option>" + data +
+            "</select> <select class='form-input' name='zone_id[]' id='valId_" + new_chq_no +
+            "' style='padding: 3px;width: 40%;' required><option value=''>Please select</option></select><input type='hidden' value='' name='geo_zone_details_id[]'> <a href='javascript:void(0)' onclick='remove_option(this)' class='btn btn-danger' style='margin-top: -5px;width: 5%;'>X</a></div>";
+
+        $('#new_zone').append(new_input);
+        $('#total_zone').val(new_chq_no);
+    }
+
+    function remove_option(data) {
+        $(data).parent().remove();
+    }
+
+    function zoneVal(val,idview){
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('get_zone_value') ?>",
+            data: {
+                country_id: val
+            },
+            beforeSend: function() {
+                $("#loading-image").show();
+            },
+            success: function(data) {
+                $("#valId_" + idview).html(data);
+                // alert(data);
+            }
+
+        });
+    }
+
+</script>
+<?= $this->endSection() ?>

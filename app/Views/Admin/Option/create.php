@@ -1,3 +1,6 @@
+<?= $this->extend('Admin/layout') ?>
+
+<?= $this->section('content') ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -80,3 +83,25 @@
     </section>
     <!-- /.content -->
 </div>
+<?= $this->endSection() ?>
+
+<?= $this->section('java_script') ?>
+<script>
+    //option
+    function add_option_new() {
+        <?php $dat = getListInOption('', 'attribute_group_id', 'name', 'cc_product_attribute_group'); ?>
+        var data = '<?php print $dat; ?>';
+
+        var new_chq_no = parseInt($('#total_chq').val()) + 1;
+        var new_input = "<div class='form-group mt-3' id='new_" + new_chq_no +
+            "' ><input type='text' class='form-control'  placeholder='value' name='value[]' style='width: 70%;float: left;'> <a href='javascript:void(0)' onclick='remove_option_new(this)' class='btn btn-sm btn-danger' style='margin-left: 5px;padding: 7px;'>X</a></div>";
+
+        $('#new_chq').append(new_input);
+        $('#total_chq').val(new_chq_no);
+    }
+
+    function remove_option_new(data, id) {
+        $(data).parent().remove();
+    }
+</script>
+<?= $this->endSection() ?>

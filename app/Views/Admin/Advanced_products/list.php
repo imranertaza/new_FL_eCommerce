@@ -1,3 +1,6 @@
+<?= $this->extend('Admin/layout') ?>
+
+<?= $this->section('content') ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -301,3 +304,311 @@
 
 
 </div>
+<?= $this->endSection() ?>
+
+<?= $this->section('java_script') ?>
+<script>
+    function bulk_status(label) {
+        var numberOfChecked = $('input:checkbox:checked').length;
+        if (numberOfChecked > 10 ) {
+            $('input[name="' + label + '"]').prop("checked", false);
+            $('#message').html('<div class="alert alert-danger alert-dismissible" role="alert">Checked Box limit 10 ! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        }else{
+            var className = 'colum_' + label;
+            if ($('input[name="' + label + '"]').is(':checked')) {
+                $("." + className).addClass('row_show');
+                $("." + className).removeClass('row_hide');
+            } else {
+                $("." + className).removeClass('row_show');
+                $("." + className).addClass('row_hide');
+            }
+            $('#message').html('');
+        }
+    }
+
+
+    function updateFunction(proId, input, value, viewId, formName,updateRow) {
+        var formID = "'" + formName + "'"
+        var data = '<form id="' + formName +
+            '" action="<?php echo base_url('bulk_data_update') ?>" onkeydown="if(event.keyCode === 13) {return false;}" data-row="'+updateRow+'" method="post"><input type="text" name="' +
+            input +
+            '" class="form-control mb-2" value="' + value +
+            '" ><input type="hidden" name="product_id" class="form-control mb-2" value="' + proId +
+            '" ><button type="button" onclick="submitFormBulk(' + formID +
+            ')" class="btn btn-xs btn-primary mr-2">Update</button><a href="javascript:void(0)" onclick="hideInput(this)" class="btn btn-xs btn-danger">Cancel</button> </form>';
+
+        $('#' + viewId).html(data);
+    }
+
+    function descriptionTableDataUpdateFunction(proId, input, value, viewId, formName,updateRow) {
+        var formID = "'" + formName + "'"
+        var data = '<form id="' + formName +
+            '" action="<?php echo base_url('description_data_update') ?>" onkeydown="if(event.keyCode === 13) {return false;}" data-row="'+updateRow+'" method="post"><input type="text" name="' +
+            input +
+            '" class="form-control mb-2" value="' + value +
+            '" ><input type="hidden" name="product_desc_id" class="form-control mb-2" value="' + proId +
+            '" ><button type="button" onclick="submitFormBulk(' + formID +
+            ')" class="btn btn-xs btn-primary mr-2">Update</button><a href="javascript:void(0)" onclick="hideInput(this)" class="btn btn-xs btn-danger">Cancel</button> </form>';
+
+        $('#' + viewId).html(data);
+    }
+
+    function hideInput(data) {
+        $(data).parent().remove();
+    }
+
+    function submitFormBulk(formID) {
+        var form = document.getElementById(formID);
+        var upRow = $(form).attr('data-row');
+
+        var done = false;
+        $.ajax({
+            url: $(form).prop('action'),
+            type: "POST",
+            data: new FormData(form),
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(data) {
+                // $("#message").html(data);
+                $("#mess").show();
+                var div = $("#"+upRow).html(data);
+                div.animate({opacity: '0.5'});
+                div.animate({opacity: '1'});
+                checkShowHideRow();
+
+            }
+        });
+
+    }
+
+    function checkShowHideRow() {
+
+        var fields = ['id','image', 'name', 'model', 'quantity', 'category', 'price', 'status', 'featured','optionrow','meta_title','meta_keyword','meta_description', 'action'];
+
+        for (let i = 0; i < fields.length; ++i) {
+            if ($('input[name="' + fields[i] + '"]').is(':checked')) {
+                $(".colum_" + fields[i]).addClass('row_show');
+                $(".colum_" + fields[i]).removeClass('row_hide');
+            } else {
+                $(".colum_" + fields[i]).removeClass('row_show');
+                $(".colum_" + fields[i]).addClass('row_hide');
+            }
+        }
+    }
+
+
+    function bulkAllStatusUpdate(proId, value, field,upRow) {
+
+        $.ajax({
+            url: '<?php echo base_url('bulk_all_status_update') ?>',
+            type: "POST",
+            data: {
+                product_id: proId,
+                value: value,
+                fieldName: field
+            },
+            success: function(data) {
+                //$("#message").html(data);
+                $("#mess").show();
+                var div = $("#"+upRow).html(data);
+                div.animate({opacity: '0.5'});
+                div.animate({opacity: '1'});
+                checkShowHideRow();
+            }
+        });
+    }
+
+    function categoryBulkUpdate(proId) {
+        $('#categoryModal').modal('show');
+        $.ajax({
+            url: '<?php echo base_url('bulk_category_view') ?>',
+            type: "POST",
+            data: {
+                product_id: proId
+            },
+            success: function(data) {
+                $("#catData").html(data);
+                $('.select2bs4').select2({
+                    theme: 'bootstrap4'
+                });
+            }
+        });
+    }
+
+    function optionBulkUpdate(proId){
+        $('#optionModal').modal('show');
+        $.ajax({
+            url: '<?php echo base_url('bulk_option_view') ?>',
+            type: "POST",
+            data: {
+                product_id: proId
+            },
+            success: function(data) {
+                $("#optionData").html(data);
+
+            }
+        });
+    }
+
+    function optionBulkUpdateAction() {
+        var result = true;
+        var mess = '<div class="alert alert-danger alert-dismissible" role="alert">All field are required! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
+
+        $('[name^="qty"]').each(function() {
+            qty = parseInt(this.value);
+            if (isNaN(qty)){
+                result = false;
+            }
+        });
+
+        $('[name^="price_op"]').each(function() {
+            price = parseInt(this.value);
+            if (isNaN(price)){
+                result = false;
+            }
+        });
+
+        $('[name^="opValue"]').each(function() {
+            opValue = parseInt(this.value);
+            if (isNaN(opValue)){
+                result = false;
+            }
+        });
+
+        if (result == false) {
+            $('#mesError').html(mess);
+        }else {
+            var form = document.getElementById('optionForm');
+            var upRow = $(form).attr('data-row');
+            $.ajax({
+                url: $(form).prop('action'),
+                type: "POST",
+                data: new FormData(form),
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (data) {
+                    $('#optionModal').modal('hide');
+                    // $("#message").html(data);
+                    $("#mess").show();
+                    var div = $("#" + upRow).html(data);
+                    div.animate({opacity: '0.5'});
+                    div.animate({opacity: '1'});
+                    checkShowHideRow();
+
+                }
+            });
+        }
+    }
+
+    function categoryBulkUpdateAction() {
+
+        var form = document.getElementById('categoryForm');
+        var upRow = $(form).attr('data-row');
+        $.ajax({
+            url: $(form).prop('action'),
+            type: "POST",
+            data: new FormData(form),
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (data) {
+                $('#categoryModal').modal('hide');
+                // $("#message").html(data);
+                $("#mess").show();
+                var div = $("#" + upRow).html(data);
+                div.animate({opacity: '0.5'});
+                div.animate({opacity: '1'});
+                checkShowHideRow();
+
+            }
+        });
+    }
+
+    function allCheckedDemo(source) {
+        var checkboxes = document.querySelectorAll('#bulkTable input[type="checkbox"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i] != source)
+                checkboxes[i].checked = source.checked;
+        }
+    }
+
+    function searchOptionUp(key) {
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('product_option_search') ?>",
+            data: {
+                key: key
+            },
+            beforeSend: function() {
+                $("#loading-image").show();
+            },
+            success: function(data) {
+                $('#dataView').html(data);
+            }
+
+        });
+    }
+
+    function optionViewPro(option_id, name,nameTitle) {
+        var n = "'" + name + "_op'";
+        var rl = "'" + name + "_remove'";
+        var nr = "'" + name + "'";
+        var link = '<a class="nav-link active text-dark" id="' + name + '_remove"  data-toggle="pill" href="#' + name +
+            '" role="tab" aria-controls="vert-tabs-home" aria-selected="true">' + nameTitle +
+            '<button type="button" class="btn btn-sm" onclick="remove_option_new_ajax(' + rl + ',' + nr +
+            ')"><i class="fa fa-trash text-danger"></i></button></a>';
+        var con = '<div class="tab-pane text-left fade  show active" id="' + name +
+            '" role="tabpanel" aria-labelledby="vert-tabs-home-tab"><div class="col-md-12 mt-2"> <h5>Click on add option</h5></div><hr><div id="' +
+            name +
+            '_op"></div><input type="hidden" value="1" id="total_chq"><div class="col-md-12 mt-2" ><a href="javascript:void(0)" style="float: right;    margin-right: 150px;" onclick="add_option_new_ajax(' +
+            n + ',' + option_id + ');"class="btn btn-sm btn-primary">Add option</a></div></div>';
+
+        $(".tab-link-ajax a").removeClass('active');
+        $(".tab-content-ajax .tab-pane").removeClass('active');
+        $('.keyoption').val('');
+        $('#dataView').html('');
+        $('.tab-link-ajax').append(link);
+        $('.tab-content-ajax').append(con);
+
+    }
+
+    //option
+    function add_option_new_ajax(id, option_id) {
+        // var data = '';
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('product_option_value_search') ?>",
+            data: {
+                option_id: option_id
+            },
+            success: function(val) {
+                var data = val;
+
+                var new_chq_no = parseInt($('#total_chq').val()) + 1;
+                var new_input = "<div class='col-md-12 mt-3' id='new_" + new_chq_no +
+                    "' ><input type='hidden' name='option[]' value='" + option_id +
+                    "' ><select name='opValue[]' id='valId_" + new_chq_no +
+                    "' style='padding: 3px;' required><option value=''>Please select</option>" + data +
+                    "</select><select name='subtract[]' style='padding: 3px;'><option value='plus'>Plus</option><option value='minus'>Minus</option></select><input type='number' placeholder='Quantity' name='qty[]' required> <input type='number' placeholder='Price' name='price_op[]' required> <a href='javascript:void(0)' onclick='remove_option(this)' class='btn btn-sm btn-danger' style='margin-top: -5px;'>X</a></div>";
+
+                $('#' + id).append(new_input);
+                $('#total_chq').val(new_chq_no);
+            }
+
+        });
+
+
+
+    }
+
+    function remove_option_new_ajax(link, data) {
+        $('#' + link).remove();
+        $('#' + data).remove();
+    }
+    function remove_option(data) {
+        $(data).parent().remove();
+    }
+</script>
+<?= $this->endSection() ?>

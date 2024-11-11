@@ -44,14 +44,11 @@ class Attribute_group extends BaseController
             foreach ($perm as $key => $val) {
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
-            echo view('Admin/header');
-            echo view('Admin/sidebar');
             if (isset($data['mod_access']) and $data['mod_access'] == 1) {
                 echo view('Admin/Attribute_group/index', $data);
             } else {
                 echo view('Admin/no_permission');
             }
-            echo view('Admin/footer');
         }
     }
 
@@ -71,14 +68,11 @@ class Attribute_group extends BaseController
             foreach ($perm as $key => $val) {
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
-            echo view('Admin/header');
-            echo view('Admin/sidebar');
             if (isset($data['create']) and $data['create'] == 1) {
                 echo view('Admin/Attribute_group/create');
             } else {
                 echo view('Admin/no_permission');
             }
-            echo view('Admin/footer');
         }
     }
 
@@ -129,14 +123,11 @@ class Attribute_group extends BaseController
             foreach ($perm as $key => $val) {
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
-            echo view('Admin/header');
-            echo view('Admin/sidebar');
             if (isset($data['update']) and $data['update'] == 1) {
                 echo view('Admin/Attribute_group/update', $data);
             } else {
                 echo view('Admin/no_permission');
             }
-            echo view('Admin/footer');
         }
     }
 

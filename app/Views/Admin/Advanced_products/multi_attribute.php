@@ -1,3 +1,6 @@
+<?= $this->extend('Admin/layout') ?>
+
+<?= $this->section('content') ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -79,3 +82,27 @@
 
 
 </div>
+<?= $this->endSection() ?>
+
+<?= $this->section('java_script') ?>
+<script>
+    //attribute
+    function add_attribute() {
+        <?php $dat = getListInOption('', 'attribute_group_id', 'name', 'cc_product_attribute_group'); ?>
+        var data = '<?php print $dat; ?>';
+
+        var new_chq_no = parseInt($('#total_att').val()) + 1;
+        var new_input = "<div class='col-md-12 mt-3' id='new_" + new_chq_no +
+            "' ><select name='attribute_group_id[]'  style='padding: 3px; text-transform: capitalize;' required><option value=''>Please select</option>" +
+            data +
+            "</select> <input type='text' placeholder='Name' name='name[]' required> <input type='text' placeholder='Details' name='details[]'> <a href='javascript:void(0)' onclick='remove_attribute(this)' class='btn btn-sm btn-danger' style='margin-top: -5px;'>X</a></div>";
+
+        $('#new_att').append(new_input);
+        $('#total_att').val(new_chq_no);
+    }
+
+    function remove_attribute(data) {
+        $(data).parent().remove();
+    }
+</script>
+<?= $this->endSection() ?>
