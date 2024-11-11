@@ -38,7 +38,7 @@ class Image_processing {
 
     /**
      * @description This function provides selected theme libraries
-     * @return Theme_2|Theme_3|Theme_default
+     * @return array
      */
     public function selected_theme_libraries(){
         helper('Global');
@@ -132,7 +132,7 @@ class Image_processing {
     public function image_crop($dir,$image,$image_name){
         foreach($this->sizeArray as $pro_img){
             if (!file_exists($dir . '/' . $pro_img['width'] .'_' . $image_name)) {
-                $this->crop->withFile($dir . '' . $image)->fit($pro_img['width'], $pro_img['height'], 'center')->save($dir . $pro_img['width'] . '_' . $image_name,$this->quality);
+                $this->crop->withFile($dir . $image)->fit($pro_img['width'], $pro_img['height'], 'center')->save($dir . $pro_img['width'] . '_' . $image_name,$this->quality);
             }
         }
         return $this;

@@ -251,9 +251,9 @@ class Customers extends BaseController
             //old image unlink
             $old_img = get_data_by_id('pic', 'cc_customers', 'customer_id', $customer_id);
             if (!empty($old_img)) {
-                $imgPath = $target_dir . '' . $old_img;
+                $imgPath = $target_dir . $old_img;
                 if (file_exists($imgPath)) {
-                    unlink($target_dir . '' . $old_img);
+                    unlink($target_dir . $old_img);
                 }
             }
 
@@ -262,8 +262,8 @@ class Customers extends BaseController
             $namePic = $pic->getRandomName();
             $pic->move($target_dir, $namePic);
             $news_img = 'customers_' . $pic->getName();
-            $this->crop->withFile($target_dir . '' . $namePic)->fit(250, 150, 'center')->save($target_dir . '' . $news_img);
-            unlink($target_dir . '' . $namePic);
+            $this->crop->withFile($target_dir . $namePic)->fit(250, 150, 'center')->save($target_dir . $news_img);
+            unlink($target_dir . $namePic);
             $data['pic'] = $news_img;
 
             $table = DB()->table('cc_customer');
