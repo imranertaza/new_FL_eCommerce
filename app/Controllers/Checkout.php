@@ -488,11 +488,6 @@ class Checkout extends BaseController
      */
     private function shipping_charge($city_id,$shipCityId,$shipping_method)
     {
-
-        $city_id = $city_id;
-        $shipCityId = $shipCityId;
-        $shipping_method = $shipping_method;
-
         if (!empty($shipCityId)) {
             $city_id = $shipCityId;
         }
