@@ -241,7 +241,7 @@ class Album extends BaseController
                 $this->imageProcessing->directory_create($target_dir);
 
                 $files = $this->request->getFileMultiple('multiImage');
-                foreach ($files as $key => $file) {
+                foreach ($files as  $file) {
 
                     if ($file->isValid() && ! $file->hasMoved())
                     {
@@ -272,7 +272,7 @@ class Album extends BaseController
 
     /**
      * @description This method provides album delete
-     * @param int $color_family_id
+     * @param int $album_id
      * @return RedirectResponse
      */
     public function delete($album_id){

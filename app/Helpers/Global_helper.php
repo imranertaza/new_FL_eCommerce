@@ -1,6 +1,7 @@
 <?php
 
 use App\Libraries\Permission;
+use CodeIgniter\Session\Session;
 
 /**
  * @description This function provides database connection
@@ -14,7 +15,7 @@ function DB()
 
 /**
  * @description This function provides Session
- * @return \CodeIgniter\Session\Session
+ * @return Session
  */
 function newSession()
 {
