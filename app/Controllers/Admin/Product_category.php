@@ -110,8 +110,8 @@ class Product_category extends BaseController
                 $namePic = $pic->getRandomName();
                 $pic->move($target_dir, $namePic);
                 $news_img = 'category_' . $pic->getName();
-                $this->crop->withFile($target_dir . '' . $namePic)->fit(166, 208, 'center')->save($target_dir . '' . $news_img);
-                unlink($target_dir . '' . $namePic);
+                $this->crop->withFile($target_dir . $namePic)->fit(166, 208, 'center')->save($target_dir . $news_img);
+                unlink($target_dir . $namePic);
                 $data['image'] = $news_img;
             }
 
@@ -217,9 +217,9 @@ class Product_category extends BaseController
                 //old image unlink
                 $old_img = get_data_by_id('image', 'cc_product_category', 'prod_cat_id', $prod_cat_id);
                 if (!empty($old_img)) {
-                    $imgPath = $target_dir . '' . $old_img;
+                    $imgPath = $target_dir . $old_img;
                     if (file_exists($imgPath)) {
-                        unlink($target_dir . '' . $old_img);
+                        unlink($target_dir . $old_img);
                     }
                 }
 
@@ -228,8 +228,8 @@ class Product_category extends BaseController
                 $namePic = $pic->getRandomName();
                 $pic->move($target_dir, $namePic);
                 $news_img = 'category_' . $pic->getName();
-                $this->crop->withFile($target_dir . '' . $namePic)->fit(166, 208, 'center')->save($target_dir . '' . $news_img);
-                unlink($target_dir . '' . $namePic);
+                $this->crop->withFile($target_dir . $namePic)->fit(166, 208, 'center')->save($target_dir . $news_img);
+                unlink($target_dir . $namePic);
                 $data['image'] = $news_img;
             }
 
@@ -289,9 +289,9 @@ class Product_category extends BaseController
         //old image unlink
         $old_img = get_data_by_id('image', 'cc_product_category', 'prod_cat_id', $prod_cat_id);
         if (!empty($old_img)) {
-            $imgPath = $target_dir . '' . $old_img;
+            $imgPath = $target_dir . $old_img;
             if (file_exists($imgPath)) {
-                unlink($target_dir . '' . $old_img);
+                unlink($target_dir . $old_img);
             }
         }
 

@@ -24,7 +24,7 @@ class Paypal extends BaseController
     }
 
     /**
-     * @description This method provides paypal settings page view
+     * @description This method provides Paypal settings page view
      * @param $payment_method_id
      * @return RedirectResponse|void
      */
@@ -58,7 +58,7 @@ class Paypal extends BaseController
     }
 
     /**
-     * @description This method provides paypal update action
+     * @description This method provides Paypal update action
      * @return RedirectResponse
      */
     public function update_action()
@@ -87,8 +87,8 @@ class Paypal extends BaseController
             $namePic = $pic->getRandomName();
             $pic->move($target_dir, $namePic);
             $news_img = 'paypal_' . $pic->getName();
-            $this->crop->withFile($target_dir . '' . $namePic)->fit(120, 30, 'center')->save($target_dir . '' . $news_img);
-            unlink($target_dir . '' . $namePic);
+            $this->crop->withFile($target_dir . $namePic)->fit(120, 30, 'center')->save($target_dir . $news_img);
+            unlink($target_dir . $namePic);
             $data['image'] = $news_img;
         }
 
