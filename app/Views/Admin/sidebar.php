@@ -28,6 +28,7 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                 <?php
+                $modules = modules_access();
                 $adRoleId = newSession()->adRoleId;
                 $modArrayPur = ['Dashboard'];
                 $menuAccessPur = all_menu_permission_check($modArrayPur, $adRoleId);
@@ -87,6 +88,22 @@
                         </ul>
                     </li>
                 <?php } ?>
+
+                <?php
+                $modArrayPur = ['Album'];
+                $menuAccessPur = all_menu_permission_check($modArrayPur, $adRoleId);
+                if ($menuAccessPur == true) {
+                    if ($modules['album'] == 1) {
+                    ?>
+                    <li class="nav-item">
+                        <a href="<?php echo base_url('album'); ?>" class="nav-link">
+                            <i class="nav-icon far fa-calendar-alt"></i>
+                            <p>
+                                Album
+                            </p>
+                        </a>
+                    </li>
+                <?php } }?>
 
                 <?php
                 $modArrayPur = ['Coupon'];

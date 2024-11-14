@@ -95,7 +95,7 @@ class Login extends BaseController {
      * @description This method provides login check
      * @param string $email
      * @param string $password
-     * @return array|mixed|object|\stdClass
+     * @return array|mixed|object|stdClass
      */
     private function loginMe($email,$password){
         $table = DB()->table('cc_customer');

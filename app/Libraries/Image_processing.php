@@ -11,13 +11,16 @@ class Image_processing {
     private $sx;
     private $sy;
     private $crop;
+    public $sizeArray;
+    private $quality = 100;
 
     public function __construct(){
         $this->wm = imagecreatefrompng(FCPATH . '/uploads/products/wm.png');
         $this->sx = imagesx($this->wm);
         $this->sy = imagesy($this->wm);
         $this->crop = Services::image();
-
+        $this->quality = $this->image_quality();
+        $this->sizeArray = $this->selected_theme_libraries();
     }
 
     /**
@@ -25,6 +28,7 @@ class Image_processing {
      * @return int
      */
     public function image_quality(){
+        helper('Global');
         $table = DB()->table('cc_modules');
         $query = $table->where('module_key', 'image_quality')->get();
         $result = $query->getRow();
@@ -34,9 +38,10 @@ class Image_processing {
 
     /**
      * @description This function provides selected theme libraries
-     * @return Theme_2|Theme_3|Theme_default
+     * @return array
      */
     public function selected_theme_libraries(){
+        helper('Global');
         $theme = get_lebel_by_value_in_settings('Theme');
         if($theme == 'Theme_3'){
             $libraries = new Theme_3();
@@ -47,7 +52,7 @@ class Image_processing {
         if($theme == 'Theme_2'){
             $libraries = new Theme_2();
         }
-        return $libraries;
+        return $libraries->product_image;
     }
 
     /**
@@ -102,7 +107,7 @@ class Image_processing {
      */
     public function watermark_on_resized_image($dir,$image){
         if (!file_exists($dir . '/600_wm_' . $image)) {
-            $this->crop->withFile($dir . $image)->fit(600, 600, 'center')->save($dir . '600_' . $image ,$this->image_quality());
+            $this->crop->withFile($dir . $image)->fit(600, 600, 'center')->save($dir . '600_' . $image ,$this->quality);
 
             if (pathinfo($image, PATHINFO_EXTENSION) == 'png'){
                 $mImg = imagecreatefrompng($dir . $image);
@@ -125,9 +130,9 @@ class Image_processing {
      * @return $this
      */
     public function image_crop($dir,$image,$image_name){
-        foreach($this->selected_theme_libraries()->product_image as $pro_img){
+        foreach($this->sizeArray as $pro_img){
             if (!file_exists($dir . '/' . $pro_img['width'] .'_' . $image_name)) {
-                $this->crop->withFile($dir . '' . $image)->fit($pro_img['width'], $pro_img['height'], 'center')->save($dir . $pro_img['width'] . '_' . $image_name,$this->image_quality());
+                $this->crop->withFile($dir . $image)->fit($pro_img['width'], $pro_img['height'], 'center')->save($dir . $pro_img['width'] . '_' . $image_name,$this->quality);
             }
         }
         return $this;
@@ -147,7 +152,7 @@ class Image_processing {
             $this->image_unlink($dir . '/wm_' . $mainImg);
             $this->image_unlink($dir . '/600_wm_' . $mainImg);
 
-            foreach($this->selected_theme_libraries()->product_image as $pro_img){
+            foreach($this->sizeArray as $pro_img){
                 $this->image_unlink($dir . '/' . $pro_img['width'] .'_' . $image);
                 $this->image_unlink($dir . '/' . $pro_img['width'] .'_wm_' . $image);
             }

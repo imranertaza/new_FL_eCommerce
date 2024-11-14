@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use CodeIgniter\HTTP\RedirectResponse;
+
 class Home extends BaseController {
 
     protected $validation;
@@ -150,6 +152,11 @@ class Home extends BaseController {
             print 'Email required';
         }
     }
+
+    /**
+     * @description This method provides user subscribe verify
+     * @return RedirectResponse
+     */
     public function verify(){
         $email = $this->request->getGetPost('email');
         $code = $this->request->getGetPost('code');
@@ -167,15 +174,13 @@ class Home extends BaseController {
 
                 setcookie('download_image', $email_decrypt, time() + (86400 * 365), "/");
                 $this->session->setFlashdata('message', '<div class="alert-success_web py-2 px-3 border-0 text-white fs-5 text-capitalize" role="alert">Subscribe successfully completed </div>');
-                return redirect()->to('/');
             } else {
                 $this->session->setFlashdata('message', '<div class="alert-success_web py-2 px-3 border-0 text-white fs-5 text-capitalize" role="alert">Information not matching </div>');
-                return redirect()->to('/');
             }
         }else{
             $this->session->setFlashdata('message', '<div class="alert-success_web py-2 px-3 border-0 text-white fs-5 text-capitalize" role="alert">Information not matching </div>');
-            return redirect()->to('/');
         }
+        return redirect()->to('/');
 
     }
 

@@ -3,7 +3,6 @@
 namespace App\Controllers\Customer;
 
 use App\Controllers\BaseController;
-use App\Libraries\Permission;
 use CodeIgniter\HTTP\RedirectResponse;
 
 class Wallet extends BaseController

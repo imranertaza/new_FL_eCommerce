@@ -48,14 +48,11 @@ class Cash_on_delivery extends BaseController
             foreach ($perm as $key => $val) {
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
-            echo view('Admin/header');
-            echo view('Admin/sidebar');
             if (isset($data['update']) and $data['update'] == 1) {
                 echo view('Admin/Payment/cash', $data);
             } else {
                 echo view('Admin/no_permission');
             }
-            echo view('Admin/footer');
         }
     }
 
@@ -91,8 +88,8 @@ class Cash_on_delivery extends BaseController
             $namePic = $pic->getRandomName();
             $pic->move($target_dir, $namePic);
             $news_img = 'cash_' . $pic->getName();
-            $this->crop->withFile($target_dir . '' . $namePic)->fit(120, 30, 'center')->save($target_dir . '' . $news_img);
-            unlink($target_dir . '' . $namePic);
+            $this->crop->withFile($target_dir . $namePic)->fit(120, 30, 'center')->save($target_dir . $news_img);
+            unlink($target_dir . $namePic);
             $data['image'] = $news_img;
         }
 

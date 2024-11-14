@@ -1,3 +1,6 @@
+<?= $this->extend('Admin/layout') ?>
+
+<?= $this->section('content') ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -327,3 +330,26 @@
     </section>
     <!-- /.content -->
 </div>
+<?= $this->endSection() ?>
+
+<?= $this->section('java_script') ?>
+<script>
+    function selectState(country_id) {
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('get_state') ?>",
+            data: {
+                country_id: country_id
+            },
+            beforeSend: function() {
+                $("#loading-image").show();
+            },
+            success: function(data) {
+                $("#stateView").html(data);
+            }
+
+        });
+    }
+
+</script>
+<?= $this->endSection() ?>

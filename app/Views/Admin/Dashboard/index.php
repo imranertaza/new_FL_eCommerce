@@ -1,3 +1,6 @@
+<?= $this->extend('Admin/layout') ?>
+
+<?= $this->section('content') ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -317,3 +320,10 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+<?= $this->endSection() ?>
+
+<?= $this->section('java_script') ?>
+    <script>
+
+    </script>
+<?= $this->endSection() ?>

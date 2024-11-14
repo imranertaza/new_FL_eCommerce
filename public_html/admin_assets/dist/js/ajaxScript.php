@@ -1152,6 +1152,38 @@ async function image_load(){
 
 }
 
+function album_image_sort_update(album_details_id,val){
+    $.ajax({
+        method: "POST",
+        url: "<?php echo base_url('album_image_sort_action') ?>",
+        data: {album_details_id: album_details_id,value:val},
+        beforeSend: function () {
+            $("#loading-image").show();
+        },
+        success: function (data) {
+            $("#success").show(0).delay(1000).fadeOut();
+        }
+    });
+}
+
+function removeAlbumImg(album_details_id) {
+    $.ajax({
+        method: "POST",
+        url: "<?php echo base_url('album_image_delete') ?>",
+        data: {
+            album_details_id: album_details_id
+        },
+        beforeSend: function() {
+            $("#loading-image").show();
+        },
+        success: function(data) {
+            $("#message").html(data);
+            $('#reloadImg').load(document.URL + ' #reloadImg');
+        }
+
+    });
+}
+
 
 
 

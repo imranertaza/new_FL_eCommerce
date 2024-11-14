@@ -44,14 +44,11 @@ class User extends BaseController
             foreach ($perm as $key => $val) {
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
-            echo view('Admin/header');
-            echo view('Admin/sidebar');
             if (isset($data['mod_access']) and $data['mod_access'] == 1) {
                 echo view('Admin/User/index', $data);
             } else {
                 echo view('Admin/no_permission');
             }
-            echo view('Admin/footer');
         }
     }
 
@@ -71,14 +68,11 @@ class User extends BaseController
             foreach ($perm as $key => $val) {
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
-            echo view('Admin/header');
-            echo view('Admin/sidebar');
             if (isset($data['create']) and $data['create'] == 1) {
                 echo view('Admin/User/create');
             } else {
                 echo view('Admin/no_permission');
             }
-            echo view('Admin/footer');
         }
     }
 
@@ -151,14 +145,11 @@ class User extends BaseController
             foreach ($perm as $key => $val) {
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
-            echo view('Admin/header');
-            echo view('Admin/sidebar');
             if (isset($data['update']) and $data['update'] == 1) {
                 echo view('Admin/User/update', $data);
             } else {
                 echo view('Admin/no_permission');
             }
-            echo view('Admin/footer');
         }
     }
 
@@ -250,9 +241,9 @@ class User extends BaseController
             //old image unlink
             $old_img = get_data_by_id('pic', 'cc_users', 'user_id', $user_id);
             if (!empty($old_img)) {
-                $imgPath = $target_dir . '' . $old_img;
+                $imgPath = $target_dir . $old_img;
                 if (file_exists($imgPath)) {
-                    unlink($target_dir . '' . $old_img);
+                    unlink($target_dir . $old_img);
                 }
             }
 
@@ -261,8 +252,8 @@ class User extends BaseController
             $namePic = $pic->getRandomName();
             $pic->move($target_dir, $namePic);
             $news_img = 'user_' . $pic->getName();
-            $this->crop->withFile($target_dir . '' . $namePic)->fit(250, 150, 'center')->save($target_dir . '' . $news_img);
-            unlink($target_dir . '' . $namePic);
+            $this->crop->withFile($target_dir . $namePic)->fit(250, 150, 'center')->save($target_dir . $news_img);
+            unlink($target_dir . $namePic);
             $data['pic'] = $news_img;
 
             $table = DB()->table('cc_users');
@@ -288,9 +279,9 @@ class User extends BaseController
         //old image unlink
         $old_img = get_data_by_id('pic', 'cc_users', 'user_id', $user_id);
         if (!empty($old_img)) {
-            $imgPath = $target_dir . '' . $old_img;
+            $imgPath = $target_dir . $old_img;
             if (file_exists($imgPath)) {
-                unlink($target_dir . '' . $old_img);
+                unlink($target_dir . $old_img);
             }
         }
 
