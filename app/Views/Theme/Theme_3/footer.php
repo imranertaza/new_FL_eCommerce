@@ -292,10 +292,12 @@
         </div>
     </section>
 
+
+
 <script src="<?php echo base_url() ?>/assets/assets_fl/script.js"></script>
 <script src="<?php echo base_url() ?>/assets/assets_fl/slick/slick.js" type="text/javascript" charset="utf-8"> </script>
 <script src="<?php echo base_url() ?>/admin_assets/plugins/select2/js/select2.full.min.js"></script>
-<script src="<?php echo base_url() ?>/assets/assets_fl/lightbox-plus-jquery.min.js"></script>
+
 
 
 <script>
