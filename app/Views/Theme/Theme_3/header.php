@@ -24,6 +24,8 @@
     <!-- Select2 -->
     <link rel="stylesheet" href="<?php echo base_url() ?>/assets/assets_fl/lightbox.min.css">
 
+    <script src="<?php echo base_url() ?>/assets/assets_fl/lightbox-plus-jquery.min.js"></script>
+
     <script src="<?php echo base_url() ?>/assets/assets_fl/jquery.min.js"></script>
     <script src="<?php echo base_url() ?>/assets/assets_fl/bootstrap.bundle.min.js"></script>
     <script src="<?php echo base_url() ?>/assets/assets_fl/swiper-bundle.min.js"></script>
