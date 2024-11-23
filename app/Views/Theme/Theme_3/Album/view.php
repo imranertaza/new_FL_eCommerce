@@ -12,7 +12,7 @@
                     </a>
                 </div>
                 <?php foreach ($albumAll as $val){ $img2 = str_replace("pro_", "", $val->image); $url2 = base_url('uploads/album/'.$val->album_id.'/'.$val->album_details_id.'/wm_'.$img2); ?>
-                <div class="col-4 col-md-4 mt-4 text-center ">
+                <div class="col-4 col-md-3 mt-4 text-center ">
                     <a class="example-image-link" href="<?= $url2;?>" data-lightbox="example-set" >
                     <?php echo multi_image_view('uploads/album', $val->album_id, $val->album_details_id, '261_wm_' . $val->image, 'noimage.png', 'img-fluid');?>
                     </a>
