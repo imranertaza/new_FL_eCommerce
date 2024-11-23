@@ -65,7 +65,7 @@
                     <div class="collapse" id="collapseProduct">
                         <div class="card card-body d-block border">
                             <div class="form-check form-check-inline">
-                                <input type="checkbox" name="id" class="form-check-input" onclick="bulk_status('id')"
+                                <input type="checkbox" name="id" class="form-check-input" oninput="bulk_status('id')"
                                     id="check_1" checked="">
                                 <label class="form-check-label" for="check_1">
                                     Id </label>
@@ -168,7 +168,7 @@
                                 <div class="col-md-3 mx-auto">
                                     <div class="input-group ">
                                         <lable class="tab-lab">Search:</lable>
-                                        <input name="keyWord" class="form-control form-control-sm border-end-0 border search-tab ml-2" onkeyup="table_form_submit()"  type="search" value="<?= $keyWord?>" id="example-search-input">
+                                        <input name="keyWord" class="form-control form-control-sm border-end-0 border search-tab ml-2" oninput="table_form_submit()"  type="search" value="<?= $keyWord?>" id="example-search-input">
                                     </div>
                                 </div>
                             </div>
