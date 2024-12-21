@@ -26,7 +26,25 @@ class Album extends BaseController {
     public function index(){
         $settings = get_settings();
 
-        $data['qcpicture'] = $this->albumModel->orderBy('sort_order','ASC')->paginate(20);
+        $data['qcpicture'] = $this->albumModel->where('parent_album_id', '0')->orderBy('sort_order','ASC')->paginate(20);
+        $data['pager'] = $this->albumModel->pager;
+        $data['links'] = $data['pager']->links('default','custome_link');
+
+
+
+        $data['keywords'] = $settings['meta_keyword'];
+        $data['description'] = $settings['meta_description'];
+        $data['title'] = !empty($settings['meta_title'])?$settings['meta_title']:$settings['store_name'];
+
+        echo view('Theme/'.$settings['Theme'].'/header',$data);
+        echo view('Theme/'.$settings['Theme'].'/Album/index',$data);
+        echo view('Theme/'.$settings['Theme'].'/footer');
+    }
+
+    public function view_folder($album_id){
+        $settings = get_settings();
+
+        $data['qcpicture'] = $this->albumModel->where('parent_album_id', $album_id)->orderBy('sort_order','ASC')->paginate(20);
         $data['pager'] = $this->albumModel->pager;
         $data['links'] = $data['pager']->links('default','custome_link');
 
