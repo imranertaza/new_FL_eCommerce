@@ -1686,11 +1686,11 @@ function product_count_by_brand_id($brand_id,$products){
  * @param $album_id
  * @return void
  */
-function display_folder_parent_with_parent($album_id)
+function display_category_parent_with_parent($album_id)
 {
     $albumName = array();
     if (!empty($album_id)) {
-        $totalParent = folder_parent_count($album_id);
+        $totalParent = album_category_parent_count($album_id);
         for ($i=0; $i<=$totalParent; $i++) {
             $albumName[] = get_album_name_by_id($album_id);
             $table = DB()->table('cc_album');
@@ -1711,11 +1711,11 @@ function display_folder_parent_with_parent($album_id)
 
 }
 
-function folder_parent_count($album_id){
+function album_category_parent_count($album_id){
     $table = DB()->table('cc_album');
     $album = $table->where('album_id', $album_id)->get()->getRow();
     if ($album->parent_album_id) {
-        return folder_parent_count($album->parent_album_id) + 1;
+        return album_category_parent_count($album->parent_album_id) + 1;
     }
 }
 

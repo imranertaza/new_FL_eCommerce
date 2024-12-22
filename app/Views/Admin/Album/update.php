@@ -51,7 +51,7 @@
                                 <select name="parent_album_id" class="form-control">
                                     <option value="">Please Select</option>
                                     <?php foreach ($albumParent as $val){ ?>
-                                        <option value="<?= $val->album_id?>" <?php echo ($val->album_id == $album->parent_album_id )?'selected':'';?> ><?= display_folder_parent_with_parent($val->album_id); ?></option>
+                                        <option value="<?= $val->album_id?>" <?php echo ($val->album_id == $album->parent_album_id )?'selected':'';?> ><?= display_category_parent_with_parent($val->album_id); ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
