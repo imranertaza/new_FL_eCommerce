@@ -8,7 +8,7 @@
                 <?php if (!empty($qcpicture)){ foreach ($qcpicture as $val){ ?>
                 <div class="col-3 col-md-3 mt-4 text-center">
                     <?php if ($val->is_parent == 1){ ?>
-                        <a href="<?= base_url('qc_picture_view_folder/'.$val->album_id);?>">
+                        <a href="<?= base_url('qc_picture_view_category/'.$val->album_id);?>">
                     <?php }else{ ?>
                         <a href="<?= base_url('qc_picture_view/'.$val->album_id);?>">
                     <?php }?>

@@ -84,7 +84,7 @@ class Album extends BaseController
     /**
      * @return RedirectResponse|void
      */
-    public function folder_create(){
+    public function album_category_create(){
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
         if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
@@ -99,7 +99,7 @@ class Album extends BaseController
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
             if (isset($data['create']) and $data['create'] == 1) {
-                echo view('Admin/Album/folder_create',$data);
+                echo view('Admin/Album/album_category_create',$data);
             } else {
                 echo view('Admin/no_permission');
             }
@@ -109,7 +109,7 @@ class Album extends BaseController
     /**
      * @return RedirectResponse
      */
-    public function folder_create_action()
+    public function album_category_create_action()
     {
         $data['name'] = $this->request->getPost('name');
         $data['parent_album_id'] = $this->request->getPost('parent_album_id');
@@ -122,7 +122,7 @@ class Album extends BaseController
 
         if ($this->validation->run($data) == FALSE) {
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">' . $this->validation->listErrors() . ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('album_folder_create');
+            return redirect()->to('album_category_create');
         } else {
 
             $table = DB()->table('cc_album');
@@ -158,7 +158,7 @@ class Album extends BaseController
 
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Create Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('album_folder_create');
+            return redirect()->to('album_category_create');
         }
     }
 
@@ -166,7 +166,7 @@ class Album extends BaseController
      * @param $album_id
      * @return RedirectResponse|void
      */
-    public function folder_update($album_id)
+    public function album_category_update($album_id)
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
@@ -186,14 +186,14 @@ class Album extends BaseController
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
             if (isset($data['update']) and $data['update'] == 1) {
-                echo view('Admin/Album/update_folder', $data);
+                echo view('Admin/Album/album_category_update', $data);
             } else {
                 echo view('Admin/no_permission');
             }
         }
     }
 
-    public function folder_update_action(){
+    public function album_category_update_action(){
         $album_id = $this->request->getPost('album_id');
         $data['name'] = $this->request->getPost('name');
         $data['parent_album_id'] = $this->request->getPost('parent_album_id');
@@ -205,7 +205,7 @@ class Album extends BaseController
 
         if ($this->validation->run($data) == FALSE) {
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">' . $this->validation->listErrors() . ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('album_folder_update/' . $album_id);
+            return redirect()->to('album_category_update/' . $album_id);
         } else {
             //old parent search
             $oldPar = get_data_by_id('parent_album_id','cc_album','album_id',$album_id);
@@ -250,12 +250,12 @@ class Album extends BaseController
 
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('album_folder_update/' . $album_id);
+            return redirect()->to('album_category_update/' . $album_id);
 
         }
     }
 
-    public function child_list($album_id){
+    public function album_sub_category_list($album_id){
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
         if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
@@ -272,7 +272,7 @@ class Album extends BaseController
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
             if (isset($data['mod_access']) and $data['mod_access'] == 1) {
-                echo view('Admin/Album/child_list', $data);
+                echo view('Admin/Album/album_sub_category_list', $data);
             } else {
                 echo view('Admin/no_permission');
             }
@@ -561,7 +561,7 @@ class Album extends BaseController
         print '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
     }
 
-    public function category_delete($album_id){
+    public function album_category_delete($album_id){
         helper('filesystem');
         $table = DB()->table('cc_album');
         $count = $table->where('parent_album_id', $album_id)->countAllResults();

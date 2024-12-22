@@ -41,7 +41,7 @@ class Album extends BaseController {
         echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
-    public function view_folder($album_id){
+    public function qc_picture_view_category($album_id){
         $settings = get_settings();
 
         $data['qcpicture'] = $this->albumModel->where('parent_album_id', $album_id)->orderBy('sort_order','ASC')->paginate(20);

@@ -30,7 +30,7 @@
                         <h3 class="card-title">Album List</h3>
                     </div>
                     <div class="col-md-4">
-                        <a href="<?php echo base_url('album_folder_create') ?>" class="btn btn-info   btn-xs"><i class="fas fa-plus"></i> Create Album Category</a>
+                        <a href="<?php echo base_url('album_category_create') ?>" class="btn btn-info   btn-xs"><i class="fas fa-plus"></i> Create Album Category</a>
                         <a href="<?php echo base_url('album_create') ?>" class="btn btn-primary   btn-xs"><i class="fas fa-plus"></i> Create Album</a>
                     </div>
                     <div class="col-md-12" style="margin-top: 10px">

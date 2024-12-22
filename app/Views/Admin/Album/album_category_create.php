@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form action="<?php echo base_url('album_folder_create_action')?>" method="post" enctype="multipart/form-data">
+                <form action="<?php echo base_url('album_category_create_action')?>" method="post" enctype="multipart/form-data">
                     <div class="row">
 
                         <div class="col-md-6">

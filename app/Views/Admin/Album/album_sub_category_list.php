@@ -30,7 +30,7 @@
                         <h3 class="card-title">Album Category List</h3>
                     </div>
                     <div class="col-md-4">
-                        <a href="<?php echo base_url('album_folder_create') ?>" class="btn btn-info   btn-xs"><i class="fas fa-plus"></i> Create Album Category</a>
+                        <a href="<?php echo base_url('album_category_create') ?>" class="btn btn-info   btn-xs"><i class="fas fa-plus"></i> Create Album Category</a>
                         <a href="<?php echo base_url('album_create') ?>" class="btn btn-primary   btn-xs"><i class="fas fa-plus"></i> Create Album</a>
                         <a href="<?php echo base_url('album')?>" class="btn btn-danger btn-xs" >Back</a>
                     </div>
@@ -57,7 +57,7 @@
                             <td><?php echo image_view('uploads/album',$val->album_id,'50_'.$val->thumb,'50_noimage.png','');?></td>
                             <td width="240">
                                 <?php if ($val->is_album_uploadable == 0){ ?>
-                                    <a href="<?php echo base_url('album_child_list/'.$val->album_id);?>" class="btn btn-info btn-xs"><i class="fas fa-list"></i> Sub Category List</a>
+                                    <a href="<?php echo base_url('album_sub_category_list/'.$val->album_id);?>" class="btn btn-info btn-xs"><i class="fas fa-list"></i> Sub Category List</a>
                                 <?php }else{ ?>
                                     <a href="<?php echo base_url('album_list/'.$val->album_id);?>" class="btn btn-dark btn-xs"><i class="fas fa-list"></i> Album List</a>
                                 <?php } ?>
@@ -65,10 +65,10 @@
                                 <?php if ($val->is_parent == 0){ ?>
                                 <a href="<?php echo base_url('album_update/'.$val->album_id);?>" class="btn btn-primary btn-xs"><i class="fas fa-edit"></i> Update</a>
                                 <?php }else{ ?>
-                                <a href="<?php echo base_url('album_folder_update/'.$val->album_id);?>" class="btn btn-primary btn-xs"><i class="fas fa-edit"></i> Update</a>
+                                <a href="<?php echo base_url('album_category_update/'.$val->album_id);?>" class="btn btn-primary btn-xs"><i class="fas fa-edit"></i> Update</a>
                                 <?php } ?>
 
-                                <a href="<?php echo base_url('album_all_delete/'.$val->album_id);?>" onclick="return confirm('Are you sure you want to Delete?')" class="btn btn-danger btn-xs"><i class="fas fa-trash"></i> Delete</a>
+                                <a href="<?php echo base_url('album_category_delete/'.$val->album_id);?>" onclick="return confirm('Are you sure you want to Delete?')" class="btn btn-danger btn-xs"><i class="fas fa-trash"></i> Delete</a>
                             </td>
                         </tr>
                     <?php } ?>
