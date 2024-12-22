@@ -1682,5 +1682,45 @@ function product_count_by_brand_id($brand_id,$products){
     return $count;
 }
 
+/**
+ * @param $album_id
+ * @return void
+ */
+function display_category_parent_with_parent($album_id)
+{
+    $albumName = array();
+    if (!empty($album_id)) {
+        $totalParent = album_category_parent_count($album_id);
+        for ($i=0; $i<=$totalParent; $i++) {
+            $albumName[] = get_album_name_by_id($album_id);
+            $table = DB()->table('cc_album');
+            $cat = $table->where('album_id', $album_id)->get()->getRow();
+            $album_id = $cat->parent_album_id;
+        }
+    }
 
+    krsort($albumName);
 
+    foreach ($albumName as $key => $val){
+        if ($key == 0) {
+            print $val;
+        }else {
+            print $val." > ";
+        }
+    }
+
+}
+
+function album_category_parent_count($album_id){
+    $table = DB()->table('cc_album');
+    $album = $table->where('album_id', $album_id)->get()->getRow();
+    if ($album->parent_album_id) {
+        return album_category_parent_count($album->parent_album_id) + 1;
+    }
+}
+
+function get_album_name_by_id($album_id){
+    $table = DB()->table('cc_album');
+    $album = $table->where('album_id', $album_id)->get()->getRow();
+    return $album->name;
+}

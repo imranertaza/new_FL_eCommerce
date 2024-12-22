@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form action="<?php echo base_url('album_update_action')?>" method="post" enctype="multipart/form-data">
+                <form action="<?php echo base_url('album_category_update_action')?>" method="post" enctype="multipart/form-data">
                     <div class="row" id="reloadImg">
 
                         <div class="col-md-6">
@@ -47,19 +47,20 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Album Category</label>
+                                <label>Sort Order</label>
+                                <input type="number" name="sort_order_al" class="form-control" value="<?= $album->sort_order;?>" placeholder="sort order" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Parent Category</label>
                                 <select name="parent_album_id" class="form-control">
                                     <option value="">Please Select</option>
                                     <?php foreach ($albumParent as $val){ ?>
                                         <option value="<?= $val->album_id?>" <?php echo ($val->album_id == $album->parent_album_id )?'selected':'';?> ><?= display_category_parent_with_parent($val->album_id); ?></option>
                                     <?php } ?>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Sort Order</label>
-                                <input type="number" name="sort_order_al" class="form-control" value="<?= $album->sort_order;?>" placeholder="sort order" required>
                             </div>
                         </div><div class="col-md-6"></div>
 
@@ -79,33 +80,14 @@
                         <div class="col-md-12">
                             <hr>
                         </div>
-                        <div class="col-md-4">
-                            <h3>Multiple Image</h3>
-                        </div>
-                        <div class="col-md-8 mt-3">
-                            <div id="success"  style="display:none;"  class="alert alert-success alert-dismissible w-50 mb-1 text-center " role="alert">Update Success </div>
-                            <div class="row mb-4" >
-                                <?php foreach ($albumAll as $img){ ?>
-                                    <div class="col-md-2 img_view">
-                                        <input type="text" onchange="album_image_sort_update('<?=$img->album_details_id?>',this.value)" class="form-control mb-2 text-center" style="height: 25px;" name="sort_order" value="<?= $img->sort_order;?>">
-                                        <?php echo multi_image_view('uploads/album', $img->album_id, $img->album_details_id, '198_' . $img->image, 'noimage.png', 'img-fluid');?>
-                                        <a href="javascript:void(0)" onclick="removeAlbumImg(<?php echo $img->album_details_id;?>)" class="btn del-btn"><i class="fas fa-trash"></i> Delete</a>
-                                    </div>
-                                <?php } ?>
-                            </div>
 
-                            <div id="frames"></div><br>
-                            <input type="file" class="form-control" id="image" name="multiImage[]" multiple />
-
-
-                        </div>
                         <div class="col-md-12">
                             <hr>
                         </div>
                         <div class="col-md-12 mt-3 text-center">
                             <button class="btn btn-primary" >Update</button>
                             <input type="hidden" class="form-control" name="album_id" value="<?= $album->album_id;?>" >
-                            <a href="<?php echo base_url('album_list/'.$album->parent_album_id)?>" class="btn btn-danger" >Back</a>
+                            <a href="<?php echo base_url('album')?>" class="btn btn-danger" >Back</a>
                         </div>
                     </div>
                 </form>

@@ -7,12 +7,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Album List</h1>
+                    <h1>Album Category List</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="<?php echo base_url('admin_dashboard') ?>">Home</a></li>
-                        <li class="breadcrumb-item active">Album List</li>
+                        <li class="breadcrumb-item active">Album Category List</li>
                     </ol>
                 </div>
             </div>
@@ -27,11 +27,12 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-8">
-                        <h3 class="card-title">Album List</h3>
+                        <h3 class="card-title">Album Category List</h3>
                     </div>
                     <div class="col-md-4">
                         <a href="<?php echo base_url('album_category_create') ?>" class="btn btn-info   btn-xs"><i class="fas fa-plus"></i> Create Album Category</a>
                         <a href="<?php echo base_url('album_create') ?>" class="btn btn-primary   btn-xs"><i class="fas fa-plus"></i> Create Album</a>
+                        <a href="<?php echo base_url('album')?>" class="btn btn-danger btn-xs" >Back</a>
                     </div>
                     <div class="col-md-12" style="margin-top: 10px">
                         <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
