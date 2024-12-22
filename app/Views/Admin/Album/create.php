@@ -47,7 +47,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Parent Folder</label>
+                                <label>Album Category</label>
                                 <select name="parent_album_id" class="form-control" required>
                                     <option value="">Please Select</option>
                                     <?php foreach ($albumParent as $val){ ?>
