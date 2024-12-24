@@ -110,6 +110,14 @@ $routes->get('/album_delete/(:num)', 'Admin\Album::delete/$1');
 $routes->post('/album_image_sort_action', 'Admin\Album::album_image_sort_action');
 $routes->post('/album_image_delete', 'Admin\Album::image_delete');
 
+$routes->get('/album_category_create', 'Admin\Album::album_category_create');
+$routes->post('/album_category_create_action', 'Admin\Album::album_category_create_action');
+$routes->get('/album_category_update/(:num)', 'Admin\Album::album_category_update/$1');
+$routes->post('/album_category_update_action', 'Admin\Album::album_category_update_action');
+$routes->get('/album_sub_category_list/(:num)', 'Admin\Album::album_sub_category_list/$1');
+$routes->get('/album_list/(:num)', 'Admin\Album::album_list/$1');
+$routes->get('/album_category_delete/(:num)', 'Admin\Album::album_category_delete/$1');
+
 //User
 $routes->get('/user', 'Admin\User::index');
 $routes->get('/user_create', 'Admin\User::create');
@@ -393,6 +401,7 @@ $routes->post('/top_search', 'Search::search_action');
 
 //Qc picture
 $routes->get('/qc_picture', 'Album::index');
+$routes->get('/qc_picture_view_category/(:num)', 'Album::qc_picture_view_category/$1');
 $routes->get('/qc_picture_view/(:num)', 'Album::view/$1');
 
 //ajax controller
