@@ -400,9 +400,9 @@ $routes->Post('/category_url_generate', 'Category::url_generate');
 $routes->post('/top_search', 'Search::search_action');
 
 //Qc picture
-$routes->get('/qc_picture', 'Album::index');
-$routes->get('/qc_picture_view_category/(:num)', 'Album::qc_picture_view_category/$1');
-$routes->get('/qc_picture_view/(:num)', 'Album::view/$1');
+$routes->get('/qc-picture', 'Album::index');
+$routes->get('/qc-picture-view-category/(:num)', 'Album::qc_picture_view_category/$1');
+$routes->get('/qc-picture-view/(:num)', 'Album::view/$1');
 
 //ajax controller
 $routes->post('/get_state', 'Admin\Ajax::get_state');
