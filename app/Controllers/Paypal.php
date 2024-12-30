@@ -189,6 +189,7 @@ class Paypal extends BaseController
                 $finalAmo = ($this->cart->total() + $data['shipping_charge']) - $disc;
             }
 
+            $data['payment_status'] = 'Paid';
             $data['total'] = $this->cart->total();
             $data['discount'] = $disc;
             $data['final_amount'] = $finalAmo;

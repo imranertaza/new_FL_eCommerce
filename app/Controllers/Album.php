@@ -26,7 +26,7 @@ class Album extends BaseController {
     public function index(){
         $settings = get_settings();
 
-        $data['qcpicture'] = $this->albumModel->where('parent_album_id', '0')->orderBy('sort_order','ASC')->paginate(20);
+        $data['qcpicture'] = $this->albumModel->where('parent_album_id', '0')->orderBy('name','ASC')->paginate(20);
         $data['pager'] = $this->albumModel->pager;
         $data['links'] = $data['pager']->links('default','custome_link');
 
