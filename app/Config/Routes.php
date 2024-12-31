@@ -378,7 +378,7 @@ $routes->get('/payment_paypal', 'Paypal::index');
 $routes->get('/payment_paypal_checkout_action', 'Paypal::paypal_checkout_action');
 
 $routes->post('/payment_oisbizcraft', 'OisbizcraftController::payment_oisbizcraft');
-$routes->get('/oisbizcraft_payment_status', 'OisbizcraftController::payment_status');
+$routes->get('/oisbizcraft_return_url', 'OisbizcraftController::return_url');
 $routes->get('/oisbizcraft_action', 'OisbizcraftController::oisbizcraft_action');
 $routes->post('/oisbizcraft-notification', 'OisbizcraftController::notification_webhook');
 $routes->get('/oisbizcraft-success', 'OisbizcraftController::success');
