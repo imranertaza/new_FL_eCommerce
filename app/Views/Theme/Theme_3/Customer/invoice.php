@@ -45,14 +45,15 @@
                             </div>
                         </div>
                         <?php
-                            $status = order_id_by_status($order->order_id);
+//                            $status = order_id_by_status($order->order_id);
 
+                            $status = $order->payment_status;
                             $bacColor = 'bg-danger';
-                            $titleS = 'Unpaid';
+                            $titleS = $status;
                             $pad ='padding:35px 20px;';
-                            if ($status == 'Complete'){
+                            if ($status == 'Paid'){
                                 $bacColor = 'bg-success';
-                                $titleS = 'Paid';
+                                $titleS = $status;
                                 $pad ='padding: 35px 28px;';
                             }
 

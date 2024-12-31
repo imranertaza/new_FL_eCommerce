@@ -10,7 +10,7 @@ class AlbumModel extends Model {
     protected $primaryKey = 'album_id';
     protected $returnType = 'object';
     protected $useSoftDeletes = false;
-    protected $allowedFields = ['album_id','name', 'thumb','sort_order','createdBy', 'createdDtm', 'updatedBy', 'updatedDtm'];
+    protected $allowedFields = ['album_id','name','parent_album_id','is_parent','is_album_uploadable','thumb','sort_order','createdBy', 'createdDtm', 'updatedBy', 'updatedDtm'];
     protected $useTimestamps = false;
     protected $validationRules    = [];
     protected $validationMessages = [];

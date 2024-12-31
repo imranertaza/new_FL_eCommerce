@@ -8,9 +8,9 @@
                 <?php if (!empty($qcpicture)){ foreach ($qcpicture as $val){ ?>
                 <div class="col-3 col-md-3 mt-4 text-center">
                     <?php if ($val->is_parent == 1){ ?>
-                        <a href="<?= base_url('qc_picture_view_category/'.$val->album_id);?>">
+                        <a href="<?= base_url('qc-picture-view-category/'.$val->album_id);?>">
                     <?php }else{ ?>
-                        <a href="<?= base_url('qc_picture_view/'.$val->album_id);?>">
+                        <a href="<?= base_url('qc-picture-view/'.$val->album_id);?>">
                     <?php }?>
                         <?php echo image_view('uploads/album',$val->album_id,'261_wm_'.$val->thumb,'noimage.png','w-100');?>
                         <p class="text-capitalize text-black mt-3"><b><?php echo $val->name; ?></b></p>

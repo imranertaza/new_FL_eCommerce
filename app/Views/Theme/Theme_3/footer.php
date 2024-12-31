@@ -952,6 +952,9 @@
         if (code == 'paypal') {
             $('#checkout-form').attr('action', '<?php echo base_url('payment_paypal'); ?>');
             $('#checkout-form').attr('method', 'GET');
+        }else if(code == 'oisbizcraft'){
+            $('#checkout-form').attr('action', '<?php echo base_url('payment_oisbizcraft'); ?>');
+            $('#checkout-form').attr('method', 'POST');
         } else {
             $('#checkout-form').attr('action', '<?php echo base_url('checkout_action'); ?>');
             $('#checkout-form').attr('method', 'POST');

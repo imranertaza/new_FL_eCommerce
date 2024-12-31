@@ -122,4 +122,15 @@ class Order extends BaseController
             return redirect()->to('order_view/' . $data['order_id'] . '?selTab=history');
         }
     }
+
+    public function payment_status_action() {
+        $order_id = $this->request->getPost('order_id');
+        $data['payment_status'] = $this->request->getPost('status');
+
+        $tableOrder = DB()->table('cc_order');
+        $tableOrder->where('order_id',$order_id)->update($data);
+
+        print '<div class="alert alert-success alert-dismissible" role="alert"> Payment status update success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+
+    }
 }
