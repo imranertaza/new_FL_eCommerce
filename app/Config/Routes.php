@@ -198,6 +198,11 @@ $routes->post('/credit_card_update_action', 'Admin\Payment\Credit_card::update_a
 $routes->get('/u_wallet/(:num)', 'Admin\Payment\U_wallet::settings/$1');
 $routes->post('/u_wallet_update_action', 'Admin\Payment\U_wallet::update_action');
 
+$routes->get('/oisbizcraft/(:num)', 'Admin\Payment\Oisbizcraft::settings/$1');
+$routes->post('oisbizcraft_update_action', 'Admin\Payment\Oisbizcraft::update_action');
+
+
+
 //Ajax
 $routes->get('/page_list', 'Admin\Page_settings::index');
 $routes->get('/page_create', 'Admin\Page_settings::create');
@@ -236,6 +241,7 @@ $routes->post('/option_remove_action', 'Admin\Option::option_remove_action');
 $routes->get('/order_list', 'Admin\Order::index');
 $routes->post('/order_history_action', 'Admin\Order::history_action');
 $routes->get('/order_view/(:num)', 'Admin\Order::order_view/$1');
+$routes->post('/order_payment_status_action', 'Admin\Order::payment_status_action');
 
 //Theme Settings
 $routes->get('/theme_settings', 'Admin\Theme_settings::index');
@@ -371,6 +377,11 @@ $routes->post('/payment_instruction', 'Checkout::payment_instruction');
 $routes->get('/payment_paypal', 'Paypal::index');
 $routes->get('/payment_paypal_checkout_action', 'Paypal::paypal_checkout_action');
 
+$routes->post('/payment_oisbizcraft', 'OisbizcraftController::payment_oisbizcraft');
+$routes->get('/oisbizcraft-return-url', 'OisbizcraftController::return_url');
+$routes->get('/oisbizcraft_action', 'OisbizcraftController::oisbizcraft_action');
+$routes->post('/oisbizcraft-notification', 'OisbizcraftController::notification_webhook');
+$routes->get('/oisbizcraft-success', 'OisbizcraftController::success');
 
 //pages routes
 $routes->get('/about', 'Pages\Pages::about');
@@ -400,9 +411,9 @@ $routes->Post('/category_url_generate', 'Category::url_generate');
 $routes->post('/top_search', 'Search::search_action');
 
 //Qc picture
-$routes->get('/qc_picture', 'Album::index');
-$routes->get('/qc_picture_view_category/(:num)', 'Album::qc_picture_view_category/$1');
-$routes->get('/qc_picture_view/(:num)', 'Album::view/$1');
+$routes->get('/qc-picture', 'Album::index');
+$routes->get('/qc-picture-view-category/(:num)', 'Album::qc_picture_view_category/$1');
+$routes->get('/qc-picture-view/(:num)', 'Album::view/$1');
 
 //ajax controller
 $routes->post('/get_state', 'Admin\Ajax::get_state');
