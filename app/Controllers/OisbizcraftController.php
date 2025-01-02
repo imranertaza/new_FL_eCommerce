@@ -76,7 +76,7 @@ class OisbizcraftController extends BaseController {
             'description' => 'Sale',
             'currency' => 'SGD',
             'optional_currency' => 'USD',
-            'merchant_return_url' => base_url('oisbizcraft_payment_status'), // Callback URL after payment
+            'merchant_return_url' => base_url('oisbizcraft-return-url'), // Callback URL after payment
             'order_id' => $this->session->order_id, // Generate a unique transaction ID
         );
 
@@ -181,7 +181,7 @@ class OisbizcraftController extends BaseController {
         }
     }
 
-    public function payment_status() {
+    public function return_url() {
         $message = $this->request->getGet('message');
         $order_id = $this->request->getGet('order_id');
         $return_code = $this->request->getGet('return_code');
