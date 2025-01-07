@@ -377,11 +377,18 @@ $routes->post('/payment_instruction', 'Checkout::payment_instruction');
 $routes->get('/payment_paypal', 'Paypal::index');
 $routes->get('/payment_paypal_checkout_action', 'Paypal::paypal_checkout_action');
 
+$routes->post('/payment_stripe', 'StripeController::payment_stripe');
+$routes->post('/payment_stripe_checkout_action', 'StripeController::stripe_create_charge');
+$routes->get('/stripe_action', 'StripeController::stripe_action');
+
 $routes->post('/payment_oisbizcraft', 'OisbizcraftController::payment_oisbizcraft');
 $routes->get('/oisbizcraft-return-url', 'OisbizcraftController::return_url');
 $routes->get('/oisbizcraft_action', 'OisbizcraftController::oisbizcraft_action');
 $routes->post('/oisbizcraft-notification', 'OisbizcraftController::notification_webhook');
 $routes->get('/oisbizcraft-success', 'OisbizcraftController::success');
+
+$routes->get('stripe/(:num)', 'Admin\Payment\Stripe::settings/$1');
+$routes->post('stripe_update_action', 'Admin\Payment\Stripe::update_action');
 
 //pages routes
 $routes->get('/about', 'Pages\Pages::about');
