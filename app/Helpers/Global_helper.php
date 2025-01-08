@@ -1724,3 +1724,9 @@ function get_album_name_by_id($album_id){
     $album = $table->where('album_id', $album_id)->get()->getRow();
     return $album->name;
 }
+
+function parent_qc_picture(){
+    $table = DB()->table('cc_album');
+    $album = $table->where('parent_album_id', '0')->orderBy('name','ASC')->get()->getResult();
+    return $album;
+}
