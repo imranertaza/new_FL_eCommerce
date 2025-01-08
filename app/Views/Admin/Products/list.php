@@ -136,6 +136,23 @@
                 checkboxes[i].checked = source.checked;
         }
     }
+
+    function product_delete(id){
+        if (confirm('Do you want to delete it?')) {
+            $.ajax({
+                method: "POST",
+                url: "<?php echo base_url('product_delete') ?>",
+                data: {product_id: id},
+                beforeSend: function () {
+                    $("#loading-image").show();
+                },
+                success: function (data) {
+                    $("#message").html(data);
+                    $('#hide_' + id).hide('slow');
+                }
+            });
+        }
+    }
 </script>
 <?= $this->endSection() ?>
 

@@ -136,7 +136,7 @@
                                     <tr>
                                         <td>Payment Status</td>
                                         <td>
-                                            <select name="payment_status" onchange="payment_status_update(this.value,'<?php echo $order->order_id;?>')">
+                                            <select name="payment_status" class="form-control" style="width: 160px;" onchange="payment_status_update(this.value,'<?php echo $order->order_id;?>')">
                                                 <option value="Pending" <?php echo ($order->payment_status == 'Pending')?'selected':'';?> >Pending</option>
                                                 <option value="Paid" <?php echo ($order->payment_status == 'Paid')?'selected':'';?> >Paid</option>
                                                 <option value="Failed" <?php echo ($order->payment_status == 'Failed')?'selected':'';?> >Failed</option>
