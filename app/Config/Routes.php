@@ -398,6 +398,7 @@ $routes->get('/page/(:any)', 'Pages\Pages::page/$1');
 
 //products routes
 $routes->get('/detail/(:num)', 'Products\Products::detail/$1');
+$routes->get('/product-not-found', 'Products\Products::product_not_found');
 $routes->post('/review', 'Products\Products::review');
 $routes->post('/both_product_price', 'Products\Products::both_product_price');
 $routes->post('/optionPriceCalculate', 'Products\Products::optionPriceCalculate');

@@ -23,6 +23,11 @@ class Products extends BaseController {
      */
     public function detail($product_id)
     {
+        $check = is_exists('cc_products', 'product_id', $product_id);
+        if ($check == true){
+            return redirect()->to('product-not-found');
+        }
+
         $settings = get_settings();
         $table = DB()->table('cc_products');
         $table->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id ');
@@ -255,6 +260,23 @@ class Products extends BaseController {
         }
         $view .='</select>';
         return $view;
+    }
+
+    /**
+     * @description This method provides product not found page view
+     * @return void
+     */
+    public function product_not_found(){
+        $settings = get_settings();
+
+        $data['keywords'] = $settings['meta_keyword'];
+        $data['description'] = $settings['meta_description'];
+        $data['title'] = !empty($settings['meta_title'])?$settings['meta_title']:$settings['store_name'];
+
+        $data['page_title'] = 'Product Not Found';
+        echo view('Theme/'.$settings['Theme'].'/header',$data);
+        echo view('Theme/'.$settings['Theme'].'/Product/not_found');
+        echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
 
