@@ -116,7 +116,7 @@ class Geo_zone extends BaseController
                 $tableZone = DB()->table('cc_geo_zone_details');
                 $tableZone->insertBatch($zoneData);
 
-                $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Create Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Geo Zone Create Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
                 return redirect()->to('geo_zone_create');
             }else{
                 $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"> Zone already exist ! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -212,7 +212,7 @@ class Geo_zone extends BaseController
 
 
 
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Geo Zone Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('geo_zone_update/' . $geo_zone_id);
 
         }
@@ -231,7 +231,7 @@ class Geo_zone extends BaseController
         $table = DB()->table('cc_geo_zone');
         $table->where('geo_zone_id', $geo_zone_id)->delete();
 
-        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Geo Zone Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('geo_zone');
     }
 
@@ -246,7 +246,7 @@ class Geo_zone extends BaseController
         $table = DB()->table('cc_geo_zone_details');
         $table->where('geo_zone_details_id', $geo_zone_details_id)->delete();
 
-        print '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        print '<div class="alert alert-success alert-dismissible" role="alert">Zone Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
 
     }
 

@@ -393,7 +393,7 @@ class Products extends BaseController
 
 
             DB()->transComplete();
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Create Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Products Create Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('product_create');
         }
     }
@@ -573,7 +573,7 @@ class Products extends BaseController
             }
             DB()->transComplete();
 
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Create Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Products Copy Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('products?page=1');
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -988,7 +988,7 @@ class Products extends BaseController
 
 
             DB()->transComplete();
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Products Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('product_update/'.$product_id);
 
         }
@@ -1049,7 +1049,7 @@ class Products extends BaseController
 
         DB()->transComplete();
 
-        print '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        print '<div class="alert alert-success alert-dismissible" role="alert">Products Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
     }
 
     /**
@@ -1103,7 +1103,7 @@ class Products extends BaseController
         }
 
         $table->where('product_image_id', $product_image_id)->delete();
-        print '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        print '<div class="alert alert-success alert-dismissible" role="alert">Image Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
     }
 
     /**
@@ -1329,7 +1329,7 @@ class Products extends BaseController
             }
             DB()->transComplete();
 
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Products Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 //            return redirect()->to('products');
             return redirect()->back();
         }else{

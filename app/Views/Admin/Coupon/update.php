@@ -54,7 +54,7 @@
                                 <label>Discount On</label>
                                 <select name="discount_on" class="form-control" >
                                     <option value="Product" <?php echo ($coupon->discount_on == 'Product')?'selected':''; ?> >Product</option>
-                                    <option value="Shipping" <?php echo ($coupon->discount_on == 'Shipping')?'selected':''; ?> >Shipping</option>
+<!--                                    <option value="Shipping" --><?php //echo ($coupon->discount_on == 'Shipping')?'selected':''; ?><!-- >Shipping</option>-->
                                 </select>
                             </div>
 

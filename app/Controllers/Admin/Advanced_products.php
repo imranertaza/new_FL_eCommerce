@@ -129,7 +129,7 @@ class Advanced_products extends BaseController
         $table = DB()->table('cc_module_settings');
         $table->where('module_settings_id', $module_settings_id)->update($data);
 
-        print '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        print '<div class="alert alert-success alert-dismissible" role="alert">Advanced Products Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
     }
 
     /**
@@ -499,7 +499,7 @@ class Advanced_products extends BaseController
             DB()->transComplete();
 
 //            print'<div class="alert alert-success alert-dismissible" role="alert">Create Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Create Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Product Cpoy Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('bulk_edit_products');
         }else{
 //            print '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
@@ -565,7 +565,7 @@ class Advanced_products extends BaseController
             }
             DB()->transComplete();
 
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Product Multi Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 //            return redirect()->to('bulk_edit_products');
             return redirect()->back();
         }else{
@@ -634,7 +634,7 @@ class Advanced_products extends BaseController
                 $optionTable = DB()->table('cc_product_option');
                 $optionTable->insertBatch($optionData);
             }
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Multi Option Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to($redirect_url);
 
         }else{
@@ -698,7 +698,7 @@ class Advanced_products extends BaseController
                 $attributeTable->insertBatch($attributeData);
             }
 
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Multi Attribute Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to($redirect_url);
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Invalid input! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -762,7 +762,7 @@ class Advanced_products extends BaseController
 
             $catTable->insertBatch($arrayData);
 
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Multi Category Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to($redirect_url);
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any category <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -818,7 +818,7 @@ class Advanced_products extends BaseController
                 $proTable->update($data);
             }
 
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Multi Price Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to($redirect_url);
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please input any price <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');

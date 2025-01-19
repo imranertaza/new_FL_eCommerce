@@ -105,16 +105,17 @@ class OisbizcraftController extends BaseController {
         curl_close($ch);
         $response_data = json_decode($response);
 
-
+//        echo $response;
+//        die();
         // Check if the request was successful
-        if ($response_data->status === 200) {
+        if (isset($response_data->status) && ($response_data->status === 200)) {
             return redirect()->to($response_data->data->url);
         }else{
-            $error = curl_error($ch);
-            curl_close($ch);
-            $data['payment_status'] = 'Failed';
+//            $error = curl_error($ch);
+//            curl_close($ch);
+            $dataPay['payment_status'] = 'Failed';
             $table = DB()->table('cc_order');
-            $table->where('order_id',$this->session->order_id)->update($data);
+            $table->where('order_id',$this->session->order_id)->update($dataPay);
             unset($_SESSION['order_id']);
 
             return redirect()->to('checkout_failed');

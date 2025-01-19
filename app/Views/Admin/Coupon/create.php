@@ -54,7 +54,7 @@
                                 <label>Discount On</label>
                                 <select name="discount_on" class="form-control" >
                                     <option value="Product" >Product</option>
-                                    <option value="Shipping" >Shipping</option>
+<!--                                    <option value="Shipping" >Shipping</option>-->
                                 </select>
                             </div>
 

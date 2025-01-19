@@ -112,7 +112,7 @@ class Brand extends BaseController
             $table = DB()->table('cc_brand');
             $table->insert($data);
 
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Create Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Brand Create Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('brand_create');
         }
     }
@@ -194,7 +194,7 @@ class Brand extends BaseController
             $table = DB()->table('cc_brand');
             $table->where('brand_id', $brand_id)->update($data);
 
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Brand Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('brand_update/' . $brand_id);
 
         }
@@ -225,7 +225,7 @@ class Brand extends BaseController
         $table->where('brand_id', $brand_id)->delete();
 
 
-        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Brand Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('brand');
     }
 

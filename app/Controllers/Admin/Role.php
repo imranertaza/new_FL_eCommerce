@@ -102,7 +102,7 @@ class Role extends BaseController
             $roleTable = DB()->table('cc_roles');
             $roleTable->insert($data);
 
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Create Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Role Create Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('role_create');
         }
     }
@@ -165,7 +165,7 @@ class Role extends BaseController
             $table = DB()->table('cc_roles');
             $table->where('role_id', $role_id)->update($data);
 
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Role Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('role_update/' . $role_id);
 
         }
@@ -182,7 +182,7 @@ class Role extends BaseController
         $table = DB()->table('cc_roles');
         $table->where('role_id', $role_id)->delete();
 
-        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Role Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('role');
     }
 
