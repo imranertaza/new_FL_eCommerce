@@ -146,7 +146,7 @@ class Shipping extends BaseController
         }
 
 
-        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Shipping Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('shipping_settings/'.$shipping_method_id);
 
 
@@ -194,7 +194,7 @@ class Shipping extends BaseController
                 $tableRate->insert($rateData);
             }
         }
-        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Zone Rate Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('shipping_settings/'.$shipping_method_id);
 
 
@@ -209,7 +209,7 @@ class Shipping extends BaseController
         $table = DB()->table('cc_geo_zone_shipping_rate');
         $table->where('cc_geo_zone_shipping_rate_id', $cc_geo_zone_shipping_rate_id)->delete();
 
-        print '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        print '<div class="alert alert-success alert-dismissible" role="alert">Zone Rate Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
     }
 
     /**
@@ -227,7 +227,7 @@ class Shipping extends BaseController
         $table = DB()->table('cc_shipping_method');
         $table->where('shipping_method_id', $shipping_method_id)->update($data);
 
-        print '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        print '<div class="alert alert-success alert-dismissible" role="alert">Shipping Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
     }
 
     /**
@@ -240,7 +240,7 @@ class Shipping extends BaseController
         $table = DB()->table('cc_weight_shipping_settings');
         $table->where('settings_id', $settings_id)->delete();
 
-        print '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        print '<div class="alert alert-success alert-dismissible" role="alert">Remove Settings Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
     }
 
 }

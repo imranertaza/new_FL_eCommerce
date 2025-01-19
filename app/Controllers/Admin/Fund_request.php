@@ -88,7 +88,7 @@ class Fund_request extends BaseController
 
         
 
-        print  '<div class="alert alert-success alert-dismissible" role="alert">Update Record Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        print  '<div class="alert alert-success alert-dismissible" role="alert">Fund Request Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
                 
     }
 
