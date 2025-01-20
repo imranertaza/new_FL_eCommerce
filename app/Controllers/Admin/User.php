@@ -114,7 +114,7 @@ class User extends BaseController
                 $table = DB()->table('cc_users');
                 $table->insert($data2);
 
-                $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Create Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">User Create Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
                 return redirect()->to('user_create');
             }else{
                 $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Email already exists <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -185,7 +185,7 @@ class User extends BaseController
                 $table = DB()->table('cc_users');
                 $table->where('user_id', $user_id)->update($data);
 
-                $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">User Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
                 return redirect()->to('user_update/' . $user_id);
             }else{
                 $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Email already exists <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -219,7 +219,7 @@ class User extends BaseController
             $table = DB()->table('cc_users');
             $table->where('user_id', $user_id)->update($data);
 
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">User Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('user_update/' . $user_id);
 
         }
@@ -259,7 +259,7 @@ class User extends BaseController
             $table = DB()->table('cc_users');
             $table->where('user_id', $user_id)->update($data);
 
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Update Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">User Image Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('user_update/' . $user_id);
         } else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">No image selected!<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -289,7 +289,7 @@ class User extends BaseController
         $table = DB()->table('cc_users');
         $table->where('user_id', $user_id)->delete();
 
-        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">User Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('user');
     }
 
