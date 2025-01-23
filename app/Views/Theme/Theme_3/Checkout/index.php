@@ -17,9 +17,7 @@
                             <p class="mb-0"><label><input type="checkbox" onclick="user_create()" name="new_acc_create"
                                         id="createNew" value="0"> Check Mark the box
                                     for create an account</label></p>
-                            <p class="ms-3 lh-sm"><small>By creating an account you will be able to make quick
-                                    purchases
-                                    later and see details about all orders</small></p>
+                            <p class="ms-3 lh-sm"><small>Create Your Account Now</small></p>
                         </div>
                     </div>
                     <?php } ?>
@@ -399,6 +397,11 @@
                                 <span>Shipping charge</span>
                                 <span id="chargeShip"><?php echo $cSymbol .'0' ?></span>
                                 <input type="hidden" name="shipping_charge" id="shipping_charge">
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-3">
+                                <span>Shipping Discount</span>
+                                <span>(-) <span id="chargeDisSh"><?php echo $cSymbol .'0' ?></span></span>
                             </div>
                         </div>
 

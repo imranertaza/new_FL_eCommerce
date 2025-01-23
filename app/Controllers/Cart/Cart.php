@@ -213,6 +213,7 @@ class Cart extends BaseController {
 
         if (empty($this->cart->contents())){
             unset($_SESSION['coupon_discount']);
+            unset($_SESSION['coupon_discount_shipping']);
         }
 
         print Cart()->total();

@@ -74,7 +74,7 @@
                                 </div>
                             </div>
                             <div id="framesdef"></div><br>
-                            <input type="file" id="defimage" name="thumb" class="form-control" >
+                            <input type="file" id="defimage" name="thumb" accept="image/*" class="form-control" >
 
                         </div>
                         <div class="col-md-12">

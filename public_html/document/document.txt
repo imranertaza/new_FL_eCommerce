@@ -1,13 +1,16 @@
 --------------------------------------------
 Ois Bizcraft config for test
 --------------------------------------------
+Exchange Rates Api email : dnationsoftdm8@gmail.com
+
+
 Api Key : DNNDT2QAB583ZP188BHNFMCXRB4G7SJ3
 OIS Bizcraft Api Url : https://devapiportal.oisbizcraft.com/api/payments
 Merchant Outlet Id : 13
 Terminal Id : 001
 Cust Code : 001095
 Exchange Rates Api : 51f16f3fee1c4eec91235cbd887a5259
-
+usd To Sgd Rates : https://openexchangerates.org/api/latest.json?app_id=$apiKey
 
 --------------------------------------------
 Ois Bizcraft config for live
@@ -19,6 +22,13 @@ Terminal Id : 001
 Cust Code : 001243
 Exchange Rates Api : 51f16f3fee1c4eec91235cbd887a5259
 
+usd To Sgd Rates : https://openexchangerates.org/api/latest.json?app_id=$apiKey
+
+Test Card
+---------
+4111111111111111
+Cvv 123
+OTP 123456
 
 --------------------------------------------
 Stripe config for test
@@ -30,8 +40,8 @@ Secret Key : sk_test_51HiuQiDVsvPo6h6ZmBoulU8B7qWOCl6qYC3feinEzPuj0lLICpwhE2vEHn
 --------------------------------------------
 Stripe config for live
 --------------------------------------------
-Key : 
-Secret Key : 
+Key : pk_live_RX96cHOMZk9qfFhUQS2KMCO6
+Secret Key : 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
 
 
 --------------------------------------------

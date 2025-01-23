@@ -1620,7 +1620,7 @@ function get_theme_title_settings(){
  * @return string
  */
 function currency_symbol_with_symbol($amount,$symbol) {
-    $cur = !empty($amount) ? $amount : 0;
+    $cur = !empty($amount) ? number_format($amount,2) : 0;
     $split = explode('.', $cur);
     $flot = empty($split[1]) ? '00' : $split[1];
     $result = $symbol . '' . $split[0] . '<sup>' . $flot . '</sup>';

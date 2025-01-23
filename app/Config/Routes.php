@@ -100,6 +100,9 @@ $routes->post('/product_image_sort_action', 'Admin\Products::product_image_sort_
 
 $routes->get('/products_list', 'Admin\Products::products_list');
 
+$routes->post('product_status_update', 'Admin\Products::status_update');
+$routes->post('product_status_update_action', 'Admin\Products::status_update_action');
+
 //Album
 $routes->get('/album', 'Admin\Album::index');
 $routes->get('/album_create', 'Admin\Album::create');
