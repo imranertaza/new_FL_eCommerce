@@ -71,7 +71,7 @@ class Album extends BaseController {
         $data['album'] = $table->where('album_id',$album_id)->get()->getRow();
 
         $tableAll = DB()->table('cc_album_details');
-        $data['albumAll'] = $tableAll->where('album_id',$album_id)->orderBy('name','ASC')->get()->getResult();
+        $data['albumAll'] = $tableAll->where('album_id',$album_id)->orderBy('album_details_id','ASC')->get()->getResult();
 
         $data['keywords'] = $settings['meta_keyword'];
         $data['description'] = $settings['meta_description'];
