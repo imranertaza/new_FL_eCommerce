@@ -62,7 +62,7 @@
                         </div>
                         <div class="col-md-8">
                             <div id="framesdef"></div><br>
-                            <input type="file" id="defimage" name="thumb" class="form-control" required>
+                            <input type="file" id="defimage" name="thumb" accept="image/*" class="form-control" required>
 
                         </div>
                         <div class="col-md-12">
@@ -73,7 +73,7 @@
                         </div>
                         <div class="col-md-8 mt-3">
                             <div id="frames"></div><br>
-                            <input type="file" class="form-control" id="image" name="multiImage[]" multiple />
+                            <input type="file" class="form-control" id="image" accept="image/*" name="multiImage[]" multiple />
 
                         </div>
                         <div class="col-md-12">

@@ -62,7 +62,7 @@
                         </div>
                         <div class="col-md-8">
                             <div id="framesdef"></div><br>
-                            <input type="file" id="defimage" name="thumb" class="form-control" required>
+                            <input type="file" id="defimage" name="thumb" accept="image/*" class="form-control" required>
 
                         </div>
 

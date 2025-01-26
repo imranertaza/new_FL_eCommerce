@@ -1458,6 +1458,54 @@ class Products extends BaseController
 
     }
 
+    public function status_update(){
+
+        $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
+        $adRoleId = $this->session->adRoleId;
+        if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
+            return redirect()->to(site_url('admin'));
+        } else {
+            $redirect_url = isset($_COOKIE['product_url_path']) ? $_COOKIE['product_url_path'] : 'admin/products';
+
+            $allProductId =  $this->request->getPost('productId[]');
+            if (!empty($allProductId)) {
+
+                $data['all_product'] = $allProductId;
+
+                //$perm = array('create','read','update','delete','mod_access');
+                $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
+                foreach ($perm as $key => $val) {
+                    $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
+                }
+                if (isset($data['update']) and $data['update'] == 1) {
+                    echo view('Admin/Products/status_update', $data);
+                } else {
+                    echo view('Admin/no_permission');
+                }
+            }else{
+                $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                return redirect()->to($redirect_url);
+            }
+        }
+    }
+
+    public function status_update_action(){
+        $redirect_url = isset($_COOKIE['product_url_path']) ? $_COOKIE['product_url_path'] : 'admin/products';
+        $all_product = $this->request->getPost('productId[]');
+        $status = $this->request->getPost('status');
+
+        $data['status'] = $status;
+
+        foreach ($all_product as $product_id) {
+            $table = DB()->table('cc_products');
+            $table->where('product_id',$product_id);
+            $table->update($data);
+        }
+
+        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Product status update successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        return redirect()->to($redirect_url);
+    }
+
 
 
 
