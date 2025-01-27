@@ -75,9 +75,54 @@ class Checkout extends BaseController
         $query = $table->where('code', $coupon_code)->where('status', 'Active')->where('total_useable >', 'total_used')->where('date_start <', date('Y-m-d'))->where('date_end >', date('Y-m-d'))->get()->getRow();
 
         if (!empty($query)) {
-            if ($query->for_registered_user == '1') {
-                $isLoggedInCustomer = $this->session->isLoggedInCustomer;
-                if (isset($isLoggedInCustomer) || $isLoggedInCustomer == TRUE) {
+            if ($query->discount_on == 'Product') {
+                if ($query->for_registered_user == '1') {
+                    $isLoggedInCustomer = $this->session->isLoggedInCustomer;
+                    if (isset($isLoggedInCustomer) || $isLoggedInCustomer == TRUE) {
+                        if (!empty($this->cart->contents())) {
+                            $couponArray = array(
+                                'coupon_discount' => $query->discount
+                            );
+                            $this->session->set($couponArray);
+                            $this->session->setFlashdata('message', 'Coupon code applied successfully ');
+                            return redirect()->to('cart');
+                        } else {
+                            $this->session->setFlashdata('message', 'your cart is currently empty');
+                            return redirect()->to('cart');
+                        }
+                    } else {
+                        $this->session->setFlashdata('message', 'Coupon code not working ');
+                        return redirect()->to('cart');
+                    }
+                }
+
+                if ($query->for_subscribed_user == '1') {
+                    $isLoggedInCustomer = $this->session->isLoggedInCustomer;
+                    if (isset($isLoggedInCustomer) || $isLoggedInCustomer == TRUE) {
+                        $checkSub = is_exists('cc_newsletter', 'customer_id', $this->session->cusUserId);
+                        if ($checkSub == false) {
+                            if (!empty($this->cart->contents())) {
+                                $couponArray = array(
+                                    'coupon_discount' => $query->discount
+                                );
+                                $this->session->set($couponArray);
+                                $this->session->setFlashdata('message', 'Coupon code applied successfully ');
+                                return redirect()->to('cart');
+                            } else {
+                                $this->session->setFlashdata('message', 'your cart is currently empty ');
+                                return redirect()->to('cart');
+                            }
+                        } else {
+                            $this->session->setFlashdata('message', 'Coupon code not working ');
+                            return redirect()->to('cart');
+                        }
+                    } else {
+                        $this->session->setFlashdata('message', 'Coupon code not working');
+                        return redirect()->to('cart');
+                    }
+                }
+
+                if (($query->for_registered_user == '0') && ($query->for_subscribed_user == '0')) {
                     if (!empty($this->cart->contents())) {
                         $couponArray = array(
                             'coupon_discount' => $query->discount
@@ -86,23 +131,17 @@ class Checkout extends BaseController
                         $this->session->setFlashdata('message', 'Coupon code applied successfully ');
                         return redirect()->to('cart');
                     } else {
-                        $this->session->setFlashdata('message', 'your cart is currently empty');
+                        $this->session->setFlashdata('message', 'your cart is currently empty ');
                         return redirect()->to('cart');
                     }
-                } else {
-                    $this->session->setFlashdata('message', 'Coupon code not working ');
-                    return redirect()->to('cart');
                 }
-            }
-
-            if ($query->for_subscribed_user == '1') {
-                $isLoggedInCustomer = $this->session->isLoggedInCustomer;
-                if (isset($isLoggedInCustomer) || $isLoggedInCustomer == TRUE) {
-                    $checkSub = is_exists('cc_newsletter', 'customer_id', $this->session->cusUserId);
-                    if ($checkSub == false) {
+            }else{
+                if ($query->for_registered_user == '1') {
+                    $isLoggedInCustomer = $this->session->isLoggedInCustomer;
+                    if (isset($isLoggedInCustomer) || $isLoggedInCustomer == TRUE) {
                         if (!empty($this->cart->contents())) {
                             $couponArray = array(
-                                'coupon_discount' => $query->discount
+                                'coupon_discount_shipping' => $query->discount
                             );
                             $this->session->set($couponArray);
                             $this->session->setFlashdata('message', 'Coupon code applied successfully ');
@@ -115,25 +154,49 @@ class Checkout extends BaseController
                         $this->session->setFlashdata('message', 'Coupon code not working ');
                         return redirect()->to('cart');
                     }
-                } else {
-                    $this->session->setFlashdata('message', 'Coupon code not working');
-                    return redirect()->to('cart');
+                }
+
+                if ($query->for_subscribed_user == '1') {
+                    $isLoggedInCustomer = $this->session->isLoggedInCustomer;
+                    if (isset($isLoggedInCustomer) || $isLoggedInCustomer == TRUE) {
+                        $checkSub = is_exists('cc_newsletter', 'customer_id', $this->session->cusUserId);
+                        if ($checkSub == false) {
+                            if (!empty($this->cart->contents())) {
+                                $couponArray = array(
+                                    'coupon_discount_shipping' => $query->discount
+                                );
+                                $this->session->set($couponArray);
+                                $this->session->setFlashdata('message', 'Coupon code applied successfully ');
+                                return redirect()->to('cart');
+                            } else {
+                                $this->session->setFlashdata('message', 'your cart is currently empty ');
+                                return redirect()->to('cart');
+                            }
+                        } else {
+                            $this->session->setFlashdata('message', 'Coupon code not working ');
+                            return redirect()->to('cart');
+                        }
+                    } else {
+                        $this->session->setFlashdata('message', 'Coupon code not working ');
+                        return redirect()->to('cart');
+                    }
+                }
+
+                if (($query->for_registered_user == '0') && ($query->for_subscribed_user == '0')) {
+                    if (!empty($this->cart->contents())) {
+                        $couponArray = array(
+                            'coupon_discount_shipping' => $query->discount
+                        );
+                        $this->session->set($couponArray);
+                        $this->session->setFlashdata('message', 'Coupon code applied successfully ');
+                        return redirect()->to('cart');
+                    } else {
+                        $this->session->setFlashdata('message', 'your cart is currently empty ');
+                        return redirect()->to('cart');
+                    }
                 }
             }
 
-            if (($query->for_registered_user == '0') && ($query->for_subscribed_user == '0')) {
-                if (!empty($this->cart->contents())) {
-                    $couponArray = array(
-                        'coupon_discount' => $query->discount
-                    );
-                    $this->session->set($couponArray);
-                    $this->session->setFlashdata('message', 'Coupon code applied successfully ');
-                    return redirect()->to('cart');
-                } else {
-                    $this->session->setFlashdata('message', 'your cart is currently empty ');
-                    return redirect()->to('cart');
-                }
-            }
         } else {
             $this->session->setFlashdata('message', 'Coupon code not working');
             return redirect()->to('cart');
@@ -210,9 +273,16 @@ class Checkout extends BaseController
                 if (isset($this->session->coupon_discount)) {
                     $disc = round(($this->cart->total() * $this->session->coupon_discount) / 100);
                 }
-                $finalAmo = $this->cart->total() - $disc;
+
                 if (!empty($shipping_charge)) {
-                    $finalAmo = ($this->cart->total() + $shipping_charge) - $disc;
+                    if (isset($this->session->coupon_discount_shipping)) {
+                        $disc = ($shipping_charge * $this->session->coupon_discount_shipping) / 100;
+                    }
+                }
+
+                $finalAmo = number_format($this->cart->total() - $disc,2);
+                if (!empty($shipping_charge)) {
+                    $finalAmo = number_format(($this->cart->total() + $shipping_charge) - $disc,2);
                 }
 
                 if ($data['payment_method'] == '8') {
@@ -365,6 +435,7 @@ class Checkout extends BaseController
                 }
 
                 unset($_SESSION['coupon_discount']);
+                unset($_SESSION['coupon_discount_shipping']);
                 $this->cart->destroy();
 
                 $this->session->setFlashdata('message', 'Your order has been successfully placed ');

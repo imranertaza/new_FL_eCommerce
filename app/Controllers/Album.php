@@ -44,7 +44,7 @@ class Album extends BaseController {
     public function qc_picture_view_category($album_id){
         $settings = get_settings();
 
-        $data['qcpicture'] = $this->albumModel->where('parent_album_id', $album_id)->orderBy('sort_order','ASC')->paginate(20);
+        $data['qcpicture'] = $this->albumModel->where('parent_album_id', $album_id)->orderBy('name','ASC')->paginate(20);
         $data['pager'] = $this->albumModel->pager;
         $data['links'] = $data['pager']->links('default','custome_link');
 
@@ -71,7 +71,7 @@ class Album extends BaseController {
         $data['album'] = $table->where('album_id',$album_id)->get()->getRow();
 
         $tableAll = DB()->table('cc_album_details');
-        $data['albumAll'] = $tableAll->where('album_id',$album_id)->orderBy('sort_order','ASC')->get()->getResult();
+        $data['albumAll'] = $tableAll->where('album_id',$album_id)->orderBy('album_details_id','ASC')->get()->getResult();
 
         $data['keywords'] = $settings['meta_keyword'];
         $data['description'] = $settings['meta_description'];

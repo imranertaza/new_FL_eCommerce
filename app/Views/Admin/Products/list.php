@@ -39,6 +39,9 @@
                             <?php if(modules_key_by_access('image_crop') == '1' ){?>
                             <button type="submit"  formaction="<?php echo base_url('product_image_crop_action'); ?>" class="btn btn-info btn-xs float-right mr-2"><i class="fas fa-file"></i> Crop image</button>
                             <?php } ?>
+                            <?php if(modules_key_by_access('multi_status_update') == '1' ){?>
+                                <button type="submit" id="save"  formaction="<?php echo base_url('product_status_update'); ?>" class="btn btn-primary btn-xs float-right mr-2"><i class="fas fa-file"></i> Status update</button>
+                            <?php } ?>
                             <?php if(modules_key_by_access('multi_delete') == '1' ){ ?>
                             <button type="submit" formaction="<?php echo base_url('product_multi_delete_action'); ?>" class="btn btn-danger btn-xs float-right mr-2"><i class="fas fa-trash"></i> Multi delete</button>
                             <?php } ?>
@@ -84,6 +87,7 @@
                             <th>Name</th>
                             <th>Model</th>
                             <th>Quantity</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -97,6 +101,7 @@
                             <td><?php echo $val->name;?></td>
                             <td><?php echo $val->model;?></td>
                             <td> <?php echo $val->quantity;?></td>
+                            <td> <?php echo $val->status;?></td>
                             <td width="140">
                                 <a href="<?php echo base_url('product_update/'.$val->product_id)?>" class="btn btn-sm btn-info">Edit</a>
                                 <a href="javascript:void(0)" class="btn btn-sm btn-danger" onclick="product_delete('<?php echo $val->product_id;?>')">delete</a>

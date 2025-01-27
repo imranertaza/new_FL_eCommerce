@@ -131,9 +131,16 @@ class StripeController extends BaseController {
         if (isset($this->session->coupon_discount)) {
             $disc = round(($this->cart->total() * $this->session->coupon_discount) / 100);
         }
-        $finalAmo = $this->cart->total() - $disc;
+
         if (!empty($data['shipping_charge'])) {
-            $finalAmo = ($this->cart->total() + $data['shipping_charge']) - $disc;
+            if (isset($this->session->coupon_discount_shipping)) {
+                $disc = ($data['shipping_charge'] * $this->session->coupon_discount_shipping) / 100;
+            }
+        }
+
+        $finalAmo = number_format($this->cart->total() - $disc,2);
+        if (!empty($data['shipping_charge'])) {
+            $finalAmo = number_format(($this->cart->total() + $data['shipping_charge']) - $disc,2);
         }
 
         $data['payment_status'] = 'Paid';
@@ -303,6 +310,9 @@ class StripeController extends BaseController {
         unset($_SESSION['shipping_postcode']);
         unset($_SESSION['shipping_address_1']);
         unset($_SESSION['shipping_address_2']);
+
+        unset($_SESSION['coupon_discount']);
+        unset($_SESSION['coupon_discount_shipping']);
 
         unset($_SESSION['t_amount']);
     }
