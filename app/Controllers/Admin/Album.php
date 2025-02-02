@@ -519,6 +519,8 @@ class Album extends BaseController
     public function delete($album_id){
 
         helper('filesystem');
+        $parent = get_data_by_id('parent_album_id','cc_album','album_id',$album_id);
+        $redirectUrl = base_url('album_list/'.$parent);
 
         DB()->transStart();
 
@@ -537,8 +539,7 @@ class Album extends BaseController
 
 
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Album Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-//        return redirect()->to('album');
-        return redirect()->back();
+        return redirect()->to($redirectUrl);
     }
 
     /**
@@ -578,6 +579,10 @@ class Album extends BaseController
         helper('filesystem');
         $table = DB()->table('cc_album');
         $count = $table->where('parent_album_id', $album_id)->countAllResults();
+
+        $oldPar = get_data_by_id('parent_album_id','cc_album','album_id',$album_id);
+        $redirectUrl = !empty($oldPar)?base_url('album_sub_category_list/'.$oldPar):base_url('album');
+
         if (empty($count)) {
             DB()->transStart();
 
@@ -586,7 +591,7 @@ class Album extends BaseController
                 delete_files($target_dir, TRUE);
                 rmdir($target_dir);
             }
-            $oldPar = get_data_by_id('parent_album_id','cc_album','album_id',$album_id);
+
 
             $table = DB()->table('cc_album');
             $table->where('album_id', $album_id)->delete();
@@ -607,10 +612,10 @@ class Album extends BaseController
 
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Album Category Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->back();
+            return redirect()->to($redirectUrl);
         }else{
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please delete child <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->back();
+            return redirect()->to($redirectUrl);
         }
     }
 
