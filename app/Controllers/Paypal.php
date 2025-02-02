@@ -96,6 +96,7 @@ class Paypal extends BaseController
 
         $data['shipping_method'] = $this->request->getGet('shipping_method');
         $data['shipping_charge'] = $this->request->getGet('shipping_charge');
+        $data['shipping_discount_charge'] = $this->request->getPost('shipping_discount_charge');
         $data['payment_method'] = $this->request->getGet('payment_method');
 
 
@@ -187,8 +188,15 @@ class Paypal extends BaseController
 
             if (!empty($data['shipping_charge'])) {
                 if (isset($this->session->coupon_discount_shipping)) {
-                    $disc = ($data['shipping_charge'] * $this->session->coupon_discount_shipping) / 100;
+                    $disc = $this->session->shipping_discount_charge;
                 }
+            }
+
+            if (!empty($disc)){
+                $oldQtyCup = get_data_by_id('total_used','cc_coupon','coupon_id',$this->session->coupon_id);
+                $newQtyCupUsed['total_used'] = $oldQtyCup + 1;
+                $table = DB()->table('cc_coupon');
+                $table->where('coupon_id',$this->session->coupon_id)->update($newQtyCupUsed);
             }
 
             $finalAmo = number_format($this->cart->total() - $disc,2);
@@ -260,6 +268,38 @@ class Paypal extends BaseController
             }
 
 
+            if (isset($this->session->cusUserId)) {
+                $tableModule = DB()->table('cc_modules');
+                $query = $tableModule->join('cc_module_settings', 'cc_module_settings.module_id = cc_modules.module_id')->where('cc_modules.module_key','point')->get()->getRow();
+                if($query->status == '1') {
+                    $oldPoint = get_data_by_id('point', 'cc_customer', 'customer_id', $this->session->cusUserId);
+                    $point = $this->cart->total() * $query->value;
+                    $restPoint = $oldPoint + $point;
+
+                    //customer point update
+                    $cusPointData['point'] = $restPoint;
+                    $tableCus = DB()->table('cc_customer');
+                    $tableCus->where('customer_id', $this->session->cusUserId)->update($cusPointData);
+
+
+                    //point history add
+                    $cusPointHistory['customer_id'] = $this->session->cusUserId;
+                    $cusPointHistory['order_id'] = $order_id;
+                    $cusPointHistory['particulars'] = 'product purchase point';
+                    $cusPointHistory['trangaction_type'] = 'Cr.';
+                    $cusPointHistory['point'] = $point;
+                    $cusPointHistory['rest_point'] = $restPoint;
+                    $tablePoint = DB()->table('cc_customer_point_history');
+                    $tablePoint->insert($cusPointHistory);
+
+                    //order point update
+                    $orPointData['total_point'] = $point;
+                    $tabOrder = DB()->table('cc_order');
+                    $tabOrder->where('order_id',$order_id)->update($orPointData);
+                }
+            }
+
+
             DB()->transComplete();
 
             //email send customer
@@ -304,6 +344,7 @@ class Paypal extends BaseController
 
         unset($_SESSION['shipping_method']);
         unset($_SESSION['shipping_charge']);
+        unset($_SESSION['shipping_discount_charge']);
         unset($_SESSION['payment_method']);
 
         unset($_SESSION['store_id']);
@@ -319,5 +360,9 @@ class Paypal extends BaseController
         unset($_SESSION['shipping_postcode']);
         unset($_SESSION['shipping_address_1']);
         unset($_SESSION['shipping_address_2']);
+
+        unset($_SESSION['coupon_discount_shipping']);
+        unset($_SESSION['coupon_discount']);
+        unset($_SESSION['coupon_id']);
     }
 }

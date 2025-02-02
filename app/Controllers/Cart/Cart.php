@@ -212,6 +212,7 @@ class Cart extends BaseController {
         $this->cart->remove($rowid);
 
         if (empty($this->cart->contents())){
+            unset($_SESSION['coupon_id']);
             unset($_SESSION['coupon_discount']);
             unset($_SESSION['coupon_discount_shipping']);
         }

@@ -120,6 +120,8 @@ $routes->post('/album_category_update_action', 'Admin\Album::album_category_upda
 $routes->get('/album_sub_category_list/(:num)', 'Admin\Album::album_sub_category_list/$1');
 $routes->get('/album_list/(:num)', 'Admin\Album::album_list/$1');
 $routes->get('/album_category_delete/(:num)', 'Admin\Album::album_category_delete/$1');
+$routes->post('/album_bulk_update_action', 'Admin\Album::bulk_update_action');
+
 
 //User
 $routes->get('/user', 'Admin\User::index');
@@ -148,6 +150,8 @@ $routes->post('/customers_general_action', 'Admin\Customers::general_action');
 $routes->get('/customers_update/(:num)', 'Admin\Customers::update/$1');
 $routes->get('/customers_delete/(:num)', 'Admin\Customers::delete/$1');
 $routes->get('/customers_ledger/(:num)', 'Admin\Customers::ledger/$1');
+$routes->get('customers_point/(:num)', 'Admin\Customers::point/$1');
+
 
 // founds request
 $routes->get('/fund_request', 'Admin\Fund_request::index');
@@ -245,6 +249,7 @@ $routes->get('/order_list', 'Admin\Order::index');
 $routes->post('/order_history_action', 'Admin\Order::history_action');
 $routes->get('/order_view/(:num)', 'Admin\Order::order_view/$1');
 $routes->post('/order_payment_status_action', 'Admin\Order::payment_status_action');
+$routes->post('order_point_action', 'Admin\Order::point_action');
 
 //Theme Settings
 $routes->get('/theme_settings', 'Admin\Theme_settings::index');
@@ -349,7 +354,7 @@ $routes->get('/add_funds', 'Customer\Wallet::add_funds');
 $routes->post('/add_funds_action', 'Customer\Wallet::fund_action');
 
 $routes->get('/ledger', 'Customer\Customer_ledger::index');
-
+$routes->get('/point_history', 'Customer\Customer_point_history::index');
 
 
 //cart routes

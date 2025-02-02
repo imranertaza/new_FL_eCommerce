@@ -54,9 +54,14 @@
                             <a class="nav-link text-dark" id="vert-tabs-settings-tab" data-toggle="pill"
                                href="#vert-tabs-settings" role="tab" aria-controls="vert-tabs-settings"
                                aria-selected="false">Products</a>
-                            <a class="nav-link text-dark <?php echo isset($_GET['selTab']) ? 'active' : ''; ?>"
+                            <a class="nav-link text-dark <?php echo (isset($_GET['selTab']) && $_GET['selTab'] == 'history') ? 'active' : ''; ?>"
                                id="vert-tabs-settings-tab" data-toggle="pill" href="#vert-tabs-history" role="tab"
                                aria-controls="vert-tabs-settings" aria-selected="false">History</a>
+
+                            <?php if(modules_key_by_access('point') == '1' ){ ?>
+                                <a class="nav-link text-dark <?php echo (isset($_GET['selTab']) && $_GET['selTab'] == 'point') ? 'active' : ''; ?>" id="vert-tabs-point-tab" data-toggle="pill" href="#vert-tabs-point" role="tab"
+                                   aria-controls="vert-tabs-point" aria-selected="false">Point</a>
+                            <?php } ?>
                         </div>
                     </div>
                     <div class="col-7 col-sm-9">
@@ -258,7 +263,7 @@
                                 </table>
                             </div>
 
-                            <div class="tab-pane fade <?php echo isset($_GET['selTab']) ? 'show active' : ''; ?>"
+                            <div class="tab-pane fade <?php echo (isset($_GET['selTab']) && $_GET['selTab'] == 'history')? 'show active' : ''; ?>"
                                  id="vert-tabs-history" role="tabpanel" aria-labelledby="vert-tabs-settings-tab">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -302,6 +307,35 @@
                                                 <input type="hidden" name="order_id"
                                                        value="<?php echo $order->order_id; ?>">
                                                 <button type="submit" class="btn btn-primary ">Add History</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade <?php echo (isset($_GET['selTab']) && $_GET['selTab'] == 'point')? 'show active' : ''; ?>" id="vert-tabs-point" role="tabpanel" aria-labelledby="vert-tabs-point-tab">
+                                <div class="row">
+                                    <div class="col-md-6 ">
+                                        <h5>Point: <?php echo $order->total_point; ?> </h5>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <form action="<?php echo base_url('order_point_action') ?>" method="post">
+                                            <div class="form-group">
+                                                <label>Status <span class="requi">*</span></label>
+                                                <select class="form-control" name="status" required>
+                                                    <option value="">Please Select</option>
+                                                    <option value="add">Add</option>
+                                                    <option value="deducted">Deducted</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Amount <span class="requi">*</span></label>
+                                                <input type="number" class="form-control" step="any" name="amount" placeholder="amount">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <input type="hidden" name="order_id" value="<?php echo $order->order_id; ?>">
+                                                <button type="submit" class="btn btn-primary ">Update</button>
                                             </div>
                                         </form>
                                     </div>

@@ -750,14 +750,12 @@
             success: function(data) {
                 var charge = Number(data.charge);
 
-                var dis = 0;
-                <?php if (isset(newSession()->coupon_discount_shipping)){ ?>
-                var dis = (Number(data.charge) * <?php echo newSession()->coupon_discount_shipping;?>)/100;
-                <?php } ?>
+                var dis = Number(data.discount);
 
                 var total = Number(totalAmount);
                 var amount = Number(total) + Number(charge) - dis;
 
+                $('#discount_charge').val(dis);
                 $('#chargeDisSh').html('<?php echo $symbol; ?> ' + dis);
                 $('#chargeShip').html('<?php echo $symbol; ?> ' + data.charge);
                 $('#total').html('<?php echo $symbol; ?> ' + parseFloat(amount.toFixed(2)));

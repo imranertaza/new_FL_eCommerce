@@ -35,6 +35,7 @@
                     </div>
                     <div class="col-md-12" style="margin-top: 10px">
                         <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
+                        <span id="mess" style="display: none"><div class="alert alert-success alert-dismissible" role="alert">Album Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div></span>
                     </div>
                 </div>
             </div>
@@ -50,9 +51,12 @@
                     </thead>
                     <tbody>
                     <?php $i=1; foreach ($album as $val){ ?>
-                        <tr>
-                            <td width="40"><?php echo $i++;?></td>
-                            <td><?php echo $val->name;?></td>
+                        <tr id="update_<?= $val->album_id;?>">
+                            <td width="40"><?php echo $val->album_id;?></td>
+                            <td>
+                                <p onclick="updateFunctionAlbum('<?= $val->album_id;?>', 'name', '<?= $val->name;?>', 'view_name_<?=$val->album_id?>', 'formEdit_<?=$val->album_id?>','update_<?= $val->album_id;?>')"><?php echo $val->name;?></p>
+                                <span id="view_name_<?php echo $val->album_id; ?>"></span>
+                            </td>
                             <td><?php echo image_view('uploads/album',$val->album_id,'50_'.$val->thumb,'50_noimage.png','');?></td>
                             <td width="220">
                                 <a href="<?php echo base_url('album_update/'.$val->album_id);?>" class="btn btn-primary btn-xs"><i class="fas fa-edit"></i> Update</a>
@@ -87,6 +91,47 @@
 
 <?= $this->section('java_script') ?>
     <script>
+        function updateFunctionAlbum(id, input, value, viewId, formName,updateRow) {
+            var formID = "'" + formName + "'"
+            var data = '<form id="' + formName +
+                '" action="<?php echo base_url('album_bulk_update_action') ?>" onkeydown="if(event.keyCode === 13) {return false;}" data-row="'+updateRow+'" method="post"><input type="text" name="' +
+                input +
+                '" class="form-control mb-2" value="' + value +
+                '" ><input type="hidden" name="album_id" class="form-control mb-2" value="' + id +
+                '" ><button type="button" onclick="submitFormBulk(' + formID +
+                ')" class="btn btn-xs btn-primary mr-2">Update</button><a href="javascript:void(0)" onclick="hideInput(this)" class="btn btn-xs btn-danger">Cancel</button> </form>';
+
+            $('#' + viewId).html(data);
+        }
+
+        function hideInput(data) {
+            $(data).parent().remove();
+        }
+        function submitFormBulk(formID) {
+            var form = document.getElementById(formID);
+            var upRow = $(form).attr('data-row');
+
+            var done = false;
+            $.ajax({
+                url: $(form).prop('action'),
+                type: "POST",
+                data: new FormData(form),
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function(data) {
+                    // $("#message").html(data);
+                    $("#mess").show();
+                    var div = $("#"+upRow).html(data);
+                    div.animate({opacity: '0.5'});
+                    div.animate({opacity: '1'});
+                    checkShowHideRow();
+
+                }
+            });
+
+        }
+
 
     </script>
 <?= $this->endSection() ?>
