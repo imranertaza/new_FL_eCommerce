@@ -48,6 +48,10 @@ class Album extends BaseController {
         $data['pager'] = $this->albumModel->pager;
         $data['links'] = $data['pager']->links('default','custome_link');
 
+        $data['page_title'] = get_data_by_id('name','cc_album','album_id',$album_id);
+
+        $checkParent = get_data_by_id('parent_album_id','cc_album','album_id',$album_id);
+        $data['back_url'] = !empty($checkParent)?base_url('qc-picture-view-category/'.$checkParent):base_url('page/qc-pictures');
 
 
         $data['keywords'] = $settings['meta_keyword'];
@@ -72,6 +76,9 @@ class Album extends BaseController {
 
         $tableAll = DB()->table('cc_album_details');
         $data['albumAll'] = $tableAll->where('album_id',$album_id)->orderBy('album_details_id','ASC')->get()->getResult();
+
+        $checkParent = get_data_by_id('parent_album_id','cc_album','album_id',$album_id);
+        $data['back_url'] = base_url('qc-picture-view-category/'.$checkParent);
 
         $data['keywords'] = $settings['meta_keyword'];
         $data['description'] = $settings['meta_description'];

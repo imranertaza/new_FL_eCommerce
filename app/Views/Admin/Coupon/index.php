@@ -47,6 +47,7 @@
                         <th>Discount</th>
                         <th>Start date</th>
                         <th>End date</th>
+                        <th>Total Used</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -59,6 +60,7 @@
                             <td><?php echo $val->discount;?></td>
                             <td><?php echo $val->date_start;?></td>
                             <td><?php echo $val->date_end;?></td>
+                            <td><?php echo $val->total_used;?></td>
                             <td width="180">
                                 <a href="<?php echo base_url('coupon_update/'.$val->coupon_id);?>" class="btn btn-primary btn-xs"><i class="fas fa-edit"></i> Update</a>
                                 <a href="<?php echo base_url('coupon_delete/'.$val->coupon_id);?>" onclick="return confirm('Are you sure you want to Delete?')" class="btn btn-danger btn-xs"><i class="fas fa-trash"></i> Delete</a>
@@ -75,6 +77,7 @@
                         <th>Discount</th>
                         <th>Start date</th>
                         <th>End date</th>
+                        <th>Total Used</th>
                         <th>Action</th>
                     </tr>
                     </tfoot>

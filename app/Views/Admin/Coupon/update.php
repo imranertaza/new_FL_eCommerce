@@ -52,10 +52,20 @@
 
                             <div class="form-group">
                                 <label>Discount On</label>
-                                <select name="discount_on" class="form-control" >
+                                <select name="discount_on" class="form-control" onchange="shippingMethod(this.value)" >
                                     <option value="Product" <?php echo ($coupon->discount_on == 'Product')?'selected':''; ?> >Product</option>
                                     <option value="Shipping" <?php echo ($coupon->discount_on == 'Shipping')?'selected':''; ?> >Shipping</option>
                                 </select>
+                            </div>
+
+                            <div class="form-group " id="shippingMethod" style="<?php echo ($coupon->discount_on == 'Shipping')?'display: block;':'display: none;';?>" >
+                                <label>Shipping Method</label>
+                                <?php foreach ($shipping_method as  $val){ ?>
+                                    <div class="form-group form-check">
+                                        <input type="checkbox" name="shipping_method[]" <?php foreach ($coupon_ship as $v){ echo ($v->shipping_method_id == $val->shipping_method_id )?'checked':''; } ?>  class="form-check-input" id="check_<?php echo $val->shipping_method_id;?>" value="<?php echo $val->shipping_method_id;?>">
+                                        <label class="form-check-label" for="check_<?php echo $val->shipping_method_id;?>"><?php echo $val->name;?></label>
+                                    </div>
+                                <?php } ?>
                             </div>
 
                             <div class="form-group">
@@ -115,6 +125,12 @@
 
 <?= $this->section('java_script') ?>
 <script>
-
+    function shippingMethod(v){
+        if (v == 'Shipping') {
+            $('#shippingMethod').css('display', 'block');
+        }else{
+            $('#shippingMethod').css('display', 'none');
+        }
+    }
 </script>
 <?= $this->endSection() ?>

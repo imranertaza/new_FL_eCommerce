@@ -322,4 +322,31 @@ class Customers extends BaseController
         }
     }
 
+    public function point($customer_id)
+    {
+        $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
+        $adRoleId = $this->session->adRoleId;
+        if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
+            return redirect()->to(site_url('admin'));
+        } else {
+
+            $table = DB()->table('cc_customer_point_history');
+            $data['point'] = $table->where('customer_id', $customer_id)->get()->getResult();
+
+
+            //$perm = array('create','read','update','delete','mod_access');
+            $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
+            foreach ($perm as $key => $val) {
+                $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
+            }
+            if (isset($data['read']) and $data['read'] == 1) {
+                echo view('Admin/Customers/point', $data);
+            } else {
+                echo view('Admin/no_permission');
+            }
+        }
+    }
+
+
+
 }
