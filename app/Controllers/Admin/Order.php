@@ -126,6 +126,7 @@ class Order extends BaseController
                     $tableModule = DB()->table('cc_modules');
                     $query = $tableModule->join('cc_module_settings', 'cc_module_settings.module_id = cc_modules.module_id')->where('cc_modules.module_key','point')->get()->getRow();
                     if($query->status == '1') {
+                        DB()->transStart();
                         $oldPoint = get_data_by_id('point', 'cc_customer', 'customer_id', $ord->customer_id);
                         $point = $ord->total_point;
                         $restPoint = $oldPoint - $point;
@@ -150,6 +151,7 @@ class Order extends BaseController
                         $orPointData['total_point'] = 0;
                         $tabOrder = DB()->table('cc_order');
                         $tabOrder->where('order_id',$data['order_id'])->update($orPointData);
+                        DB()->transComplete();
                     }
                 }
 
@@ -176,6 +178,7 @@ class Order extends BaseController
                 $tableModule = DB()->table('cc_modules');
                 $query = $tableModule->join('cc_module_settings', 'cc_module_settings.module_id = cc_modules.module_id')->where('cc_modules.module_key','point')->get()->getRow();
                 if($query->status == '1') {
+                    DB()->transStart();
                     $oldPoint = get_data_by_id('point', 'cc_customer', 'customer_id', $ord->customer_id);
                     $point = $ord->total * $query->value;
                     $restPoint = $oldPoint + $point;
@@ -199,7 +202,8 @@ class Order extends BaseController
                     //order point update
                     $orPointData['total_point'] = $point;
                     $tabOrder = DB()->table('cc_order');
-                    $tabOrder->where('order_id',$data['order_id'])->update($orPointData);
+                    $tabOrder->where('order_id',$order_id)->update($orPointData);
+                    DB()->transComplete();
                 }
             }
 
