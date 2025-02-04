@@ -402,6 +402,7 @@
                             <div class="d-flex justify-content-between mt-3">
                                 <span>Shipping Discount</span>
                                 <span>(-) <span id="chargeDisSh"><?php echo $cSymbol .'0' ?></span></span>
+                                <input type="hidden" name="shipping_discount_charge" id="discount_charge">
                             </div>
                         </div>
 

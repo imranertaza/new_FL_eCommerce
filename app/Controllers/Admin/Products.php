@@ -147,6 +147,10 @@ class Products extends BaseController
             $proTable->insert($proData);
             $productId = DB()->insertID();
 
+            //php ini set
+            ini_set ( 'max_execution_time', '30000' );
+            ini_set ( 'post_max_size', '3200M' );
+            ini_set ( 'upload_max_filesize', '3200M' );
 
 
             if (!empty($_FILES['image']['name'])) {
@@ -693,7 +697,10 @@ class Products extends BaseController
             $proTable = DB()->table('cc_products');
             $proTable->where('product_id',$product_id)->update($proData);
 
-
+            //php ini set
+            ini_set ( 'max_execution_time', '30000' );
+            ini_set ( 'post_max_size', '3200M' );
+            ini_set ( 'upload_max_filesize', '3200M' );
 
 
             if (!empty($_FILES['image']['name'])) {

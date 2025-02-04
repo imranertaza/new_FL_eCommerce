@@ -1,9 +1,10 @@
 <section class="main-container my-0">
     <div class="container">
-        <div class="contact-form bg-white  py-4 mb-5 mt-5">
+        <div class=" bg-white  py-4 mb-5 mt-5">
             <div class="row">
                 <div class="col-lg-12 ">
                     <h3 class="text-capitalize mb-4"> <?= $album->name?></h3>
+                    <a href="<?php echo $back_url;?>" class="btn btn-sm btn-secondary" ><i class="fa fa-long-arrow-left" aria-hidden="true"></i> Back</a>
                 </div>
                 <div class="col-4 col-md-3 mt-4 text-center ">
                     <?php $img = str_replace("pro_", "", $album->thumb); $url = base_url('uploads/album/'.$album->album_id.'/wm_'.$img); ?>
@@ -18,6 +19,9 @@
                     </a>
                 </div>
                 <?php } ?>
+                <div class="col-lg-12 mt-5">
+                    <a href="<?php echo $back_url;?>" class="btn btn-sm btn-secondary" ><i class="fa fa-long-arrow-left" aria-hidden="true"></i> Back</a>
+                </div>
             </div>
         </div>
     </div>
