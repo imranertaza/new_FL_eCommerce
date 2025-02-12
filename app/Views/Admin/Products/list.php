@@ -53,8 +53,11 @@
                 </div>
             </div>
             <div class="card-body">
+                <div class="col-md-12">
+                    <?php echo $links; ?>
+                </div>
                 <form id="tableForm" action="<?php echo base_url('products')?>" method="GET" >
-                    <div class="row mb-3">
+                    <div class="row mb-3 mt-3">
                         <div class="col-md-2 mx-auto">
 
                             <label class="d-flex p-1 tab-lab">

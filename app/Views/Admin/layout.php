@@ -58,6 +58,10 @@
     <link rel="stylesheet" href="<?php echo base_url() ?>/admin_assets/plugins/dropzone/min/dropzone.min.css">
     <!-- Theme style -->
 
+    <!--    lightbox-->
+    <link rel="stylesheet" href="<?php echo base_url() ?>/assets/assets_fl/lightbox.min.css">
+    <script src="<?php echo base_url() ?>/assets/assets_fl/lightbox-plus-jquery.min.js"></script>
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">

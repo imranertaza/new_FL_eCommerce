@@ -84,8 +84,8 @@ class Login extends BaseController {
 
 
             }else{
-                $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Your login detail not match <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-                return redirect()->to(site_url());
+                $this->session->setFlashdata('message', 'Your login detail not match!');
+                return redirect()->to('/login');
             }
 
         }

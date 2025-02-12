@@ -201,14 +201,16 @@
                             </thead>
                             <!-- row_hide -->
                             <tbody id="tbody">
-                                <?php foreach ($product as $key => $val) { ?>
+                                <?php foreach ($product as $key => $val) { $img = str_replace("pro_", "", $val->image); $url = (!empty($val->image)) ? base_url('uploads/products/' . $val->product_id . '/' . $img):base_url('uploads/products/noimage.png' ); ?>
                                 <tr id="update_<?php echo $val->product_id?>">
                                     <td width="10">
                                         <input type="checkbox" name="productId[]" value="<?php echo $val->product_id;?>" form="multiActionForm" >
                                     </td>
                                     <td class="colum_id row_show "> <?php echo $val->product_id; ?></td>
                                     <td class="colum_image row_show ">
+                                        <a class="product-image-link" href="<?= $url;?>" data-lightbox="product-set-<?= $val->product_id;?>">
                                         <?php echo image_view('uploads/products',$val->product_id,'50_'.$val->image,'50_noimage.png','');?>
+                                        </a>
                                     </td>
                                     <td class="colum_name row_show ">
                                         <p  onclick="updateFunction('<?php echo $val->product_id; ?>','name','<?php echo $val->name; ?>','view_name_<?php echo $val->product_id; ?>','bulkForm_name_<?php echo $val->product_id; ?>','update_<?php echo $val->product_id?>')">

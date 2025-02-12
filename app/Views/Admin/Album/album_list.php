@@ -57,7 +57,13 @@
                                 <p onclick="updateFunctionAlbum('<?= $val->album_id;?>', 'name', '<?= $val->name;?>', 'view_name_<?=$val->album_id?>', 'formEdit_<?=$val->album_id?>','update_<?= $val->album_id;?>')"><?php echo $val->name;?></p>
                                 <span id="view_name_<?php echo $val->album_id; ?>"></span>
                             </td>
-                            <td><?php echo image_view('uploads/album',$val->album_id,'50_'.$val->thumb,'50_noimage.png','');?></td>
+                            <td>
+                                <?php $img = str_replace("pro_", "", $val->thumb); $url = base_url('uploads/album/'.$val->album_id.'/wm_'.$img); ?>
+                                <a class="album-image-link" href="<?= $url;?>" data-lightbox="album-set-<?= $val->album_id;?>">
+                                <?php echo image_view('uploads/album',$val->album_id,'50_'.$val->thumb,'50_noimage.png','');?>
+                                </a>
+
+                            </td>
                             <td width="220">
                                 <a href="<?php echo base_url('album_update/'.$val->album_id);?>" class="btn btn-primary btn-xs"><i class="fas fa-edit"></i> Update</a>
                                 <a href="<?php echo base_url('album_delete/'.$val->album_id);?>" onclick="return confirm('Are you sure you want to Delete?')" class="btn btn-danger btn-xs"><i class="fas fa-trash"></i> Delete</a>
@@ -91,6 +97,7 @@
 
 <?= $this->section('java_script') ?>
     <script>
+
         function updateFunctionAlbum(id, input, value, viewId, formName,updateRow) {
             var formID = "'" + formName + "'"
             var data = '<form id="' + formName +
