@@ -303,59 +303,39 @@
             ?>
         </div>
 
-        <div class="brands-slide mb-5">
-            <div class="brands-title">
-                <div class="row">
-                    <div class="col-6 col-md-3">
-                        <h3 class="title-header">Brands</h3>
-                    </div>
-                    <div class="col-6 col-md-9 d-flex justify-content-end align-items-center">
-                        <div class="brands-button-prev">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M14 18L8 12L14 6L15.4 7.4L10.8 12L15.4 16.6L14 18Z" fill="#141414"/>
-                            </svg>
-                        </div>
-                        <div class="brands-button-next">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9.4 18L8 16.6L12.6 12L8 7.4L9.4 6L15.4 12L9.4 18Z" fill="#141414"/>
-                            </svg>    
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="border p-4">
-                <div class="swiper brandsSlide">
-                    <div class="swiper-wrapper">
-                    <?php foreach($brand as $br){ ?>
-                        <div class="swiper-slide">
-                            <?php echo image_view('uploads/brand', '', $br->image, 'noimage.png', 'w-100') ?>
-                        </div>
-                        <?php } ?>
-                    </div>
-                </div>
-            </div>                
-        </div>
+<!--        <div class="brands-slide mb-5">-->
+<!--            <div class="brands-title">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-6 col-md-3">-->
+<!--                        <h3 class="title-header">Brands</h3>-->
+<!--                    </div>-->
+<!--                    <div class="col-6 col-md-9 d-flex justify-content-end align-items-center">-->
+<!--                        <div class="brands-button-prev">-->
+<!--                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+<!--                                <path d="M14 18L8 12L14 6L15.4 7.4L10.8 12L15.4 16.6L14 18Z" fill="#141414"/>-->
+<!--                            </svg>-->
+<!--                        </div>-->
+<!--                        <div class="brands-button-next">-->
+<!--                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+<!--                                <path d="M9.4 18L8 16.6L12.6 12L8 7.4L9.4 6L15.4 12L9.4 18Z" fill="#141414"/>-->
+<!--                            </svg>    -->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="border p-4">-->
+<!--                <div class="swiper brandsSlide">-->
+<!--                    <div class="swiper-wrapper">-->
+<!--                    --><?php //foreach($brand as $br){ ?>
+<!--                        <div class="swiper-slide">-->
+<!--                            --><?php //echo image_view('uploads/brand', '', $br->image, 'noimage.png', 'w-100') ?>
+<!--                        </div>-->
+<!--                        --><?php //} ?>
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>                -->
+<!--        </div>-->
     </div>
     
-    <div class="popular-category">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2>Shop by Category</h2>
-            </div>
-            <div class="row row-cols-lg-5 row-cols-md-3 row-cols-sm-2 row-cols-1 gx-5">
-                <?php foreach($shop_by as $valShop){ ?>        
-                <div class="col mb-5">
-                    <a href="<?php echo base_url('category/' . $valShop->prod_cat_id);?>" >
-                    <div class="card p-4 border-0 text-center rounded-4">
-                        <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center brand-icon">
-                            <?php echo $valShop->code;?>
-                            <h4><?php echo $valShop->category_name;  ?></h4>
-                        </div>
-                    </div>
-                    </a>
-                </div>
-                <?php } ?>
-            </div>
-        </div>
-    </div>
+    ?
 </section>

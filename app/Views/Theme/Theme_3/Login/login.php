@@ -244,7 +244,7 @@
             </div>
             <div class="col-md-6 mb-4 mb-md-0">
                 <form action="<?php echo base_url('login_action')?>" method="post" class="sing-up" onsubmit="return onsubmitHendler()">
-                    <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
+                    <p class="text-danger"><?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?></p>
                     <div class="form-group">
                         <div class="input-group d-flex align-items-center bg-white border px-3 rounded-2 in_err">
                             <input class="form-control border-0" id="email" name="email" type="email" placeholder="Email" value="<?php if(isset($_COOKIE['login_email_web'])){ echo $_COOKIE['login_email_web'];} ?>" required >

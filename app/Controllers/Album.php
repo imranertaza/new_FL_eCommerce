@@ -71,6 +71,11 @@ class Album extends BaseController {
     public function view($album_id){
         $settings = get_settings();
 
+        $check = is_exists('cc_album', 'album_id', $album_id);
+        if ($check == true){
+            return redirect()->to('qc-picture-not-found');
+        }
+
         $table = DB()->table('cc_album');
         $data['album'] = $table->where('album_id',$album_id)->get()->getRow();
 
@@ -87,6 +92,32 @@ class Album extends BaseController {
         echo view('Theme/'.$settings['Theme'].'/header',$data);
         echo view('Theme/'.$settings['Theme'].'/Album/view',$data);
         echo view('Theme/'.$settings['Theme'].'/footer');
+    }
+    public function picture_not_found(){
+        $settings = get_settings();
+
+
+        $data['keywords'] = $settings['meta_keyword'];
+        $data['description'] = $settings['meta_description'];
+        $data['title'] = !empty($settings['meta_title'])?$settings['meta_title']:$settings['store_name'];
+
+        echo view('Theme/'.$settings['Theme'].'/header',$data);
+        echo view('Theme/'.$settings['Theme'].'/Album/not_found',$data);
+        echo view('Theme/'.$settings['Theme'].'/footer');
+    }
+
+    public function qc_picture_query(){
+        $emailCus = $this->request->getPost('email');
+        $albumId = $this->request->getPost('album_id');
+        $url = base_url('album_list/'.$albumId);
+
+        //email send admin
+        $email = get_lebel_by_value_in_settings('email');
+        $subject = 'Enquiry Request!';
+        $message = 'Please provide me the details of this product. <br>URL:'.$url.' <br>Email:'.$emailCus;
+        email_send($email, $subject, $message);
+
+//        print 'In query successfully submitted';
     }
 
 
