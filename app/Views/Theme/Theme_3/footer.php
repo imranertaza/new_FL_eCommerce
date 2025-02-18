@@ -1038,6 +1038,49 @@
         $('.dw-input-group').show();
     }
 
+
+
+    //QC Pictures query(start)
+    function submitQueryForm(){
+        var email = $('#email').val();
+        var albumId = $('#album_id').val();
+        if (email == ''){
+            $('#errMss').html('Please input email');
+        }else {
+             if (validateEmail(email) == true ) {
+                 submitQueryQcpictures(email,albumId);
+             }else {
+                 $('#errMss').html('Please input valid email');
+             }
+        }
+    }
+
+     function validateEmail($email) {
+         var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+         return emailReg.test( $email );
+     }
+
+    function submitQueryQcpictures(email,albumId){
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('qc-picture-query') ?>",
+            data: {
+                email: email,
+                album_id: albumId,
+            },
+            success: function (response) {
+                $('#email').val('');
+                $('#queryModal').modal('hide');
+                $('#mesVal').html(response);
+                $('.message_alert').show();
+                setTimeout(function() {
+                    $("#messAlt").fadeOut(1500);
+                }, 600);
+            }
+        });
+    }
+    //QC Pictures query(end)
+
 </script>
 
 <script src="<?php echo base_url() ?>/assets/assets_fl/validation.js " type="text/javascript"> </script>

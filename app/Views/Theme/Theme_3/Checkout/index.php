@@ -70,12 +70,15 @@
 
 
                         <?php
+                            $coun = $zon =  $post = $add1 = $add2 = '';
                             $cusAddr = isset($customer->customer_id) ?get_all_row_data_by_id('cc_address', 'customer_id', $customer->customer_id):'';
-                            $coun = isset($customer->customer_id) ? $cusAddr->country_id:'';
-                            $zon = isset($customer->customer_id) ? $cusAddr->zone_id : '';
-                            $post = isset($customer->customer_id) ? $cusAddr->postcode : '';
-                            $add1 = isset($customer->customer_id) ? $cusAddr->address_1 : '';
-                            $add2 = isset($customer->customer_id) ? $cusAddr->address_2 : '';
+                            if(!empty($cusAddr)) {
+                                $coun = isset($customer->customer_id) ? $cusAddr->country_id : '';
+                                $zon = isset($customer->customer_id) ? $cusAddr->zone_id : '';
+                                $post = isset($customer->customer_id) ? $cusAddr->postcode : '';
+                                $add1 = isset($customer->customer_id) ? $cusAddr->address_1 : '';
+                                $add2 = isset($customer->customer_id) ? $cusAddr->address_2 : '';
+                            }
                         ?>
 
 

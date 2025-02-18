@@ -92,7 +92,7 @@
                                 <?php $stock = get_data_by_id('quantity', 'cc_products', 'product_id', $products->product_id) ?>
 
                                 <div class="rating mb-3">
-                                    <?php echo product_id_by_rating($products->product_id, '1'); ?>
+                                    <?php //echo product_id_by_rating($products->product_id, '1'); ?>
                                 </div>
 
                                 <p class="mb-3">
@@ -477,7 +477,7 @@
             </div>
         </div>
 
-        <?php if (!empty($bothProducts)) { ?>
+        <?php if($modules['both_products'] == '1' ){ if (!empty($bothProducts)) { ?>
         <div class="row mb-4 ">
             <div class="col-lg-12 border-bottom p-3">
                 <ul class="nav nav-tabs list-unstyled mb-5 border-0 border-bottom custom-tab-up" id="myTab"
@@ -574,7 +574,7 @@
                 </div>
             </div>
         </div>
-        <?php } ?>
+        <?php } } ?>
 
 
         <div class="row mb-4 related-products-oth">
@@ -647,14 +647,14 @@
             </div>
         </div>
 
-        <?php if (!empty($products->description_image)) { ?>
-        <div class="row mb-4">
-            <div class="col-lg-12 p-3">
-                <?php echo image_view('uploads/products', $products->product_id, $products->description_image, '', $class = 'w-100'); ?>
-            </div>
-        </div>
-        <?php } ?>
-
+<!--        --><?php //if (!empty($products->description_image)) { ?>
+<!--        <div class="row mb-4">-->
+<!--            <div class="col-lg-12 p-3">-->
+<!--                --><?php //echo image_view('uploads/products', $products->product_id, $products->description_image, '', $class = 'w-100'); ?>
+<!--            </div>-->
+<!--        </div>-->
+<!--        --><?php //} ?>
+        <?php if($modules['product_guides'] == '1' ){ ?>
         <div class="row mb-4">
             <div class="col-lg-12 p-3 product-guides mo-text-center">
                 <p class="product-guides-title text-uppercase px-3">Product guides and Documents</p><br>
@@ -672,7 +672,8 @@
                 <?php } ?>
             </div>
         </div>
-
+        <?php } ?>
+        <?php if($modules['other_products'] == '1' ){ ?>
         <div class="row mb-4 ">
             <div class="col-lg-12  p-4 rounded-0 border-bottom border-top">
                 <div class="px-2 py-3 mb-3 bg-white">
@@ -742,6 +743,7 @@
                 </div>
             </div>
         </div>
+        <?php } ?>
 
     </div>
 </section>

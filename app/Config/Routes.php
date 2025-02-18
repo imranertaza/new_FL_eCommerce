@@ -430,6 +430,8 @@ $routes->post('/top_search', 'Search::search_action');
 $routes->get('/qc-picture', 'Album::index');
 $routes->get('/qc-picture-view-category/(:num)', 'Album::qc_picture_view_category/$1');
 $routes->get('/qc-picture-view/(:num)', 'Album::view/$1');
+$routes->post('/qc-picture-query', 'Album::qc_picture_query');
+$routes->get('/qc-picture-not-found', 'Album::picture_not_found');
 
 //ajax controller
 $routes->post('/get_state', 'Admin\Ajax::get_state');

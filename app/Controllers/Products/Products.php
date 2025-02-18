@@ -31,7 +31,11 @@ class Products extends BaseController {
         $settings = get_settings();
         $table = DB()->table('cc_products');
         $table->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id ');
-        $data['products'] = $table->where('cc_products.product_id',$product_id)->get()->getRow();
+        $data['products'] = $table->where('cc_products.product_id',$product_id)->where('cc_products.status','Active')->get()->getRow();
+
+        if (empty($data['products'])){
+            return redirect()->to('product-not-found');
+        }
 
         //image
         $imgTable = DB()->table('cc_product_image');
