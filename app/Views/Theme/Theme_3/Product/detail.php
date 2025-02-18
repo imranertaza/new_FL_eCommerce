@@ -477,7 +477,7 @@
             </div>
         </div>
 
-        <?php if($modules['both_products'] == '1' ){ if (!empty($bothProducts)) { ?>
+        <?php if($modules['bought_products'] == '1' ){ if (!empty($bothProducts)) { ?>
         <div class="row mb-4 ">
             <div class="col-lg-12 border-bottom p-3">
                 <ul class="nav nav-tabs list-unstyled mb-5 border-0 border-bottom custom-tab-up" id="myTab"
@@ -515,7 +515,7 @@
                                                     </div>
                                                     <div class="product-bottom  mt-2">
                                                         <div class="product-title-2 mb-2">
-                                                            <a href="#"><?php echo substr($both->name, 0, 40); ?> </a>
+                                                            <a target="_blank" href="<?php echo base_url('detail/' . $both->product_id) ?>"><?php echo substr($both->name, 0, 40); ?> </a>
                                                         </div>
                                                         <div class="price-2 mb-3">
                                                             <?php $spPric = get_data_by_id('special_price', 'cc_product_special', 'product_id', $both->product_id);
@@ -621,8 +621,7 @@
                                     </div>
                                     <div class="product-bottom mt-auto">
                                         <div class="product-title-new mb-2 text-capitalize">
-                                            <a
-                                                href="<?php echo base_url('detail/' . $rPro->product_id) ?>"><?php echo substr($rPro->name, 0, 60); ?></a>
+                                            <a target="_blank" href="<?php echo base_url('detail/' . $rPro->product_id) ?>"><?php echo substr($rPro->name, 0, 60); ?></a>
                                         </div>
                                         <div class="price-new mb-3">
                                             <?php $spPric = get_data_by_id('special_price', 'cc_product_special', 'product_id', $rPro->product_id);
