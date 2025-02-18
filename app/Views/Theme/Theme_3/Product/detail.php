@@ -477,7 +477,7 @@
             </div>
         </div>
 
-        <?php if($modules['both_products'] == '1' ){ if (!empty($bothProducts)) { ?>
+        <?php if($modules['bought_products'] == '1' ){ if (!empty($boughtProducts)) { ?>
         <div class="row mb-4 ">
             <div class="col-lg-12 border-bottom p-3">
                 <ul class="nav nav-tabs list-unstyled mb-5 border-0 border-bottom custom-tab-up" id="myTab"
@@ -502,25 +502,25 @@
                                         <div class="row mo-text-center both-pro-mob">
                                             <?php $totalPrice = 0;
                                                 $i = 1;
-                                                foreach ($bothProducts as $key => $both) { ?>
+                                                foreach ($boughtProducts as $key => $bought) { ?>
                                             <div class="col-lg-3 ">
                                                 <div
                                                     class="product-grid h-100 d-flex align-items-stretch flex-column position-relative">
                                                     <div class="product-top border p-2">
-                                                        <?php echo image_view('uploads/products', $both->product_id, $img_size_191 . $both->image, 'noimage.png', 'img-fluid w-100') ?>
+                                                        <?php echo image_view('uploads/products', $bought->product_id, $img_size_191 . $bought->image, 'noimage.png', 'img-fluid w-100') ?>
                                                         <input type="checkbox" name="both_product[]"
                                                             onchange="bothPriceCalculat()"
                                                             class="form-check-input check-input"
-                                                            value="<?php echo $both->product_id; ?>" checked>
+                                                            value="<?php echo $bought->product_id; ?>" checked>
                                                     </div>
                                                     <div class="product-bottom  mt-2">
                                                         <div class="product-title-2 mb-2">
-                                                            <a href="#"><?php echo substr($both->name, 0, 40); ?> </a>
+                                                            <a target="_blank" href="<?php echo base_url('detail/' . $bought->product_id) ?>"><?php echo substr($bought->name, 0, 40); ?> </a>
                                                         </div>
                                                         <div class="price-2 mb-3">
-                                                            <?php $spPric = get_data_by_id('special_price', 'cc_product_special', 'product_id', $both->product_id);
+                                                            <?php $spPric = get_data_by_id('special_price', 'cc_product_special', 'product_id', $bought->product_id);
                                                                     if (empty($spPric)) { ?>
-                                                            <?php echo currency_symbol_with_symbol($both->price,$symbol); ?>
+                                                            <?php echo currency_symbol_with_symbol($bought->price,$symbol); ?>
                                                             <?php } else { ?>
                                                             <?php echo currency_symbol_with_symbol($spPric,$symbol); ?>
                                                             <?php } ?>
@@ -528,9 +528,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <?php $totalPrice += !empty($spPric) ? $spPric : $both->price;
+                                            <?php $totalPrice += !empty($spPric) ? $spPric : $bought->price;
                                                     $show = 3 / $i;
-                                                    if (($show != 1) && (array_key_exists($key + 1, $bothProducts))) { ?>
+                                                    if (($show != 1) && (array_key_exists($key + 1, $boughtProducts))) { ?>
                                             <div class="col-lg-1 d-flex align-items-center ">
                                                 <div class="plus-icon w-100 text-center">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
@@ -621,8 +621,7 @@
                                     </div>
                                     <div class="product-bottom mt-auto">
                                         <div class="product-title-new mb-2 text-capitalize">
-                                            <a
-                                                href="<?php echo base_url('detail/' . $rPro->product_id) ?>"><?php echo substr($rPro->name, 0, 60); ?></a>
+                                            <a target="_blank" href="<?php echo base_url('detail/' . $rPro->product_id) ?>"><?php echo substr($rPro->name, 0, 60); ?></a>
                                         </div>
                                         <div class="price-new mb-3">
                                             <?php $spPric = get_data_by_id('special_price', 'cc_product_special', 'product_id', $rPro->product_id);

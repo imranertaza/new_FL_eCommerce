@@ -70,15 +70,15 @@ class Products extends BaseController {
 
 
         //bought together products view
-        $bothProduct = array();
+        $boughtProduct = array();
         $bothTable = DB()->table('cc_product_bought_together');
         $bothPro = $bothTable->where('product_id',$product_id)->orderBy('product_id','DESC')->get()->getResult();
         foreach ($bothPro as $bVal){
             $tableboth = DB()->table('cc_products');
             $rowPro = $tableboth->where('product_id',$bVal->related_id)->get()->getRow();
-            array_push($bothProduct,$rowPro);
+            array_push($boughtProduct,$rowPro);
         }
-        $data['bothProducts'] = $bothProduct;
+        $data['boughtProducts'] = $boughtProduct;
 
 
 
