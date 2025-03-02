@@ -31,25 +31,32 @@
                         </div>
                         <div class="col-md-10">
                             <?php $modules = modules_access();?>
-                            <a href="<?php echo base_url('product_create') ?>" class="btn btn-primary  btn-xs float-right "><i class="fas fa-plus"></i> Add</a>
-                            <a class="btn btn-xs btn-info float-right mr-2" data-toggle="collapse" href="#collapseProduct" role="button" aria-expanded="false" aria-controls="collapseProduct">Settings</a>
+                            <a href="<?php echo base_url('product_create') ?>" class="btn btn-primary  btn-xs float-right  mb-2"><i class="fas fa-plus"></i> Add</a>
+                            <a class="btn btn-xs btn-info float-right mr-2 mb-2" data-toggle="collapse" href="#collapseProduct" role="button" aria-expanded="false" aria-controls="collapseProduct">Settings</a>
 
                             <form id="multiActionForm" action="<?= base_url('bulk_product_multi_delete')?>" method="post">
-                            <button type="submit" formaction="<?= base_url('bulk_product_cpoy')?>" class="btn btn-secondary btn-xs float-right mr-2"><i class="nav-icon fas fa-copy"></i> Copy</button>
+                            <button type="submit" formaction="<?= base_url('bulk_product_cpoy')?>" class="btn btn-secondary btn-xs float-right mr-2 mb-2"><i class="nav-icon fas fa-copy"></i> Copy</button>
                             <?php if($modules['multi_delete'] == '1' ){ ?>
-                            <button type="submit" class="btn btn-danger btn-xs float-right mr-2"><i class="fas fa-trash"></i> Multi delete</button>
+                            <button type="submit" class="btn btn-danger btn-xs float-right mr-2 mb-2"><i class="fas fa-trash"></i> Multi delete</button>
                             <?php } ?>
                             <?php if($modules['multi_option'] == '1' ){ ?>
-                            <button type="submit" formaction="<?php echo base_url('bulk_product_multi_option_edit'); ?>" class="btn btn-primary btn-xs float-right mr-2"><i class="fas fa-edit"></i> Multi option edit</button>
+                            <button type="submit" formaction="<?php echo base_url('bulk_product_multi_option_edit'); ?>" class="btn btn-primary btn-xs float-right mr-2 mb-2"><i class="fas fa-edit"></i> Multi option edit</button>
                             <?php } ?>
                             <?php if($modules['multi_attribute'] == '1' ){ ?>
-                            <button type="submit" formaction="<?php echo base_url('bulk_product_multi_attribute_edit'); ?>" class="btn btn-info btn-xs float-right mr-2"><i class="fas fa-edit"></i> Multi attribute edit</button>
+                            <button type="submit" formaction="<?php echo base_url('bulk_product_multi_attribute_edit'); ?>" class="btn btn-info btn-xs float-right mr-2 mb-2"><i class="fas fa-edit"></i> Multi attribute edit</button>
                             <?php } ?>
                             <?php if($modules['multi_category'] == '1' ){ ?>
-                                <button type="submit" formaction="<?php echo base_url('bulk_product_multi_category_edit'); ?>" class="btn btn-success btn-xs float-right mr-2"><i class="fas fa-edit"></i> Multi category edit</button>
+                                <button type="submit" formaction="<?php echo base_url('bulk_product_multi_category_edit'); ?>" class="btn btn-success btn-xs float-right mr-2 mb-2"><i class="fas fa-edit"></i> Multi category edit</button>
                             <?php } ?>
                             <?php if(modules_key_by_access('multi_price') == '1' ){ ?>
-                                <button type="submit" formaction="<?php echo base_url('bulk_product_multi_price_edit'); ?>" class="btn btn-info btn-xs float-right mr-2"><i class="fas fa-edit"></i> Multi price edit</button>
+                                <button type="submit" formaction="<?php echo base_url('bulk_product_multi_price_edit'); ?>" class="btn btn-info btn-xs float-right mr-2 mb-2"><i class="fas fa-edit"></i> Multi price edit</button>
+                            <?php } ?>
+
+                            <?php if(modules_key_by_access('bulk_related_product') == '1' ){ ?>
+                                <button type="submit" formaction="<?php echo base_url('bulk_related_action'); ?>" class="btn btn-info btn-xs float-right mr-2 mb-2"><i class="fas fa-edit"></i> Bulk Related Product</button>
+                            <?php } ?>
+                            <?php if(modules_key_by_access('bulk_bought_together') == '1' ){ ?>
+                                <button type="submit" formaction="<?php echo base_url('bulk_bought_together_action'); ?>" class="btn btn-info btn-xs float-right mr-2 mb-2"><i class="fas fa-edit"></i> Bulk Bought Together</button>
                             <?php } ?>
                             </form>
                             <a href="<?php echo base_url('products') ?>" class="btn btn-danger float-right mr-2 btn-xs" >Back</a>
