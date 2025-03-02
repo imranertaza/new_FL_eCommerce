@@ -19,9 +19,13 @@
                 </div>
                 <?php } }else{ echo '<h4 class="text-center text-danger">Album not found</h4>'; } ?>
 
-                <div class="col-lg-12  justify-content-between">
-                    <a href="<?php echo $back_url;?>" class="btn btn-sm btn-secondary" ><i class="fa fa-long-arrow-left" aria-hidden="true"></i> Back</a>
+                <div class="row">
+                <div class="col-lg-4 ">
+                    <a href="<?php echo $back_url;?>" class="btn btn-sm btn-secondary mt-4" ><i class="fa fa-long-arrow-left" aria-hidden="true"></i> Back</a>
+                </div>
+                <div class="col-lg-8 ">
                     <?php echo $links; ?>
+                </div>
                 </div>
             </div>
         </div>

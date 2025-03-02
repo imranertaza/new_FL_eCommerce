@@ -326,7 +326,6 @@
         $('.select2_pro').select2({
             multiple: true,
             theme: 'bootstrap4',
-            tags: true,
             ajax: {
                 url: "<?php echo base_url('related_product') ?>",
                 dataType: 'json',

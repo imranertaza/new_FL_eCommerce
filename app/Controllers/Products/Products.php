@@ -47,10 +47,13 @@ class Products extends BaseController {
         $relPro = $relTable->where('product_id',$product_id)->limit(5)->get()->getResult();
         foreach ($relPro as $rVal){
             $tableSear = DB()->table('cc_products');
-            $rowPro = $tableSear->where('product_id',$rVal->related_id)->get()->getRow();
-            array_push($relatedProduct,$rowPro);
+            $rowPro = $tableSear->where('product_id',$rVal->related_id)->where('status','Active')->get()->getRow();
+            if(!empty($rowPro)) {
+                array_push($relatedProduct, $rowPro);
+            }
         }
         $data['relProd'] = $relatedProduct;
+
 
         //related product  2 products view
         $relatedProduct2 = array();
@@ -58,8 +61,10 @@ class Products extends BaseController {
         $relPro2 = $relTable->where('product_id',$product_id)->orderBy('product_id','DESC')->limit(2)->get()->getResult();
         foreach ($relPro2 as $rVal2){
             $tableSear2 = DB()->table('cc_products');
-            $rowPro2 = $tableSear2->where('product_id',$rVal2->related_id)->get()->getRow();
-            array_push($relatedProduct2,$rowPro2);
+            $rowPro2 = $tableSear2->where('product_id',$rVal2->related_id)->where('status','Active')->get()->getRow();
+            if(!empty($rowPro2)) {
+                array_push($relatedProduct2, $rowPro2);
+            }
         }
         $data['relProdSide'] = $relatedProduct2;
 
@@ -75,11 +80,12 @@ class Products extends BaseController {
         $bothPro = $bothTable->where('product_id',$product_id)->orderBy('product_id','DESC')->get()->getResult();
         foreach ($bothPro as $bVal){
             $tableboth = DB()->table('cc_products');
-            $rowPro = $tableboth->where('product_id',$bVal->related_id)->get()->getRow();
-            array_push($boughtProduct,$rowPro);
+            $rowPro = $tableboth->where('product_id',$bVal->related_id)->where('status','Active')->get()->getRow();
+            if(!empty($rowPro)) {
+                array_push($boughtProduct, $rowPro);
+            }
         }
         $data['boughtProducts'] = $boughtProduct;
-
 
 
         $data['option'] = $this->optionView($product_id);

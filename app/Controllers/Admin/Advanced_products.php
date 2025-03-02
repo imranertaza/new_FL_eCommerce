@@ -826,6 +826,63 @@ class Advanced_products extends BaseController
         }
     }
 
+    public function bulk_related_action(){
+        $redirect_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
+        $allProductId =  $this->request->getPost('productId[]');
+        if (!empty($allProductId)) {
+            foreach ($allProductId as $p) {
+                $relatedTableDel = DB()->table('cc_product_related');
+                $relatedTableDel->where('product_id', $p)->delete();
+                $relatedData = [];
+                foreach ($allProductId as $rel) {
+                    if ($p !== $rel) {
+                        $relatedData[] = ['product_id' => $p, 'related_id' => $rel];
+                    }
+                }
+                if (!empty($relatedData)) {
+                    $relatedTable = DB()->table('cc_product_related');
+                    $relatedTable->insertBatch($relatedData);
+                } else {
+                    $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please input releted product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                    return redirect()->to($redirect_url);
+                }
+            }
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Related Product Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to($redirect_url);
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please input product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to($redirect_url);
+        }
+    }
+    public function bulk_bought_together_action(){
+        $redirect_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
+        $allProductId =  $this->request->getPost('productId[]');
+        if (!empty($allProductId)) {
+            foreach ($allProductId as $p) {
+                $boughtTogetherTableDel = DB()->table('cc_product_bought_together');
+                $boughtTogetherTableDel->where('product_id', $p)->delete();
+                $relatedData = [];
+                foreach ($allProductId as $rel) {
+                    if ($p !== $rel) {
+                        $relatedData[] = ['product_id' => $p, 'related_id' => $rel];
+                    }
+                }
+                if (!empty($relatedData)) {
+                    $boughtTogetherTable = DB()->table('cc_product_bought_together');
+                    $boughtTogetherTable->insertBatch($relatedData);
+                } else {
+                    $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please input releted product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                    return redirect()->to($redirect_url);
+                }
+            }
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Bought Together Product Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to($redirect_url);
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please input product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to($redirect_url);
+        }
+    }
+
 
 
 
