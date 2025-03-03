@@ -576,7 +576,7 @@
         </div>
         <?php } } ?>
 
-
+        <?php if (!empty($relProd)) { ?>
         <div class="row mb-4 related-products-oth">
             <div class="col-lg-12  p-4 rounded-0 border-bottom border-top">
                 <div class="px-2 py-3 mb-3 bg-white">
@@ -585,8 +585,7 @@
                 <div class="card-body pb-3">
                     <div class="products h-100">
                         <div class="row gx-0 row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-5 h-100 mo-text-center">
-                            <?php if (!empty($relProd)) {
-                                foreach ($relProd as $rPro) { ?>
+                            <?php foreach ($relProd as $rPro) { ?>
                             <div class="col border p-2">
                                 <div
                                     class=" product-grid h-100 d-flex align-items-stretch flex-column position-relative">
@@ -638,13 +637,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <?php }
-                            } ?>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <?php } ?>
 
 <!--        --><?php //if (!empty($products->description_image)) { ?>
 <!--        <div class="row mb-4">-->
