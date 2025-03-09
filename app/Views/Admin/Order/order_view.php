@@ -26,10 +26,13 @@
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-8 ">
                         <h3 class="card-title">Order View</h3>
+
                     </div>
-                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <a href="<?php echo base_url('order_list');?>" class="btn btn-danger btn-sm float-end" >Back</a>
+                    </div>
                     <div class="col-md-12" style="margin-top: 10px" id="message">
                         <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message');
                         endif; ?>

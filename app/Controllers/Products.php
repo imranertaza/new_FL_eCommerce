@@ -143,9 +143,11 @@ class Products extends BaseController {
         if (!empty($data['products'])) {
             $data['pager'] = $this->$searchModel->pager;
             $data['links'] = $data['pager']->links('default', 'custome_link');
+            $data['totalPro'] = $data['pager']->getTotal();
         }else {
             $data['pager'] = '';
             $data['links'] = '';
+            $data['totalPro'] = '0';
         }
 
 
