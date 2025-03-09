@@ -86,6 +86,7 @@
                     <thead>
                         <tr>
                             <th><input type="checkbox" onclick="allchecked(this)" ></th>
+                            <th>Sl</th>
                             <th>Image</th>
                             <th>Name</th>
                             <th>Model</th>
@@ -95,11 +96,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $i=1; foreach ($product as $val){ ?>
+                        <?php $i=1; foreach ($product as $key => $val){ ?>
                         <tr id="hide_<?php echo $val->product_id;?>">
                             <td width="10">
                                 <input type="checkbox" name="productId[]" value="<?php echo $val->product_id;?>" form="multisubmitform" >
                             </td>
+                            <td><?php echo $i++;?></td>
                             <td width="50"><?php echo image_view('uploads/products',$val->product_id,'50_'.$val->image,'50_noimage.png','');?></td>
                             <td><?php echo $val->name;?></td>
                             <td><?php echo $val->model;?></td>

@@ -12,7 +12,7 @@
                     <div class="col-md-9 " style="padding-left: 3px;">
                         <div class="top-bar border">
                             <div class="row">
-                                <div class="col-4 col-md-4">
+                                <div class="col-3 col-md-3">
                                     <a href="javascript:void(0)" onclick="viewStyle('gird')" id="gird-btn"
                                        class="d-inline-block border p-2 active-view">
                                         <svg aria-hidden="true" focusable="false" width="20px" height="20px"
@@ -36,11 +36,12 @@
                                                   class=""></path>
                                         </svg>
                                     </a>
-
-                                    <!--                                        Items --><?php //echo count($products);?>
+                                </div>
+                                <div class="col-3 col-md-3 pt-2">
+                                    <label >Results: <?php echo $totalPro;?> showing</label>
                                 </div>
 
-                                <div class="col-8 col-md-8">
+                                <div class="col-6 col-md-6 ">
 
                                     <div class="form-group float-end">
                                         <label class="d-none d-sm-inline">Sort By</label>
@@ -59,6 +60,8 @@
                                             </option>
                                         </select>
                                     </div>
+
+
 
                                     <div class="form-group float-end me-2">
                                         <label class="d-none d-sm-inline">Show</label>

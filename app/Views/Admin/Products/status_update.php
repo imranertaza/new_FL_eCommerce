@@ -66,8 +66,9 @@
                             </div>
 
                         </div>
-                        <div class="modal-footer justify-content-between">
+                        <div class="modal-footer justify-content-start">
                             <button type="submit" class="btn btn-primary">Save changes</button>
+                            <a href="<?php echo base_url(isset($_COOKIE['product_url_path']) ? $_COOKIE['product_url_path'] : 'admin/products'); ?>"  class="btn btn-danger">Back</a>
                         </div>
                     </form>
 
