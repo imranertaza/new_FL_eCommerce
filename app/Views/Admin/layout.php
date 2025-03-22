@@ -372,7 +372,8 @@
 
         //Initialize Select2 Elements
         $('.select2bs4').select2({
-            theme: 'bootstrap4'
+            theme: 'bootstrap4',
+            sorter: data => data.sort((a, b) => a.text.localeCompare(b.text)),
         })
 
         $('.select2bs4_2').select2({

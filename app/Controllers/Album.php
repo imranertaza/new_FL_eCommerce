@@ -109,7 +109,7 @@ class Album extends BaseController {
     public function qc_picture_query(){
         $emailCus = $this->request->getPost('email');
         $albumId = $this->request->getPost('album_id');
-        $url = base_url('album_list/'.$albumId);
+        $url = base_url('qc-picture-view/'.$albumId);
 
         //email send admin
         $email = get_lebel_by_value_in_settings('email');

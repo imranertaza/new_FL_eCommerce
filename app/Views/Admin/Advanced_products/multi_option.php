@@ -66,8 +66,9 @@
                         </div>
 
                     </div>
-                    <div class="modal-footer justify-content-between">
+                    <div class="modal-footer justify-content-start">
                         <button type="submit" onclick="check_required_option()"  class="btn btn-primary">Save changes</button>
+                        <a href="<?php echo base_url(isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : ''); ?>"  class="btn btn-danger">Back</a>
                     </div>
                 </form>
 
