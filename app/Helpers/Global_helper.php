@@ -924,13 +924,16 @@ function email_send($to, $subject, $message)
     $email->setSubject($subject);
     $email->setMessage($message);
 
-    //    $email->send();
     if ($email->send()) {
-        echo 'Email successfully sent';
+        //echo 'Email successfully sent';
+        $result = true;
     } else {
-        $data = $email->printDebugger(['headers']);
-        print_r($data);
+        $email->printDebugger(['headers']);
+
+        $result = false;
     }
+
+    return $result;
 }
 
 /**
