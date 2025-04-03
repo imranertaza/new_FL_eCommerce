@@ -29,7 +29,7 @@ class Customer_point_history extends BaseController
         } else {
             $settings = get_settings();
             $table = DB()->table('cc_customer_point_history');
-            $data['point_history'] = $table->where('customer_id',$this->session->cusUserId)->orderBy('ledg_id','ASC')->limit(20)->get()->getResult();
+            $data['point_history'] = $table->where('customer_id',$this->session->cusUserId)->orderBy('ledg_id','DESC')->get()->getResult();
 
             $tableBal = DB()->table('cc_customer');
             $data['cust'] = $tableBal->where('customer_id', $this->session->cusUserId)->get()->getRow();

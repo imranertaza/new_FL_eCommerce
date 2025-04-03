@@ -120,10 +120,24 @@
                     </li>
                 <?php } ?>
 
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p> Offer <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <?php echo add_main_based_menu_with_permission('Buy One Get One', base_url('buy_on_get_one'), $adRoleId, 'fa-circle', 'Buy_one_get_on'); ?>
+                    </ul>
+                </li>
+
+
                 <?php
                 $modArrayPur = ['Reviews'];
                 $menuAccessPur = all_menu_permission_check($modArrayPur, $adRoleId);
                 if ($menuAccessPur == true) {
+                    if ($modules['review'] == 1) {
                 ?>
                     <li class="nav-item">
                         <a href="<?php echo base_url('reviews'); ?>" class="nav-link">
@@ -133,7 +147,7 @@
                             </p>
                         </a>
                     </li>
-                <?php } ?>
+                <?php } } ?>
 
                 <li class="nav-header">Modules</li>
                 <?php

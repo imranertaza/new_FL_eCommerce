@@ -297,10 +297,12 @@
 <script src="<?php echo base_url() ?>/assets/assets_fl/script.js"></script>
 <script src="<?php echo base_url() ?>/assets/assets_fl/slick/slick.js" type="text/javascript" charset="utf-8"> </script>
 <script src="<?php echo base_url() ?>/admin_assets/plugins/select2/js/select2.full.min.js"></script>
-
+<script src="<?php echo base_url() ?>/assets/assets_fl/datatable/datatables.min.js" ></script>
 
 
 <script>
+
+    new DataTable('#tableReload', { });
 
     //Initialize Select2 Elements
     $('.select2bs4').select2({
@@ -612,6 +614,7 @@
             success: function(response) {
                 $('#cartReload').load(location.href + " #cartReload");
                 $('#tableReload').load(location.href + " #tableReload");
+                $('#tableReload2').load(location.href + " #tableReload2");
                 $('#cartReload2').load(location.href + " #cartReload2");
                 $('#mesVal').html(response.message);
                 $('.btn-count').load(location.href + " .btn-count");
@@ -639,6 +642,7 @@
                 $('#cartReload').load(location.href + " #cartReload");
                 $('#cartReload2').load(location.href + " #cartReload2");
                 $('#tableReload').load(location.href + " #tableReload");
+                $('#tableReload2').load(location.href + " #tableReload2");
                 $('#mesVal').html('Successfully remove to cart');
                 $('.btn-count').load(location.href + " .btn-count");
                 $('.body-count').load(location.href + " .body-count");
@@ -833,7 +837,10 @@
 
     function subscribe(emailID) {
         var email = $('#'+emailID).val();
-        if (email == '') {
+
+        var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+        if (!emailRegex.test(email)) {
             $('#mesVal').html('Email required');
             $('.message_alert').show();
             setTimeout(function() {
@@ -1080,6 +1087,63 @@
         });
     }
     //QC Pictures query(end)
+
+
+     function album_download_btn_show(proId){
+         $('.album-btn-group_'+proId).show();
+     }
+
+     function show_form_alb(proId){
+         $('.album-btn-group_form_'+proId).show();
+         $('.album-btn-group_'+proId).hide();
+     }
+
+     function album_watermark_image_download(condition,imgId){
+
+         var activeImage = $('#'+imgId).attr('src');
+
+         if (condition == 'watermark') {
+             var newName = activeImage.replace("261_wm_pro_", 'wm_');
+         }else{
+             var newName = activeImage.replace("261_wm_pro_", '');
+         }
+         var a = $("<a>").attr("href", newName).attr("download", "download_img.jpg").appendTo("body");
+         a[0].click();
+         a.remove();
+         $('.btn-group-al').hide();
+     }
+
+     function subscribe_album(emailID,proId) {
+         var email = $('#'+emailID+proId).val();
+
+         var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+         if (!emailRegex.test(email)) {
+             $('#mesVal').html('Email required');
+             $('.message_alert').show();
+             setTimeout(function() {
+                 $("#messAlt").fadeOut(1500);
+             }, 600);
+         } else {
+             $.ajax({
+                 method: "POST",
+                 url: "<?php echo base_url('user_subscribe') ?>",
+                 data: {
+                     email: email
+                 },
+                 success: function(response) {
+                     $('#'+emailID+proId).val('');
+                     $('#mesVal').html(response);
+                     $('.message_alert').show();
+                     $('.album-btn-group_form_'+proId).hide();
+                     $('.album-btn-group_'+proId).hide();
+                     setTimeout(function() {
+                         $("#messAlt").fadeOut(1500);
+                     }, 600);
+                 }
+             });
+         }
+     }
 
 </script>
 

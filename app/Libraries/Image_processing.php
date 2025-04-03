@@ -2,6 +2,8 @@
 namespace App\Libraries;
 
 use Config\Services;
+use CodeIgniter\HTTP\ResponseInterface;
+use ZipArchive;
 
 class Image_processing {
 
@@ -219,6 +221,133 @@ class Image_processing {
         }
 
         return $news_img;
+    }
+
+    /**
+     * @description This function provides all image upload and crop all size
+     * @param $img
+     * @param $dir
+     * @return string
+     */
+    public function image_upload_and_crop_all_size($img,$dir){
+        $news_img = $this->product_image_upload($img,$dir);
+        //image crop
+        $image = str_replace('pro_', '', $news_img);
+        $this->image_crop($dir,$image, $news_img);
+
+        return $news_img;
+    }
+
+    // Function to merge images and save
+    public function image_merger_and_save($imageArray,$dir,$image_name){
+        // Define target size for resizing (for example, 200x150)
+        $targetWidth = 200;
+        $targetHeight = 150;
+
+        // Load your images dynamically (for example, you can use an array of image paths)
+        $filePath = $dir.$image_name;
+        $imagePaths = $imageArray;
+        $this->directory_create($dir);
+
+        $images = [];
+        foreach ($imagePaths as $path) {
+            $images[] = imagecreatefromjpeg($path);
+        }
+
+        // Resize images to target size
+        foreach ($images as &$image) {
+            $image = imagescale($image, $targetWidth, $targetHeight);
+        }
+
+        // Padding and border settings for the images
+        $padding = 10;
+        $borderColor = imagecolorallocate($images[0], 0, 0, 0); // Black border (RGB)
+
+        // Calculate grid dimensions based on the number of images
+        $numImages = count($images);
+        $maxColumns = 3; // Set maximum images per row
+        $numColumns = min($maxColumns, $numImages); // Ensure no more than maxColumns per row
+        $numRows = ceil($numImages / $numColumns); // Calculate number of rows
+
+        // Calculate the final width and height of the combined image with padding
+        $finalWidth = $targetWidth * $numColumns + $padding * ($numColumns + 1); // Account for padding
+        $finalHeight = $targetHeight * $numRows + $padding * ($numRows + 1); // Account for padding
+
+        // Create a blank image for the final result
+        $finalImage = imagecreatetruecolor($finalWidth, $finalHeight);
+
+        // Set background color for final image (optional, here we set it as white)
+        $white = imagecolorallocate($finalImage, 255, 255, 255); // RGB white color
+        imagefill($finalImage, 0, 0, $white);
+
+        // Copy each image into the final image with padding
+        $x = $padding;
+        $y = $padding;
+
+        foreach ($images as $index => $image) {
+            // Copy each resized image to the final image
+            imagecopy($finalImage, $image, $x, $y, 0, 0, $targetWidth, $targetHeight);
+
+            // Calculate the next x and y coordinates
+            $x += $targetWidth + $padding;
+
+            // If we've reached the maximum number of columns, move to the next row
+            if (($index + 1) % $numColumns == 0) {
+                $x = $padding; // Reset x to start from the left
+                $y += $targetHeight + $padding; // Move down to the next row
+            }
+        }
+
+        // Add a border around the entire final image
+        imagerectangle($finalImage, 0, 0, $finalWidth - 1, $finalHeight - 1, $borderColor); // Border around the whole combined image
+
+
+        if(!file_exists($filePath)){
+            // Save the final image as a JPEG
+            imagejpeg($finalImage, $filePath,100);
+        }
+
+        // Output the final image to the browser
+        //header('Content-Type: image/jpeg');
+        //imagejpeg($finalImage);
+
+
+        // Free up memory
+        imagedestroy($finalImage);
+
+    }
+
+    // Function to zip images
+    public function zipImages($imagePaths,$dirSave)
+    {
+        $zip = new ZipArchive();
+
+        $zipName = $dirSave . 'images.zip';
+
+        // Open the ZIP file for writing
+        if ($zip->open($zipName, ZipArchive::CREATE) === TRUE) {
+            foreach ($imagePaths as $imagePath) {
+                // Add each image to the ZIP file
+                $zip->addFile($imagePath, basename($imagePath)); // Add file with original filename
+            }
+
+            // Close the ZIP file after adding all files
+            $zip->close();
+        } else {
+            throw new \RuntimeException('Failed to create ZIP file');
+        }
+
+        return $zipName; // Return the path to the created ZIP file
+    }
+    // Function to download the file
+    public function downloadFile($zipName,$image_name){
+        if (file_exists($zipName)) {
+            $response = service('response')->download($zipName, null)->setFileName($image_name);
+            register_shutdown_function(function () use ($zipName) {
+                $this->image_unlink($zipName);
+            });
+            return $response;
+        }
     }
 
 }

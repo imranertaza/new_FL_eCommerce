@@ -32,7 +32,7 @@ class Order extends BaseController
         } else {
             $settings = get_settings();
             $table = DB()->table('cc_order');
-            $data['order'] = $table->where('customer_id',$this->session->cusUserId)->get()->getResult();
+            $data['order'] = $table->where('customer_id',$this->session->cusUserId)->orderBy('order_id','DESC')->get()->getResult();
 
             $data['menu_active'] = 'order';
             $data['page_title'] = 'My Order';

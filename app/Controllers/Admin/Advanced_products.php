@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Libraries\Image_processing;
 use App\Libraries\Permission;
 use App\Models\ProductsModel;
 use CodeIgniter\HTTP\RedirectResponse;
@@ -15,6 +16,7 @@ class Advanced_products extends BaseController
     protected $permission;
     protected $crop;
     protected $productsModel;
+    protected $imageProcessing;
     private $module_name = 'Advanced_products';
 
     public function __construct()
@@ -24,6 +26,7 @@ class Advanced_products extends BaseController
         $this->permission = new Permission();
         $this->crop = \Config\Services::image();
         $this->productsModel = new ProductsModel();
+        $this->imageProcessing = new Image_processing();
 
     }
 
@@ -883,6 +886,61 @@ class Advanced_products extends BaseController
         }
     }
 
+    public function image_download_action(){
+        $redirect_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
+        $allProductId =  $this->request->getPost('productId[]');
+        if (!empty($allProductId)) {
+
+            $saveImage = [];
+            foreach ($allProductId as $proId) {
+                $imageArray = [];
+                $dirSave = WRITEPATH . 'uploads/product_image/';
+
+                $image = get_data_by_id('image', 'cc_products', 'product_id', $proId);
+                $dir = 'uploads/products/' . $proId . '/';
+                $img = str_replace("pro_", "", $image);
+                if (!empty($image)) {
+                    $imageArray[] = $dir . $img;
+                    $saveImage[] = $dirSave . $image;
+                    $imageName = $image;
+
+                    //all image
+                    $table = DB()->table('cc_product_image');
+                    $allImag = $table->where('product_id', $proId)->get()->getResult();
+                    if (!empty($allImag)) {
+                        foreach ($allImag as $pro) {
+                            $dir2 = $dir . $pro->product_image_id . '/';
+                            $img2 = str_replace("pro_", "", $pro->image);
+                            $imageArray[] = $dir2 . $img2;
+                        }
+                    }
+                    $this->imageProcessing->image_merger_and_save($imageArray, $dirSave, $imageName);
+                }
+            }
+            
+            $zipName = $this->imageProcessing->zipImages($saveImage, $dirSave);
+            if (file_exists($zipName)) {
+                $randomName = bin2hex(random_bytes(5));
+                $response = $this->imageProcessing->downloadFile($zipName, $randomName.'productImage.zip');
+
+                register_shutdown_function(function () use ($dirSave) {
+                    helper('filesystem');
+                    if (file_exists($dirSave)) {
+                        delete_files($dirSave, TRUE);
+                        rmdir($dirSave);
+                    }
+                });
+                return $response;
+            }else {
+                $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Product image is empty! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                return redirect()->to($redirect_url);
+            }
+
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to($redirect_url);
+        }
+    }
 
 
 

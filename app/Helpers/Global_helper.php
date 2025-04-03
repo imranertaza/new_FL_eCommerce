@@ -43,6 +43,7 @@ function bdDateFormat($data = '0000-00-00')
     return ($data == '0000-00-00') ? 'Unknown' : date('d/m/y', strtotime($data));
 }
 
+
 /**
  * @description This function provides global date format
  * @param string $datetime
@@ -307,7 +308,7 @@ function image_view($url, $slug, $image, $no_image, $class = '', $id = '')
  * @param int|string $class
  * @return string
  */
-function multi_image_view($url, $slug, $slug2, $image, $no_image, $class = '')
+function multi_image_view($url, $slug, $slug2, $image, $no_image, $class = '',$id='')
 {
     $bas_url = base_url();
 
@@ -318,17 +319,17 @@ function multi_image_view($url, $slug, $slug2, $image, $no_image, $class = '')
     $no_img = $bas_url . '/' . $url . '/' . $no_image;
     if (!empty($image)) {
         if (!file_exists($dir)) {
-            $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+            $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" id="'.$id.'" loading="lazy">';
         } else {
             $imgPath = $dir . '/' . $image;
             if (file_exists($imgPath)) {
-                $result = '<img data-sizes="auto" src="' . $img . '" class="' . $class . '" loading="lazy">';
+                $result = '<img data-sizes="auto" src="' . $img . '" class="' . $class . '" id="'.$id.'" loading="lazy">';
             } else {
-                $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+                $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" id="'.$id.'" loading="lazy">';
             }
         }
     } else {
-        $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+        $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" id="'.$id.'" loading="lazy">';
     }
     return $result;
 }
