@@ -29,7 +29,7 @@ class Customer_ledger extends BaseController
         } else {
             $settings = get_settings();
             $table = DB()->table('cc_customer_ledger');
-            $data['ledger'] = $table->where('customer_id',$this->session->cusUserId)->get()->getResult();
+            $data['ledger'] = $table->where('customer_id',$this->session->cusUserId)->orderBy('ledg_id','DESC')->get()->getResult();
 
             $data['keywords'] = $settings['meta_keyword'];
             $data['description'] = $settings['meta_description'];

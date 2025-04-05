@@ -58,6 +58,8 @@
                             <?php if(modules_key_by_access('bulk_bought_together') == '1' ){ ?>
                                 <button type="submit" formaction="<?php echo base_url('bulk_bought_together_action'); ?>" class="btn btn-info btn-xs float-right mr-2 mb-2"><i class="fas fa-edit"></i> Bulk Bought Together</button>
                             <?php } ?>
+
+                                <button type="submit" formaction="<?php echo base_url('image_download_action'); ?>" class="btn btn-primary btn-xs float-right mr-2 mb-2"><i class="fas fa-edit"></i> Image Download</button>
                             </form>
                             <a href="<?php echo base_url('products') ?>" class="btn btn-danger float-right mr-2 btn-xs" >Back</a>
                         </div>

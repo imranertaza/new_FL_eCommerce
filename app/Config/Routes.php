@@ -121,6 +121,7 @@ $routes->get('/album_sub_category_list/(:num)', 'Admin\Album::album_sub_category
 $routes->get('/album_list/(:num)', 'Admin\Album::album_list/$1');
 $routes->get('/album_category_delete/(:num)', 'Admin\Album::album_category_delete/$1');
 $routes->post('/album_bulk_update_action', 'Admin\Album::bulk_update_action');
+$routes->post('/album_download_action', 'Admin\Album::album_download_action');
 
 
 //User
@@ -226,6 +227,14 @@ $routes->post('/coupon_update_action', 'Admin\Coupon::update_action');
 $routes->get('/coupon_update/(:num)', 'Admin\Coupon::update/$1');
 $routes->get('/coupon_delete/(:num)', 'Admin\Coupon::delete/$1');
 
+//Coupon
+$routes->get('/buy_on_get_one', 'Admin\Buy_on_get_one::index');
+$routes->get('/buy_on_get_one_create', 'Admin\Buy_on_get_one::create');
+$routes->post('/buy_on_get_one_create_action', 'Admin\Buy_on_get_one::create_action');
+$routes->post('/buy_on_get_one_update_action', 'Admin\Buy_on_get_one::update_action');
+$routes->get('/buy_on_get_one_update/(:num)', 'Admin\Buy_on_get_one::update/$1');
+$routes->get('/buy_on_get_one_delete/(:num)', 'Admin\Buy_on_get_one::delete/$1');
+
 //
 $routes->get('/module', 'Admin\Module::index');
 $routes->post('/module_update_action', 'Admin\Module::update_action');
@@ -320,7 +329,7 @@ $routes->post('/bulk_bought_together_action', 'Admin\Advanced_products::bulk_bou
 
 $routes->get('/bulk_product_list', 'Admin\Advanced_products::product_list');
 
-
+$routes->post('/image_download_action', 'Admin\Advanced_products::image_download_action');
 
 //login routes
 $routes->get('/register', 'Login::register');
@@ -435,6 +444,10 @@ $routes->get('/qc-picture-view-category/(:num)', 'Album::qc_picture_view_categor
 $routes->get('/qc-picture-view/(:num)', 'Album::view/$1');
 $routes->post('/qc-picture-query', 'Album::qc_picture_query');
 $routes->get('/qc-picture-not-found', 'Album::picture_not_found');
+
+//offers
+$routes->get('/offers', 'Offers::index');
+$routes->get('/offers-view/(:any)', 'Offers::view/$1');
 
 //ajax controller
 $routes->post('/get_state', 'Admin\Ajax::get_state');

@@ -145,8 +145,11 @@ class Home extends BaseController {
             ];
             $this->session->set($sessionArray);
 
-            email_send($email,$subject,$message);
-            print "Please Verify Your Email Address to Complete Your Subscription!";
+            if(email_send($email, $subject, $message) == true) {
+                print "Please Verify Your Email Address to Complete Your Subscription!";
+            }else{
+                print 'Something went wrong! Please try again.';
+            }
 
         }else{
             print 'Email required';

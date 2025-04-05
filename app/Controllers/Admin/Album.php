@@ -288,7 +288,7 @@ class Album extends BaseController
 
             $table = DB()->table('cc_album');
             $data['album'] = $table->where('parent_album_id', $album_id)->where('is_parent', '0')->get()->getResult();
-
+            $data['parent_album_id'] = $album_id;
 
             //$perm = array('create','read','update','delete','mod_access');
             $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
@@ -623,6 +623,62 @@ class Album extends BaseController
         $data['val'] = $table2->where('album_id', $album_id)->get()->getRow();
 
         echo view('Admin/Album/row', $data);
+    }
+
+    public function album_download_action(){
+        $albumId =  $this->request->getPost('album_id[]');
+        $parent_album_id =  $this->request->getPost('parent_album_id');
+        if (!empty($albumId)) {
+
+            $saveImage = [];
+            foreach ($albumId as $albumId) {
+                $imageArray = [];
+                $dirSave = WRITEPATH . 'uploads/album_image/';
+
+                $image = get_data_by_id('thumb', 'cc_album', 'album_id', $albumId);
+                $dir = 'uploads/album/' . $albumId . '/';
+                $img = str_replace("pro_", "", $image);
+                if (!empty($image)) {
+                    $imageArray[] = $dir . $img;
+                    $saveImage[] = $dirSave . $image;
+                    $imageName = $image;
+
+                    //all image
+                    $table = DB()->table('cc_album_details');
+                    $allImag = $table->where('album_id', $albumId)->get()->getResult();
+                    if (!empty($allImag)) {
+                        foreach ($allImag as $pro) {
+                            $dir2 = $dir . $pro->album_details_id . '/';
+                            $img2 = str_replace("pro_", "", $pro->image);
+                            $imageArray[] = $dir2 . $img2;
+                        }
+                    }
+                    $this->imageProcessing->image_merger_and_save($imageArray, $dirSave, $imageName);
+                }
+            }
+
+            $zipName = $this->imageProcessing->zipImages($saveImage, $dirSave);
+            if (file_exists($zipName)) {
+                $randomName = bin2hex(random_bytes(5));
+                $response = $this->imageProcessing->downloadFile($zipName, $randomName.'albumImage.zip');
+
+                register_shutdown_function(function () use ($dirSave) {
+                    helper('filesystem');
+                    if (file_exists($dirSave)) {
+                        delete_files($dirSave, TRUE);
+                        rmdir($dirSave);
+                    }
+                });
+                return $response;
+            }else {
+                $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Product image is empty! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                return redirect()->to('album_list/'.$parent_album_id);
+            }
+
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('album_list/'.$parent_album_id);
+        }
     }
 
 
