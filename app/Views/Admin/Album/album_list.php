@@ -21,7 +21,7 @@
 
     <!-- Main content -->
     <section class="content">
-
+        <form action="<?= base_url('album_download_action')?>" method="post">
         <!-- Default box -->
         <div class="card">
             <div class="card-header">
@@ -30,6 +30,7 @@
                         <h3 class="card-title">Album List</h3>
                     </div>
                     <div class="col-md-4">
+                        <button type="submit" class="btn btn-success   btn-xs">Album Download</button>
                         <a href="<?php echo base_url('album_category_create') ?>" class="btn btn-info   btn-xs"><i class="fas fa-plus"></i> Create Album Category</a>
                         <a href="<?php echo base_url('album_create') ?>" class="btn btn-primary   btn-xs"><i class="fas fa-plus"></i> Create Album</a>
                     </div>
@@ -40,9 +41,11 @@
                 </div>
             </div>
             <div class="card-body">
+                <input type="hidden" name="parent_album_id" value="<?php echo $parent_album_id;?>"  >
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                         <tr>
+                            <th><input type="checkbox" onclick="allCheckedDemo(this)"  ></th>
                             <th>Sl</th>
                             <th>Name</th>
                             <th>Thumbnail</th>
@@ -52,6 +55,9 @@
                     <tbody>
                     <?php $i=1; foreach ($album as $val){ ?>
                         <tr id="update_<?= $val->album_id;?>">
+                            <td width="10">
+                                <input type="checkbox" name="album_id[]" value="<?php echo $val->album_id;?>"  >
+                            </td>
                             <td width="40"><?php echo $val->album_id;?></td>
                             <td>
                                 <p onclick="updateFunctionAlbum('<?= $val->album_id;?>', 'name', '<?= $val->name;?>', 'view_name_<?=$val->album_id?>', 'formEdit_<?=$val->album_id?>','update_<?= $val->album_id;?>')"><?php echo $val->name;?></p>
@@ -74,6 +80,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
+                            <th></th>
                             <th>Sl</th>
                             <th>Name</th>
                             <th>Thumbnail</th>
@@ -89,7 +96,7 @@
             <!-- /.card-footer-->
         </div>
         <!-- /.card -->
-
+        </form>
     </section>
     <!-- /.content -->
 </div>
@@ -97,6 +104,13 @@
 
 <?= $this->section('java_script') ?>
     <script>
+        function allCheckedDemo(source) {
+            var checkboxes = document.querySelectorAll('#example1 input[type="checkbox"]');
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i] != source)
+                    checkboxes[i].checked = source.checked;
+            }
+        }
 
         function updateFunctionAlbum(id, input, value, viewId, formName,updateRow) {
             var formID = "'" + formName + "'"

@@ -38,6 +38,9 @@
 
 <!--    <script src="https://www.google.com/recaptcha/api.js" async defer></script>-->
 
+    <link href="<?php echo base_url() ?>/assets/assets_fl/datatable/datatables.min.css" rel="stylesheet"  >
+
+
 </head>
 <body>
     <div class="message_alert" <?php if (session()->getFlashdata('message') !== NULL) : echo "style='display:block !important'"; endif; ?> id="messAlt">

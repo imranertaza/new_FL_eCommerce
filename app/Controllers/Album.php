@@ -115,9 +115,19 @@ class Album extends BaseController {
         $email = get_lebel_by_value_in_settings('email');
         $subject = 'Enquiry Request!';
         $message = 'Please provide me the details of this product. <br>URL:'.$url.' <br>Email:'.$emailCus;
-        email_send($email, $subject, $message);
+        if(email_send($email, $subject, $message) == true){
+            $check = is_exists('cc_enquiry_emails', 'email', $emailCus);
+            if($check == true){
+                $data['email'] = $emailCus;
+                $table = DB()->table('cc_enquiry_emails');
+                $table->insert($data);
+            }
+            $message = 'In query successfully submitted';
+        }else{
+            $message = 'Something went wrong! Please try again.';
+        }
 
-//        print 'In query successfully submitted';
+        print $message;
     }
 
 

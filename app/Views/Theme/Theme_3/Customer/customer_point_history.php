@@ -21,15 +21,14 @@
                     <div class="table-responsive mt-3">
                         <table class="cart-table w-100 text-center" id="tableReload">
                             <thead>
-                            <tr>
-                                <th>Sl</th>
-                                <th>Particulars</th>
-                                <th>Transaction Type</th>
-                                <th>Date</th>
-                                <th>Point</th>
-                                <th>Rest Point</th>
-
-                            </tr>
+                                <tr>
+                                    <th>Sl</th>
+                                    <th>Particulars</th>
+                                    <th>Transaction Type</th>
+                                    <th>Date</th>
+                                    <th>Point</th>
+                                    <th>Rest Point</th>
+                                </tr>
                             </thead>
                             <tbody>
                             <?php $i = 1; ;

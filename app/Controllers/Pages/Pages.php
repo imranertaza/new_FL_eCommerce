@@ -62,12 +62,11 @@ class Pages extends BaseController {
             $email = get_lebel_by_value_in_settings('email');
             email_send($email, $subject, $data['message']);
 
-
             //message get customer
             $message = 'Your message was successfully submitted';
             email_send($data['email'], $subject, $message);
 
-//            print 'Your message was successfully submitted';
+            print $message;
         }
     }
 
