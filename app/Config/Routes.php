@@ -276,6 +276,7 @@ $routes->post('/header_section_two_update', 'Admin\Theme_settings_3::header_sect
 $routes->post('/home_category_update', 'Admin\Theme_settings_3::home_category_update');
 $routes->post('/banner_bottom_update', 'Admin\Theme_settings_3::banner_bottom_update');
 $routes->post('/banner_featured_category_update', 'Admin\Theme_settings_3::banner_featured_category_update');
+$routes->post('/banner_top_update', 'Admin\Theme_settings_3::banner_top_update');
 
 //Localization
 $routes->get('/geo_zone', 'Admin\Geo_zone::index');

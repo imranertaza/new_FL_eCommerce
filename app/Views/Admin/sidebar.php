@@ -128,7 +128,7 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <?php echo add_main_based_menu_with_permission('Buy One Get One', base_url('buy_on_get_one'), $adRoleId, 'fa-circle', 'Buy_one_get_on'); ?>
+                        <?php echo add_main_based_menu_with_permission('Offer', base_url('buy_on_get_one'), $adRoleId, 'fa-circle', 'Buy_one_get_on'); ?>
                     </ul>
                 </li>
 

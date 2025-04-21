@@ -7,12 +7,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Buy One Get One Offer List</h1>
+                        <h1>Offer List</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="<?php echo base_url('admin_dashboard') ?>">Home</a></li>
-                            <li class="breadcrumb-item active">Buy One Get One Offer List</li>
+                            <li class="breadcrumb-item active">Offer List</li>
                         </ol>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-8">
-                            <h3 class="card-title">Buy One Get One Offer List</h3>
+                            <h3 class="card-title">Offer List</h3>
                         </div>
                         <div class="col-md-4">
                             <a href="<?php echo base_url('buy_on_get_one_create') ?>" class="btn btn-primary btn-block btn-xs"><i class="fas fa-plus"></i> Create</a>

@@ -62,24 +62,28 @@
 <section class="main-container">
     <div class="container">
         <div class="featured-category mb-5">
-            <div class="cat-title">
-                <div class="row">
-                    <div class="col-6 col-md-3">
-                        <h3 class="title-header">Buy 5 Ship for Free</h3>
-                    </div>
-                </div>
-            </div>
+<!--            <div class="cat-title">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-6 col-md-3">-->
+<!--                        <h3 class="title-header">Buy 5 Ship for Free</h3>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="row row-cols-lg-6 row-cols-md-3 row-cols-sm-3 row-cols-2 row-cols-1">
-            <?php
-                    foreach ($populerCat as $key => $catPop) {
+<!--            --><?php
+//                    foreach ($populerCat as $key => $catPop) {
+//                ?>
+<!--                <div class="col">-->
+<!--                    <a href="--><?php //echo base_url('category/'.$catPop->prod_cat_id) ?><!--">   -->
+<!--                    --><?php //echo image_view('uploads/category', '', $catPop->image, 'noimage.png', 'w-100'); ?>
+<!--                    <div class="category-title">--><?php //echo $catPop->category_name;?><!--</div>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--                --><?php //} ?>
+                <?php
+                $banner_top = $theme_settings['banner_top'];
+                echo image_view('uploads/banner_top', '', $banner_top, 'noimage.png', 'w-100');
                 ?>
-                <div class="col">
-                    <a href="<?php echo base_url('category/'.$catPop->prod_cat_id) ?>">   
-                    <?php echo image_view('uploads/category', '', $catPop->image, 'noimage.png', 'w-100'); ?>
-                    <div class="category-title"><?php echo $catPop->category_name;?></div>
-                    </a>
-                </div>
-                <?php } ?>
             </div>
         </div>
 

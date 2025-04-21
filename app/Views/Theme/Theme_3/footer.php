@@ -738,7 +738,6 @@
 
         $('#totalamo').val(totalAmount);
         $('#total').html('<?php echo $symbol; ?> ' + totalAmount);
-        $('#check_total').html('<?php echo $symbol; ?> ' + totalAmount);
 
         <?php $symbol = $settings['currency_symbol']; ?>
         $.ajax({
@@ -764,9 +763,15 @@
                 $('#chargeShip').html('<?php echo $symbol; ?> ' + data.charge);
                 $('#total').html('<?php echo $symbol; ?> ' + parseFloat(amount.toFixed(2)));
                 $('#totalamo').val(total);
-                $('#check_total').html('<?php echo $symbol; ?> ' + total);
                 $('#shipping_charge').val(charge);
                 $('#shipping_tot').val(parseFloat(amount.toFixed(2)));
+                if (amount < 0){
+                    $('#orderBtn').hide();
+                    $('#wMessage').show();
+                }else{
+                    $('#orderBtn').show();
+                    $('#wMessage').hide();
+                }
             }
         });
     }
