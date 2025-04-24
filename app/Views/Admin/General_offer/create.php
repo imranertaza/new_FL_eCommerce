@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="<?php echo base_url('buy_on_get_one_create_action')?>" method="post" enctype="multipart/form-data">
+                    <form action="<?php echo base_url('general_offer_create_action')?>" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -108,7 +108,7 @@
                                 </div>
 
                                 <button type="submit" class="btn btn-primary" >Create</button>
-                                <a href="<?php echo base_url('buy_on_get_one')?>" class="btn btn-danger" >Back</a>
+                                <a href="<?php echo base_url('general_offer')?>" class="btn btn-danger" >Back</a>
                             </div>
                             <div class="col-md-6">
                                 <h2>Get</h2>

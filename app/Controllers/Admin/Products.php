@@ -950,9 +950,11 @@ class Products extends BaseController
 
             //product_related table data insert(start)
             $product_related = $this->request->getPost('product_related[]');
+
+            $proReltableDel = DB()->table('cc_product_related');
+            $proReltableDel->where('product_id',$product_id)->delete();
+
             if (!empty($product_related)){
-                $proReltableDel = DB()->table('cc_product_related');
-                $proReltableDel->where('product_id',$product_id)->delete();
                 $proRelData = [];
                 foreach ($product_related as $key => $relp) {
                     $proRelData[$key] = [
@@ -968,9 +970,12 @@ class Products extends BaseController
 
             // product_bought_together table data insert(start)
             $bought_together = $this->request->getPost('bought_together[]');
+
+            $boughtTogetherDel = DB()->table('cc_product_bought_together');
+            $boughtTogetherDel->where('product_id',$product_id)->delete();
+
             if (!empty($bought_together)){
-                $boughtTogetherDel = DB()->table('cc_product_bought_together');
-                $boughtTogetherDel->where('product_id',$product_id)->delete();
+
                 $proBothData = [];
                 foreach ($bought_together as $key => $bothp) {
                     $proBothData[$key] = [

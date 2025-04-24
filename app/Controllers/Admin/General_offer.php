@@ -7,7 +7,7 @@ use App\Libraries\Image_processing;
 use App\Libraries\Permission;
 use CodeIgniter\HTTP\RedirectResponse;
 
-class Buy_on_get_one extends BaseController
+class General_offer extends BaseController
 {
 
     protected $validation;
@@ -15,7 +15,7 @@ class Buy_on_get_one extends BaseController
     protected $crop;
     protected $permission;
     protected $imageProcessing;
-    private $module_name = 'Buy_one_get_on';
+    private $module_name = 'General_offer';
 
     public function __construct()
     {
@@ -48,7 +48,7 @@ class Buy_on_get_one extends BaseController
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
             if (isset($data['mod_access']) and $data['mod_access'] == 1) {
-                echo view('Admin/Buy_one_get_one/index', $data);
+                echo view('Admin/General_offer/index', $data);
             } else {
                 echo view('Admin/no_permission');
             }
@@ -75,7 +75,7 @@ class Buy_on_get_one extends BaseController
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
             if (isset($data['create']) and $data['create'] == 1) {
-                echo view('Admin/Buy_one_get_one/create',$data);
+                echo view('Admin/General_offer/create',$data);
             } else {
                 echo view('Admin/no_permission');
             }
@@ -116,7 +116,7 @@ class Buy_on_get_one extends BaseController
 
         if ($this->validation->run($data) == FALSE) {
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">' . $this->validation->listErrors() . ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('buy_on_get_one_create');
+            return redirect()->to('general_offer_create');
         } else {
 
 
@@ -183,7 +183,7 @@ class Buy_on_get_one extends BaseController
             DB()->transComplete();
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Offer Create Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('buy_on_get_one_create');
+            return redirect()->to('general_offer_create');
         }
     }
 
@@ -214,7 +214,7 @@ class Buy_on_get_one extends BaseController
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
             if (isset($data['update']) and $data['update'] == 1) {
-                echo view('Admin/Buy_one_get_one/update', $data);
+                echo view('Admin/General_offer/update', $data);
             } else {
                 echo view('Admin/no_permission');
             }
@@ -254,7 +254,7 @@ class Buy_on_get_one extends BaseController
 
         if ($this->validation->run($data) == FALSE) {
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">' . $this->validation->listErrors() . ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('buy_on_get_one_update/'.$offer_id);
+            return redirect()->to('general_offer_update/'.$offer_id);
         } else {
 
             DB()->transStart();
@@ -325,7 +325,7 @@ class Buy_on_get_one extends BaseController
             DB()->transComplete();
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Offer Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('buy_on_get_one_update/'.$offer_id);
+            return redirect()->to('general_offer_update/'.$offer_id);
         }
     }
 
@@ -350,7 +350,7 @@ class Buy_on_get_one extends BaseController
             $table->where('offer_id', $offer_id)->delete();
         DB()->transComplete();
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Offer Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-        return redirect()->to('buy_on_get_one');
+        return redirect()->to('general_offer');
     }
 
 }

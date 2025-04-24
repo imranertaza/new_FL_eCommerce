@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="<?php echo base_url('buy_on_get_one_update_action')?>" method="post" enctype="multipart/form-data">
+                    <form action="<?php echo base_url('general_offer_update_action')?>" method="post" enctype="multipart/form-data">
                         <div class="row">
 
                             <div class="col-md-6">
@@ -121,7 +121,7 @@
 
                                 <input type="hidden" name="offer_id"  value="<?= $offer->offer_id; ?>" required>
                                 <button type="submit" class="btn btn-primary" >Update</button>
-                                <a href="<?php echo base_url('buy_on_get_one')?>" class="btn btn-danger" >Back</a>
+                                <a href="<?php echo base_url('general_offer')?>" class="btn btn-danger" >Back</a>
                             </div>
                             <div class="col-md-6">
                                 <h2>Get</h2>

@@ -121,16 +121,16 @@
                 <?php } ?>
 
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-copy"></i>
-                        <p> Offer <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <?php echo add_main_based_menu_with_permission('Offer', base_url('buy_on_get_one'), $adRoleId, 'fa-circle', 'Buy_one_get_on'); ?>
-                    </ul>
-                </li>
+<!--                <li class="nav-item">-->
+<!--                    <a href="#" class="nav-link">-->
+<!--                        <i class="nav-icon fas fa-copy"></i>-->
+<!--                        <p> Offer <i class="fas fa-angle-left right"></i>-->
+<!--                        </p>-->
+<!--                    </a>-->
+<!--                    <ul class="nav nav-treeview">-->
+<!--                        --><?php //echo add_main_based_menu_with_permission('General Offer', base_url('general_offer'), $adRoleId, 'fa-circle', 'General_offer'); ?>
+<!--                    </ul>-->
+<!--                </li>-->
 
 
                 <?php

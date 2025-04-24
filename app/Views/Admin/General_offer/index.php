@@ -30,7 +30,7 @@
                             <h3 class="card-title">Offer List</h3>
                         </div>
                         <div class="col-md-4">
-                            <a href="<?php echo base_url('buy_on_get_one_create') ?>" class="btn btn-primary btn-block btn-xs"><i class="fas fa-plus"></i> Create</a>
+                            <a href="<?php echo base_url('general_offer_create') ?>" class="btn btn-primary btn-block btn-xs"><i class="fas fa-plus"></i> Create</a>
                         </div>
                         <div class="col-md-12" style="margin-top: 10px">
                             <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
@@ -62,8 +62,8 @@
                                     <td><?php echo bdDateFormat($val->expire_date);?></td>
                                     <td><?php echo image_view('uploads/offer',$val->offer_id,'50_'.$val->banner,'50_noimage.png','','');?></td>
                                     <td width="180">
-                                        <a href="<?php echo base_url('buy_on_get_one_update/'.$val->offer_id);?>" class="btn btn-primary btn-xs"><i class="fas fa-edit"></i> Update</a>
-                                        <a href="<?php echo base_url('buy_on_get_one_delete/'.$val->offer_id);?>" onclick="return confirm('Are you sure you want to Delete?')" class="btn btn-danger btn-xs"><i class="fas fa-trash"></i> Delete</a>
+                                        <a href="<?php echo base_url('general_offer_update/'.$val->offer_id);?>" class="btn btn-primary btn-xs"><i class="fas fa-edit"></i> Update</a>
+                                        <a href="<?php echo base_url('general_offer_delete/'.$val->offer_id);?>" onclick="return confirm('Are you sure you want to Delete?')" class="btn btn-danger btn-xs"><i class="fas fa-trash"></i> Delete</a>
                                     </td>
                                 </tr>
                             <?php }?>
