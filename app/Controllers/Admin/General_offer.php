@@ -7,7 +7,7 @@ use App\Libraries\Image_processing;
 use App\Libraries\Permission;
 use CodeIgniter\HTTP\RedirectResponse;
 
-class Buy_on_get_one extends BaseController
+class General_offer extends BaseController
 {
 
     protected $validation;
@@ -15,7 +15,7 @@ class Buy_on_get_one extends BaseController
     protected $crop;
     protected $permission;
     protected $imageProcessing;
-    private $module_name = 'Buy_one_get_on';
+    private $module_name = 'General_offer';
 
     public function __construct()
     {
@@ -48,7 +48,7 @@ class Buy_on_get_one extends BaseController
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
             if (isset($data['mod_access']) and $data['mod_access'] == 1) {
-                echo view('Admin/Buy_one_get_one/index', $data);
+                echo view('Admin/General_offer/index', $data);
             } else {
                 echo view('Admin/no_permission');
             }
@@ -75,7 +75,7 @@ class Buy_on_get_one extends BaseController
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
             if (isset($data['create']) and $data['create'] == 1) {
-                echo view('Admin/Buy_one_get_one/create',$data);
+                echo view('Admin/General_offer/create',$data);
             } else {
                 echo view('Admin/no_permission');
             }
@@ -89,80 +89,101 @@ class Buy_on_get_one extends BaseController
     public function create_action()
     {
         $data['offer'] = $this->request->getPost('offer');
-        $data['qty'] = $this->request->getPost('qty');
         $data['slug'] = $this->request->getPost('slug');
         $data['description'] = $this->request->getPost('description');
         $data['products'] = $this->request->getPost('products[]');
         $data['start_date'] = $this->request->getPost('start_date');
         $data['expire_date'] = $this->request->getPost('expire_date');
+        $data['offer_type'] = $this->request->getPost('offer_type');
+
+
+        $data['offer_on'] = $this->request->getPost('offer_on');
+        $data['qty'] = $this->request->getPost('qty');
+        $data['on_amount'] = $this->request->getPost('on_amount');
+        $data['amount'] = $this->request->getPost('amount');
+
+        $data['discount_on'] = $this->request->getPost('discount_on');
+        $data['discount_type'] = $this->request->getPost('discount_type');
 
 
         $this->validation->setRules([
             'offer' => ['label' => 'Offer Name', 'rules' => 'required'],
             'slug' => ['label' => 'Slug', 'rules' => 'required'],
             'description' => ['label' => 'Description', 'rules' => 'required'],
-            'products' => ['label' => 'Products', 'rules' => 'required'],
             'start_date' => ['label' => 'Start Date', 'rules' => 'required'],
             'expire_date' => ['label' => 'Expire Date', 'rules' => 'required'],
         ]);
 
         if ($this->validation->run($data) == FALSE) {
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">' . $this->validation->listErrors() . ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('buy_on_get_one_create');
+            return redirect()->to('general_offer_create');
         } else {
 
 
 
-            DB()->transStart();
+//            DB()->transStart();
+
                 $dataOff['name'] = $data['offer'];
-                $dataOff['offer_on'] = 'product';
                 $dataOff['qty'] = $data['qty'];
                 $dataOff['slug'] = $data['slug'];
                 $dataOff['description'] = $data['description'];
-                $dataOff['discount_on'] = 'product';
+                $dataOff['discount_on'] = $data['discount_on'];
                 $dataOff['start_date'] = $data['start_date'];
                 $dataOff['expire_date'] = $data['expire_date'];
+                $dataOff['offer_type'] = $data['offer_type'];
+
+                $dataOff['offer_on'] = $data['offer_on'];
+                $dataOff['on_amount'] = $data['on_amount'];
+                $dataOff['amount'] = $data['amount'];
+                if ($data['discount_type'] == 'discount_percent') {
+                    $dataOff['discount_percent'] = 1;
+                }
+                if ($data['discount_type'] == 'discount_amount') {
+                    $dataOff['discount_amount'] = 1;
+                }
+
                 $table = DB()->table('cc_offer');
                 $table->insert($dataOff);
                 $offer_id = DB()->insertID();
 
 
                 //offer discount
-                $dataDiscount = array();
-                foreach ($data['products'] as $v) {
-                    $dataPro['offer_id'] = $offer_id;
-                    $dataPro['product_id'] = $v;
-                    array_push($dataDiscount,$dataPro);
+                if (!empty($data['products'])) {
+                    $dataDiscount = array();
+                    foreach ($data['products'] as $v) {
+                        $dataPro['offer_id'] = $offer_id;
+                        $dataPro['product_id'] = $v;
+                        array_push($dataDiscount, $dataPro);
+                    }
+                    $tablePro = DB()->table('cc_offer_on_product');
+                    $tablePro->insertBatch($dataDiscount);
                 }
-                $tablePro = DB()->table('cc_offer_on_product');
-                $tablePro->insertBatch($dataDiscount);
 
 
 
-            //Offer table data insert(end)
-            if (!empty($_FILES['banner']['name'])) {
-                //image size array
-                $this->imageProcessing->sizeArray = [['width'=>'880', 'height'=>'400', ],['width'=>'50', 'height'=>'50', ],];
+                //Offer table data insert(end)
+                if (!empty($_FILES['banner']['name'])) {
+                    //image size array
+                    $this->imageProcessing->sizeArray = [['width'=>'880', 'height'=>'400', ],['width'=>'50', 'height'=>'50', ],];
 
-                $target_dir = FCPATH . '/uploads/offer/'.$offer_id.'/';
-                $this->imageProcessing->directory_create($target_dir);
+                    $target_dir = FCPATH . '/uploads/offer/'.$offer_id.'/';
+                    $this->imageProcessing->directory_create($target_dir);
 
-                //new image upload
-                $pic = $this->request->getFile('banner');
+                    //new image upload
+                    $pic = $this->request->getFile('banner');
+                    $news_img = $this->imageProcessing->image_upload_and_crop_all_size($pic,$target_dir);
 
-                $news_img = $this->imageProcessing->image_upload_and_crop_all_size($pic,$target_dir);
+                    $dataImg['banner'] = $news_img;
 
-                $dataImg['banner'] = $news_img;
-
-                $albumTable = DB()->table('cc_offer');
-                $albumTable->where('	offer_id',$offer_id)->update($dataImg);
-            }
-            //Offer table data insert(end)
+                    $albumTable = DB()->table('cc_offer');
+                    $albumTable->where('offer_id',$offer_id)->update($dataImg);
+                }
+                //Offer table data insert(end)
 
             DB()->transComplete();
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Offer Create Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('buy_on_get_one_create');
+            return redirect()->to('general_offer_create');
         }
     }
 
@@ -193,7 +214,7 @@ class Buy_on_get_one extends BaseController
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
             if (isset($data['update']) and $data['update'] == 1) {
-                echo view('Admin/Buy_one_get_one/update', $data);
+                echo view('Admin/General_offer/update', $data);
             } else {
                 echo view('Admin/no_permission');
             }
@@ -214,51 +235,69 @@ class Buy_on_get_one extends BaseController
         $data['products'] = $this->request->getPost('products[]');
         $data['start_date'] = $this->request->getPost('start_date');
         $data['expire_date'] = $this->request->getPost('expire_date');
+        $data['offer_type'] = $this->request->getPost('offer_type');
+
+        $data['offer_on'] = $this->request->getPost('offer_on');
+        $data['on_amount'] = $this->request->getPost('on_amount');
+        $data['amount'] = $this->request->getPost('amount');
+        $data['discount_on'] = $this->request->getPost('discount_on');
+        $data['discount_type'] = $this->request->getPost('discount_type');
 
 
         $this->validation->setRules([
             'offer' => ['label' => 'Offer Name', 'rules' => 'required'],
             'slug' => ['label' => 'Slug', 'rules' => 'required'],
             'description' => ['label' => 'Description', 'rules' => 'required'],
-            'products' => ['label' => 'Products', 'rules' => 'required'],
             'start_date' => ['label' => 'Start Date', 'rules' => 'required'],
             'expire_date' => ['label' => 'Expire Date', 'rules' => 'required'],
         ]);
 
         if ($this->validation->run($data) == FALSE) {
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">' . $this->validation->listErrors() . ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('buy_on_get_one_update/'.$offer_id);
+            return redirect()->to('general_offer_update/'.$offer_id);
         } else {
-
-
 
             DB()->transStart();
                 $dataOff['name'] = $data['offer'];
-                $dataOff['offer_on'] = 'product';
                 $dataOff['qty'] = $data['qty'];
                 $dataOff['slug'] = $data['slug'];
                 $dataOff['description'] = $data['description'];
-                $dataOff['discount_on'] = 'product';
+                $dataOff['discount_on'] = $data['discount_on'];
                 $dataOff['start_date'] = $data['start_date'];
                 $dataOff['expire_date'] = $data['expire_date'];
+                $dataOff['offer_type'] = $data['offer_type'];
+
+                $dataOff['offer_on'] = $data['offer_on'];
+                $dataOff['on_amount'] = $data['on_amount'];
+                $dataOff['amount'] = $data['amount'];
+
+                if ($data['discount_type'] == 'discount_percent') {
+                    $dataOff['discount_percent'] = 1;
+                }
+                if ($data['discount_type'] == 'discount_amount') {
+                    $dataOff['discount_amount'] = 1;
+                }
+
                 $table = DB()->table('cc_offer');
                 $table->where('offer_id',$offer_id)->update($dataOff);
 
 
-                //offer discount delete
+
+                //offer discount product delete
                 $tableProD = DB()->table('cc_offer_on_product');
-                $tableProD->where('offer_id',$offer_id)->delete();
+                $tableProD->where('offer_id', $offer_id)->delete();
 
-                //offer discount
-                $dataDiscount = array();
-                foreach ($data['products'] as $v) {
-                    $dataPro['offer_id'] = $offer_id;
-                    $dataPro['product_id'] = $v;
-                    array_push($dataDiscount,$dataPro);
+                if (!empty($data['products'])) {
+                    //offer discount products insert
+                    $dataDiscount = array();
+                    foreach ($data['products'] as $v) {
+                        $dataPro['offer_id'] = $offer_id;
+                        $dataPro['product_id'] = $v;
+                        array_push($dataDiscount, $dataPro);
+                    }
+                    $tablePro = DB()->table('cc_offer_on_product');
+                    $tablePro->insertBatch($dataDiscount);
                 }
-                $tablePro = DB()->table('cc_offer_on_product');
-                $tablePro->insertBatch($dataDiscount);
-
 
 
 
@@ -286,7 +325,7 @@ class Buy_on_get_one extends BaseController
             DB()->transComplete();
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Offer Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('buy_on_get_one_update/'.$offer_id);
+            return redirect()->to('general_offer_update/'.$offer_id);
         }
     }
 
@@ -311,7 +350,7 @@ class Buy_on_get_one extends BaseController
             $table->where('offer_id', $offer_id)->delete();
         DB()->transComplete();
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Offer Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-        return redirect()->to('buy_on_get_one');
+        return redirect()->to('general_offer');
     }
 
 }

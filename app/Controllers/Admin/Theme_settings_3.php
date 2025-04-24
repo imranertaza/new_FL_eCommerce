@@ -431,5 +431,34 @@ class Theme_settings_3 extends BaseController
         }
     }
 
+    public function banner_top_update(){
+        if (!empty($_FILES['banner_top']['name'])) {
+            $target_dir = FCPATH . '/uploads/banner_top/';
+            if (!file_exists($target_dir)) {
+                mkdir($target_dir, 0777);
+            }
+
+            //new image uplode
+            $pic = $this->request->getFile('banner_top');
+            $namePic = $pic->getRandomName();
+            $pic->move($target_dir, $namePic);
+            $news_img = 'banner_top_' . $pic->getName();
+            $this->crop->withFile($target_dir . $namePic)->fit(1116, 211, 'center')->save($target_dir . $news_img);
+            unlink($target_dir . $namePic);
+            $data['value'] = $news_img;
+
+            $table = DB()->table('cc_theme_settings');
+            $table->where('label', 'banner_top')->update($data);
+
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Top Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('theme_settings?sel=home_settings');
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Image required <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('theme_settings?sel=home_settings');
+        }
+    }
+
+
+
 }
 

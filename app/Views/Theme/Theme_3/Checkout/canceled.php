@@ -1,4 +1,4 @@
-<section class="main-container checkout" id="tableReload">
+<section class="main-container checkout" >
     <div class="container">
         <div class="row">
             <div class="col-md-6">

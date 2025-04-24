@@ -1,4 +1,4 @@
-<section class="main-container checkout" >
+<section class="main-container checkout" id="tableReload2">
 <!--    id="tableReload"-->
     <div class="container">
         <form id="checkout-form" action="<?php echo base_url('checkout_action')  ?>" method="post" onsubmit="return onchackoutsubmit()">
@@ -313,14 +313,18 @@
 
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Discount</span>
-                                <?php $disc = 0;
-                                if (isset(newSession()->coupon_discount)) {
-                                    $disc = round((Cart()->total() * newSession()->coupon_discount) / 100); ?>
-                                <span><?php echo $cSymbol .$disc ?></span>
+                                <?php
+                                    $disc = 0;
+                                    $offerdisc = 0;
+                                if (isset(newSession()->coupon_discount) || !empty($offer['discount_amount'])) {
+                                    $disc = round((Cart()->total() * newSession()->coupon_discount) / 100);
+                                    $offerdisc = $offer['discount_amount'];
+                                    ?>
+                                <span><?php $toDis = $disc + $offerdisc;  echo $cSymbol .$toDis ?></span>
                                 <?php } else {
                                     echo '<span>' . $cSymbol .$disc . '</span>';
                                 }
-                                $total = (isset(newSession()->coupon_discount)) ? Cart()->total() - $disc : Cart()->total(); ?>
+                                $total = (isset(newSession()->coupon_discount) || !empty($offer['discount_amount'])) ? Cart()->total() - $disc - $offerdisc : Cart()->total(); ?>
                             </div>
                         </div>
 
@@ -452,7 +456,8 @@
 
                     <input type="hidden" name="amount" id="shipping_tot" value="<?php echo $total ?>">
                     <p>
-                        <button type="submit" class="btn bg-custom-color text-white w-100 rounded-0">Confirm Order</button>
+                        <button type="submit" id="orderBtn" class="btn bg-custom-color text-white w-100 rounded-0">Confirm Order</button>
+                        <span id="wMessage" class="text-danger" style="display: none;">Something went wrong!</span>
                     </p>
                 </div>
             </div>
