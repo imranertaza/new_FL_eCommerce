@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Libraries\Mycart;
-use App\Libraries\Offer_calculet;
+use App\Libraries\Offer_calculate;
 use App\Libraries\Weight_shipping;
 use App\Libraries\Zone_rate_shipping;
 use App\Libraries\Zone_shipping;
@@ -24,7 +24,7 @@ class Checkout extends BaseController
     protected $weight_shipping;
     protected $zone_rate_shipping;
     protected $cart;
-    protected $offer_calculet;
+    protected $offer_calculate;
 
     public function __construct()
     {
@@ -36,7 +36,7 @@ class Checkout extends BaseController
         $this->weight_shipping = new Weight_shipping();
         $this->zone_rate_shipping = new Zone_rate_shipping();
         $this->cart = new Mycart();
-        $this->offer_calculet = new Offer_calculet();
+        $this->offer_calculate = new Offer_calculate();
     }
 
     /**
@@ -53,7 +53,7 @@ class Checkout extends BaseController
             $tableSet = DB()->table('cc_payment_settings');
             $data['paypalEmail'] = $tableSet->where('payment_method_id', '3')->where('label', 'email')->get()->getRow();
 
-            $data['offer'] = $this->offer_calculet->offer_discount($this->cart);
+            $data['offer'] = $this->offer_calculate->offer_discount($this->cart);
             $data['keywords'] = $settings['meta_keyword'];
             $data['description'] = $settings['meta_description'];
             $data['title'] = 'Checkout';
@@ -305,7 +305,7 @@ class Checkout extends BaseController
                     $table->where('coupon_id',$this->session->coupon_id)->update($newQtyCupUsed);
                 }
 
-                $offer = $this->offer_calculet->offer_discount($this->cart,$shipping_charge);
+                $offer = $this->offer_calculate->offer_discount($this->cart,$shipping_charge);
                 $offerDiscount = $offer['discount_amount'] + $offer['discount_shipping_amount'];
 
                 $finalAmo = number_format($this->cart->total() - $disc - $offerDiscount,2);
@@ -509,7 +509,7 @@ class Checkout extends BaseController
         if (isset(newSession()->coupon_discount_shipping)) {
             $data['discount'] += $this->shipping_discount_calculate($data['charge'], $paymethod);
         }
-        $offer = $this->offer_calculet->offer_discount($this->cart,$data['charge']);
+        $offer = $this->offer_calculate->offer_discount($this->cart,$data['charge']);
         if (!empty($offer['discount_shipping_amount']) && !empty($data['charge'])){
             $data['discount'] += $offer['discount_shipping_amount'];
         }

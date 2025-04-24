@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Libraries\Flat_shipping;
 use App\Libraries\Mycart;
-use App\Libraries\Offer_calculet;
+use App\Libraries\Offer_calculate;
 use App\Libraries\Weight_shipping;
 use App\Libraries\Zone_shipping;
 use App\Models\ProductsModel;
@@ -21,7 +21,7 @@ class StripeController extends BaseController {
     protected $zone_shipping;
     protected $productsModel;
     protected $cart;
-    protected $offer_calculet;
+    protected $offer_calculate;
 
     public function __construct()
     {
@@ -32,7 +32,7 @@ class StripeController extends BaseController {
         $this->flat_shipping = new Flat_shipping();
         $this->weight_shipping = new Weight_shipping();
         $this->cart = new Mycart();
-        $this->offer_calculet = new Offer_calculet();
+        $this->offer_calculate = new Offer_calculate();
     }
 
     /**
@@ -148,7 +148,7 @@ class StripeController extends BaseController {
             $table->where('coupon_id',$this->session->coupon_id)->update($newQtyCupUsed);
         }
 
-        $offer = $this->offer_calculet->offer_discount($this->cart,$data['shipping_charge']);
+        $offer = $this->offer_calculate->offer_discount($this->cart,$data['shipping_charge']);
         $offerDiscount = $offer['discount_amount'] + $offer['discount_shipping_amount'];
 
         $finalAmo = number_format($this->cart->total() - $disc - $offerDiscount,2);
