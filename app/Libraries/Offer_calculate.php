@@ -4,7 +4,7 @@ namespace App\Libraries;
 use Config\Services;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class Offer_calculet {
+class Offer_calculate {
     private $discount = 0;
     private $shipDiscount = 0;
     private $productProDisc = 0;
@@ -15,6 +15,10 @@ class Offer_calculet {
 
     }
 
+    /**
+     * @description This function provides active offers
+     * @return array
+     */
     public function today_active_offers(){
         $todayDate = date('Y-m-d H:i:s');
         $table = DB()->table('cc_offer');
@@ -22,6 +26,12 @@ class Offer_calculet {
         return $offers;
     }
 
+    /**
+     * @description This function provides offer discount
+     * @param $cart
+     * @param $shipAmount
+     * @return array
+     */
     public function offer_discount($cart, $shipAmount = 0)
     {
         $totalAmount = $cart->total();
@@ -102,6 +112,13 @@ class Offer_calculet {
         ];
     }
 
+    /**
+     * @description This function provides product discount
+     * @param $offer
+     * @param $productPrice
+     * @param $shipAmount
+     * @return void
+     */
     private function product_discount($offer,$productPrice,$shipAmount)
     {
         if ($offer->discount_on === 'product_amount') {
@@ -113,6 +130,14 @@ class Offer_calculet {
             }
         }
     }
+
+    /**
+     * @description This function provides amount discount
+     * @param $offer
+     * @param $totalAmount
+     * @param $shipAmount
+     * @return void
+     */
     private function amount_discount($offer,$totalAmount,$shipAmount)
     {
         if ($offer->discount_on === 'product_amount') {
@@ -125,6 +150,12 @@ class Offer_calculet {
         }
     }
 
+    /**
+     * @description This function provides discount calculate
+     * @param $offer
+     * @param $baseAmount
+     * @return float|int|mixed
+     */
     private function calculate_discount($offer, $baseAmount)
     {
         if ($offer->discount_percent == 1) {
