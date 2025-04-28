@@ -273,9 +273,11 @@ class General_offer extends BaseController
 
                 if ($data['discount_type'] == 'discount_percent') {
                     $dataOff['discount_percent'] = 1;
+                    $dataOff['discount_amount'] = 0;
                 }
                 if ($data['discount_type'] == 'discount_amount') {
                     $dataOff['discount_amount'] = 1;
+                    $dataOff['discount_percent'] = 0;
                 }
 
                 $table = DB()->table('cc_offer');

@@ -28,8 +28,8 @@ class Offer_calculate {
 
     /**
      * @description This function provides offer discount
-     * @param $cart
-     * @param $shipAmount
+     * @param $cart array
+     * @param $shipAmount float
      * @return array
      */
     public function offer_discount($cart, $shipAmount = 0)
@@ -54,7 +54,7 @@ class Offer_calculate {
                             if ($offer->offer_type == 'distinct') {
                                 $amountOffId = $offer->offer_id;
                             }
-                            $this->product_discount($offer,$cartItem['price'],$shipAmount);
+                            $this->product_discount($offer,$cartItem['price'],$cartItem['qty'],$shipAmount);
                         }
 
                     }
@@ -91,7 +91,7 @@ class Offer_calculate {
                     foreach ($offerProducts as $pro) {
                         foreach ($cart->contents() as $cartItem) {
                             if ($pro->product_id == $cartItem['id'] && $cartItem['qty'] >= $firstOffer->qty) {
-                                $this->product_discount($firstOffer,$cartItem['price'],$shipAmount);
+                                $this->product_discount($firstOffer,$cartItem['price'],$cartItem['qty'],$shipAmount);
                             }
                         }
                     }
@@ -114,15 +114,17 @@ class Offer_calculate {
 
     /**
      * @description This function provides product discount
-     * @param $offer
-     * @param $productPrice
-     * @param $shipAmount
+     * @param $offer array
+     * @param $qty int
+     * @param $productPrice float
+     * @param $shipAmount float
      * @return void
      */
-    private function product_discount($offer,$productPrice,$shipAmount)
+    private function product_discount($offer,$productPrice,$qty,$shipAmount)
     {
         if ($offer->discount_on === 'product_amount') {
-            $this->productProDisc += $this->calculate_discount($offer, $productPrice);
+            $totalPrice = $productPrice * $qty;
+            $this->productProDisc += $this->calculate_discount($offer, $totalPrice);
         }
         if (count(Cart()->contents()) == 1) {
             if ($offer->discount_on === 'shipping_amount') {
@@ -133,9 +135,9 @@ class Offer_calculate {
 
     /**
      * @description This function provides amount discount
-     * @param $offer
-     * @param $totalAmount
-     * @param $shipAmount
+     * @param $offer array
+     * @param $totalAmount float
+     * @param $shipAmount float
      * @return void
      */
     private function amount_discount($offer,$totalAmount,$shipAmount)
@@ -152,8 +154,8 @@ class Offer_calculate {
 
     /**
      * @description This function provides discount calculate
-     * @param $offer
-     * @param $baseAmount
+     * @param $offer array
+     * @param $baseAmount float
      * @return float|int|mixed
      */
     private function calculate_discount($offer, $baseAmount)
