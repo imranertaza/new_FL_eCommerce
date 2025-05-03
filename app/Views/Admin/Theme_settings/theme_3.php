@@ -276,8 +276,8 @@
             <h3>Banner Bottom</h3>
             <div class="form-group">
                 <?php
-                    $banner_bottom = $themeSetting['banner_bottom'];
-                    echo image_view('uploads/banner_bottom', '', $banner_bottom, 'noimage.png', 'w-100');
+                $banner_bottom = $themeSetting['banner_bottom'];
+                echo image_view('uploads/banner_bottom', '', $banner_bottom, 'noimage.png', 'w-100');
                 ?><br>
                 <label><?php echo $themeSettingTitle['banner_bottom'];?></label>
                 <input type="file" class="form-control" name="banner_bottom">
@@ -296,6 +296,24 @@
                 ?><br>
                 <label><?php echo $themeSettingTitle['banner_featured_category'];?></label>
                 <input type="file" class="form-control" name="banner_featured_category">
+                <span>Recommended Size: 1116 x 211</span>
+            </div>
+            <button class="btn btn-primary">Save</button>
+
+        </form>
+    </div>
+
+    <div class="col-md-6 card p-2">
+
+        <form action="<?php echo base_url('banner_top_update') ?>" method="post" enctype="multipart/form-data">
+            <h3 class="mt-5"><?php echo $themeSettingTitle['banner_top'];?></h3>
+            <div class="form-group">
+                <?php
+                $banner_top = $themeSetting['banner_top'];
+                echo image_view('uploads/banner_top', '', $banner_top, 'noimage.png', 'w-100');
+                ?><br>
+                <label><?php echo $themeSettingTitle['banner_top'];?></label>
+                <input type="file" class="form-control" name="banner_top">
                 <span>Recommended Size: 1116 x 211</span>
             </div>
             <button class="btn btn-primary">Save</button>

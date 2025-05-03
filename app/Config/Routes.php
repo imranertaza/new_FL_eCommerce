@@ -228,12 +228,12 @@ $routes->get('/coupon_update/(:num)', 'Admin\Coupon::update/$1');
 $routes->get('/coupon_delete/(:num)', 'Admin\Coupon::delete/$1');
 
 //Coupon
-$routes->get('/buy_on_get_one', 'Admin\Buy_on_get_one::index');
-$routes->get('/buy_on_get_one_create', 'Admin\Buy_on_get_one::create');
-$routes->post('/buy_on_get_one_create_action', 'Admin\Buy_on_get_one::create_action');
-$routes->post('/buy_on_get_one_update_action', 'Admin\Buy_on_get_one::update_action');
-$routes->get('/buy_on_get_one_update/(:num)', 'Admin\Buy_on_get_one::update/$1');
-$routes->get('/buy_on_get_one_delete/(:num)', 'Admin\Buy_on_get_one::delete/$1');
+$routes->get('/general_offer', 'Admin\General_offer::index');
+$routes->get('/general_offer_create', 'Admin\General_offer::create');
+$routes->post('/general_offer_create_action', 'Admin\General_offer::create_action');
+$routes->post('/general_offer_update_action', 'Admin\General_offer::update_action');
+$routes->get('/general_offer_update/(:num)', 'Admin\General_offer::update/$1');
+$routes->get('/general_offer_delete/(:num)', 'Admin\General_offer::delete/$1');
 
 //
 $routes->get('/module', 'Admin\Module::index');
@@ -276,6 +276,7 @@ $routes->post('/header_section_two_update', 'Admin\Theme_settings_3::header_sect
 $routes->post('/home_category_update', 'Admin\Theme_settings_3::home_category_update');
 $routes->post('/banner_bottom_update', 'Admin\Theme_settings_3::banner_bottom_update');
 $routes->post('/banner_featured_category_update', 'Admin\Theme_settings_3::banner_featured_category_update');
+$routes->post('/banner_top_update', 'Admin\Theme_settings_3::banner_top_update');
 
 //Localization
 $routes->get('/geo_zone', 'Admin\Geo_zone::index');

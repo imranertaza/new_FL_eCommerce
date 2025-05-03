@@ -240,82 +240,169 @@ class Image_processing {
 
     // Function to merge images and save
     public function image_merger_and_save($imageArray,$dir,$image_name){
-        // Define target size for resizing (for example, 200x150)
+
         $targetWidth = 200;
         $targetHeight = 150;
+        $padding = 10;
+        $maxColumns = 3;
 
-        // Load your images dynamically (for example, you can use an array of image paths)
-        $filePath = $dir.$image_name;
-        $imagePaths = $imageArray;
-        $this->directory_create($dir);
+        $filePath = $dir . $image_name;
+        $this->directory_create($dir); // Make sure directory exists
 
         $images = [];
-        foreach ($imagePaths as $path) {
-            $images[] = imagecreatefromjpeg($path);
-        }
+        foreach ($imageArray as $path) {
+            $srcImage = imagecreatefromjpeg($path);
+            if ($srcImage) {
+                $originalWidth = imagesx($srcImage);
+                $originalHeight = imagesy($srcImage);
 
-        // Resize images to target size
-        foreach ($images as &$image) {
-            $image = imagescale($image, $targetWidth, $targetHeight);
-        }
+                // Step 1: Scale to fill
+                $scale = max($targetWidth / $originalWidth, $targetHeight / $originalHeight);
+                $scaledWidth = (int)($originalWidth * $scale);
+                $scaledHeight = (int)($originalHeight * $scale);
 
-        // Padding and border settings for the images
-        $padding = 10;
-        $borderColor = imagecolorallocate($images[0], 0, 0, 0); // Black border (RGB)
+                $resizedImage = imagescale($srcImage, $scaledWidth, $scaledHeight);
+                imagedestroy($srcImage); // free memory
 
-        // Calculate grid dimensions based on the number of images
-        $numImages = count($images);
-        $maxColumns = 3; // Set maximum images per row
-        $numColumns = min($maxColumns, $numImages); // Ensure no more than maxColumns per row
-        $numRows = ceil($numImages / $numColumns); // Calculate number of rows
+                // Step 2: Center crop to target size
+                $cropX = (int)(($scaledWidth - $targetWidth) / 2);
+                $cropY = (int)(($scaledHeight - $targetHeight) / 2);
 
-        // Calculate the final width and height of the combined image with padding
-        $finalWidth = $targetWidth * $numColumns + $padding * ($numColumns + 1); // Account for padding
-        $finalHeight = $targetHeight * $numRows + $padding * ($numRows + 1); // Account for padding
+                $croppedImage = imagecrop($resizedImage, [
+                    'x' => $cropX,
+                    'y' => $cropY,
+                    'width' => $targetWidth,
+                    'height' => $targetHeight
+                ]);
+                imagedestroy($resizedImage); // free memory
 
-        // Create a blank image for the final result
-        $finalImage = imagecreatetruecolor($finalWidth, $finalHeight);
-
-        // Set background color for final image (optional, here we set it as white)
-        $white = imagecolorallocate($finalImage, 255, 255, 255); // RGB white color
-        imagefill($finalImage, 0, 0, $white);
-
-        // Copy each image into the final image with padding
-        $x = $padding;
-        $y = $padding;
-
-        foreach ($images as $index => $image) {
-            // Copy each resized image to the final image
-            imagecopy($finalImage, $image, $x, $y, 0, 0, $targetWidth, $targetHeight);
-
-            // Calculate the next x and y coordinates
-            $x += $targetWidth + $padding;
-
-            // If we've reached the maximum number of columns, move to the next row
-            if (($index + 1) % $numColumns == 0) {
-                $x = $padding; // Reset x to start from the left
-                $y += $targetHeight + $padding; // Move down to the next row
+                if ($croppedImage !== FALSE) {
+                    $images[] = $croppedImage;
+                }
             }
         }
 
-        // Add a border around the entire final image
-        imagerectangle($finalImage, 0, 0, $finalWidth - 1, $finalHeight - 1, $borderColor); // Border around the whole combined image
-
-
-        if(!file_exists($filePath)){
-            // Save the final image as a JPEG
-            imagejpeg($finalImage, $filePath,100);
+        $numImages = count($images);
+        if ($numImages == 0) {
+            return; // No valid images to process
         }
 
-        // Output the final image to the browser
-        //header('Content-Type: image/jpeg');
-        //imagejpeg($finalImage);
+        $numColumns = min($maxColumns, $numImages);
+        $numRows = ceil($numImages / $numColumns);
 
+        $finalWidth = $targetWidth * $numColumns + $padding * ($numColumns + 1);
+        $finalHeight = $targetHeight * $numRows + $padding * ($numRows + 1);
 
-        // Free up memory
-        imagedestroy($finalImage);
+        $finalImage = imagecreatetruecolor($finalWidth, $finalHeight);
+
+        $white = imagecolorallocate($finalImage, 255, 255, 255); // White background
+        imagefill($finalImage, 0, 0, $white);
+
+        $borderColor = imagecolorallocate($finalImage, 0, 0, 0); // Black border
+
+        // Place images in grid
+        $x = $padding;
+        $y = $padding;
+        foreach ($images as $index => $img) {
+            imagecopy($finalImage, $img, $x, $y, 0, 0, $targetWidth, $targetHeight);
+            imagedestroy($img); // free memory after copy
+
+            $x += $targetWidth + $padding;
+            if (($index + 1) % $numColumns == 0) {
+                $x = $padding;
+                $y += $targetHeight + $padding;
+            }
+        }
+
+        // Draw border around final image
+        imagerectangle($finalImage, 0, 0, $finalWidth - 1, $finalHeight - 1, $borderColor);
+
+        // Save final image
+        if (!file_exists($filePath)) {
+            imagejpeg($finalImage, $filePath, 100);
+        }
+
+        imagedestroy($finalImage); // Clean up
+
 
     }
+
+//    old(){
+//        //        // Define target size for resizing (for example, 200x150)
+//    //        $targetWidth = 200;
+//    //        $targetHeight = 150;
+//    //
+//    //        // Load your images dynamically (for example, you can use an array of image paths)
+//    //        $filePath = $dir.$image_name;
+//    //        $imagePaths = $imageArray;
+//    //        $this->directory_create($dir);
+//    //
+//    //        $images = [];
+//    //        foreach ($imagePaths as $path) {
+//    //            $images[] = imagecreatefromjpeg($path);
+//    //        }
+//    //
+//    //        // Resize images to target size
+//    //        foreach ($images as &$image) {
+//    //            $image = imagescale($image, $targetWidth, $targetHeight);
+//    //        }
+//    //
+//    //        // Padding and border settings for the images
+//    //        $padding = 10;
+//    //        $borderColor = imagecolorallocate($images[0], 0, 0, 0); // Black border (RGB)
+//    //
+//    //        // Calculate grid dimensions based on the number of images
+//    //        $numImages = count($images);
+//    //        $maxColumns = 3; // Set maximum images per row
+//    //        $numColumns = min($maxColumns, $numImages); // Ensure no more than maxColumns per row
+//    //        $numRows = ceil($numImages / $numColumns); // Calculate number of rows
+//    //
+//    //        // Calculate the final width and height of the combined image with padding
+//    //        $finalWidth = $targetWidth * $numColumns + $padding * ($numColumns + 1); // Account for padding
+//    //        $finalHeight = $targetHeight * $numRows + $padding * ($numRows + 1); // Account for padding
+//    //
+//    //        // Create a blank image for the final result
+//    //        $finalImage = imagecreatetruecolor($finalWidth, $finalHeight);
+//    //
+//    //        // Set background color for final image (optional, here we set it as white)
+//    //        $white = imagecolorallocate($finalImage, 255, 255, 255); // RGB white color
+//    //        imagefill($finalImage, 0, 0, $white);
+//    //
+//    //        // Copy each image into the final image with padding
+//    //        $x = $padding;
+//    //        $y = $padding;
+//    //
+//    //        foreach ($images as $index => $image) {
+//    //            // Copy each resized image to the final image
+//    //            imagecopy($finalImage, $image, $x, $y, 0, 0, $targetWidth, $targetHeight);
+//    //
+//    //            // Calculate the next x and y coordinates
+//    //            $x += $targetWidth + $padding;
+//    //
+//    //            // If we've reached the maximum number of columns, move to the next row
+//    //            if (($index + 1) % $numColumns == 0) {
+//    //                $x = $padding; // Reset x to start from the left
+//    //                $y += $targetHeight + $padding; // Move down to the next row
+//    //            }
+//    //        }
+//    //
+//    //        // Add a border around the entire final image
+//    //        imagerectangle($finalImage, 0, 0, $finalWidth - 1, $finalHeight - 1, $borderColor); // Border around the whole combined image
+//    //
+//    //
+//    //        if(!file_exists($filePath)){
+//    //            // Save the final image as a JPEG
+//    //            imagejpeg($finalImage, $filePath,100);
+//    //        }
+//    //
+//    //        // Output the final image to the browser
+//    //        //header('Content-Type: image/jpeg');
+//    //        //imagejpeg($finalImage);
+//    //
+//    //
+//    //        // Free up memory
+//    //        imagedestroy($finalImage);
+//    }
 
     // Function to zip images
     public function zipImages($imagePaths,$dirSave)

@@ -30,7 +30,9 @@
                         <h3 class="card-title">Album List</h3>
                     </div>
                     <div class="col-md-4">
+                        <?php if(modules_key_by_access('multi_album_download') == '1' ){ ?>
                         <button type="submit" class="btn btn-success   btn-xs">Album Download</button>
+                        <?php } ?>
                         <a href="<?php echo base_url('album_category_create') ?>" class="btn btn-info   btn-xs"><i class="fas fa-plus"></i> Create Album Category</a>
                         <a href="<?php echo base_url('album_create') ?>" class="btn btn-primary   btn-xs"><i class="fas fa-plus"></i> Create Album</a>
                     </div>
