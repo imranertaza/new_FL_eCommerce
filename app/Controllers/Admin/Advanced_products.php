@@ -900,7 +900,7 @@ class Advanced_products extends BaseController
                 $dir = 'uploads/products/' . $proId . '/';
                 $img = str_replace("pro_", "", $image);
                 if (!empty($image)) {
-                    $imageArray[] = $dir . $img;
+//                    $imageArray[] = $dir . $img;
                     $saveImage[] = $dirSave . $image;
                     $imageName = $image;
 
