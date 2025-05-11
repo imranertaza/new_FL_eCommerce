@@ -638,8 +638,11 @@ class Album extends BaseController
                 $image = get_data_by_id('thumb', 'cc_album', 'album_id', $albumId);
                 $dir = 'uploads/album/' . $albumId . '/';
                 $img = str_replace("pro_", "", $image);
-                if (!empty($image)) {
-                    $imageArray[] = $dir . $img;
+
+                $table = DB()->table('cc_album_details');
+                $allImagCount = $table->where('album_id', $albumId)->countAllResults();
+                if (!empty($image) && !empty($allImagCount)) {
+//                    $imageArray[] = $dir . $img;
                     $saveImage[] = $dirSave . $image;
                     $imageName = $image;
 
