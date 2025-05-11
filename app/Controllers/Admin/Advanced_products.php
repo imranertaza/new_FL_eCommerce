@@ -899,7 +899,10 @@ class Advanced_products extends BaseController
                 $image = get_data_by_id('image', 'cc_products', 'product_id', $proId);
                 $dir = 'uploads/products/' . $proId . '/';
                 $img = str_replace("pro_", "", $image);
-                if (!empty($image)) {
+
+                $table = DB()->table('cc_product_image');
+                $allImagCount = $table->where('product_id', $proId)->countAllResults();
+                if (!empty($image) && !empty($allImagCount)) {
 //                    $imageArray[] = $dir . $img;
                     $saveImage[] = $dirSave . $image;
                     $imageName = $image;
