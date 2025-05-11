@@ -350,7 +350,6 @@ class Image_processing {
             }else {
                 $srcImage = @imagecreatefromjpeg($path);
             }
-            if (!$srcImage) continue;
 
             $originalWidth = imagesx($srcImage);
             $originalHeight = imagesy($srcImage);
