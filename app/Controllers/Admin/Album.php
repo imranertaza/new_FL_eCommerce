@@ -639,7 +639,7 @@ class Album extends BaseController
                 $dir = 'uploads/album/' . $albumId . '/';
                 $img = str_replace("pro_", "", $image);
                 if (!empty($image)) {
-                    $imageArray[] = $dir . $img;
+//                    $imageArray[] = $dir . $img;
                     $saveImage[] = $dirSave . $image;
                     $imageName = $image;
 
