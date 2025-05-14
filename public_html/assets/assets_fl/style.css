@@ -3016,3 +3016,35 @@ li div {
 ul > li:last-child {
     border-left: 2px solid transparent;
 }
+
+#scrollToTopBtn {
+    /*display: none; !* Hidden by default *!*/
+    visibility: hidden;
+    position: fixed;
+    bottom: 137px;
+    right: 30px;
+    z-index: 99;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    background-color: #1795e2;
+    color: white;
+    cursor: pointer;
+    padding: 5px 14px;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+
+
+#scrollToTopBtn.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+#scrollToTopBtn:hover {
+    background-color:#005286;
+    transition: background-color 0.2s linear;
+    margin-bottom: 3px;
+    transition: margin-bottom 0.2s;
+}
