@@ -78,10 +78,10 @@
                             </form>
                         </div>
                         <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
-                            <center><h4 class="ti-or-n">Recent Order</h4></center>
+                            <h4 class="ti-or-n">Recent Order</h4>
                             <table class="table table-borderless table-responsive">
                                 <tbody>
-                                <?php foreach ($orderItem as $item){ ?>
+                                <?php if (!empty($orderItem)){  foreach ($orderItem as $item){ ?>
                                     <tr>
                                         <td><?php
                                             $img = get_data_by_id('image','cc_products','product_id',$item->product_id);
@@ -91,9 +91,11 @@
                                         </td>
                                         <td>
                                             <p class="p-date"><?php echo invoiceDateFormat($item->createdDtm);?></p>
-                                            <span class="p-sty"><?php echo get_data_by_id('name','cc_products','product_id',$item->product_id);;?></span>
+                                            <p class="p-sty mt-2"><?php echo get_data_by_id('name','cc_products','product_id',$item->product_id);;?></p>
                                         </td>
                                     </tr>
+                                <?php } } else{ ?>
+                                    <p class="p-sty">No products available!</p>
                                 <?php } ?>
                                 </tbody>
                             </table>

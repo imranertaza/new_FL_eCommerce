@@ -163,119 +163,23 @@
                 </div>
             </div>
         </div>
-        <div class="header-bottom py-2">
+        <div class="header-bottom  py-2 " id="menu-sticky">
             <div class="container">
                 <div class="row gx-0 align-items-center">
                     <div class="col-xl-3 col-lg-3 col-sm-3 col-12 mb-2 mb-sm-0">
-                    <?php if (isset($home_menu)) {  ?>
                         <div class="allcategory h-100 w-100">
-                            <button class="btn btn-secondary text-uppercase dropdown-toggle rounded-0 h-100 bg-blue border-0 text-start w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-secondary text-uppercase dropdown-toggle rounded-0 h-100 bg-blue border-0 text-start w-100" onclick="toggleDiv()"  type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-bars me-3"></i>
                                 Shop by Categories
                             </button>
 
 
                             <!--category start-->
-                            <div class="dropdown-menu border accordion-cat cat-drop-menu all-cat-menu btn-cat-show " id="catBox">
-                                <div class="accordion">
-                                    <?php foreach (getSideMenuArray() as $pcat) { ?>
-
-                             <!--single-->
-                                    <div class="accordion-item border-0">
-                                        <h2 class="accordion-header" id=<?="panelsStayOpen-heading-".$pcat->prod_cat_id?> >
-                                            <a href="<?php echo base_url('category/' . $pcat->prod_cat_id); ?>" class="accordion-button collapsed py-2 px-2">
-                                                <span>
-                                                    <svg class="svgIcon-accordion" width="100%" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <rect width="24" height="24" fill="white"/>
-                                                    <path d="M9.5 7L14.5 12L9.5 17" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"/>
-                                                    </svg>
-
-                                                </span>
-                                                <span><?php echo $pcat->category_name; ?></span>
-                                                <?php $pCatAr = getCategoryBySubArray($pcat->prod_cat_id,$pcat->order_by,$pcat->order_type); if (!empty(count($pCatAr))) { ?>
-                                                <button class="btn ms-auto button-collapse py-2 collappse-btn"
-                                                    id="<?="accordionPanelsStayOpen-".$pcat->prod_cat_id?>" type="button" data-bs-toggle="collapse"
-                                                    data-bs-target= <?="#panelsStayOpen-collapse-".$pcat->prod_cat_id?> aria-expanded="false"
-                                                    aria-controls=<?="panelsStayOpen-collapse-".$pcat->prod_cat_id?>>
-                                                </button>
-                                                <?php }?>
-
-                                            </a>
-                                        </h2>
-                                        <div id="<?="panelsStayOpen-collapse-".$pcat->prod_cat_id?>" class="accordion-collapse collapse"
-                                            aria-labelledby=<?="panelsStayOpen-heading-".$pcat->prod_cat_id?> >
-                                           
-                                            <?php if (!empty(count($pCatAr))) { ?>
-                                                <div class="accordion-body p-0">
-                                                <?php foreach ($pCatAr as $sCat) { ?>
-                                                    <div class="accordion-item border-0">
-                                                        <h2 class="accordion-header" id="<?="panelsStayOpen-panelsStayOpen-heading".$pcat->prod_cat_id."-inner-heading".$sCat->prod_cat_id?>">
-                                                            <a href=<?php echo base_url('category/' . $sCat->prod_cat_id); ?> class="accordion-button collapsed py-2 px-2 pl-20">
-                                                            <span>
-                                                                <svg class="svgIcon-accordion" width="100%" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <rect width="24" height="24" fill="white"/>
-                                                                <path d="M9.5 7L14.5 12L9.5 17" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"/>
-                                                                </svg>
-                                                            </span>
-                                                                <span> <?php echo $sCat->category_name; ?></span>
-                                                                <?php $sCatAr = getCategoryBySubArray($sCat->prod_cat_id,$sCat->order_by,$sCat->order_type); if (!empty(count($sCatAr))) { ?>
-                                                                <button class="btn ms-auto button-collapse py-2 collappse-btn"
-                                                                    id= "<?="accordionPanelsStayOpen-panelsStayOpen-heading".$pcat->prod_cat_id."-inner-heading".$sCat->prod_cat_id?>" type="button"
-                                                                    data-bs-toggle="collapse"
-                                                                    data-bs-target=<?="#panelsStayOpen-panelsStayOpen-heading".$pcat->prod_cat_id."-inner-collapse".$sCat->prod_cat_id?> aria-expanded="false"
-                                                                    aria-controls=<?="#panelsStayOpen-panelsStayOpen-heading".$pcat->prod_cat_id."-inner-collapse".$sCat->prod_cat_id?> >
-                                                                </button>
-                                                                <?php }?>
-                                                            </a>
-                                                        </h2>
-                                                        <div id="<?="panelsStayOpen-panelsStayOpen-heading".$pcat->prod_cat_id."-inner-collapse".$sCat->prod_cat_id?>" class="accordion-collapse collapse"
-                                                            aria-labelledby=<?="panelsStayOpen-panelsStayOpen-heading".$pcat->prod_cat_id."-inner-heading".$sCat->prod_cat_id?>>
-                                                            <!-- Add your inner accordion content here -->
-                                                            <!-- Example: -->
-                                                            <?php if (!empty(count($sCatAr))) { ?>
-                                                                <div class="accordion-body p-0">
-                                                                <?php foreach ($sCatAr as $ssCat) { ?>
-                                                                    <div class="accordion-item border-0 ">
-                                                                        <h2 class="accordion-header" id="panelsStayOpen-panelsStayOpen-heading-2-inner-heading-2">
-                                                                            <a href="<?php echo base_url('category/' . $ssCat->prod_cat_id); ?>" class="accordion-button collapsed py-2 px-2 pl-34">
-                                                                            <span>
-                                                                                <svg class="svgIcon-accordion" width="100%" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                                <rect width="24" height="24" fill="white"/>
-                                                                                <path d="M9.5 7L14.5 12L9.5 17" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"/>
-                                                                                </svg>
-                                                                            </span>
-                                                                            <span><?php echo $ssCat->category_name; ?></span>
-                                                                            <?php if (!empty(count(getCategoryBySubArray($ssCat->prod_cat_id,$ssCat->order_by,$ssCat->order_type)))) { ?>
-                                                                            <button class="btn ms-auto button-collapse py-2 collappse-btn"
-                                                                                id="accordionPanelsStayOpen-panelsStayOpen-heading-2-inner-2" type="button"
-                                                                                data-bs-toggle="collapse"
-                                                                                data-bs-target="#panelsStayOpen-panelsStayOpen-heading-2-inner-collapse-2" aria-expanded="false"
-                                                                                aria-controls="panelsStayOpen-panelsStayOpen-heading-2-inner-collapse-2">
-                                                                            </button>
-                                                                            <?php }?>
-                                                                            </a>
-                                                                        </h2>
-                                                                        <div id="panelsStayOpen-panelsStayOpen-heading-2-inner-collapse-2" class="accordion-collapse collapse"
-                                                                        aria-labelledby="anelsStayOpen-panelsStayOpen-heading-2-inner-heading-2">
-                                                                        </div>
-                                                                    </div>
-                                                                    <?php }?>
-                                                                </div>
-                                                                <?php }?> 
-                                                             </div>
-                                                        </div>
-                                                    <?php }?> 
-                                                </div>
-                                            <?php }?> 
-                                        </div>
-                                    </div>
-                                    <!--single end-->
-                                    <?php } ?>
-                                </div>
+                            <div class="dropdown-menu border accordion-cat cat-drop-menu all-cat-menu btn-cat-show "  style="height: 402px; display: none;" id="catBox">
+                                <?= view('Theme/Theme_3/category_menu') ?>
                             </div>
-                        <!--category end-->   
+                        <!--category end-->
                         </div>
-                        <?php } ?>
                     </div>
                     <div class="col-xl-6 col-lg-6 col-sm-5 col-6 d-flex align-items-center justify-content-end">
                     <?php if ($modules['top_search'] == 1) { ?>
@@ -287,44 +191,44 @@
                                 <button class="btn btn-default bg-white rounded-0" onclick="topSearchValidation('first-form-top','first-cat','first-keywordTop','first-valid')" type="button">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M19.0002 19L14.6572 14.657M14.6572 14.657C15.4001 13.9141 15.9894 13.0321 16.3914 12.0615C16.7935 11.0909 17.0004 10.0506 17.0004 8.99996C17.0004 7.94936 16.7935 6.90905 16.3914 5.93842C15.9894 4.96779 15.4001 4.08585 14.6572 3.34296C13.9143 2.60007 13.0324 2.01078 12.0618 1.60874C11.0911 1.20669 10.0508 0.999756 9.00021 0.999756C7.9496 0.999756 6.90929 1.20669 5.93866 1.60874C4.96803 2.01078 4.08609 2.60007 3.34321 3.34296C1.84288 4.84329 1 6.87818 1 8.99996C1 11.1217 1.84288 13.1566 3.34321 14.657C4.84354 16.1573 6.87842 17.0002 9.00021 17.0002C11.122 17.0002 13.1569 16.1573 14.6572 14.657Z" stroke="#727272" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>    
+                                </svg>
                                 </button>
                             </span>
                             </div>
                         </form>
-                        <?php } ?>  
+                        <?php } ?>
                     </div>
                     <div class="col-xl-3 col-lg-3 col-sm-4 col-6">
                         <div class="d-flex flex-row align-items-center justify-content-end gap-3 gap-lg-5 h-100">
                         <?php if ($modules['compare'] == 1) { ?>
                             <a  href="<?php echo base_url('compare') ?>">
-                                <div class="mini-cart d-flex position-relative" id="comparetReload">                                
+                                <div class="mini-cart d-flex position-relative" id="comparetReload">
                                     <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M28.2656 17.9062L24.4922 5.34375H15.8789V3.78516C15.8789 3.36328 15.457 2.92969 15.0234 2.92969C14.6016 2.92969 14.168 3.35156 14.168 3.78516V5.35547H5.55469L1.78125 17.9062H1.69922H1.27734C1.27734 20.7539 3.58594 23.0742 6.44531 23.0742C9.30469 23.0742 11.6133 20.7656 11.6133 17.9062H11.1211H11.0391L7.47656 6.12891H14.2383V24.457H7.54688V27.082H8.40234H15.0234H21.6445H22.5V24.457H15.8086V6.12891H22.5703L19.0078 17.9062H18.9258H18.4336C18.4336 20.7539 20.7422 23.0742 23.6016 23.0742C26.4609 23.0742 28.7695 20.7656 28.7695 17.9062H28.3477H28.2656ZM9.86719 17.9062H3.02344L6.41016 6.48047L9.86719 17.9062ZM20.1797 17.9062L23.6367 6.48047L27.0234 17.9062H20.1797Z" fill="white"/>
-                                    </svg>        
-                                    <span class="cart-item position-absolute rounded-5 d-flex align-items-center justify-content-center bg-white text-black">0</span>        
+                                    </svg>
+                                    <span class="cart-item position-absolute rounded-5 d-flex align-items-center justify-content-center bg-white text-black">0</span>
                                 </div>
                             </a>
                         <?php } ?>
-                        
+
                         <?php if ($modules['wishlist'] == 1) { ?>
                             <a href="<?php echo base_url('favorite') ?>">
                             <div class="mini-cart d-flex position-relative" id="wishlistReload">
                                 <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M5.56275 17.3849L14.2535 25.549C14.5529 25.8301 14.7025 25.9707 14.879 26.0053C14.9585 26.021 15.0403 26.021 15.1198 26.0053C15.2963 25.9707 15.4459 25.8301 15.7453 25.549L24.436 17.3849C26.8813 15.0879 27.1782 11.3079 25.1217 8.65719L24.735 8.15878C22.2748 4.98783 17.3364 5.51962 15.6078 9.14166C15.3635 9.6533 14.6353 9.6533 14.391 9.14166C12.6624 5.51962 7.72406 4.98783 5.26384 8.15879L4.87715 8.65719C2.8206 11.3079 3.11754 15.0879 5.56275 17.3849Z" stroke="white" stroke-width="2"/>
-                                </svg>    
-                                <span class="cart-item position-absolute rounded-5 d-flex align-items-center justify-content-center bg-white text-black">0</span>        
+                                </svg>
+                                <span class="cart-item position-absolute rounded-5 d-flex align-items-center justify-content-center bg-white text-black">0</span>
                             </div>
 
                             </a>
                         <?php } ?>
 
                             <a href="<?php echo base_url('cart') ?>">
-                            <div class="mini-cart d-flex position-relative" id="cartReload">    
+                            <div class="mini-cart d-flex position-relative" id="cartReload">
                                 <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M25.2803 15.6573C24.5478 11.756 24.1828 9.80476 22.7928 8.65226C21.4066 7.49976 19.4216 7.49976 15.4528 7.49976H14.5503C10.5816 7.49976 8.59656 7.49976 7.20781 8.65226C5.82031 9.80476 5.45406 11.756 4.72156 15.6573C3.69406 21.1435 3.17906 23.886 4.67906 25.6935C6.17781 27.4998 8.96781 27.4998 14.5491 27.4998H15.4516C21.0328 27.4998 23.8241 27.4998 25.3228 25.6935C26.1928 24.6435 26.3853 23.281 26.1928 21.2498M11.2503 7.49976V6.24976C11.2503 5.25519 11.6454 4.30137 12.3487 3.59811C13.0519 2.89484 14.0057 2.49976 15.0003 2.49976C15.9949 2.49976 16.9487 2.89484 17.652 3.59811C18.3552 4.30137 18.7503 5.25519 18.7503 6.24976V7.49976" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
                                 </svg>
-                                <span class="cart-item position-absolute rounded-5 d-flex align-items-center justify-content-center"><?php echo count(Cart()->contents()); ?></span>        
+                                <span class="cart-item position-absolute rounded-5 d-flex align-items-center justify-content-center"><?php echo count(Cart()->contents()); ?></span>
                             </div>
                             </a>
                         </div>
@@ -332,6 +236,7 @@
                 </div>
             </div>
         </div>
+
     </header>
     <button id="scrollToTopBtn" title="Go to top">↑</button>
 
@@ -349,7 +254,6 @@
        document.querySelectorAll(".collappse-btn").forEach(ele => {
            ele.addEventListener('click', (e) => {
                e.preventDefault();
-               
                if(e.target.getAttribute('aria-expanded')==="true"){
                     e.target.style.backgroundPosition = "0 -12px";
                     span = false;

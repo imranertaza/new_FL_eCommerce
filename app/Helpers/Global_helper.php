@@ -1449,7 +1449,7 @@ function paypal_settings()
 function get_category_id_by_product_show_home_slide($category_id)
 {
     $table = DB()->table('cc_products');
-    $table->join('cc_product_to_category', 'cc_product_to_category.product_id = cc_products.product_id')->where('cc_products.status', 'Active');
+    $table->join('cc_product_to_category', 'cc_product_to_category.product_id = cc_products.product_id')->where('cc_products.status', 'Active')->where('cc_products.featured', '1');
     $result = $table->where('cc_product_to_category.category_id', $category_id)->orderBy('cc_products.product_id','DESC')->limit(20)->get()->getResult();
 
     $modules = modules_access();
