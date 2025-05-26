@@ -855,14 +855,26 @@
     }
 
     function subscription() {
+        var val = 'unchecked';
+        var checkBox = document.getElementById("flexCheckDefault");
+        
+        if (checkBox.checked) {
+            val = 'checked';
+        }
 
         $.ajax({
             method: "POST",
-            url: "<?php echo base_url('newsletter_action') ?>",
-            success: function(data) {
-                $("#message").html(data);
+            url: "<?php echo base_url('newsletter_action'); ?>",
+            data: { value: val },
+            success: function(response) {
+                $("#message").html(response);
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error: ", error);
+                alert("Something went wrong!");
             }
         });
+
     }
 
     function bothPriceCalculat() {
