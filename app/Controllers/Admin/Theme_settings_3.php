@@ -180,15 +180,14 @@ class Theme_settings_3 extends BaseController
 
             $table = DB()->table('cc_theme_settings');
             $table->where('label', 'banner_bottom')->update($data);
-
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Bottom Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('theme_settings?sel=home_settings');
-        }else{
-            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Image required <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('theme_settings?sel=home_settings');
         }
 
+        $dataCat['value'] = $this->request->getPost('banner_bottom_category');
+        $table = DB()->table('cc_theme_settings');
+        $table->where('label', 'banner_bottom_category')->update($dataCat);
 
+        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Bottom Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        return redirect()->to('theme_settings?sel=home_settings');
     }
 
     /**
@@ -213,13 +212,16 @@ class Theme_settings_3 extends BaseController
 
             $table = DB()->table('cc_theme_settings');
             $table->where('label', 'banner_featured_category')->update($data);
-
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Featured Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('theme_settings?sel=home_settings');
-        }else{
-            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Image required <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('theme_settings?sel=home_settings');
         }
+
+        $dataCat['value'] = $this->request->getPost('banner_featured_category_category');
+        $table = DB()->table('cc_theme_settings');
+        $table->where('label', 'banner_featured_category_category')->update($dataCat);
+
+        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Featured Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        return redirect()->to('theme_settings?sel=home_settings');
+
+
 
 
     }
@@ -449,13 +451,15 @@ class Theme_settings_3 extends BaseController
 
             $table = DB()->table('cc_theme_settings');
             $table->where('label', 'banner_top')->update($data);
-
-            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Top Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('theme_settings?sel=home_settings');
-        }else{
-            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Image required <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('theme_settings?sel=home_settings');
         }
+
+        $dataCat['value'] = $this->request->getPost('banner_top_category');
+        $table = DB()->table('cc_theme_settings');
+        $table->where('label', 'banner_top_category')->update($dataCat);
+
+        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Top Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        return redirect()->to('theme_settings?sel=home_settings');
+
     }
 
 

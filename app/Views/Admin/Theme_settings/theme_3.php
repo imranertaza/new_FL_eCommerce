@@ -275,6 +275,20 @@
         <form action="<?php echo base_url('banner_bottom_update') ?>" method="post" enctype="multipart/form-data">
             <h3>Banner Bottom</h3>
             <div class="form-group">
+                <label><?php echo $themeSettingTitle['banner_bottom_category'];?></label>
+                <select name="banner_bottom_category" class="form-control" required>
+                    <option value="">Please Select</option>
+                    <?php
+                    $catSel = $themeSetting['banner_bottom_category'];
+                    foreach ($cat as $val){
+                        ?>
+                        <option value="<?php echo $val->prod_cat_id;?>"
+                            <?php echo ($val->prod_cat_id == $catSel)?'selected':'';?>><?php echo display_category_with_parent($val->prod_cat_id);?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="form-group">
                 <?php
                 $banner_bottom = $themeSetting['banner_bottom'];
                 echo image_view('uploads/banner_bottom', '', $banner_bottom, 'noimage.png', 'w-100');
@@ -289,6 +303,20 @@
 
         <form action="<?php echo base_url('banner_featured_category_update') ?>" method="post" enctype="multipart/form-data">
             <h3 class="mt-5"><?php echo $themeSettingTitle['banner_featured_category'];?></h3>
+            <div class="form-group">
+                <label><?php echo $themeSettingTitle['banner_featured_category_category'];?></label>
+                <select name="banner_featured_category_category" class="form-control" required>
+                    <option value="">Please Select</option>
+                    <?php
+                    $catSel = $themeSetting['banner_featured_category_category'];
+                    foreach ($cat as $val){
+                        ?>
+                        <option value="<?php echo $val->prod_cat_id;?>"
+                            <?php echo ($val->prod_cat_id == $catSel)?'selected':'';?>><?php echo display_category_with_parent($val->prod_cat_id);?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
             <div class="form-group">
                 <?php
                 $banner_featured_category = $themeSetting['banner_featured_category'];
@@ -307,6 +335,20 @@
 
         <form action="<?php echo base_url('banner_top_update') ?>" method="post" enctype="multipart/form-data">
             <h3 class="mt-5"><?php echo $themeSettingTitle['banner_top'];?></h3>
+            <div class="form-group">
+                <label><?php echo $themeSettingTitle['banner_top_category'];?></label>
+                <select name="banner_top_category" class="form-control" required>
+                    <option value="">Please Select</option>
+                    <?php
+                    $catSel = $themeSetting['banner_top_category'];
+                    foreach ($cat as $val){
+                        ?>
+                        <option value="<?php echo $val->prod_cat_id;?>"
+                            <?php echo ($val->prod_cat_id == $catSel)?'selected':'';?>><?php echo display_category_with_parent($val->prod_cat_id);?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
             <div class="form-group">
                 <?php
                 $banner_top = $themeSetting['banner_top'];
