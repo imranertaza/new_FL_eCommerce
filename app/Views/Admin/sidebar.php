@@ -240,7 +240,7 @@
                 <?php
                 $modArrayPur = ['Fund_request'];
                 $menuAccessPur = all_menu_permission_check($modArrayPur, $adRoleId);
-                if ($menuAccessPur == true) {
+                if (($menuAccessPur == true)|| ($modules['fund_request'] == 1)) {
                 ?>
                     <li class="nav-item">
                         <a href="<?php echo base_url('fund_request'); ?>" class="nav-link">
@@ -248,7 +248,7 @@
                             <p>Fund Request </p>
                         </a>
                     </li>
-                <?php } ?>
+                <?php }  ?>
 
                 <li class="nav-header">System</li>
                 <?php

@@ -241,9 +241,17 @@
             "autoWidth": false,
             "targets": 'no-sort',
             "bSort": false,
+            // "stateSave": true,
             "order": [
                 [0, "desc"]
             ],
+            // "bStateSave": true,
+            // "fnStateSave": function (oSettings, oData) {
+            //     localStorage.setItem('example1DataTables', JSON.stringify(oData));
+            // },
+            // "fnStateLoad": function (oSettings) {
+            //     return JSON.parse(localStorage.getItem('example1DataTables'));
+            // }
             // "buttons": ["csv", "excel", "pdf", "print" ]
             // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');

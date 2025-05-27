@@ -128,20 +128,23 @@
                         <h4 class="f-title toggleButton">Customer Service</h4>
                         <div class="elementToToggle d-none d-md-block">
                             <ul class="list-unstyled ul-link mt-md-4">
-                                <li><a href="<?php echo base_url('page/returns-policy') ?>">
+                                <?php $returns = get_data_by_id('slug','cc_pages','page_id','6'); ?>
+                                <li><a href="<?php echo base_url('page/'.$returns) ?>">
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
                                     Returns
                                 </a></li>
-                                <li><a href="<?php echo base_url('page/contact-us') ?>">
+                                <?php $contact = get_data_by_id('slug','cc_pages','page_id','1'); ?>
+                                <li><a href="<?php echo base_url('page/'.$contact) ?>">
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
                                     Contact us
                                 </a></li>
+                                <?php $siteMap = get_data_by_id('slug','cc_pages','page_id','14'); ?>
                                 <li>
-                                    <a href="<?php echo base_url('page/site-map')?>" >
+                                    <a href="<?php echo base_url('page/'.$siteMap)?>" >
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
@@ -157,27 +160,32 @@
                         <h4 class="f-title toggleButton">Information</h4>
                         <div class="elementToToggle d-none d-md-block">
                             <ul class="list-unstyled ul-link mt-md-4">
-                                <li><a href="<?php echo base_url('page/core-values-of-finer-labels') ?>">
+                                <?php $ourCoreValues = get_data_by_id('slug','cc_pages','page_id','11'); ?>
+                                <li><a href="<?php echo base_url('page/'.$ourCoreValues) ?>">
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
                                     Our Core Values</a></li>
-                                <li><a href="<?php echo base_url('page/about-us') ?>">
+                                <?php $about = get_data_by_id('slug','cc_pages','page_id','2'); ?>
+                                <li><a href="<?php echo base_url('page/'.$about) ?>">
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
                                     About Us</a></li>
-                                <li><a href="<?php echo base_url('page/privacy-policy') ?>">
+                                <?php $privacy = get_data_by_id('slug','cc_pages','page_id','4'); ?>
+                                <li><a href="<?php echo base_url('page/'.$privacy) ?>">
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
                                     Privacy Policy</a></li>
-                                <li><a href="<?php echo base_url('page/returns-and-refunds-policy') ?>">
+                                <?php $refunds = get_data_by_id('slug','cc_pages','page_id','12'); ?>
+                                <li><a href="<?php echo base_url('page/'.$refunds) ?>">
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
-                                    Returns and Refunds</a></li>
-                                <li><a href="<?php echo base_url('page/terms-and-conditions') ?>">
+                                        FAQ</a></li>
+                                <?php $conditions = get_data_by_id('slug','cc_pages','page_id','5'); ?>
+                                <li><a href="<?php echo base_url('page/'.$conditions) ?>">
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
@@ -209,7 +217,8 @@
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
                                     Wish List</a></li>
-                                <li><a href="<?php echo base_url('page/newsletter-signup') ?>">
+                                <?php $newsletter = get_data_by_id('slug','cc_pages','page_id','13'); ?>
+                                <li><a href="<?php echo base_url('page/'.$newsletter) ?>">
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5.11523 2.68945L4.32422 3.49805L9.82617 9L4.32422 14.502L5.11523 15.3105L11.4258 9L5.11523 2.68945ZM9.05273 2.68945L8.26172 3.49805L13.7637 9L8.26172 14.502L9.05273 15.3105L15.3633 9L9.05273 2.68945Z" fill="white"/>
                                     </svg>
@@ -306,6 +315,37 @@
 
 
 <script>
+
+    function toggleDiv() {
+        var div = document.getElementById("catBox");
+        if (div.style.display === "none") {
+            div.style.display = "block";
+        } else {
+            div.style.display = "none";
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const div = document.getElementById('catBox');
+        const navbar = document.getElementById('menu-sticky');
+        const navbarOffsetTop = navbar.offsetTop;
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > navbarOffsetTop) {
+                document.getElementById('menu-sticky').classList.add('fixed-top');
+                // add padding top to show content behind navbar
+                navbar_height = document.querySelector('#menu-sticky').offsetHeight;
+                document.body.style.paddingTop = navbar_height + 'px';
+                // div.style.display = "none";
+            } else {
+                document.getElementById('menu-sticky').classList.remove('fixed-top');
+                // remove padding top from body
+                document.body.style.paddingTop = '0';
+                // div.style.display = "block";
+
+            }
+        });
+    });
+
     const scrollToTopBtn = document.getElementById("scrollToTopBtn");
 
     window.onscroll = function () {
@@ -324,7 +364,8 @@
 
     //Initialize Select2 Elements
     $('.select2bs4').select2({
-        theme: 'bootstrap4'
+        theme: 'bootstrap4',
+        sorter: data => data.sort((a, b) => a.text.localeCompare(b.text)),
     })
 
     //social chat script (start)
@@ -814,14 +855,26 @@
     }
 
     function subscription() {
+        var val = 'unchecked';
+        var checkBox = document.getElementById("flexCheckDefault");
+        
+        if (checkBox.checked) {
+            val = 'checked';
+        }
 
         $.ajax({
             method: "POST",
-            url: "<?php echo base_url('newsletter_action') ?>",
-            success: function(data) {
-                $("#message").html(data);
+            url: "<?php echo base_url('newsletter_action'); ?>",
+            data: { value: val },
+            success: function(response) {
+                $("#message").html(response);
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error: ", error);
+                alert("Something went wrong!");
             }
         });
+
     }
 
     function bothPriceCalculat() {

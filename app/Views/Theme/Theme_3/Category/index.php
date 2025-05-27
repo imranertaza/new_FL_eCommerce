@@ -136,7 +136,7 @@
                                                 <div class="product-top text-center">
                                                     <a href="<?php echo base_url('detail/' . $pro->product_id) ?>"><?php echo image_view('uploads/products', $pro->product_id, $img_size . $pro->image, 'noimage.png', 'img-fluid ') ?></a>
                                                     <div class="rating text-center my-2">
-                                                        <?php echo product_id_by_rating($pro->product_id); ?>
+                                                        <?php //echo product_id_by_rating($pro->product_id); ?>
                                                     </div>
                                                 </div>
                                                 <div class="product-bottom mt-auto">

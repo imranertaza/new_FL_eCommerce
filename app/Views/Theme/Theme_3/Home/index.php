@@ -1,7 +1,12 @@
 <section class="banner">
     <div class="container">
         <div class="row gx-0">
-            <div class="col-xl-9 offset-xl-3 d-flex flex-column flex-lg-row">
+            <div class="col-xl-3 col-lg-3 col-sm-3 col-12 mb-2 mb-sm-0 cat-m-d">
+                <div class="border cat-menu-static accordion-cat" >
+                    <?= view('Theme/Theme_3/category_menu') ?>
+                </div>
+            </div>
+            <div class="col-xl-9  d-flex flex-column flex-lg-row">
                 <div class="swiper bannerSlide me-1">
                     <div class="swiper-wrapper">
                         <?php $sli_1 = get_lebel_by_value_in_theme_settings('slider_1'); ?>
