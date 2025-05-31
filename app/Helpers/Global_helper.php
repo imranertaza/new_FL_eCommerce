@@ -1269,7 +1269,7 @@ function success_email_template($title, $message, $url)
             <p style='margin-bottom: 30px;'>
                 $message
             </p>
-            <center><a href='$url' target='_blank' style='background-color: #000000;border: none;padding: 10px 98px;color: #ffffff;font-size: 20px;text-decoration: none; '>Visit</a></center>
+            <center><a href='$url' target='_blank' style='background-color: #000000;border: none;padding: 10px 98px;color: #ffffff;font-size:18px;text-decoration: none;width:100%' >Visit</a></center>
             <hr style='margin-top: 30px;margin-bottom: 30px;border: 2px solid #d5d5d5;'>
             <center> <a href='#'>$fbIcon</a> <a href='#'>$twi</a> <a href='#'>$link</a></center>
             <center> <p>$address</p></center>

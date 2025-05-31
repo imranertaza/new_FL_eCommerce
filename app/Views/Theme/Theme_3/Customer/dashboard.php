@@ -79,26 +79,22 @@
                         </div>
                         <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
                             <h4 class="ti-or-n">Recent Order</h4>
-                            <table class="table table-borderless table-responsive">
-                                <tbody>
-                                <?php if (!empty($orderItem)){  foreach ($orderItem as $item){ ?>
-                                    <tr>
-                                        <td><?php
-                                            $img = get_data_by_id('image','cc_products','product_id',$item->product_id);
-                                            echo image_view('uploads/products',$item->product_id,$img_size.$img,'noimage.png','');
-                                            ?>
+                            <?php if (!empty($orderItem)){  foreach ($orderItem as $item){ ?>
+                                <div class="d-flex">
+                                    <div><?php
+                                        $img = get_data_by_id('image','cc_products','product_id',$item->product_id);
+                                        echo image_view('uploads/products',$item->product_id,$img_size.$img,'noimage.png','');
+                                        ?>
 
-                                        </td>
-                                        <td>
-                                            <p class="p-date"><?php echo invoiceDateFormat($item->createdDtm);?></p>
-                                            <p class="p-sty mt-2"><?php echo get_data_by_id('name','cc_products','product_id',$item->product_id);;?></p>
-                                        </td>
-                                    </tr>
-                                <?php } } else{ ?>
-                                    <p class="p-sty">No products available!</p>
-                                <?php } ?>
-                                </tbody>
-                            </table>
+                                    </div>
+                                    <div class="ms-3">
+                                        <p class="p-date"><?php echo invoiceDateFormat($item->createdDtm);?></p>
+                                        <p class="p-sty mt-2"><?php echo get_data_by_id('name','cc_products','product_id',$item->product_id);;?></p>
+                                    </div>
+                                </div>
+                            <?php } } else{ ?>
+                                <p class="p-sty">No products available!</p>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
