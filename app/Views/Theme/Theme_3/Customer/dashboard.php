@@ -61,15 +61,15 @@
                             <h4 class="ti-or-n">Change Password</h4>
                             <form action="<?php echo base_url('password_action_update')?>" method="post" onsubmit="return resetPassword()">
                             <div class="mb-3 mt-3">
-                                <input type="password" id="current_password" name="current_password" class="form-control con-or text-center in_err fw-bolder" placeholder="Current Password*" required >
+                                <input type="password" id="current_password" name="current_password" class="form-control con-or in_err fw-bolder" placeholder="Current Password*"  >
                                 <span class="text-danger d-inline-block err text-capitalize" id="password_err_mess"></span>
                             </div>
                             <div class="mb-3">
-                                <input type="password" name="new_password" id="new_password" class="form-control  in_err con-or text-center fw-bolder"  placeholder="New Password*" required >
+                                <input type="password" name="new_password" id="new_password" class="form-control  in_err con-or fw-bolder"  placeholder="New Password*"  >
                                 <span class="text-danger d-inline-block err text-capitalize" id="new_password_err_mess"></span>
                             </div>
                             <div class="mb-3">
-                                <input type="password" name="confirm_password" id="confirm_password"     class="form-control con-or text-center in_err fw-bolder" placeholder="Confirm Password*" required >
+                                <input type="password" name="confirm_password" id="confirm_password"     class="form-control con-or in_err fw-bolder" placeholder="Confirm Password*"  >
                                 <span class="text-danger d-inline-block err text-capitalize" id="confirm_password_err_mess"></span>
                             </div>
                             <div class="mb-3">
@@ -79,26 +79,22 @@
                         </div>
                         <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
                             <h4 class="ti-or-n">Recent Order</h4>
-                            <table class="table table-borderless table-responsive">
-                                <tbody>
-                                <?php if (!empty($orderItem)){  foreach ($orderItem as $item){ ?>
-                                    <tr>
-                                        <td><?php
-                                            $img = get_data_by_id('image','cc_products','product_id',$item->product_id);
-                                            echo image_view('uploads/products',$item->product_id,$img_size.$img,'noimage.png','');
-                                            ?>
+                            <?php if (!empty($orderItem)){  foreach ($orderItem as $item){ ?>
+                                <div class="d-flex">
+                                    <div><?php
+                                        $img = get_data_by_id('image','cc_products','product_id',$item->product_id);
+                                        echo image_view('uploads/products',$item->product_id,$img_size.$img,'noimage.png','');
+                                        ?>
 
-                                        </td>
-                                        <td>
-                                            <p class="p-date"><?php echo invoiceDateFormat($item->createdDtm);?></p>
-                                            <p class="p-sty mt-2"><?php echo get_data_by_id('name','cc_products','product_id',$item->product_id);;?></p>
-                                        </td>
-                                    </tr>
-                                <?php } } else{ ?>
-                                    <p class="p-sty">No products available!</p>
-                                <?php } ?>
-                                </tbody>
-                            </table>
+                                    </div>
+                                    <div class="ms-3">
+                                        <p class="p-date"><?php echo invoiceDateFormat($item->createdDtm);?></p>
+                                        <p class="p-sty mt-2"><?php echo get_data_by_id('name','cc_products','product_id',$item->product_id);;?></p>
+                                    </div>
+                                </div>
+                            <?php } } else{ ?>
+                                <p class="p-sty">No products available!</p>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
