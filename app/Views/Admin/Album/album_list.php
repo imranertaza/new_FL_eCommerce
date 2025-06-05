@@ -68,7 +68,7 @@
                             <td>
                                 <?php $img = str_replace("pro_", "", $val->thumb); $url = base_url('uploads/album/'.$val->album_id.'/wm_'.$img); ?>
                                 <a class="album-image-link" href="<?= $url;?>" data-lightbox="album-set-<?= $val->album_id;?>">
-                                <?php echo image_view('uploads/album',$val->album_id,'50_'.$val->thumb,'50_noimage.png','');?>
+                                <?php echo common_image_view('uploads/album', $val->album_id, $val->thumb, 'noimage.png', '', '', '50', '50');?>
                                 </a>
 
                             </td>

@@ -136,7 +136,7 @@ class Album extends BaseController
             }
 
             //image size array
-            $this->imageProcessing->sizeArray = [['width'=>'261', 'height'=>'261',],[ 'width'=>'198', 'height'=>'198', ],['width'=>'50', 'height'=>'50', ],];
+            $this->imageProcessing->sizeArray = [];
 
             //album table data insert(end)
             if (!empty($_FILES['thumb']['name'])) {
@@ -231,7 +231,7 @@ class Album extends BaseController
                 }
             }
             //image size array
-            $this->imageProcessing->sizeArray = [ ['width'=>'261', 'height'=>'261',],[ 'width'=>'198', 'height'=>'198', ],['width'=>'50', 'height'=>'50', ],];
+            $this->imageProcessing->sizeArray = [];
 
             //album table data insert(end)
             if (!empty($_FILES['thumb']['name'])) {

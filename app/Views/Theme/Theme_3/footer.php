@@ -809,17 +809,17 @@
                 paymethod: paymethod
             },
             dataType: 'json',
-            success: function(data) {
-                var charge = Number(data.charge);
+            success: function(result) {
+                var charge = Number(result.charge);
 
-                var dis = Number(data.discount);
+                var dis = Number(result.discount);
 
                 var total = Number(totalAmount);
                 var amount = Number(total) + Number(charge) - dis;
 
                 $('#discount_charge').val(dis);
                 $('#chargeDisSh').html('<?php echo $symbol; ?> ' + dis);
-                $('#chargeShip').html('<?php echo $symbol; ?> ' + data.charge);
+                $('#chargeShip').html('<?php echo $symbol; ?> ' + result.charge);
                 $('#total').html('<?php echo $symbol; ?> ' + parseFloat(amount.toFixed(2)));
                 $('#totalamo').val(total);
                 $('#shipping_charge').val(charge);

@@ -14,7 +14,7 @@
                 <div class="col-4 col-md-3 mt-4 text-center position-relative">
                     <?php $img = str_replace("pro_", "", $album->thumb); $url = base_url('uploads/album/'.$album->album_id.'/wm_'.$img); ?>
                     <a class="example-image-link" href="<?= $url;?>" data-lightbox="example-set">
-                    <?php echo image_view('uploads/album',$album->album_id,'261_wm_'.$album->thumb,'noimage.png','',$album->album_id.'_image');?>
+                    <?php echo product_image_view('uploads/album', $album->album_id, $album->thumb, 'noimage.png', '', $album->album_id.'_image', '', '261', '261') ?>
                     </a>
 
                     <div id="dowBtn">
@@ -36,7 +36,7 @@
                 <?php foreach ($albumAll as $val){ $img2 = str_replace("pro_", "", $val->image); $url2 = base_url('uploads/album/'.$val->album_id.'/'.$val->album_details_id.'/wm_'.$img2); ?>
                 <div class="col-4 col-md-3 mt-4 text-center position-relative">
                     <a class="example-image-link" href="<?= $url2;?>" data-lightbox="example-set" >
-                    <?php echo multi_image_view('uploads/album', $val->album_id, $val->album_details_id, '261_wm_' . $val->image, 'noimage.png', 'img-fluid',$val->album_details_id.'_dt_image');?>
+                    <?php echo product_multi_image_view('uploads/album', $val->album_id, $val->album_details_id,  $val->image, 'noimage.png', 'img-fluid','261','261',$val->album_details_id.'_dt_image');?>
                     </a>
                     <div id="dowBtn">
                         <button class="btn btn-dow position-absolute" onclick="album_download_btn_show('det_<?= $val->album_details_id;?>')"  ><i class="fa-solid fa-download "></i></button>

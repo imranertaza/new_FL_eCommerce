@@ -82,10 +82,10 @@
                                         <div class="img-table" style="width:12%; float:left;">
                                         <?php
                                         $img = get_data_by_id('image','cc_products','product_id',$item->product_id);
-                                        echo image_view('uploads/products',$item->product_id,$img_size.$img,'noimage.png','');
+                                        echo product_image_view('uploads/products', $item->product_id, $img, 'noimage.png', 'img-fluid', '', '', '100', '100')
                                         ?>
                                         </div>
-                                        <div class="img-text" style="width:88%;float:left;">
+                                        <div class="img-text" style="width:88%;float:left; padding-left: 10px">
                                         <?php echo get_data_by_id('name','cc_products','product_id',$item->product_id) ;?>
                                             <br>
                                         <?php
