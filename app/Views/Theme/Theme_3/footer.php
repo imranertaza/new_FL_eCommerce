@@ -857,7 +857,7 @@
     function subscription() {
         var val = 'unchecked';
         var checkBox = document.getElementById("flexCheckDefault");
-        
+
         if (checkBox.checked) {
             val = 'checked';
         }

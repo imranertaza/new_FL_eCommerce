@@ -85,7 +85,7 @@ class Profile extends BaseController
         ]);
 
         if ($this->validation->run($data) == FALSE) {
-            $this->session->setFlashdata('message', '<div class="alert text-white alert-danger alert-dismissible" role="alert">' . $this->validation->listErrors() . '</div>');
+            $this->session->setFlashdata('message', '' . $this->validation->listErrors() . '');
             return redirect()->to('profile');
         } else {
 
@@ -114,11 +114,11 @@ class Profile extends BaseController
                     if ($data['new_password'] == $data['confirm_password']){
                         $cusData['password'] =  SHA1($data['new_password']);
                     }else{
-                        $this->session->setFlashdata('message', '<div class="alert alert-danger text-white alert-dismissible" role="alert">New password and confirm password not match </div>');
+                        $this->session->setFlashdata('message', 'New password and confirm password not match ');
                         return redirect()->to('profile');
                     }
                 }else{
-                    $this->session->setFlashdata('message', '<div class="alert alert-danger text-white alert-dismissible" role="alert">Current password not match </div>');
+                    $this->session->setFlashdata('message', 'Current password not match ');
                     return redirect()->to('profile');
                 }
             }
@@ -148,7 +148,7 @@ class Profile extends BaseController
 
 
 
-            $this->session->setFlashdata('message', '<div class="alert-success-m alert-success alert-dismissible" role="alert">Update successfully </div>');
+            $this->session->setFlashdata('message', 'Update successfully ');
             return redirect()->to('profile');
 
         }
@@ -172,7 +172,7 @@ class Profile extends BaseController
         ]);
 
         if ($this->validation->run($data) == FALSE) {
-            $this->session->setFlashdata('message', '<div class="alert text-white  alert-dismissible" role="alert">' . $this->validation->listErrors() . '</div>');
+            $this->session->setFlashdata('message', '' . $this->validation->listErrors() . '');
             return redirect()->to('dashboard');
         } else {
 
@@ -181,7 +181,7 @@ class Profile extends BaseController
                 if ($check == false){
                     $cusData['password'] =  SHA1($data['new_password']);
                 }else{
-                    $this->session->setFlashdata('message', '<div class="alert  alert-dismissible" role="alert">Current password not match </div>');
+                    $this->session->setFlashdata('message', 'Current password not match ');
                     return redirect()->to('dashboard');
                 }
             }
@@ -190,7 +190,7 @@ class Profile extends BaseController
             $table->where('customer_id',$this->session->cusUserId)->update($cusData);
 
 
-            $this->session->setFlashdata('message', '<div class="alert-success-m alert-success alert-dismissible" role="alert">Update successfully </div>');
+            $this->session->setFlashdata('message', 'Update successfully ');
             return redirect()->to('dashboard');
 
         }
