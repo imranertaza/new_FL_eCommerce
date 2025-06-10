@@ -32,7 +32,7 @@
                                 <td class="product-thumbnail mo-text-center">
                                     <a href="#">
                                         <?php $img = get_data_by_id('image', 'cc_products', 'product_id', $val['id']); ?>
-                                        <?php echo image_view('uploads/products', $val['id'], $img_size . $img, 'noimage.png', 'img-fluid') ?>
+                                        <?php echo product_image_view('uploads/products', $val['id'], $img, 'noimage.png', 'img-fluid', '', '', '100', '100') ?>
                                     </a>
                                 </td>
                                 <td class="product-name text-start mo-text-center">

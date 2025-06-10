@@ -138,15 +138,18 @@
                                     </li>
                                   <?php //echo top_menu(); ?>
                                     <?php if ($modules['album'] == 1) { ?>
+                                        <?php $qcPic = get_data_by_id('slug','cc_pages','page_id','15'); ?>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="<?php echo base_url('page/qc-pictures') ?>">QC Pictures</a>
+                                        <a class="nav-link" href="<?php echo base_url('page/'.$qcPic) ?>">QC Pictures</a>
                                     </li>
                                     <?php } ?>
+                                    <?php $about = get_data_by_id('slug','cc_pages','page_id','2'); ?>
                                   <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo base_url('page/about-us') ?>">About Us</a>
+                                    <a class="nav-link" href="<?php echo base_url('page/'.$about) ?>">About Us</a>
                                   </li>
+                                    <?php $contact = get_data_by_id('slug','cc_pages','page_id','1'); ?>
                                   <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo base_url('page/contact-us') ?>">Contact Us</a>
+                                    <a class="nav-link" href="<?php echo base_url('page/'.$contact) ?>">Contact Us</a>
                                   </li>
                                 </ul>
                               </div>

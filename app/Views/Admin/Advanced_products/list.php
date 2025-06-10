@@ -219,7 +219,7 @@
                                     <td class="colum_id row_show "> <?php echo $val->product_id; ?></td>
                                     <td class="colum_image row_show ">
                                         <a class="product-image-link" href="<?= $url;?>" data-lightbox="product-set-<?= $val->product_id;?>">
-                                        <?php echo image_view('uploads/products',$val->product_id,'50_'.$val->image,'50_noimage.png','');?>
+                                        <?php echo product_image_view('uploads/products', $val->product_id, $val->image, 'noimage.png', 'img-fluid', '', '', '50', '50') ?>
                                         </a>
                                     </td>
                                     <td class="colum_name row_show ">

@@ -7,7 +7,7 @@ use App\Libraries\Image_processing;
 use App\Libraries\Permission;
 use CodeIgniter\HTTP\RedirectResponse;
 
-class General_offer extends BaseController
+class Zone_based_offer extends BaseController
 {
 
     protected $validation;
@@ -39,7 +39,7 @@ class General_offer extends BaseController
         } else {
 
             $table = DB()->table('cc_offer');
-            $data['offer'] = $table->where('key','general_offer')->get()->getResult();
+            $data['offer'] = $table->where('key','zone_based_offer')->get()->getResult();
 
 
             //$perm = array('create','read','update','delete','mod_access');
@@ -48,7 +48,7 @@ class General_offer extends BaseController
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
             if (isset($data['mod_access']) and $data['mod_access'] == 1) {
-                echo view('Admin/General_offer/index', $data);
+                echo view('Admin/Zone_based_offer/index', $data);
             } else {
                 echo view('Admin/no_permission');
             }
@@ -67,7 +67,13 @@ class General_offer extends BaseController
         } else {
 
             $table = DB()->table('cc_shipping_method');
-            $data['shipping_method'] = $table->where('status',1)->get()->getResult();
+            $data['shipping_method'] = $table->where('status',1)->where('code','zone_rate')->get()->getRow();
+
+            $table = DB()->table('cc_product_category');
+            $data['prodCat'] = $table->get()->getResult();
+
+            $tableBrand = DB()->table('cc_brand');
+            $data['brand'] = $tableBrand->get()->getResult();
 
             //$perm = array('create','read','update','delete','mod_access');
             $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
@@ -75,7 +81,7 @@ class General_offer extends BaseController
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
             if (isset($data['create']) and $data['create'] == 1) {
-                echo view('Admin/General_offer/create',$data);
+                echo view('Admin/Zone_based_offer/create',$data);
             } else {
                 echo view('Admin/no_permission');
             }
@@ -95,6 +101,10 @@ class General_offer extends BaseController
         $data['start_date'] = $this->request->getPost('start_date');
         $data['expire_date'] = $this->request->getPost('expire_date');
         $data['offer_type'] = $this->request->getPost('offer_type');
+
+        $data['categorys'] = $this->request->getPost('categorys[]');
+        $data['brand'] = $this->request->getPost('brand[]');
+        $data['allProduct'] = $this->request->getPost('allProduct');
 
 
         $data['offer_on'] = $this->request->getPost('offer_on');
@@ -116,10 +126,8 @@ class General_offer extends BaseController
 
         if ($this->validation->run($data) == FALSE) {
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">' . $this->validation->listErrors() . ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('general_offer_create');
+            return redirect()->to('zone_based_offer_create');
         } else {
-
-
 
             DB()->transStart();
 
@@ -134,24 +142,14 @@ class General_offer extends BaseController
 
                 $dataOff['offer_on'] = $data['offer_on'];
                 $dataOff['on_amount'] = $data['on_amount'];
-                $dataOff['key'] = 'general_offer';
+                $dataOff['key'] = 'zone_based_offer';
 
                 $table = DB()->table('cc_offer');
                 $table->insert($dataOff);
                 $offer_id = DB()->insertID();
 
-                //discount on
-                $dataDis['offer_id'] = $offer_id;
-                $dataDis['discount_amount'] = $data['amount'];
-                if ($data['discount_type'] == 'discount_percent') {
-                    $dataDis['discount_calculate_on'] = 'percentage';
-                }else {
-                    $dataDis['discount_calculate_on'] = 'fixed';
-                }
-                $tableDisc = DB()->table('cc_offer_discount');
-                $tableDisc->insert($dataDis);
 
-                //offer discount
+                //offer discount product
                 if (!empty($data['products'])) {
                     $dataDiscount = array();
                     foreach ($data['products'] as $v) {
@@ -162,6 +160,61 @@ class General_offer extends BaseController
                     $tablePro = DB()->table('cc_offer_on_product');
                     $tablePro->insertBatch($dataDiscount);
                 }
+
+                //offer discount category
+                if (!empty($data['categorys'])) {
+                    $dataDiscountCat = array();
+                    foreach ($data['categorys'] as $cat) {
+                        $dataCat['offer_id'] = $offer_id;
+                        $dataCat['prod_cat_id'] = $cat;
+                        array_push($dataDiscountCat, $dataCat);
+                    }
+                    $tableProCat = DB()->table('cc_offer_on_product');
+                    $tableProCat->insertBatch($dataDiscountCat);
+                }
+
+                //offer discount brand
+                if (!empty($data['brand'])) {
+                    $dataBrandArray = array();
+                    foreach ($data['brand'] as $brand) {
+                        $dataBrand['offer_id'] = $offer_id;
+                        $dataBrand['brand_id'] = $brand;
+                        array_push($dataBrandArray, $dataBrand);
+                    }
+                    $tableBra = DB()->table('cc_offer_on_product');
+                    $tableBra->insertBatch($dataBrandArray);
+                }
+
+                //offer discount all product
+                if ($data['allProduct'] == 1){
+                    $dataAll['offer_id'] = $offer_id;
+                    $tableAll = DB()->table('cc_offer_on_product');
+                    $tableAll->insert($dataAll);
+                }
+
+                //discount offer
+                $allZone = get_all_data_array('cc_geo_zone');
+                $dataAllZone = [];
+                foreach ($allZone as $zone){
+                    $zoneAmount = $this->request->getPost('amount_'.$zone->geo_zone_id);
+                    if (!empty($zoneAmount)) {
+                        $dataProZone['offer_id'] = $offer_id;
+                        $dataProZone['shipping_method_id'] = $this->request->getPost('shipping_method_id');
+
+                        if ($this->request->getPost('dis_' . $zone->geo_zone_id) == 'discount_percent') {
+                            $dataProZone['discount_calculate_on'] = 'percentage';
+                        } else {
+                            $dataProZone['discount_calculate_on'] = 'fixed';
+                        }
+
+                        $dataProZone['discount_amount'] = $zoneAmount;
+                        $dataProZone['geo_zone_id'] = $zone->geo_zone_id;
+
+                        array_push($dataAllZone, $dataProZone);
+                    }
+                }
+                $tableZone = DB()->table('cc_offer_discount');
+                $tableZone->insertBatch($dataAllZone);
 
 
 
@@ -187,7 +240,7 @@ class General_offer extends BaseController
             DB()->transComplete();
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Offer Create Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('general_offer_create');
+            return redirect()->to('zone_based_offer_create');
         }
     }
 
@@ -212,7 +265,16 @@ class General_offer extends BaseController
             $data['offer_product'] = $tableCoup->where('offer_id', $offer_id)->get()->getResult();
 
             $tableDis = DB()->table('cc_offer_discount');
-            $data['discount'] = $tableDis->where('offer_id', $offer_id)->get()->getRow();
+            $data['offer_discount'] = $tableDis->where('offer_id', $offer_id)->get()->getResult();
+
+            $table = DB()->table('cc_product_category');
+            $data['prodCat'] = $table->get()->getResult();
+
+            $tableBrand = DB()->table('cc_brand');
+            $data['brand'] = $tableBrand->get()->getResult();
+
+            $table = DB()->table('cc_shipping_method');
+            $data['shipping_method'] = $table->where('status',1)->where('code','zone_rate')->get()->getRow();
 
             //$perm = array('create','read','update','delete','mod_access');
             $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
@@ -220,7 +282,7 @@ class General_offer extends BaseController
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
             if (isset($data['update']) and $data['update'] == 1) {
-                echo view('Admin/General_offer/update', $data);
+                echo view('Admin/Zone_based_offer/update', $data);
             } else {
                 echo view('Admin/no_permission');
             }
@@ -239,9 +301,13 @@ class General_offer extends BaseController
         $data['slug'] = $this->request->getPost('slug');
         $data['description'] = $this->request->getPost('description');
         $data['products'] = $this->request->getPost('products[]');
+        $data['categorys'] = $this->request->getPost('categorys[]');
         $data['start_date'] = $this->request->getPost('start_date');
         $data['expire_date'] = $this->request->getPost('expire_date');
         $data['offer_type'] = $this->request->getPost('offer_type');
+
+        $data['brand'] = $this->request->getPost('brand[]');
+        $data['allProduct'] = $this->request->getPost('allProduct');
 
         $data['offer_on'] = $this->request->getPost('offer_on');
         $data['on_amount'] = $this->request->getPost('on_amount');
@@ -260,7 +326,7 @@ class General_offer extends BaseController
 
         if ($this->validation->run($data) == FALSE) {
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">' . $this->validation->listErrors() . ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('general_offer_update/'.$offer_id);
+            return redirect()->to('zone_based_offer_update/'.$offer_id);
         } else {
 
             DB()->transStart();
@@ -276,24 +342,9 @@ class General_offer extends BaseController
                 $dataOff['offer_on'] = $data['offer_on'];
                 $dataOff['on_amount'] = $data['on_amount'];
 
-
                 $table = DB()->table('cc_offer');
                 $table->where('offer_id',$offer_id)->update($dataOff);
 
-
-                //discount on
-                $tableProDis = DB()->table('cc_offer_discount');
-                $tableProDis->where('offer_id', $offer_id)->delete();
-
-                $dataDis['offer_id'] = $offer_id;
-                $dataDis['discount_amount'] = $data['amount'];
-                if ($data['discount_type'] == 'discount_percent') {
-                    $dataDis['discount_calculate_on'] = 'percentage';
-                }else {
-                    $dataDis['discount_calculate_on'] = 'fixed';
-                }
-                $tableDisc = DB()->table('cc_offer_discount');
-                $tableDisc->insert($dataDis);
 
 
                 //offer discount product delete
@@ -311,6 +362,66 @@ class General_offer extends BaseController
                     $tablePro = DB()->table('cc_offer_on_product');
                     $tablePro->insertBatch($dataDiscount);
                 }
+
+                //offer discount brand
+                if (!empty($data['brand'])) {
+                    $dataBrandArray = array();
+                    foreach ($data['brand'] as $brand) {
+                        $dataBrand['offer_id'] = $offer_id;
+                        $dataBrand['brand_id'] = $brand;
+                        array_push($dataBrandArray, $dataBrand);
+                    }
+                    $tableBra = DB()->table('cc_offer_on_product');
+                    $tableBra->insertBatch($dataBrandArray);
+                }
+
+                //offer discount all product
+                if ($data['allProduct'] == 1){
+                    $dataAll['offer_id'] = $offer_id;
+                    $tableAll = DB()->table('cc_offer_on_product');
+                    $tableAll->insert($dataAll);
+                }
+
+
+
+                //offer discount
+                if (!empty($data['categorys'])) {
+                    $dataDiscountCat = array();
+                    foreach ($data['categorys'] as $cat) {
+                        $dataCat['offer_id'] = $offer_id;
+                        $dataCat['prod_cat_id'] = $cat;
+                        array_push($dataDiscountCat, $dataCat);
+                    }
+                    $tableProCat = DB()->table('cc_offer_on_product');
+                    $tableProCat->insertBatch($dataDiscountCat);
+                }
+
+                //discount offer
+                $tableDis = DB()->table('cc_offer_discount');
+                $tableDis->where('offer_id', $offer_id)->delete();
+
+                $allZone = get_all_data_array('cc_geo_zone');
+                $dataAllZone = [];
+                foreach ($allZone as $zone){
+                    $zoneAmount = $this->request->getPost('amount_'.$zone->geo_zone_id);
+                    if (!empty($zoneAmount)) {
+                        $dataProZone['offer_id'] = $offer_id;
+                        $dataProZone['shipping_method_id'] = $this->request->getPost('shipping_method_id');
+
+                        if ($this->request->getPost('dis_' . $zone->geo_zone_id) == 'discount_percent') {
+                            $dataProZone['discount_calculate_on'] = 'percentage';
+                        } else {
+                            $dataProZone['discount_calculate_on'] = 'fixed';
+                        }
+
+                        $dataProZone['discount_amount'] = $zoneAmount;
+                        $dataProZone['geo_zone_id'] = $zone->geo_zone_id;
+
+                        array_push($dataAllZone, $dataProZone);
+                    }
+                }
+                $tableZone = DB()->table('cc_offer_discount');
+                $tableZone->insertBatch($dataAllZone);
 
 
 
@@ -338,7 +449,7 @@ class General_offer extends BaseController
             DB()->transComplete();
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Offer Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('general_offer_update/'.$offer_id);
+            return redirect()->to('zone_based_offer_update/'.$offer_id);
         }
     }
 
@@ -359,14 +470,14 @@ class General_offer extends BaseController
             $table = DB()->table('cc_offer_on_product');
             $table->where('offer_id', $offer_id)->delete();
 
-            $tableDisc = DB()->table('cc_offer_discount');
-            $tableDisc->where('offer_id', $offer_id)->delete();
+            $table = DB()->table('cc_offer_discount');
+            $table->where('offer_id', $offer_id)->delete();
 
             $table = DB()->table('cc_offer');
             $table->where('offer_id', $offer_id)->delete();
         DB()->transComplete();
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Offer Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-        return redirect()->to('general_offer');
+        return redirect()->to('zone_based_offer');
     }
 
 }

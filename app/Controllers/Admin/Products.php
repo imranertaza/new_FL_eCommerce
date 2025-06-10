@@ -655,6 +655,20 @@ class Products extends BaseController
         $data['price'] = $this->request->getPost('price');
         $data['quantity'] = $this->request->getPost('quantity');
 
+//        $table = DB()->table('cc_product_image');
+//        $allImage = $table->where('product_id', $product_id)->get()->getResult();
+//        $productImageSize = [['width' => '191', 'height' => '191',], ['width' => '198', 'height' => '198',], ['width' => '100', 'height' => '100',], ['width' => '437', 'height' => '437',], ['width' => '50', 'height' => '50',],];
+//        foreach ($allImage as $pro) {
+//            foreach ($productImageSize as $val) {
+//                $re_dir = FCPATH . '/uploads/products/' .$product_id.'/'.$pro->product_image_id . '/' . $val['width'] . '_' .$pro->image;
+//                $re_dir_wat = FCPATH . '/uploads/products/' . $product_id.'/'.$pro->product_image_id . '/' . $val['width'] . '_wm_' . $pro->image;
+//                $this->imageProcessing->resize_image_unlink($re_dir);
+//                $this->imageProcessing->resize_image_unlink($re_dir_wat);
+//            }
+//        }
+//
+//        die();
+
         $this->validation->setRules([
             'pro_name' => ['label' => 'Name', 'rules' => 'required'],
             'model' => ['label' => 'Model', 'rules' => 'required'],
@@ -691,7 +705,6 @@ class Products extends BaseController
 
             $proTable = DB()->table('cc_products');
             $proTable->where('product_id',$product_id)->update($proData);
-
 
 
             if (!empty($_FILES['image']['name'])) {
@@ -1509,7 +1522,57 @@ class Products extends BaseController
         return redirect()->to($redirect_url);
     }
 
+    public function remove_cropped_images_action(){
+        $redirect_url = isset($_COOKIE['product_url_path']) ? $_COOKIE['product_url_path'] : 'admin/products';
+        $allProductId =  $this->request->getPost('productId[]');
+        if (!empty($allProductId)) {
+            DB()->transStart();
+            // Define reusable image sizes
+            $productImageSizes = [
+                ['width' => '191', 'height' => '191'],
+                ['width' => '198', 'height' => '198'],
+                ['width' => '100', 'height' => '100'],
+                ['width' => '437', 'height' => '437'],
+                ['width' => '50',  'height' => '50'],
+            ];
 
+            foreach ($allProductId as $product_id) {
+                // Main product image
+                $mainImage = get_data_by_id('image', 'cc_products', 'product_id', $product_id);
+
+                if (!empty($mainImage)) {
+                    foreach ($productImageSizes as $size) {
+                        $basePath = FCPATH . 'uploads/products/' . $product_id . '/';
+                        $resizedImage = $basePath . $size['width'] . '_' . $mainImage;
+                        $resizedWatermarked = $basePath . $size['width'] . '_wm_' . $mainImage;
+
+                        $this->imageProcessing->resize_image_unlink($resizedImage);
+                        $this->imageProcessing->resize_image_unlink($resizedWatermarked);
+                    }
+                }
+
+                // Multiple product images
+                $images = DB()->table('cc_product_image')->where('product_id', $product_id)->get()->getResult();
+
+                foreach ($images as $img) {
+                    foreach ($productImageSizes as $size) {
+                        $multiPath = FCPATH . 'uploads/products/' . $product_id . '/' . $img->product_image_id . '/';
+                        $resizedImage = $multiPath . $size['width'] . '_' . $img->image;
+                        $resizedWatermarked = $multiPath . $size['width'] . '_wm_' . $img->image;
+
+                        $this->imageProcessing->resize_image_unlink($resizedImage);
+                        $this->imageProcessing->resize_image_unlink($resizedWatermarked);
+                    }
+                }
+            }
+            DB()->transComplete();
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Image remove successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to($redirect_url);
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select at least one product<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to($redirect_url);
+        }
+    }
 
 
 

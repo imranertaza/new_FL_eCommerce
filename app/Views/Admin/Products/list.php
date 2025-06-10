@@ -26,10 +26,10 @@
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <h3 class="card-title">Product List</h3>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <form id="multisubmitform" action="<?php echo base_url('product_copy_action'); ?>" method="post">
                             <a href="<?php echo base_url('product_create') ?>" class="btn btn-primary btn-xs float-right"><i class="fas fa-plus"></i> Add</a>
                             <?php if(modules_key_by_access('bulk_edit_products') == '1' ){?>
@@ -44,6 +44,9 @@
                             <?php } ?>
                             <?php if(modules_key_by_access('multi_delete') == '1' ){ ?>
                             <button type="submit" formaction="<?php echo base_url('product_multi_delete_action'); ?>" class="btn btn-danger btn-xs float-right mr-2"><i class="fas fa-trash"></i> Multi delete</button>
+                            <?php } ?>
+                            <?php if(modules_key_by_access('remove_cropped_images') == '1' ){ ?>
+                                <button type="submit" formaction="<?php echo base_url('remove_cropped_images_action'); ?>" class="btn btn-warning btn-xs float-right mr-2"><i class="fas fa-trash"></i> Remove Cropped Image</button>
                             <?php } ?>
                         </form>
                     </div>
@@ -102,7 +105,7 @@
                                 <input type="checkbox" name="productId[]" value="<?php echo $val->product_id;?>" form="multisubmitform" >
                             </td>
                             <td><?php echo $i++;?></td>
-                            <td width="50"><?php echo image_view('uploads/products',$val->product_id,'50_'.$val->image,'50_noimage.png','');?></td>
+                            <td width="50"><?php echo product_image_view('uploads/products', $val->product_id, $val->image, 'noimage.png', 'img-fluid', '', '', '50', '50') ?></td>
                             <td><?php echo $val->name;?></td>
                             <td><?php echo $val->model;?></td>
                             <td> <?php echo $val->quantity;?></td>

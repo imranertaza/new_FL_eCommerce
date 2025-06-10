@@ -238,101 +238,6 @@ class Image_processing {
         return $news_img;
     }
 
-
-//    public function image_merger_and_save($imageArray, $dir, $image_name) {
-//        $targetWidth = 200;
-//        $targetHeight = 150;
-//        $padding = 10;
-//        $maxColumns = 3;
-//
-//        $filePath = $dir . $image_name;
-//        $this->directory_create($dir); // Ensure directory exists
-//
-//        $images = [];
-//        foreach ($imageArray as $path) {
-//            if (pathinfo($path, PATHINFO_EXTENSION) == 'png'){
-//                $srcImage = @imagecreatefrompng($path);
-//            }else {
-//                $srcImage = @imagecreatefromjpeg($path);
-//            }
-////            $srcImage = @imagecreatefromjpeg($path); // Use @ to suppress warnings on invalid files
-//            if ($srcImage) {
-//                $originalWidth = imagesx($srcImage);
-//                $originalHeight = imagesy($srcImage);
-//
-//                // Step 1: Scale to fill (use resampled version instead of imagescale)
-//                $scale = max($targetWidth / $originalWidth, $targetHeight / $originalHeight);
-//                $scaledWidth = (int)($originalWidth * $scale);
-//                $scaledHeight = (int)($originalHeight * $scale);
-//
-//                $resizedImage = imagecreatetruecolor($scaledWidth, $scaledHeight);
-//                imagecopyresampled($resizedImage, $srcImage, 0, 0, 0, 0, $scaledWidth, $scaledHeight, $originalWidth, $originalHeight);
-//                imagedestroy($srcImage);
-//
-//                // Step 2: Center crop
-//                $cropX = (int)(($scaledWidth - $targetWidth) / 2);
-//                $cropY = (int)(($scaledHeight - $targetHeight) / 2);
-//
-//                $croppedImage = imagecrop($resizedImage, [
-//                    'x' => $cropX,
-//                    'y' => $cropY,
-//                    'width' => $targetWidth,
-//                    'height' => $targetHeight
-//                ]);
-//                imagedestroy($resizedImage);
-//
-//                if ($croppedImage !== false) {
-//                    $images[] = $croppedImage;
-//                }
-//            }
-//        }
-//
-//        $numImages = count($images);
-//        if ($numImages == 0) {
-//            return;
-//        }
-//
-//        $numColumns = min($maxColumns, $numImages);
-//        $numRows = ceil($numImages / $numColumns);
-//
-//        $finalWidth = $targetWidth * $numColumns + $padding * ($numColumns + 1);
-//        $finalHeight = $targetHeight * $numRows + $padding * ($numRows + 1);
-//
-//        $finalImage = imagecreatetruecolor($finalWidth, $finalHeight);
-//        imageantialias($finalImage, true);
-//
-//        $white = imagecolorallocate($finalImage, 255, 255, 255);
-//        imagefill($finalImage, 0, 0, $white);
-//
-//        $borderColor = imagecolorallocate($finalImage, 0, 0, 0);
-//
-//        // Place images in grid
-//        $x = $padding;
-//        $y = $padding;
-//        foreach ($images as $index => $img) {
-//            imagecopy($finalImage, $img, $x, $y, 0, 0, $targetWidth, $targetHeight);
-//            imagedestroy($img);
-//
-//            $x += $targetWidth + $padding;
-//            if (($index + 1) % $numColumns == 0) {
-//                $x = $padding;
-//                $y += $targetHeight + $padding;
-//            }
-//        }
-//
-//        imagerectangle($finalImage, 0, 0, $finalWidth - 1, $finalHeight - 1, $borderColor);
-//
-//        // Save image at maximum quality (JPEG or PNG)
-//        $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
-//        if ($ext === 'png') {
-//            imagepng($finalImage, $filePath, 0); // PNG: 0 = no compression (max quality)
-//        } else {
-//            imagejpeg($finalImage, $filePath, 100); // JPEG: 100 = max quality
-//        }
-//
-//        imagedestroy($finalImage);
-//    }
-
     public function image_merger_and_save($imageArray, $dir, $image_name) {
         $targetWidth = 200;
         $targetHeight = 150;
@@ -463,6 +368,10 @@ class Image_processing {
             });
             return $response;
         }
+    }
+
+    public function resize_image_unlink($imagePaths){
+        $this->image_unlink($imagePaths);
     }
 
 }
