@@ -1744,7 +1744,7 @@ function common_image_view($url, $slug, $image, $no_image, $class = '', $id = ''
     $dir = FCPATH . '/' . $url . '/' . $slug;
 
     $imageNo = explode('.', $no_image);
-    $pathNewNo = 'cache/'.$url . '/' .$imageNo[0].$width.'x'.$height.'.webp';
+    $pathNewNo = 'cache/'.$url . '/' .$width.'x'.$height.'_'.$imageNo[0].'.webp';
     if(file_exists($pathNewNo)){
         $no_img = base_url($pathNewNo);
     }else{
@@ -1760,7 +1760,7 @@ function common_image_view($url, $slug, $image, $no_image, $class = '', $id = ''
 
             if (file_exists($imgPath)) {
                 $image = explode('.', $imgMain);
-                $pathNew = 'cache/'.$url . '/' . $slug . '/'.$image[0].$width.'x'.$height.'.webp';
+                $pathNew = 'cache/'.$url . '/' . $slug . '/'.$width.'x'.$height.'_'.$image[0].'.webp';
                 if(file_exists($pathNew)){
                     $imgFinal = base_url($pathNew);
                 }else{
@@ -1788,7 +1788,7 @@ function product_image_view($url, $slug, $image, $no_image, $class = '', $id = '
     $dir = FCPATH . '/' . $url . '/' . $slug;
 
     $imageNo = explode('.', $no_image);
-    $pathNewNo = 'cache/'.$url . '/' .$imageNo[0].$width.'x'.$height.'.webp';
+    $pathNewNo = 'cache/'.$url . '/' .$width.'x'.$height.'_'.$imageNo[0].'.webp';
     if(file_exists($pathNewNo)){
         $no_img = base_url($pathNewNo);
     }else{
@@ -1804,7 +1804,7 @@ function product_image_view($url, $slug, $image, $no_image, $class = '', $id = '
 
             if (file_exists($imgPath)) {
                 $image = explode('.', $imgMain);
-                $pathNew = 'cache/'.$url . '/' . $slug . '/'.$image[0].$width.'x'.$height.'.webp';
+                $pathNew = 'cache/'.$url . '/' . $slug . '/'.$width.'x'.$height.'_'.$image[0].'.webp';
                 if(file_exists($pathNew)){
                     $imgFinal = base_url($pathNew);
                 }else{
@@ -1833,7 +1833,7 @@ function product_multi_image_view($url, $slug, $slug2, $image, $no_image, $class
 
 
     $imageNo = explode('.', $no_image);
-    $pathNewNo = 'cache/'.$url . '/' .$imageNo[0].$width.'x'.$height.'.webp';
+    $pathNewNo = 'cache/'.$url . '/' .$width.'x'.$height.'_'.$imageNo[0].'.webp';
     if(file_exists($pathNewNo)){
         $no_img = base_url($pathNewNo);
     }else{
@@ -1849,7 +1849,7 @@ function product_multi_image_view($url, $slug, $slug2, $image, $no_image, $class
 
             if (file_exists($imgPath)) {
                 $image = explode('.', $imgMain);
-                $pathNew = 'cache/'.$url . '/' . $slug . '/'. $slug2 . '/'.$image[0].$width.'x'.$height.'.webp';
+                $pathNew = 'cache/'.$url . '/' . $slug . '/'. $slug2 . '/'.$width.'x'.$height.'_'.$image[0].'.webp';
                 if(file_exists($pathNew)){
                     $imgFinal = base_url($pathNew);
                 }else{
