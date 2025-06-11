@@ -126,13 +126,13 @@ class Settings extends BaseController
 
 
     }
-    public function cache_image_remove(){
-        $dir = FCPATH . 'cache/uploads';
+    public function cacheImageRemove(){
+        $directory = FCPATH . 'cache/uploads';
         $days = 30;
         $now = time();
 
         $files = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+            new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS),
             RecursiveIteratorIterator::CHILD_FIRST
         );
 

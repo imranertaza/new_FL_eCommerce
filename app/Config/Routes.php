@@ -162,7 +162,7 @@ $routes->post('/fund_request_action', 'Admin\Fund_request::fund_action');
 //Settings
 $routes->get('/settings', 'Admin\Settings::index');
 $routes->post('/settings_update_action', 'Admin\Settings::update_action');
-$routes->get('/cache_image_remove', 'Admin\Settings::cache_image_remove');
+$routes->get('/cache_image_remove', 'Admin\Settings::cacheImageRemove');
 
 
 $routes->get('/settings_update_action', 'Admin\Settings::update_action');
