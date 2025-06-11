@@ -41,7 +41,7 @@ class Image extends BaseController {
         $image = explode('.', $imageName);
 
         // Image is not in cache, so generate it
-        $imagePath = 'cache/'.base64_decode($path). $image[0] . $width .'x'. $height. '.webp'; // Cache path
+        $imagePath = 'cache/'.base64_decode($path). $width .'x'. $height.'_'.$image[0] .  '.webp'; // Cache path
 
         // Load the image library
         $img = \Config\Services::image();
