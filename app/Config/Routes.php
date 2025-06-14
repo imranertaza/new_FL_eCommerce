@@ -95,7 +95,7 @@ $routes->post('/product_option_value_search', 'Admin\Products::product_option_va
 
 $routes->post('/product_image_crop_action', 'Admin\Products::image_crop');
 $routes->post('/product_multi_delete_action', 'Admin\Products::multi_delete_action');
-$routes->post('/remove_cropped_images_action', 'Admin\Products::remove_cropped_images_action');
+$routes->post('/remove_cropped_images_action', 'Admin\Products::removeCroppedImagesAction');
 
 $routes->post('/product_image_sort_action', 'Admin\Products::product_image_sort_action');
 
@@ -164,8 +164,6 @@ $routes->get('/settings', 'Admin\Settings::index');
 $routes->post('/settings_update_action', 'Admin\Settings::update_action');
 $routes->get('/cache_image_remove', 'Admin\Settings::cacheImageRemove');
 
-
-$routes->get('/settings_update_action', 'Admin\Settings::update_action');
 
 //Shipping
 $routes->get('/shipping', 'Admin\Shipping\Shipping::index');
