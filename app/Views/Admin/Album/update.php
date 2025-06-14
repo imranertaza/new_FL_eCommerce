@@ -69,7 +69,7 @@
                         <div class="col-md-8">
                             <div class="row ">
                                 <div class="col-md-2 img_view">
-                                    <?php echo image_view('uploads/album',$album->album_id,'198_'.$album->thumb,'noimage.png','img-w-h-100');?>
+                                    <?php echo common_image_view('uploads/album', $album->album_id, $album->thumb, 'noimage.png', 'img-w-h-100', '', '100', '100');?>
                                 </div>
                             </div>
                             <div id="framesdef"></div><br>
@@ -88,7 +88,8 @@
                                 <?php foreach ($albumAll as $img){ ?>
                                     <div class="col-md-2 img_view">
                                         <input type="text" onchange="album_image_sort_update('<?=$img->album_details_id?>',this.value)" class="form-control mb-2 text-center" style="height: 25px;" name="sort_order" value="<?= $img->sort_order;?>">
-                                        <?php echo multi_image_view('uploads/album', $img->album_id, $img->album_details_id, '198_' . $img->image, 'noimage.png', 'img-fluid');?>
+                                        <?php echo product_multi_image_view('uploads/album', $img->album_id, $img->album_details_id, $img->image, 'noimage.png', '', '100', '100')?>
+
                                         <a href="javascript:void(0)" onclick="removeAlbumImg(<?php echo $img->album_details_id;?>)" class="btn del-btn"><i class="fas fa-trash"></i> Delete</a>
                                     </div>
                                 <?php } ?>

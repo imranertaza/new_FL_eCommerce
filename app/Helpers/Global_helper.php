@@ -2,6 +2,7 @@
 
 use App\Libraries\Permission;
 use CodeIgniter\Session\Session;
+use Config\Services;
 
 /**
  * @description This function provides database connection
@@ -1480,7 +1481,7 @@ function get_category_id_by_product_show_home_slide($category_id)
         }
 
         $view .= '<div class="product-top mb-2">
-                    ' . image_view('uploads/products', $pro->product_id, $img_size . $pro->image, 'noimage.png', 'img-fluid w-100') . '                    
+                    ' . product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', 'img-fluid w-100', '', '', '132', '132') . '                    
                 </div>
                 <div class="product-bottom mt-auto">
                     <div class="product-title product_title_area mb-2">
@@ -1733,4 +1734,170 @@ function parent_qc_picture(){
     $table = DB()->table('cc_album');
     $album = $table->where('parent_album_id', '0')->orderBy('name','ASC')->get()->getResult();
     return $album;
+}
+
+function common_image_view($url, $slug, $image, $no_image, $class = '', $id = '', $width = '', $height = "")
+{
+
+    $imgMain = str_replace("pro_", "", $image);
+
+    $dir = FCPATH . '/' . $url . '/' . $slug;
+
+    $imageNo = explode('.', $no_image);
+    $pathNewNo = 'cache/'.$url . '/' .$width.'x'.$height.'_'.$imageNo[0].'.webp';
+    if(file_exists($pathNewNo)){
+        $no_img = base_url($pathNewNo);
+    }else{
+        $urlNewNo = base64_encode($url . '/');
+        $no_img = base_url('image-resize/' . $urlNewNo . '/' . $width . 'x' . $height . '/' . $no_image);
+    }
+
+    if (!empty($image)) {
+        if (!file_exists($dir)) {
+            $result = '<img data-sizes="auto" id="' . $id . '" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+        } else {
+            $imgPath = $dir . '/' . $imgMain;
+
+            if (file_exists($imgPath)) {
+                $image = explode('.', $imgMain);
+                $pathNew = 'cache/'.$url . '/' . $slug . '/'.$width.'x'.$height.'_'.$image[0].'.webp';
+                if(file_exists($pathNew)){
+                    $imgFinal = base_url($pathNew);
+                }else{
+                    $urlNew = base64_encode($url . '/' . $slug . '/');
+                    $imgFinal = base_url('image-resize/' . $urlNew . '/' . $width . 'x' . $height . '/' . $imgMain);
+                }
+
+                $result   = '<img data-sizes="auto"  id="' . $id . '" src="' . $imgFinal . '" class="' . $class . '" loading="lazy">';
+            } else {
+                $result = '<img data-sizes="auto" id="' . $id . '" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+            }
+        }
+    } else {
+        $result = '<img data-sizes="auto" id="' . $id . '" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+    }
+
+    return $result;
+}
+function product_image_view($url, $slug, $image, $no_image, $class = '', $id = '', $attr = '', $width = '', $height = "")
+{
+    $modules = modules_access();
+    $im  = str_replace("pro_", "", $image);
+    $imgMain = ($modules['watermark'] == '1')?'600_wm_'.$im:$im;
+
+    $dir = FCPATH . '/' . $url . '/' . $slug;
+
+    $imageNo = explode('.', $no_image);
+    $pathNewNo = 'cache/'.$url . '/' .$width.'x'.$height.'_'.$imageNo[0].'.webp';
+    if(file_exists($pathNewNo)){
+        $no_img = base_url($pathNewNo);
+    }else{
+        $urlNewNo = base64_encode($url . '/');
+        $no_img = base_url('image-resize/' . $urlNewNo . '/' . $width . 'x' . $height . '/' . $no_image);
+    }
+
+    if (!empty($image)) {
+        if (!file_exists($dir)) {
+            $result = '<img data-sizes="auto" id="' . $id . '" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+        } else {
+            $imgPath = $dir . '/' . $imgMain;
+
+            if (file_exists($imgPath)) {
+                $image = explode('.', $imgMain);
+                $pathNew = 'cache/'.$url . '/' . $slug . '/'.$width.'x'.$height.'_'.$image[0].'.webp';
+                if(file_exists($pathNew)){
+                    $imgFinal = base_url($pathNew);
+                }else{
+                    $urlNew = base64_encode($url . '/' . $slug . '/');
+                    $imgFinal = base_url('image-resize/' . $urlNew . '/' . $width . 'x' . $height . '/' . $imgMain);
+                }
+                $result   = '<img data-sizes="auto" ' . $attr . ' id="' . $id . '" src="' . $imgFinal . '" class="' . $class . '" loading="lazy">';
+            } else {
+                $result = '<img data-sizes="auto" id="' . $id . '" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+            }
+        }
+    } else {
+        $result = '<img data-sizes="auto" id="' . $id . '" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+    }
+
+    return $result;
+}
+function product_multi_image_view($url, $slug, $slug2, $image, $no_image, $class = '', $width = '', $height = '',$id='')
+{
+    $modules = modules_access();
+    $im  = str_replace("pro_", "", $image);
+    $imgMain = ($modules['watermark'] == '1')?'600_wm_'.$im:$im;
+
+    $dir = FCPATH . '/' . $url . '/' . $slug . '/' . $slug2;
+
+
+
+    $imageNo = explode('.', $no_image);
+    $pathNewNo = 'cache/'.$url . '/' .$width.'x'.$height.'_'.$imageNo[0].'.webp';
+    if(file_exists($pathNewNo)){
+        $no_img = base_url($pathNewNo);
+    }else{
+        $urlNewNo = base64_encode($url . '/');
+        $no_img = base_url('image-resize/' . $urlNewNo . '/' . $width . 'x' . $height . '/' . $no_image);
+    }
+
+    if (!empty($image)) {
+        if (!file_exists($dir)) {
+            $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" id="'.$id.'" loading="lazy">';
+        } else {
+            $imgPath = $dir . '/' . $imgMain;
+
+            if (file_exists($imgPath)) {
+                $image = explode('.', $imgMain);
+                $pathNew = 'cache/'.$url . '/' . $slug . '/'. $slug2 . '/'.$width.'x'.$height.'_'.$image[0].'.webp';
+                if(file_exists($pathNew)){
+                    $imgFinal = base_url($pathNew);
+                }else{
+                    $urlNew = base64_encode($url . '/' . $slug . '/'. $slug2 . '/');
+                    $imgFinal = base_url('image-resize/' . $urlNew . '/' . $width . 'x' . $height . '/' . $imgMain);
+                }
+                $result   = '<img data-sizes="auto" src="' . $imgFinal . '" class="' . $class . '" id="'.$id.'" loading="lazy">';
+            } else {
+                $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" id="'.$id.'" loading="lazy">';
+            }
+        }
+    } else {
+        $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" id="'.$id.'" loading="lazy">';
+    }
+
+    return $result;
+}
+function image_cache($path, $imageName, $width, $height)
+{
+    $imageUrl = $path . $imageName;
+    $cache    = Services::cache(); // Get cache service
+    $cacheKey = 'image_' . md5($imageName . $width . $height); // Unique key for the image
+
+    // Check if image is already cached
+    $imagePath = $cache->get($cacheKey);
+    $seconds   = 30 * 24 * 60 * 60;
+
+    if (!$imagePath) {
+        // Image is not in cache, so generate it
+        $imagePath = WRITEPATH . 'cache/generated_image_' . md5(time()) . '.jpg'; // Cache path
+
+        // Load the image library
+        $img = \Config\Services::image();
+
+        // Create a simple image (e.g., image with text)
+        $img->withFile($imageUrl)
+            ->fit($width, $height, 'center')
+            ->save($imagePath);
+
+        // Save the image path to the cache
+        $cache->save($cacheKey, file_get_contents($imagePath), $seconds); // $seconds Cache for 1 day (86400 seconds) 1 hour (3600 seconds) 30 day (2592000 seconds)
+        unlink($imagePath);
+    }
+
+    // Serve the image
+//    return $this->response->setHeader('Content-Type', 'image/png')->setBody($cache->get($cacheKey));
+
+    $base64Image = base64_encode($cache->get($cacheKey));
+
+    return 'data:image/png;base64,' . $base64Image;
 }

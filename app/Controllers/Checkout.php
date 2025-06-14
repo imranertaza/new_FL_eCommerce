@@ -491,7 +491,7 @@ class Checkout extends BaseController
             $city_id = $shipCityId;
         }
         $data['charge'] = 0;
-
+        $geo_zone_id = 0;
         if ($paymethod == 'flat') {
             $data['charge'] = $this->flat_shipping->getSettings()->calculateShipping();
         }
@@ -504,12 +504,16 @@ class Checkout extends BaseController
         if ($paymethod == 'zone_rate') {
             $data['charge'] = $this->zone_rate_shipping->getSettings($city_id)->calculateShipping();
         }
+        if(!empty($city_id)) {
+            $country_id = get_data_by_id('country_id', 'cc_zone', 'zone_id', $city_id);
+            $geo_zone_id = $this->zone_rate_shipping->zone_id($country_id, $city_id);
+        }
 
         $data['discount'] = 0;
         if (isset(newSession()->coupon_discount_shipping)) {
             $data['discount'] += $this->shipping_discount_calculate($data['charge'], $paymethod);
         }
-        $offer = $this->offer_calculate->offer_discount($this->cart,$data['charge']);
+        $offer = $this->offer_calculate->offer_discount($this->cart,$data['charge'],$geo_zone_id);
         if (!empty($offer['discount_shipping_amount']) && !empty($data['charge'])){
             $data['discount'] += $offer['discount_shipping_amount'];
         }

@@ -180,7 +180,7 @@ class Zone_rate_shipping{
      * @param int $zone_id
      * @return int
      */
-    private function zone_id($country_id,$zone_id){
+    public function zone_id($country_id,$zone_id){
         $table = DB()->table('cc_geo_zone_details');
         $datarow = $table->where('country_id', $country_id)->where('zone_id', $zone_id)->get()->getRow();
 

@@ -83,7 +83,7 @@
                                 <div class="d-flex">
                                     <div><?php
                                         $img = get_data_by_id('image','cc_products','product_id',$item->product_id);
-                                        echo image_view('uploads/products',$item->product_id,$img_size.$img,'noimage.png','');
+                                        echo product_image_view('uploads/products', $item->product_id, $img, 'noimage.png', 'img-fluid', '', '', '100', '100')
                                         ?>
 
                                     </div>

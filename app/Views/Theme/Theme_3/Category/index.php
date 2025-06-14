@@ -134,7 +134,9 @@
                                                 <?php } ?>
 
                                                 <div class="product-top text-center">
-                                                    <a href="<?php echo base_url('detail/' . $pro->product_id) ?>"><?php echo image_view('uploads/products', $pro->product_id, $img_size . $pro->image, 'noimage.png', 'img-fluid ') ?></a>
+                                                    <a href="<?php echo base_url('detail/' . $pro->product_id) ?>">
+                                                        <?php echo product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', 'img-fluid', '', '', '191', '191')?>
+                                                    </a>
                                                     <div class="rating text-center my-2">
                                                         <?php //echo product_id_by_rating($pro->product_id); ?>
                                                     </div>
@@ -202,7 +204,9 @@
                                             <?php } ?>
 
                                             <div class="product-top text-center" style="width:40%;float:left; ">
-                                                <a href="<?php echo base_url('detail/' . $pro->product_id) ?>"><?php echo image_view('uploads/products', $pro->product_id, $img_size_198 . $pro->image, 'noimage.png', 'img-fluid ') ?></a>
+                                                <a href="<?php echo base_url('detail/' . $pro->product_id) ?>">
+                                                    <?php echo product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', 'img-fluid', '', '', '198', '198')?>
+                                                </a>
 
                                             </div>
 
@@ -216,7 +220,7 @@
                                                 </div>
 
                                                 <div class="rating my-2">
-                                                    <?php echo product_id_by_rating($pro->product_id); ?>
+                                                    <?php //echo product_id_by_rating($pro->product_id); ?>
                                                 </div>
 
                                                 <div class="price mb-3">

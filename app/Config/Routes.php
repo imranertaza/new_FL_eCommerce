@@ -95,6 +95,7 @@ $routes->post('/product_option_value_search', 'Admin\Products::product_option_va
 
 $routes->post('/product_image_crop_action', 'Admin\Products::image_crop');
 $routes->post('/product_multi_delete_action', 'Admin\Products::multi_delete_action');
+$routes->post('/remove_cropped_images_action', 'Admin\Products::remove_cropped_images_action');
 
 $routes->post('/product_image_sort_action', 'Admin\Products::product_image_sort_action');
 
@@ -161,9 +162,10 @@ $routes->post('/fund_request_action', 'Admin\Fund_request::fund_action');
 //Settings
 $routes->get('/settings', 'Admin\Settings::index');
 $routes->post('/settings_update_action', 'Admin\Settings::update_action');
+$routes->get('/cache_image_remove', 'Admin\Settings::cacheImageRemove');
 
 
-$routes->post('/settings_update_action', 'Admin\Settings::update_action');
+$routes->get('/settings_update_action', 'Admin\Settings::update_action');
 
 //Shipping
 $routes->get('/shipping', 'Admin\Shipping\Shipping::index');
@@ -234,6 +236,13 @@ $routes->post('/general_offer_create_action', 'Admin\General_offer::create_actio
 $routes->post('/general_offer_update_action', 'Admin\General_offer::update_action');
 $routes->get('/general_offer_update/(:num)', 'Admin\General_offer::update/$1');
 $routes->get('/general_offer_delete/(:num)', 'Admin\General_offer::delete/$1');
+
+$routes->get('/zone_based_offer', 'Admin\Zone_based_offer::index');
+$routes->get('/zone_based_offer_create', 'Admin\Zone_based_offer::create');
+$routes->post('/zone_based_offer_create_action', 'Admin\Zone_based_offer::create_action');
+$routes->post('/zone_based_offer_update_action', 'Admin\Zone_based_offer::update_action');
+$routes->get('/zone_based_offer_update/(:num)', 'Admin\Zone_based_offer::update/$1');
+$routes->get('/zone_based_offer_delete/(:num)', 'Admin\Zone_based_offer::delete/$1');
 
 //
 $routes->get('/module', 'Admin\Module::index');
@@ -453,6 +462,8 @@ $routes->get('/offers-view/(:any)', 'Offers::view/$1');
 //ajax controller
 $routes->post('/get_state', 'Admin\Ajax::get_state');
 $routes->post('/get_zone_value', 'Admin\Ajax::get_zone_value');
+
+$routes->get('/image-resize/(:any)/(:any)/(:any)', 'Image::resize/$1/$2/$3');
 
 
 /*

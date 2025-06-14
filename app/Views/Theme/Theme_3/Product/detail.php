@@ -20,14 +20,14 @@
                                                     <div class="slider slider-nav thumb-image">
                                                         <div class="thumbnail-image">
                                                             <div class="thumbImg">
-                                                                <?php echo image_view('uploads/products', $products->product_id, $img_size . $products->image, 'noimage.png', 'img-fluid') ?>
+                                                                <?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', 'img-fluid', '', '', '100', '100') ?>
                                                             </div>
                                                         </div>
 
                                                         <?php
                                                         if (!empty($proImg)) {
                                                             foreach ($proImg as $imgval) {
-                                                                echo '<div class="thumbnail-image"><div class="thumbImg">' . multi_image_view('uploads/products', $imgval->product_id, $imgval->product_image_id, $img_size . $imgval->image, 'noimage.png', 'img-fluid') . '</div></div>';
+                                                                echo '<div class="thumbnail-image"><div class="thumbImg">' . product_multi_image_view('uploads/products', $imgval->product_id, $imgval->product_image_id,  $imgval->image, 'noimage.png', 'img-fluid', '100', '100'). '</div></div>';
                                                             }
                                                         }
                                                         ?>
@@ -36,7 +36,7 @@
                                                             <div class="thumbImg video-thum">
                                                                 <a href="javascript:void(0)" data-bs-toggle="modal"
                                                                     data-bs-target="#videoeModal">
-                                                                    <?php echo image_view('uploads/products', $products->product_id, $img_size . $products->image, 'noimage.png', 'img-fluid') ?>
+                                                                    <?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', 'img-fluid', '', '', '100', '100') ?>
                                                                     <img src="<?php echo base_url('uploads/play.png') ?>"
                                                                         alt="" class="play-image">
                                                                 </a>
@@ -49,13 +49,14 @@
                                                 <div class="col-10 col-sm-9 col-md-10 col-lg-9 position-relative">
                                                     <div class="slider slider-for slider-cus-css">
                                                         <div class="slider-banner-image">
-                                                            <?php echo image_view('uploads/products', $products->product_id, $img_size_437 . $products->image, 'noimage.png', 'img-fluid') ?>
+                                                            <?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', 'img-fluid', '', '', '437', '437');?>
                                                         </div>
 
                                                         <?php
                                                         if (!empty($proImg)) {
                                                             foreach ($proImg as $imgval) {
-                                                                echo '<div class="slider-banner-image">' . multi_image_view('uploads/products', $imgval->product_id, $imgval->product_image_id, $img_size_437 . $imgval->image, 'noimage.png', 'img-fluid') . '</div>';
+                                                                echo '<div class="slider-banner-image">' .
+                                                                    product_multi_image_view('uploads/products', $imgval->product_id, $imgval->product_image_id,  $imgval->image, 'noimage.png', 'img-fluid', '437', '437'). '</div>';
                                                             }
                                                         }
                                                         ?>
@@ -472,7 +473,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4 mb-3">
-                    <?php echo image_view('uploads/products', $products->product_id, $img_size_437 . $products->image, 'noimage.png', 'img-fluid w-100') ?>
+                    <?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', 'img-fluid w-100', '', '', '437', '437');?>
                 </div>
             </div>
         </div>
@@ -507,7 +508,7 @@
                                                 <div
                                                     class="product-grid h-100 d-flex align-items-stretch flex-column position-relative">
                                                     <div class="product-top border p-2">
-                                                        <?php echo image_view('uploads/products', $bought->product_id, $img_size_191 . $bought->image, 'noimage.png', 'img-fluid w-100') ?>
+                                                        <?php echo product_image_view('uploads/products', $bought->product_id, $bought->image, 'noimage.png', 'img-fluid w-100', '', '', '191', '191');?>
                                                         <input type="checkbox" name="both_product[]"
                                                             onchange="bothPriceCalculat()"
                                                             class="form-check-input check-input"
@@ -612,8 +613,9 @@
                                     </a>
                                     <?php } ?>
                                     <div class="product-top text-center">
-                                        <a
-                                            href="<?php echo base_url('detail/' . $rPro->product_id) ?>"><?php echo image_view('uploads/products', $rPro->product_id, $img_size_191 . $rPro->image, 'noimage.png', 'img-fluid ') ?></a>
+                                        <a href="<?php echo base_url('detail/' . $rPro->product_id) ?>">
+                                            <?php echo product_image_view('uploads/products', $rPro->product_id, $rPro->image, 'noimage.png', 'img-fluid', '', '', '191', '191');?>
+                                        </a>
                                         <div class="rating text-center my-2">
                                             <?php echo product_id_by_rating($rPro->product_id); ?>
                                         </div>
@@ -708,8 +710,9 @@
                                     </a>
                                     <?php } ?>
                                     <div class="product-top text-center">
-                                        <a
-                                            href="<?php echo base_url('detail/' . $rPro->product_id) ?>"><?php echo image_view('uploads/products', $rPro->product_id, $img_size_191 . $rPro->image, 'noimage.png', 'img-fluid ') ?></a>
+                                        <a href="<?php echo base_url('detail/' . $rPro->product_id) ?>">
+                                            <?php echo product_image_view('uploads/products', $rPro->product_id, $rPro->image, 'noimage.png', 'img-fluid', '', '', '191', '191');?>
+                                        </a>
                                         <div class="rating text-center my-2">
                                             <?php echo product_id_by_rating($rPro->product_id); ?>
                                         </div>

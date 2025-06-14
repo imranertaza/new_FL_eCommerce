@@ -129,6 +129,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <?php echo add_main_based_menu_with_permission('General Offer', base_url('general_offer'), $adRoleId, 'fa-circle', 'General_offer'); ?>
+                        <?php echo add_main_based_menu_with_permission('Zone Based Offer', base_url('zone_based_offer'), $adRoleId, 'fa-circle', 'General_offer'); ?>
                     </ul>
                 </li>
 

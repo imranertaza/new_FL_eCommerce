@@ -6,7 +6,7 @@
                     <h3 class="text-capitalize mb-4"> <?= $offer->name;?></h3>
                 </div>
                 <div class="col-lg-12 text-center">
-                    <?= image_view('uploads/offer',$offer->offer_id,'880_'.$offer->banner,'noimage.png','','') ?>
+                    <?php echo common_image_view('uploads/offer', $offer->offer_id, $offer->banner, 'noimage.png', '', '', '880', '400');?>
                 </div>
 
                 <div class="col-lg-12 mt-4">
