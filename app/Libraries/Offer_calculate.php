@@ -1,17 +1,21 @@
 <?php
+
 namespace App\Libraries;
 
 use Config\Services;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class Offer_calculate {
+class Offer_calculate
+{
     private $discount = 0;
     private $shipDiscount = 0;
     private $productProDisc = 0;
     private $productShipDisc = 0;
     private $amountProDisc = 0;
     private $amountShipDisc = 0;
-    public function __construct(){
+
+    public function __construct()
+    {
 
     }
 
@@ -19,20 +23,20 @@ class Offer_calculate {
      * @description This function provides active offers
      * @return array
      */
-    public function today_active_offers(){
+    public function today_active_offers()
+    {
         $todayDate = date('Y-m-d H:i:s');
         $table = DB()->table('cc_offer');
-        $offers = $table->where('expire_date >',$todayDate)->get()->getResult();
-        return $offers;
+        return $table->where('expire_date >', $todayDate)->get()->getResult();
     }
 
     /**
      * @description This function provides offer discount
-     * @param $cart array
-     * @param $shipAmount float
+     * @param array $cart
+     * @param float $shipAmount
      * @return array
      */
-    public function offer_discount($cart, $shipAmount = 0,$geo_zone_id = 0)
+    public function offer_discount($cart, $shipAmount = 0, $geo_zone_id = 0)
     {
         $totalAmount = $cart->total();
         $offersData = $this->today_active_offers();
@@ -105,8 +109,6 @@ class Offer_calculate {
                     }
 
 
-
-
                 }
             }
 
@@ -116,13 +118,13 @@ class Offer_calculate {
                     if ($offer->offer_type == 'distinct') {
                         $amountOffId = $offer->offer_id;
                     }
-                    $this->amount_discount($offer,$totalAmount,$shipAmount,$geo_zone_id);
+                    $this->amount_discount($offer, $totalAmount, $shipAmount, $geo_zone_id);
                 }
             }
 
         }
 
-        if($isDistinct == true){
+        if ($isDistinct == true) {
 
             $firstOffer = get_all_row_data_by_id('cc_offer', 'offer_id', $amountOffId);
 
@@ -140,7 +142,7 @@ class Offer_calculate {
                     foreach ($offerProducts as $pro) {
                         foreach ($cart->contents() as $cartItem) {
                             if ($pro->product_id == $cartItem['id'] && $cartItem['qty'] >= $firstOffer->qty) {
-                                $this->product_discount($firstOffer,$cartItem['price'],$cartItem['qty'],$shipAmount,$geo_zone_id);
+                                $this->product_discount($firstOffer, $cartItem['price'], $cartItem['qty'], $shipAmount, $geo_zone_id);
                             }
                         }
 
@@ -180,7 +182,7 @@ class Offer_calculate {
                 }
 
                 if ($firstOffer->offer_on === 'amount') {
-                    $this->amount_discount($firstOffer,$totalAmount,$shipAmount,$geo_zone_id);
+                    $this->amount_discount($firstOffer, $totalAmount, $shipAmount, $geo_zone_id);
                 }
             }
         }
@@ -196,13 +198,13 @@ class Offer_calculate {
 
     /**
      * @description This function provides product discount
-     * @param $offer array
-     * @param $qty int
-     * @param $productPrice float
-     * @param $shipAmount float
+     * @param array $offer
+     * @param int $qty
+     * @param float $productPrice
+     * @param float $shipAmount
      * @return void
      */
-    private function product_discount($offer,$productPrice,$qty,$shipAmount,$geo_zone_id)
+    private function product_discount($offer, $productPrice, $qty, $shipAmount, $geo_zone_id)
     {
         if ($offer->discount_on === 'product_amount') {
             $totalPrice = $productPrice * $qty;
@@ -210,64 +212,71 @@ class Offer_calculate {
         }
         if (count(Cart()->contents()) == 1) {
             if ($offer->discount_on === 'shipping_amount') {
-                $this->productShipDisc = $this->calculate_discount_shipping($offer, $shipAmount,$geo_zone_id);
+                $this->productShipDisc = $this->calculate_discount_shipping($offer, $shipAmount, $geo_zone_id);
             }
         }
     }
 
     /**
      * @description This function provides amount discount
-     * @param $offer array
-     * @param $totalAmount float
-     * @param $shipAmount float
+     * @param array $offer
+     * @param float $totalAmount
+     * @param float $shipAmount
      * @return void
      */
-    private function amount_discount($offer,$totalAmount,$shipAmount,$geo_zone_id)
+    private function amount_discount($offer, $totalAmount, $shipAmount, $geo_zone_id)
     {
         if ($offer->discount_on === 'product_amount') {
             $this->productProDisc += $this->calculate_discount($offer, $totalAmount);
         }
         if (count(Cart()->contents()) == 1) {
             if ($offer->discount_on === 'shipping_amount') {
-                $this->productShipDisc = $this->calculate_discount_shipping($offer, $shipAmount,$geo_zone_id);
+                $this->productShipDisc = $this->calculate_discount_shipping($offer, $shipAmount, $geo_zone_id);
             }
         }
     }
 
     /**
      * @description This function provides discount calculate
-     * @param $offer array
-     * @param $baseAmount float
+     * @param array $offer
+     * @param float $baseAmount
      * @return float|int|mixed
      */
     private function calculate_discount($offer, $baseAmount)
     {
         $table = DB()->table('cc_offer_discount');
-        $result = $table->where('offer_id',$offer->offer_id)->get()->getRow();
+        $result = $table->where('offer_id', $offer->offer_id)->get()->getRow();
 
         if ($result->discount_calculate_on == 'percentage') {
             return ($baseAmount * $result->discount_amount) / 100;
-        }else{
+        } else {
             return $result->discount_amount;
         }
 
         return 0;
     }
-    private function calculate_discount_shipping($offer, $baseAmount,$geo_zone_id)
+
+    /**
+     * @param array $offer
+     * @param float $baseAmount
+     * @param int $geo_zone_id
+     * @return float|int
+     */
+    private function calculate_discount_shipping($offer, $baseAmount, $geo_zone_id)
     {
         $table = DB()->table('cc_offer_discount');
-        $result = $table->where('offer_id',$offer->offer_id)->get()->getRow();
+        $result = $table->where('offer_id', $offer->offer_id)->get()->getRow();
         if (empty($result->shipping_method_id)) {
             if ($result->discount_calculate_on == 'percentage') {
                 return ($baseAmount * $result->discount_amount) / 100;
             } else {
                 return $result->discount_amount;
             }
-        }else{
+        } else {
             if (!empty($geo_zone_id)) {
                 $tableDis = DB()->table('cc_offer_discount');
                 $query = $tableDis->where('offer_id', $offer->offer_id)->where('geo_zone_id', $geo_zone_id)->get()->getRow();
-                if (!empty($query)){
+                if (!empty($query)) {
                     if ($query->discount_calculate_on == 'percentage') {
                         return ($baseAmount * $query->discount_amount) / 100;
                     } else {
@@ -279,13 +288,6 @@ class Offer_calculate {
 
         return 0;
     }
-
-
-
-
-
-
-
 
 
 }
