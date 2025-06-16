@@ -123,6 +123,7 @@ $routes->get('/album_list/(:num)', 'Admin\Album::album_list/$1');
 $routes->get('/album_category_delete/(:num)', 'Admin\Album::album_category_delete/$1');
 $routes->post('/album_bulk_update_action', 'Admin\Album::bulk_update_action');
 $routes->post('/album_download_action', 'Admin\Album::album_download_action');
+$routes->post('/remove_album_cropped_images_action', 'Admin\Album::removeAlbumCroppedImagesAction');
 
 
 //User
@@ -463,7 +464,9 @@ $routes->post('/get_zone_value', 'Admin\Ajax::get_zone_value');
 
 $routes->get('/image-resize/(:any)/(:any)/(:any)', 'Image::resize/$1/$2/$3');
 
-
+//Blog
+$routes->get('/blog', 'Blog::index');
+$routes->get('/blog-view/(:num)', 'Blog::view/$1');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

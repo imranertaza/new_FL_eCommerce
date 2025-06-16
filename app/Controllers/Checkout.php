@@ -76,7 +76,7 @@ class Checkout extends BaseController
         $coupon_code = $this->request->getPost('coupon');
 
         $table = DB()->table('cc_coupon');
-        $query = $table->where('code', $coupon_code)->where('status', 'Active')->where('total_useable >', 'total_used')->where('date_start <', date('Y-m-d'))->where('date_end >', date('Y-m-d'))->get()->getRow();
+        $query = $table->where('code', $coupon_code)->where('status', 'Active')->where('total_useable >', 'total_used')->where('date_start <=', date('Y-m-d'))->where('date_end >=', date('Y-m-d'))->get()->getRow();
 
         if (!empty($query)) {
             if (isset(newSession()->coupon_id)){

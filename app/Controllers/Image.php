@@ -57,12 +57,32 @@ class Image extends BaseController {
 
     private function serveImage($path)
     {
-        $mime = mime_content_type($path);
+        $mime = $this->getMimeTypeByExtension($path);
         header("Content-Type: $mime");
         header("Cache-Control: public, max-age=31536000");
         header("Expires: " . gmdate("D, d M Y H:i:s", time() + 31536000) . " GMT");
         readfile($path);
         exit;
+    }
+
+    private function getMimeTypeByExtension($filename)
+    {
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+        $mimeTypes = [
+            'jpg'  => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png'  => 'image/png',
+            'gif'  => 'image/gif',
+            'webp' => 'image/webp',
+            'svg'  => 'image/svg+xml',
+            'bmp'  => 'image/bmp',
+            'ico'  => 'image/vnd.microsoft.icon',
+            'tiff' => 'image/tiff',
+            'avif' => 'image/avif',
+        ];
+
+        return $mimeTypes[$extension] ?? 'application/octet-stream';
     }
 
 
