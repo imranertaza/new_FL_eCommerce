@@ -77,8 +77,13 @@
                                     <div class="d-flex coupon">
                                         <input type="text" class="form-control w-auto rounded-0 me-1" name="coupon" placeholder="Coupon Code" required>
                                         <input class="btn bg-custom-color rounded-0 px-4 text-white" type="submit" name="submit" value="Apply Coupon">
+
                                     </div>
+                                    <?php if (isset(newSession()->coupon_discount_shipping)){ ?>
+                                        <small class="mt-3 text-danger" style="float: left;">Shipping coupon discount will show up after you checkout.</small>
+                                    <?php } ?>
                                 </form>
+
                                 <?php } ?>
                             </td>
                             <td class="border-end-0 mo-text-center" style="text-align:left;">

@@ -84,7 +84,7 @@
                                     <path d="M20 2C20 0.9 19.1 0 18 0H2C0.9 0 0 0.9 0 2V14C0 15.1 0.9 16 2 16H18C19.1 16 20 15.1 20 14V2ZM18 2L10 7L2 2H18ZM18 14H2V4L10 9L18 4V14Z" fill="#939393"></path>
                                 </svg>
                             </a>
-                            <a class="d-none d-md-block" href="tel:<?php echo $settings['email']; ?>">Email: <?php echo $settings['email']; ?></a>
+                            <a class="d-none d-md-block" href="mailto:<?php echo $settings['email']; ?>">Email: <?php echo $settings['email']; ?></a>
                         </div>
                     </div>
                     <div class="col-12 col-sm-8 col-md-5 d-flex gap-3 justify-content-center justify-content-sm-end mb-2 mb-sm-0"> 

@@ -65,7 +65,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <input type="submit" value="Get a Quary" onclick="contactFormSubmit()" class="btn bg-custom-color text-white rounded-0">
+                            <input type="submit" value="Get in touch" onclick="contactFormSubmit()" class="btn bg-custom-color text-white rounded-0">
                         </div>
 <!--                    </form>-->
                 </div>
