@@ -16,6 +16,8 @@ class Album extends BaseController
     protected $permission;
     protected $imageProcessing;
     private $module_name = 'Album';
+    private $albumImageSizes = [['width' => '261', 'height' => '261',], ['width' => '198', 'height' => '198',], ['width' => '50', 'height' => '50',],];
+    private $albumImageCropSizes = [];
 
     public function __construct()
     {
@@ -59,7 +61,8 @@ class Album extends BaseController
      * @description This method provides album create page view
      * @return RedirectResponse|void
      */
-    public function create(){
+    public function create()
+    {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
         if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
@@ -74,7 +77,7 @@ class Album extends BaseController
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
             if (isset($data['create']) and $data['create'] == 1) {
-                echo view('Admin/Album/create',$data);
+                echo view('Admin/Album/create', $data);
             } else {
                 echo view('Admin/no_permission');
             }
@@ -84,7 +87,8 @@ class Album extends BaseController
     /**
      * @return RedirectResponse|void
      */
-    public function album_category_create(){
+    public function album_category_create()
+    {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
         if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
@@ -99,7 +103,7 @@ class Album extends BaseController
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
             if (isset($data['create']) and $data['create'] == 1) {
-                echo view('Admin/Album/album_category_create',$data);
+                echo view('Admin/Album/album_category_create', $data);
             } else {
                 echo view('Admin/no_permission');
             }
@@ -129,10 +133,10 @@ class Album extends BaseController
             $table->insert($data);
             $albumId = DB()->insertID();
 
-            if (!empty($data['parent_album_id'])){
+            if (!empty($data['parent_album_id'])) {
                 $dataChild['is_album_uploadable'] = '0';
                 $albumTable = DB()->table('cc_album');
-                $albumTable->where('album_id',$data['parent_album_id'])->update($dataChild);
+                $albumTable->where('album_id', $data['parent_album_id'])->update($dataChild);
             }
 
             //image size array
@@ -140,21 +144,20 @@ class Album extends BaseController
 
             //album table data insert(end)
             if (!empty($_FILES['thumb']['name'])) {
-                $target_dir = FCPATH . '/uploads/album/'.$albumId.'/';
+                $target_dir = FCPATH . '/uploads/album/' . $albumId . '/';
                 $this->imageProcessing->directory_create($target_dir);
 
                 //new image upload
                 $pic = $this->request->getFile('thumb');
 
-                $news_img = $this->imageProcessing->product_image_upload_and_crop_all_size($pic,$target_dir);
+                $news_img = $this->imageProcessing->product_image_upload_and_crop_all_size($pic, $target_dir);
 
                 $dataImg['thumb'] = $news_img;
 
                 $albumTable = DB()->table('cc_album');
-                $albumTable->where('album_id',$albumId)->update($dataImg);
+                $albumTable->where('album_id', $albumId)->update($dataImg);
             }
             //album table data insert(end)
-
 
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Album Category Create Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -193,7 +196,8 @@ class Album extends BaseController
         }
     }
 
-    public function album_category_update_action(){
+    public function album_category_update_action()
+    {
         $album_id = $this->request->getPost('album_id');
         $data['name'] = $this->request->getPost('name');
         $data['parent_album_id'] = $this->request->getPost('parent_album_id');
@@ -208,26 +212,26 @@ class Album extends BaseController
             return redirect()->to('album_category_update/' . $album_id);
         } else {
             //old parent search
-            $oldPar = get_data_by_id('parent_album_id','cc_album','album_id',$album_id);
+            $oldPar = get_data_by_id('parent_album_id', 'cc_album', 'album_id', $album_id);
 
 
             $table = DB()->table('cc_album');
             $table->where('album_id', $album_id)->update($data);
 
             //parent has child update
-            if (!empty($data['parent_album_id'])){
+            if (!empty($data['parent_album_id'])) {
                 $dataChild['is_album_uploadable'] = '0';
                 $albumTable = DB()->table('cc_album');
-                $albumTable->where('album_id',$data['parent_album_id'])->update($dataChild);
+                $albumTable->where('album_id', $data['parent_album_id'])->update($dataChild);
             }
 
             //old parent has child update
-            if($oldPar != $data['parent_album_id']){
+            if ($oldPar != $data['parent_album_id']) {
                 $exist = is_exists('cc_album', 'parent_album_id', $oldPar);
-                if ($exist == true){
+                if ($exist == true) {
                     $dataChild['is_album_uploadable'] = '1';
                     $albumTable = DB()->table('cc_album');
-                    $albumTable->where('album_id',$oldPar)->update($dataChild);
+                    $albumTable->where('album_id', $oldPar)->update($dataChild);
                 }
             }
             //image size array
@@ -235,16 +239,16 @@ class Album extends BaseController
 
             //album table data insert(end)
             if (!empty($_FILES['thumb']['name'])) {
-                $target_dir = FCPATH . '/uploads/album/'.$album_id.'/';
+                $target_dir = FCPATH . '/uploads/album/' . $album_id . '/';
                 //unlink
-                $oldImg = get_data_by_id('thumb','cc_album','album_id',$album_id);
+                $oldImg = get_data_by_id('thumb', 'cc_album', 'album_id', $album_id);
                 $pic = $this->request->getFile('thumb');
-                $news_img = $this->imageProcessing->single_product_image_unlink($target_dir,$oldImg)->directory_create($target_dir)->product_image_upload_and_crop_all_size($pic,$target_dir);
+                $news_img = $this->imageProcessing->single_product_image_unlink($target_dir, $oldImg)->directory_create($target_dir)->product_image_upload_and_crop_all_size($pic, $target_dir);
 
                 $dataImg['thumb'] = $news_img;
 
                 $proUpTable = DB()->table('cc_album');
-                $proUpTable->where('album_id',$album_id)->update($dataImg);
+                $proUpTable->where('album_id', $album_id)->update($dataImg);
             }
             //album table data insert(end)
 
@@ -255,7 +259,8 @@ class Album extends BaseController
         }
     }
 
-    public function album_sub_category_list($album_id){
+    public function album_sub_category_list($album_id)
+    {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
         if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
@@ -279,7 +284,8 @@ class Album extends BaseController
         }
     }
 
-    public function album_list($album_id){
+    public function album_list($album_id)
+    {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
         if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
@@ -302,6 +308,7 @@ class Album extends BaseController
             }
         }
     }
+
     /**
      * @description This method provides album create action
      * @return RedirectResponse
@@ -328,58 +335,55 @@ class Album extends BaseController
 
 
             //image size array
-            $this->imageProcessing->sizeArray = [['width'=>'261', 'height'=>'261',],[ 'width'=>'198', 'height'=>'198', ],['width'=>'50', 'height'=>'50', ],];
+            $this->imageProcessing->sizeArray = $this->albumImageCropSizes;
 
             //album table data insert(end)
             if (!empty($_FILES['thumb']['name'])) {
-                $target_dir = FCPATH . '/uploads/album/'.$albumId.'/';
+                $target_dir = FCPATH . '/uploads/album/' . $albumId . '/';
                 $this->imageProcessing->directory_create($target_dir);
 
                 //new image upload
                 $pic = $this->request->getFile('thumb');
 
-                $news_img = $this->imageProcessing->product_image_upload_and_crop_all_size($pic,$target_dir);
+                $news_img = $this->imageProcessing->product_image_upload_and_crop_all_size($pic, $target_dir);
 
                 $dataImg['thumb'] = $news_img;
 
                 $albumTable = DB()->table('cc_album');
-                $albumTable->where('album_id',$albumId)->update($dataImg);
+                $albumTable->where('album_id', $albumId)->update($dataImg);
             }
             //album table data insert(end)
 
             //multi image upload(start)
-            if($this->request->getFileMultiple('multiImage')){
+            if ($this->request->getFileMultiple('multiImage')) {
 
-                $target_dir = FCPATH . '/uploads/album/'.$albumId.'/';
+                $target_dir = FCPATH . '/uploads/album/' . $albumId . '/';
                 $this->imageProcessing->directory_create($target_dir);
 
                 $files = $this->request->getFileMultiple('multiImage');
                 foreach ($files as $file) {
 
-                    if ($file->isValid() && ! $file->hasMoved())
-                    {
+                    if ($file->isValid() && !$file->hasMoved()) {
                         $dataMultiImg['album_id'] = $albumId;
                         $albumImgTable = DB()->table('cc_album_details');
                         $albumImgTable->insert($dataMultiImg);
                         $albumImgId = DB()->insertID();
 
-                        $target_dir2 = FCPATH . '/uploads/album/'.$albumId.'/'.$albumImgId.'/';
+                        $target_dir2 = FCPATH . '/uploads/album/' . $albumId . '/' . $albumImgId . '/';
                         $this->imageProcessing->directory_create($target_dir2);
 
-                        $news_img2 = $this->imageProcessing->product_image_upload_and_crop_all_size($file,$target_dir2);
+                        $news_img2 = $this->imageProcessing->product_image_upload_and_crop_all_size($file, $target_dir2);
 
                         $dataMultiImg2['image'] = $news_img2;
 
                         $proImgUpTable = DB()->table('cc_album_details');
-                        $proImgUpTable->where('album_details_id',$albumImgId)->update($dataMultiImg2);
+                        $proImgUpTable->where('album_details_id', $albumImgId)->update($dataMultiImg2);
                     }
 
                 }
 
             }
             //multi image upload(start)
-
-
 
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Album Category Create Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -447,48 +451,46 @@ class Album extends BaseController
             $table->where('album_id', $album_id)->update($data);
 
 
-
             //image size array
-            $this->imageProcessing->sizeArray = [ ['width'=>'261', 'height'=>'261',],[ 'width'=>'198', 'height'=>'198', ],['width'=>'50', 'height'=>'50', ],];
+            $this->imageProcessing->sizeArray = $this->albumImageCropSizes;
 
             //album table data insert(end)
             if (!empty($_FILES['thumb']['name'])) {
-                $target_dir = FCPATH . '/uploads/album/'.$album_id.'/';
+                $target_dir = FCPATH . '/uploads/album/' . $album_id . '/';
                 //unlink
-                $oldImg = get_data_by_id('thumb','cc_album','album_id',$album_id);
+                $oldImg = get_data_by_id('thumb', 'cc_album', 'album_id', $album_id);
                 $pic = $this->request->getFile('thumb');
-                $news_img = $this->imageProcessing->single_product_image_unlink($target_dir,$oldImg)->directory_create($target_dir)->product_image_upload_and_crop_all_size($pic,$target_dir);
+                $news_img = $this->imageProcessing->single_product_image_unlink($target_dir, $oldImg)->directory_create($target_dir)->product_image_upload_and_crop_all_size($pic, $target_dir);
 
                 $dataImg['thumb'] = $news_img;
 
                 $proUpTable = DB()->table('cc_album');
-                $proUpTable->where('album_id',$album_id)->update($dataImg);
+                $proUpTable->where('album_id', $album_id)->update($dataImg);
             }
             //album table data insert(end)
 
             //multi image upload(start)
-            if($this->request->getFileMultiple('multiImage')){
+            if ($this->request->getFileMultiple('multiImage')) {
 
-                $target_dir = FCPATH . '/uploads/album/'.$album_id.'/';
+                $target_dir = FCPATH . '/uploads/album/' . $album_id . '/';
                 $this->imageProcessing->directory_create($target_dir);
 
                 $files = $this->request->getFileMultiple('multiImage');
-                foreach ($files as  $file) {
+                foreach ($files as $file) {
 
-                    if ($file->isValid() && ! $file->hasMoved())
-                    {
+                    if ($file->isValid() && !$file->hasMoved()) {
                         $dataMultiImg['album_id'] = $album_id;
                         $proImgTable = DB()->table('cc_album_details');
                         $proImgTable->insert($dataMultiImg);
                         $albumImgId = DB()->insertID();
 
-                        $target_dir2 = FCPATH . '/uploads/album/'.$album_id.'/'.$albumImgId.'/';
-                        $news_img2 = $this->imageProcessing->directory_create($target_dir2)->product_image_upload_and_crop_all_size($file,$target_dir2);
+                        $target_dir2 = FCPATH . '/uploads/album/' . $album_id . '/' . $albumImgId . '/';
+                        $news_img2 = $this->imageProcessing->directory_create($target_dir2)->product_image_upload_and_crop_all_size($file, $target_dir2);
 
                         $dataMultiImg2['image'] = $news_img2;
 
                         $proImgUpTable = DB()->table('cc_album_details');
-                        $proImgUpTable->where('album_details_id',$albumImgId)->update($dataMultiImg2);
+                        $proImgUpTable->where('album_details_id', $albumImgId)->update($dataMultiImg2);
                     }
 
                 }
@@ -507,15 +509,16 @@ class Album extends BaseController
      * @param int $album_id
      * @return RedirectResponse
      */
-    public function delete($album_id){
+    public function delete($album_id)
+    {
 
         helper('filesystem');
-        $parent = get_data_by_id('parent_album_id','cc_album','album_id',$album_id);
-        $redirectUrl = base_url('album_list/'.$parent);
+        $parent = get_data_by_id('parent_album_id', 'cc_album', 'album_id', $album_id);
+        $redirectUrl = base_url('album_list/' . $parent);
 
         DB()->transStart();
 
-        $target_dir = FCPATH . '/uploads/album/'.$album_id;
+        $target_dir = FCPATH . '/uploads/album/' . $album_id;
         if (file_exists($target_dir)) {
             delete_files($target_dir, TRUE);
             rmdir($target_dir);
@@ -537,26 +540,28 @@ class Album extends BaseController
      * @description This method provides album sort action
      * @return void
      */
-    public function album_image_sort_action(){
-        $album_details_id =  $this->request->getPost('album_details_id');
+    public function album_image_sort_action()
+    {
+        $album_details_id = $this->request->getPost('album_details_id');
 
         $data['sort_order'] = $this->request->getPost('value');
         $table = DB()->table('cc_album_details');
-        $table->where('album_details_id',$album_details_id)->update($data);
+        $table->where('album_details_id', $album_details_id)->update($data);
     }
 
     /**
      * @description This method provides album image delete
      * @return void
      */
-    public function image_delete(){
+    public function image_delete()
+    {
         helper('filesystem');
 
         $album_details_id = $this->request->getPost('album_details_id');
         $table = DB()->table('cc_album_details');
         $data = $table->where('album_details_id', $album_details_id)->get()->getRow();
 
-        $target_dir = FCPATH . '/uploads/album/'.$data->album_id.'/'.$album_details_id;
+        $target_dir = FCPATH . '/uploads/album/' . $data->album_id . '/' . $album_details_id;
         if (file_exists($target_dir)) {
             delete_files($target_dir, TRUE);
             rmdir($target_dir);
@@ -566,13 +571,14 @@ class Album extends BaseController
         print '<div class="alert alert-success alert-dismissible" role="alert">Album Image Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
     }
 
-    public function album_category_delete($album_id){
+    public function album_category_delete($album_id)
+    {
         helper('filesystem');
         $table = DB()->table('cc_album');
         $count = $table->where('parent_album_id', $album_id)->countAllResults();
 
-        $oldPar = get_data_by_id('parent_album_id','cc_album','album_id',$album_id);
-        $redirectUrl = !empty($oldPar)?base_url('album_sub_category_list/'.$oldPar):base_url('album');
+        $oldPar = get_data_by_id('parent_album_id', 'cc_album', 'album_id', $album_id);
+        $redirectUrl = !empty($oldPar) ? base_url('album_sub_category_list/' . $oldPar) : base_url('album');
 
         if (empty($count)) {
             DB()->transStart();
@@ -587,12 +593,12 @@ class Album extends BaseController
             $table = DB()->table('cc_album');
             $table->where('album_id', $album_id)->delete();
 
-            if(!empty($oldPar)){
+            if (!empty($oldPar)) {
                 $exist = is_exists('cc_album', 'parent_album_id', $oldPar);
-                if ($exist == true){
+                if ($exist == true) {
                     $dataChild['is_album_uploadable'] = '1';
                     $albumTable = DB()->table('cc_album');
-                    $albumTable->where('album_id',$oldPar)->update($dataChild);
+                    $albumTable->where('album_id', $oldPar)->update($dataChild);
                 }
             }
 
@@ -604,13 +610,14 @@ class Album extends BaseController
 
             $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Album Category Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to($redirectUrl);
-        }else{
+        } else {
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please delete child <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to($redirectUrl);
         }
     }
 
-    public function bulk_update_action(){
+    public function bulk_update_action()
+    {
         $album_id = $this->request->getPost('album_id');
         $name = $this->request->getPost('name');
 
@@ -625,9 +632,10 @@ class Album extends BaseController
         echo view('Admin/Album/row', $data);
     }
 
-    public function album_download_action(){
-        $albumId =  $this->request->getPost('album_id[]');
-        $parent_album_id =  $this->request->getPost('parent_album_id');
+    public function album_download_action()
+    {
+        $albumId = $this->request->getPost('album_id[]');
+        $parent_album_id = $this->request->getPost('parent_album_id');
         if (!empty($albumId)) {
 
             $saveImage = [];
@@ -663,7 +671,7 @@ class Album extends BaseController
             $zipName = $this->imageProcessing->zipImages($saveImage, $dirSave);
             if (file_exists($zipName)) {
                 $randomName = bin2hex(random_bytes(5));
-                $response = $this->imageProcessing->downloadFile($zipName, $randomName.'albumImage.zip');
+                $response = $this->imageProcessing->downloadFile($zipName, $randomName . 'albumImage.zip');
 
                 register_shutdown_function(function () use ($dirSave) {
                     helper('filesystem');
@@ -673,15 +681,56 @@ class Album extends BaseController
                     }
                 });
                 return $response;
-            }else {
+            } else {
                 $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Product image is empty! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-                return redirect()->to('album_list/'.$parent_album_id);
+                return redirect()->to('album_list/' . $parent_album_id);
             }
 
-        }else{
+        } else {
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('album_list/'.$parent_album_id);
+            return redirect()->to('album_list/' . $parent_album_id);
         }
+    }
+
+    public function removeAlbumCroppedImagesAction()
+    {
+        $albumId = $this->request->getPost('album_id[]');
+        $parent_album_id = $this->request->getPost('parent_album_id');
+        if (!empty($albumId)) {
+            DB()->transStart();
+            foreach ($albumId as $album_id) {
+                $mainImage = get_data_by_id('thumb', 'cc_album', 'album_id', $album_id);
+                if (!empty($mainImage)) {
+                    foreach ($this->albumImageSizes as $size) {
+                        $basePath = FCPATH . 'uploads/album/' . $album_id . '/';
+                        $resizedImage = $basePath . $size['width'] . '_' . $mainImage;
+                        $resizedWatermarked = $basePath . $size['width'] . '_wm_' . $mainImage;
+
+                        $this->imageProcessing->resize_image_unlink($resizedImage);
+                        $this->imageProcessing->resize_image_unlink($resizedWatermarked);
+                    }
+                }
+
+                // Multiple album images
+                $images = DB()->table('cc_album_details')->where('album_id', $album_id)->get()->getResult();
+
+                foreach ($images as $img) {
+                    foreach ($this->albumImageSizes as $size) {
+                        $multiPath = FCPATH . 'uploads/album/' . $album_id . '/' . $img->album_details_id . '/';
+                        $resizedImage = $multiPath . $size['width'] . '_' . $img->image;
+                        $resizedWatermarked = $multiPath . $size['width'] . '_wm_' . $img->image;
+
+                        $this->imageProcessing->resize_image_unlink($resizedImage);
+                        $this->imageProcessing->resize_image_unlink($resizedWatermarked);
+                    }
+                }
+            }
+            DB()->transComplete();
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Image remove successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        } else {
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        }
+        return redirect()->to('album_list/' . $parent_album_id);
     }
 
 
