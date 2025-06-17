@@ -648,20 +648,6 @@ class Products extends BaseController
         $data['price'] = $this->request->getPost('price');
         $data['quantity'] = $this->request->getPost('quantity');
 
-//        $table = DB()->table('cc_product_image');
-//        $allImage = $table->where('product_id', $product_id)->get()->getResult();
-//        $productImageSize = [['width' => '191', 'height' => '191',], ['width' => '198', 'height' => '198',], ['width' => '100', 'height' => '100',], ['width' => '437', 'height' => '437',], ['width' => '50', 'height' => '50',],];
-//        foreach ($allImage as $pro) {
-//            foreach ($productImageSize as $val) {
-//                $re_dir = FCPATH . '/uploads/products/' .$product_id.'/'.$pro->product_image_id . '/' . $val['width'] . '_' .$pro->image;
-//                $re_dir_wat = FCPATH . '/uploads/products/' . $product_id.'/'.$pro->product_image_id . '/' . $val['width'] . '_wm_' . $pro->image;
-//                $this->imageProcessing->resize_image_unlink($re_dir);
-//                $this->imageProcessing->resize_image_unlink($re_dir_wat);
-//            }
-//        }
-//
-//        die();
-
         $this->validation->setRules([
             'pro_name' => ['label' => 'Name', 'rules' => 'required'],
             'model' => ['label' => 'Model', 'rules' => 'required'],
