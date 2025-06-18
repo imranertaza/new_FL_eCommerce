@@ -88,42 +88,49 @@ class Image_processing {
      * @return $this
      */
     public function watermark_main_image($dir,$image){
+
         if (!file_exists($dir . '/wm_' . $image)) {
 
-            if (pathinfo($image, PATHINFO_EXTENSION) == 'png'){
+            $ext = strtolower(pathinfo($image, PATHINFO_EXTENSION));
+
+            if ($ext == 'png') {
                 $mainImg = imagecreatefrompng($dir . $image);
-            }else {
+            } else {
                 $mainImg = imagecreatefromjpeg($dir . $image);
             }
-            //imagecopy($mainImg, $this->wm, imagesx($mainImg) - $this->sx - $this->marge_right, imagesy($mainImg) - $this->sy - $this->marge_bottom, 0, 0, imagesx($this->wm), imagesy($this->wm));
 
-            // Get the dimensions of the main image
             $mainImageWidth = imagesx($mainImg);
             $mainImageHeight = imagesy($mainImg);
 
-            // Get the dimensions of the watermark image
             $watermarkWidth = imagesx($this->wm);
             $watermarkHeight = imagesy($this->wm);
 
-            // Calculate the new watermark size based on the main image size, keeping the aspect ratio
-            $watermarkNewWidth = $mainImageWidth * 0.25;  // Adjust this factor as needed (e.g., 25% of the main image width)
-            $watermarkNewHeight = ($watermarkNewWidth / $watermarkWidth) * $watermarkHeight;  // Maintain the aspect ratio
+            $watermarkNewWidth = $mainImageWidth * 0.25;
+            $watermarkNewHeight = ($watermarkNewWidth / $watermarkWidth) * $watermarkHeight;
 
-            // Resize the watermark to the new size
             $watermarkResized = imagecreatetruecolor($watermarkNewWidth, $watermarkNewHeight);
             imagealphablending($watermarkResized, false);
             imagesavealpha($watermarkResized, true);
             imagecopyresampled($watermarkResized, $this->wm, 0, 0, 0, 0, $watermarkNewWidth, $watermarkNewHeight, $watermarkWidth, $watermarkHeight);
 
-            // Calculate the position to place the watermark (bottom-right corner)
-            $watermarkX = $mainImageWidth - $watermarkNewWidth - $this->marge_right; // 30px padding from the right
-            $watermarkY = $mainImageHeight - $watermarkNewHeight - $this->marge_bottom; // 30px padding from the bottom
+            $watermarkX = $mainImageWidth - $watermarkNewWidth - $this->marge_right;
+            $watermarkY = $mainImageHeight - $watermarkNewHeight - $this->marge_bottom;
 
-            // Merge the watermark onto the main image
             imagecopy($mainImg, $watermarkResized, $watermarkX, $watermarkY, 0, 0, $watermarkNewWidth, $watermarkNewHeight);
 
-            imagePng($mainImg, $dir . 'wm_' . $image);
+            // Save compressed image based on format
+            $outputFile = $dir . 'wm_' . $image;
+
+            if ($ext == 'png') {
+                imagepng($mainImg, $outputFile, 9); // Compression level 0-9
+            } else {
+                imagejpeg($mainImg, $outputFile, 100); // Quality 0-100
+            }
+
+            imagedestroy($watermarkResized);
+            imagedestroy($mainImg);
         }
+
         return $this;
     }
 

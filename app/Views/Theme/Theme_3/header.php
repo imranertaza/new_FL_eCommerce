@@ -57,7 +57,7 @@
         <div class="topbar py-1 py-md-3">
             <div class="container">
                 <div class="row align-items-center justify-content-center">
-                    <div class="col-12 col-sm-4 col-md-7 d-flex flex-row align-items-center justify-content-center gap-3 mb-2 mb-sm-0">
+                    <div class="col-12 col-sm-4 col-md-7 d-flex flex-row align-items-center gap-3 mb-2 mb-sm-0">
                         <div class="currency-switcher">
                             <div class="input-group">
                                 <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="currencyDropdown"><?php echo get_lebel_by_value_in_settings('currency_symbol'); ?> <?php echo get_lebel_by_value_in_settings('currency'); ?></button>
