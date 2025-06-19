@@ -996,6 +996,12 @@ class Products extends BaseController
             rmdir($target_dir);
         }
 
+        $targetDirCash = FCPATH . '/cache/uploads/products/' . $product_id;
+        if (file_exists($targetDirCash)) {
+            delete_files($targetDirCash, TRUE);
+            rmdir($targetDirCash);
+        }
+
         $proTable = DB()->table('cc_products');
         $proTable->where('product_id', $product_id)->delete();
 
