@@ -1688,7 +1688,8 @@ function product_count_by_brand_id($brand_id,$products){
 }
 
 /**
- * @param $album_id
+ * @description This function provides display category parent with parent
+ * @param int $album_id
  * @return void
  */
 function display_category_parent_with_parent($album_id)
@@ -1900,4 +1901,83 @@ function image_cache($path, $imageName, $width, $height)
     $base64Image = base64_encode($cache->get($cacheKey));
 
     return 'data:image/png;base64,' . $base64Image;
+}
+
+/**
+ * @description This function provides display blog category with parent.
+ * @param int $cate_id
+ * @return void
+ */
+function display_blog_category_with_parent($cate_id)
+{
+    $catName = [];
+
+    if (!empty($cate_id)) {
+        $totalParent = blog_category_parent_count($cate_id);
+
+        for ($i = 0; $i <= $totalParent; $i++) {
+            $catName[] = get_blog_category_name_by_id($cate_id);
+            $table     = DB()->table('cc_category');
+            $cat       = $table->where('cat_id', $cate_id)->get()->getRow();
+            $cate_id   = $cat->parent_id;
+        }
+    }
+
+    krsort($catName);
+
+    foreach ($catName as $key => $val) {
+        if ($key == 0) {
+            print $val;
+        } else {
+            print $val . " > ";
+        }
+    }
+}
+
+/**
+ * @description This function provides blog category parent count.
+ * @param int $cate_id
+ * @return int|void|null
+ */
+function blog_category_parent_count($cate_id)
+{
+    $table = DB()->table('cc_category');
+    $cat   = $table->where('cat_id', $cate_id)->get()->getRow();
+
+    if ($cat->parent_id) {
+        return blog_category_parent_count($cat->parent_id) + 1;
+    }
+}
+
+/**
+ * @description This function provides get blog category name by id.
+ * @param int $cate_id
+ * @return mixed
+ */
+function get_blog_category_name_by_id($cate_id)
+{
+    $table = DB()->table('cc_category');
+    $cat   = $table->where('cat_id', $cate_id)->get()->getRow();
+
+    return $cat->category_name;
+}
+
+/**
+ * @description This function provides count comment by blog_id.
+ * @param int $blog_id
+ * @return int|string
+ */
+function count_comment_by_blog_id($blog_id){
+    $table = DB()->table('cc_blog_comments');
+    return $table->where('blog_id', $blog_id)->countAllResults();
+}
+
+/**
+ * @description This function provides comment id by reply comment.
+ * @param int $comment_id
+ * @return array
+ */
+function comment_id_by_reply_comment($comment_id){
+    $table = DB()->table('cc_blog_comments');
+    return $table->where('	comment_parent_id', $comment_id)->get()->getResult();
 }

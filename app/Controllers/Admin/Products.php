@@ -85,6 +85,9 @@ class Products extends BaseController
             $table = DB()->table('cc_product_category');
             $data['prodCat'] = $table->get()->getResult();
 
+            $tableBrand = DB()->table('cc_brand');
+            $data['brands'] = $tableBrand->where('status','Active')->get()->getResult();
+
             //$perm = array('create','read','update','delete','mod_access');
             $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
             foreach ($perm as $key => $val) {
@@ -592,6 +595,9 @@ class Products extends BaseController
 
             $table = DB()->table('cc_product_category');
             $data['prodCat'] = $table->get()->getResult();
+
+            $tableBrand = DB()->table('cc_brand');
+            $data['brands'] = $tableBrand->where('status','Active')->get()->getResult();
 
             $tablecat = DB()->table('cc_product_to_category');
             $data['prodCatSel'] = $tablecat->where('product_id', $product_id)->get()->getResult();

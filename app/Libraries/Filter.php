@@ -187,6 +187,7 @@ class Filter{
             $table = DB()->table('cc_brand');
             if (!empty($brandArray)) {
                 $table->whereIn('brand_id', $brandArray)
+                    ->where('status','Active')
                     ->orderBy('name');
 
                 $result = $table->get()->getResult();

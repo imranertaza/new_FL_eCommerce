@@ -145,7 +145,8 @@
                                     <?php } ?>
                                     <?php $about = get_data_by_id('slug','cc_pages','page_id','2'); ?>
                                   <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo base_url('page/'.$about) ?>">About Us</a>
+<!--                                    <a class="nav-link" href="--><?php //echo base_url('page/'.$about) ?><!--">About Us</a>-->
+                                    <a class="nav-link" href="<?php echo base_url('blog') ?>">Blog</a>
                                   </li>
                                     <?php $contact = get_data_by_id('slug','cc_pages','page_id','1'); ?>
                                   <li class="nav-item">
