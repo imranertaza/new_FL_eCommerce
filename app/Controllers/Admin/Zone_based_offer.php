@@ -432,12 +432,13 @@ class Zone_based_offer extends BaseController
                     $oldImg = get_data_by_id('banner','cc_offer','offer_id',$offer_id);
 
                     $target_dir = FCPATH . '/uploads/offer/'.$offer_id.'/';
+                    $targetDirCache = FCPATH . '/cache/uploads/offer/'.$offer_id.'/';
                     $this->imageProcessing->directory_create($target_dir);
 
                     //new image upload
                     $pic = $this->request->getFile('banner');
 
-                    $news_img = $this->imageProcessing->single_product_image_unlink($target_dir,$oldImg)->image_upload_and_crop_all_size($pic,$target_dir);
+                    $news_img = $this->imageProcessing->single_product_image_unlink($target_dir,$oldImg)->single_product_image_unlink($targetDirCache,$oldImg)->image_upload_and_crop_all_size($pic,$target_dir);
 
                     $dataImg['banner'] = $news_img;
 
@@ -465,6 +466,12 @@ class Zone_based_offer extends BaseController
             if (file_exists($target_dir)) {
                 delete_files($target_dir, TRUE);
                 rmdir($target_dir);
+            }
+
+            $targetDirCache = FCPATH . '/cache/uploads/offer/'.$offer_id;
+            if (file_exists($targetDirCache)) {
+                delete_files($targetDirCache, TRUE);
+                rmdir($targetDirCache);
             }
 
             $table = DB()->table('cc_offer_on_product');

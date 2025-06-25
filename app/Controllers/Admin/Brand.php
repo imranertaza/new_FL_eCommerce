@@ -180,6 +180,12 @@ class Brand extends BaseController
                     if (file_exists($imgPath)) {
                         unlink($target_dir . $old_img);
                     }
+
+                    $targetDirCash = FCPATH . '/cache/uploads/brand/';
+                    $imgPathCache = $targetDirCash .  $old_img;
+                    if (file_exists($imgPathCache)) {
+                        unlink($targetDirCash . $old_img);
+                    }
                 }
 
                 //new image uplode
@@ -215,6 +221,12 @@ class Brand extends BaseController
             $imgPath = $target_dir . $old_img;
             if (file_exists($imgPath)) {
                 unlink($target_dir . $old_img);
+            }
+
+            $targetDirCash = FCPATH . '/cache/uploads/brand/';
+            $imgPathCash = $targetDirCash . $old_img;
+            if (file_exists($imgPathCash)) {
+                unlink($targetDirCash . $old_img);
             }
         }
 
