@@ -251,6 +251,38 @@
                     </li>
                 <?php }  ?>
 
+                <li class="nav-header">Blog</li>
+                <?php
+                $modArrayPur = ['Blog_category'];
+                $menuAccessPur   = all_menu_permission_check($modArrayPur, $adRoleId);
+
+                if ($menuAccessPur == true) {
+                    ?>
+                    <li class="nav-item">
+                        <a href="<?php echo base_url('blog_category'); ?>" class="nav-link">
+                            <i class="nav-icon far fa-calendar-alt"></i>
+                            <p>Blog Category </p>
+                        </a>
+                    </li>
+                    <?php
+                } ?>
+                <?php
+                $modArrayPur = ['Blog'];
+                $menuAccessPur           = all_menu_permission_check($modArrayPur, $adRoleId);
+
+                if ($menuAccessPur == true) {
+                    ?>
+                    <li class="nav-item">
+                        <a href="<?php echo base_url('admin-blog'); ?>" class="nav-link">
+                            <i class="nav-icon far fa-calendar-alt"></i>
+                            <p>
+                                Blog
+                            </p>
+                        </a>
+                    </li>
+                    <?php
+                } ?>
+
                 <li class="nav-header">System</li>
                 <?php
                 $modArrayPur = ['Settings'];

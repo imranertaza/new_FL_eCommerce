@@ -93,6 +93,8 @@ class Settings extends BaseController
         $data['twitter_url'] = $this->request->getPost('twitter_url');
         $data['tiktok_url'] = $this->request->getPost('tiktok_url');
         $data['instagram_url'] = $this->request->getPost('instagram_url');
+        $data['pinterest_url'] = $this->request->getPost('pinterest_url');
+        $data['telegram_url'] = $this->request->getPost('telegram_url');
 
 
         $data['meta_title'] = $this->request->getPost('meta_title');

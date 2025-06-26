@@ -92,6 +92,7 @@ class Coupon extends BaseController
         $data['date_start'] = $this->request->getPost('date_start');
         $data['date_end'] = $this->request->getPost('date_end');
 
+        $data['discount_type'] = $this->request->getPost('discount_type');
         $data['discount_on'] = $this->request->getPost('discount_on');
         $data['for_subscribed_user'] = $this->request->getPost('for_subscribed_user');
         $data['for_registered_user'] = $this->request->getPost('for_registered_user');
@@ -188,6 +189,7 @@ class Coupon extends BaseController
         $data['date_end'] = $this->request->getPost('date_end');
 
         $data['discount_on'] = $this->request->getPost('discount_on');
+        $data['discount_type'] = $this->request->getPost('discount_type');
         $data['for_subscribed_user'] = $this->request->getPost('for_subscribed_user');
         $data['for_registered_user'] = $this->request->getPost('for_registered_user');
 

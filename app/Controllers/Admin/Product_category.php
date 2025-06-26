@@ -221,6 +221,12 @@ class Product_category extends BaseController
                     if (file_exists($imgPath)) {
                         unlink($target_dir . $old_img);
                     }
+                    //cache delete
+                    $targetDirCash = FCPATH . '/cache/uploads/category/';
+                    $imgPathCash = $targetDirCash . $old_img;
+                    if (file_exists($imgPathCash)) {
+                        unlink($targetDirCash . $old_img);
+                    }
                 }
 
                 //new image uplode
@@ -293,6 +299,13 @@ class Product_category extends BaseController
             if (file_exists($imgPath)) {
                 unlink($target_dir . $old_img);
             }
+
+            $targetDirCash = FCPATH . '/cache/uploads/category/';
+            $imgPathCash = $targetDirCash . $old_img;
+            if (file_exists($imgPathCash)) {
+                unlink($targetDirCash . $old_img);
+            }
+
         }
 
         $checkProCat = is_exists('cc_product_to_category', 'category_id', $prod_cat_id);
