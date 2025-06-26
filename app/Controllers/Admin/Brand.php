@@ -155,6 +155,7 @@ class Brand extends BaseController
     {
         $brand_id = $this->request->getPost('brand_id');
         $data['name'] = $this->request->getPost('name');
+        $data['status'] = $this->request->getPost('status');
         $data['sort_order'] = $this->request->getPost('sort_order');
         $data['updatedBy'] = $this->session->adUserId;
 
@@ -178,6 +179,12 @@ class Brand extends BaseController
                     $imgPath = $target_dir .  $old_img;
                     if (file_exists($imgPath)) {
                         unlink($target_dir . $old_img);
+                    }
+
+                    $targetDirCash = FCPATH . '/cache/uploads/brand/';
+                    $imgPathCache = $targetDirCash .  $old_img;
+                    if (file_exists($imgPathCache)) {
+                        unlink($targetDirCash . $old_img);
                     }
                 }
 
@@ -214,6 +221,12 @@ class Brand extends BaseController
             $imgPath = $target_dir . $old_img;
             if (file_exists($imgPath)) {
                 unlink($target_dir . $old_img);
+            }
+
+            $targetDirCash = FCPATH . '/cache/uploads/brand/';
+            $imgPathCash = $targetDirCash . $old_img;
+            if (file_exists($imgPathCash)) {
+                unlink($targetDirCash . $old_img);
             }
         }
 

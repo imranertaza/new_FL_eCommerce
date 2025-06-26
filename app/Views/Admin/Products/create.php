@@ -196,7 +196,9 @@
                                                 <label>Brand</label>
                                                 <select name="brand_id" class="form-control">
                                                     <option value="">Please select</option>
-                                                    <?php echo getListInOption('', 'brand_id', 'name', 'cc_brand'); ?>
+                                                    <?php foreach ($brands as $brand){ ?>
+                                                    <option value="<?php echo $brand->brand_id;?>"><?php echo $brand->name;?></option>
+                                                    <?php } ?>
                                                 </select>
                                             </div>
 

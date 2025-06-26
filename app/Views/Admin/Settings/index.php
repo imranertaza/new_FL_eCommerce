@@ -297,6 +297,10 @@
                                                     <label><?php echo $settingsTitle['twitter_url'];?></label>
                                                     <input type="text" name="twitter_url" class="form-control" value="<?php echo $settings['twitter_url'];?>"  required>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label><?php echo $settingsTitle['pinterest_url'];?></label>
+                                                    <input type="text" name="pinterest_url" class="form-control" value="<?php echo $settings['pinterest_url'];?>"  required>
+                                                </div>
 
                                             </div>
                                             <div class="col-md-6">
@@ -308,6 +312,11 @@
                                                 <div class="form-group">
                                                     <label><?php echo $settingsTitle['instagram_url'];?></label>
                                                     <input type="text" name="instagram_url" class="form-control" value="<?php echo $settings['instagram_url'];?>"  required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label><?php echo $settingsTitle['telegram_url'];?></label>
+                                                    <input type="text" name="telegram_url" class="form-control" value="<?php echo $settings['telegram_url'];?>"  required>
                                                 </div>
                                             </div>
                                         </div>

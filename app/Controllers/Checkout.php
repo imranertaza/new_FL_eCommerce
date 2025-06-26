@@ -83,6 +83,7 @@ class Checkout extends BaseController
                 unset($_SESSION['coupon_id']);
                 unset($_SESSION['coupon_discount']);
                 unset($_SESSION['coupon_discount_shipping']);
+                unset($_SESSION['discount_type']);
             }
 
 
@@ -93,7 +94,8 @@ class Checkout extends BaseController
                         if (!empty($this->cart->contents())) {
                             $couponArray = array(
                                 'coupon_id' => $query->coupon_id,
-                                'coupon_discount' => $query->discount
+                                'coupon_discount' => $query->discount,
+                                'discount_type' => $query->discount_type
                             );
                             $this->session->set($couponArray);
                             $this->session->setFlashdata('message', 'Coupon code applied successfully ');
@@ -116,7 +118,8 @@ class Checkout extends BaseController
                             if (!empty($this->cart->contents())) {
                                 $couponArray = array(
                                     'coupon_id' => $query->coupon_id,
-                                    'coupon_discount' => $query->discount
+                                    'coupon_discount' => $query->discount,
+                                    'discount_type' => $query->discount_type
                                 );
                                 $this->session->set($couponArray);
                                 $this->session->setFlashdata('message', 'Coupon code applied successfully ');
@@ -139,7 +142,8 @@ class Checkout extends BaseController
                     if (!empty($this->cart->contents())) {
                         $couponArray = array(
                             'coupon_id' => $query->coupon_id,
-                            'coupon_discount' => $query->discount
+                            'coupon_discount' => $query->discount,
+                            'discount_type' => $query->discount_type
                         );
                         $this->session->set($couponArray);
                         $this->session->setFlashdata('message', 'Coupon code applied successfully ');
@@ -157,7 +161,8 @@ class Checkout extends BaseController
                         if (!empty($this->cart->contents())) {
                             $couponArray = array(
                                 'coupon_id' => $query->coupon_id,
-                                'coupon_discount_shipping' => $query->discount
+                                'coupon_discount_shipping' => $query->discount,
+                                'discount_type' => $query->discount_type
                             );
                             $this->session->set($couponArray);
                             $this->session->setFlashdata('message', 'Coupon code applied successfully ');
@@ -180,7 +185,8 @@ class Checkout extends BaseController
                             if (!empty($this->cart->contents())) {
                                 $couponArray = array(
                                     'coupon_id' => $query->coupon_id,
-                                    'coupon_discount_shipping' => $query->discount
+                                    'coupon_discount_shipping' => $query->discount,
+                                    'discount_type' => $query->discount_type
                                 );
                                 $this->session->set($couponArray);
                                 $this->session->setFlashdata('message', 'Coupon code applied successfully ');
@@ -203,7 +209,8 @@ class Checkout extends BaseController
                     if (!empty($this->cart->contents())) {
                         $couponArray = array(
                             'coupon_id' => $query->coupon_id,
-                            'coupon_discount_shipping' => $query->discount
+                            'coupon_discount_shipping' => $query->discount,
+                            'discount_type' => $query->discount_type
                         );
                         $this->session->set($couponArray);
                         $this->session->setFlashdata('message', 'Coupon code applied successfully ');
@@ -289,7 +296,11 @@ class Checkout extends BaseController
 
                 $disc = null;
                 if (isset($this->session->coupon_discount)) {
-                    $disc = round(($this->cart->total() * $this->session->coupon_discount) / 100);
+                    if (newSession()->discount_type == 'Percentage') {
+                        $disc = round(($this->cart->total() * $this->session->coupon_discount) / 100);
+                    }else{
+                        $disc = $this->session->coupon_discount;
+                    }
                 }
 
                 if (!empty($shipping_charge)) {
@@ -466,6 +477,7 @@ class Checkout extends BaseController
                 unset($_SESSION['coupon_id']);
                 unset($_SESSION['coupon_discount']);
                 unset($_SESSION['coupon_discount_shipping']);
+                unset($_SESSION['discount_type']);
                 $this->cart->destroy();
 
                 $this->session->setFlashdata('message', 'Your order has been successfully placed ');
@@ -531,12 +543,20 @@ class Checkout extends BaseController
             $table2 = DB()->table('cc_coupon_shipping');
             $checkShipping = $table2->where('coupon_id',newSession()->coupon_id)->where('shipping_method_id',$shipping_method_id)->countAllResults();
             if (!empty($checkShipping)) {
-                $dis = ($charge * newSession()->coupon_discount_shipping) / 100;
+                if (newSession()->discount_type == 'Percentage') {
+                    $dis = ($charge * newSession()->coupon_discount_shipping) / 100;
+                }else{
+                    $dis = newSession()->coupon_discount_shipping;
+                }
             }else{
                 $dis =  0;
             }
         }else{
-            $dis = ($charge * newSession()->coupon_discount_shipping)/100;
+            if (newSession()->discount_type == 'Percentage') {
+                $dis = ($charge * newSession()->coupon_discount_shipping) / 100;
+            }else{
+                $dis = newSession()->coupon_discount_shipping;
+            }
         }
 
         return $dis;

@@ -133,9 +133,9 @@
                                   <li class="nav-item">
                                     <a class="nav-link" aria-current="page" href="<?php echo base_url() ?>">Home</a>
                                   </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-danger" href="<?php echo base_url('page/new-arrivals') ?>">New Arrivals</a>
-                                    </li>
+<!--                                    <li class="nav-item">-->
+<!--                                        <a class="nav-link text-danger" href="--><?php //echo base_url('page/new-arrivals') ?><!--">New Arrivals</a>-->
+<!--                                    </li>-->
                                   <?php //echo top_menu(); ?>
                                     <?php if ($modules['album'] == 1) { ?>
                                         <?php $qcPic = get_data_by_id('slug','cc_pages','page_id','15'); ?>
@@ -145,7 +145,8 @@
                                     <?php } ?>
                                     <?php $about = get_data_by_id('slug','cc_pages','page_id','2'); ?>
                                   <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo base_url('page/'.$about) ?>">About Us</a>
+<!--                                    <a class="nav-link" href="--><?php //echo base_url('page/'.$about) ?><!--">About Us</a>-->
+                                    <a class="nav-link" href="<?php echo base_url('blog') ?>">Blog</a>
                                   </li>
                                     <?php $contact = get_data_by_id('slug','cc_pages','page_id','1'); ?>
                                   <li class="nav-item">

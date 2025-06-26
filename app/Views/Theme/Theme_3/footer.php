@@ -1221,6 +1221,59 @@
          }
      }
 
+     $('#commentForm').on('submit', function(event) {
+         event.preventDefault();
+         $.ajax({
+             url: $(this).attr('action'),
+             type: "POST",
+             data: new FormData(this),
+             contentType: false,
+             cache: false,
+             processData: false,
+             success: function(response) {
+                 $('#commentForm')[0].reset();
+                 $('#mesVal').html(response);
+                 $('#commentBoxReload').load(document.URL + ' #commentBoxReload');
+                 $('.message_alert').show();
+                 setTimeout(function() {
+                     $("#messAlt").fadeOut(1500);
+                 }, 600);
+
+             }
+         });
+     });
+
+    function commentReply(show,id){
+        var formID = "'commentReply_" + id+"'" ;
+        var html = '<form id="commentReply_'+id+'" action="<?php echo base_url('blog-comment-reply-action')?>" method="post"><div class="d-flex" > <input type="hidden" name="comment_id" class="comment_id" value="'+id+'" required> <input type="text" name="com_name" placeholder="Name" class="input-c" required> <input type="text" name="com_email" placeholder="Email" class="input-c"> </div> <div class="mt-1"> <input type="text" name="com_text" placeholder="Text" class="input-c input-te" required> <br><button type="button" class="btn btn-reply mt-1" onclick="commentReplyAction('+formID+')" >Reply  Comment</button> </div></form>';
+        $("#"+show).html(html);
+    }
+
+
+
+    function commentReplyAction(formID){
+        var form = document.getElementById(formID);
+        $.ajax({
+            url: $(form).prop('action'),
+            type: "POST",
+            data: new FormData(form),
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(response) {
+                $('#'+formID)[0].reset();
+                $('#'+formID).hide();
+                $('#commentBoxReload').load(document.URL + ' #commentBoxReload');
+                $('#mesVal').html(response);
+                $('.message_alert').show();
+                setTimeout(function () {
+                    $("#messAlt").fadeOut(1500);
+                }, 600);
+
+            }
+        });
+    }
+
 </script>
 
 <script src="<?php echo base_url() ?>/assets/assets_fl/validation.js " type="text/javascript"> </script>

@@ -43,6 +43,7 @@
                         <tr>
                             <th>Sl</th>
                             <th>Name</th>
+                            <th>Status</th>
                             <th>Image</th>
                             <th>Action</th>
                         </tr>
@@ -52,6 +53,7 @@
                         <tr>
                             <td width="40"><?php echo $i++;?></td>
                             <td><?php echo $val->name;?></td>
+                            <td><?php echo $val->status;?></td>
                             <td><?php echo image_view('uploads/brand','',$val->image,'noimage.png','width-80');?></td>
                             <td width="180">
                                 <a href="<?php echo base_url('brand_update/'.$val->brand_id);?>" class="btn btn-primary btn-xs"><i class="fas fa-edit"></i> Update</a>

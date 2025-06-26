@@ -50,6 +50,13 @@
                             <label>Sort Order</label>
                             <input type="number" name="sort_order" class="form-control" placeholder="Sort Order" value="<?php echo $brand->sort_order;?>" required>
                         </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select name="status" class="form-control">
+                                <option value="Active" <?php echo ($brand->status == 'Active')?'selected':'';?> >Active</option>
+                                <option value="Inactive" <?php echo ($brand->status == 'Inactive')?'selected':'';?> >Inactive</option>
+                            </select>
+                        </div>
 
                         <div class="form-group">
                             <label>Image</label>
