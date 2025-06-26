@@ -86,7 +86,7 @@ class Products extends BaseController
             $data['prodCat'] = $table->get()->getResult();
 
             $tableBrand = DB()->table('cc_brand');
-            $data['brands'] = $tableBrand->where('status','Active')->get()->getResult();
+            $data['brands'] = $tableBrand->where('status','Active')->orderBy('name','ASC')->get()->getResult();
 
             //$perm = array('create','read','update','delete','mod_access');
             $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
