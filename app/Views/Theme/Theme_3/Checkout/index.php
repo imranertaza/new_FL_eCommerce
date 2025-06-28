@@ -318,9 +318,9 @@
                                     $offerdisc = 0;
                                 if (isset(newSession()->coupon_discount) || !empty($offer['discount_amount'])) {
                                 if (newSession()->discount_type == 'Percentage') {
-                                    $disc = round((Cart()->total() * newSession()->coupon_discount) / 100);
+                                    $disc = (Cart()->total() * newSession()->coupon_discount) / 100;
                                 }else{
-                                    $disc = round(newSession()->coupon_discount);
+                                    $disc = newSession()->coupon_discount;
                                 }
                                     $offerdisc = $offer['discount_amount'];
                                     ?>
