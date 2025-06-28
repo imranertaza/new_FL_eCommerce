@@ -597,7 +597,7 @@ class Products extends BaseController
             $data['prodCat'] = $table->get()->getResult();
 
             $tableBrand = DB()->table('cc_brand');
-            $data['brands'] = $tableBrand->where('status','Active')->get()->getResult();
+            $data['brands'] = $tableBrand->where('status','Active')->orderBy('name','ASC')->get()->getResult();
 
             $tablecat = DB()->table('cc_product_to_category');
             $data['prodCatSel'] = $tablecat->where('product_id', $product_id)->get()->getResult();
