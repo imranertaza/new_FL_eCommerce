@@ -91,3 +91,8 @@ table.dataTable thead .sorting_asc,
 table.dataTable thead .sorting_desc {
     background : none;
 }
+.remove_btn{
+    position: absolute;
+    right: 19px;
+    top: 8px;
+}

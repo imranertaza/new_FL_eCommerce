@@ -99,7 +99,12 @@
                             </td>
                             <td class="mo-text-center mo-amount" style="text-align:left; width: 170px">
                                 <?php if (isset(newSession()->coupon_discount) || !empty($offer['discount_amount'])) {
-                                    $disc = round((Cart()->total() * newSession()->coupon_discount) / 100);
+                                    if (newSession()->discount_type == 'Percentage') {
+                                        $disc = (Cart()->total() * newSession()->coupon_discount / 100);
+                                    }else{
+                                        $disc = newSession()->coupon_discount;
+                                    }
+
                                     $offerdisc = $offer['discount_amount']; ?>
                                     <span class=" fs-4"><?php echo currency_symbol_with_symbol(Cart()->total(),$symbol) ?></span><br>
                                     <span class=" fs-4"><?php echo currency_symbol_with_symbol(($disc + $offerdisc),$symbol) ?></span><br>

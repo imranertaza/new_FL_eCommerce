@@ -518,11 +518,18 @@ class Album extends BaseController
 
         DB()->transStart();
 
-        $target_dir = FCPATH . '/uploads/album/' . $album_id;
-        if (file_exists($target_dir)) {
-            delete_files($target_dir, TRUE);
-            rmdir($target_dir);
+        $targetDir = FCPATH . '/uploads/album/' . $album_id;
+        if (file_exists($targetDir)) {
+            delete_files($targetDir, TRUE);
+            rmdir($targetDir);
         }
+        //cache image delete
+        $targetDirCache = FCPATH . '/cache/uploads/album/' . $album_id;
+        if (file_exists($targetDirCache)) {
+            delete_files($targetDirCache, TRUE);
+            rmdir($targetDirCache);
+        }
+
         $table = DB()->table('cc_album');
         $table->where('album_id', $album_id)->delete();
 
@@ -561,11 +568,18 @@ class Album extends BaseController
         $table = DB()->table('cc_album_details');
         $data = $table->where('album_details_id', $album_details_id)->get()->getRow();
 
-        $target_dir = FCPATH . '/uploads/album/' . $data->album_id . '/' . $album_details_id;
-        if (file_exists($target_dir)) {
-            delete_files($target_dir, TRUE);
-            rmdir($target_dir);
+        $targetDir = FCPATH . '/uploads/album/' . $data->album_id . '/' . $album_details_id;
+        if (file_exists($targetDir)) {
+            delete_files($targetDir, TRUE);
+            rmdir($targetDir);
         }
+        //cache image delete
+        $targetDirCache = FCPATH . '/cache/uploads/album/' . $data->album_id . '/' . $album_details_id;
+        if (file_exists($targetDirCache)) {
+            delete_files($targetDirCache, TRUE);
+            rmdir($targetDirCache);
+        }
+
 
         $table->where('album_details_id', $album_details_id)->delete();
         print '<div class="alert alert-success alert-dismissible" role="alert">Album Image Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
@@ -583,10 +597,16 @@ class Album extends BaseController
         if (empty($count)) {
             DB()->transStart();
 
-            $target_dir = FCPATH . '/uploads/album/' . $album_id;
-            if (file_exists($target_dir)) {
-                delete_files($target_dir, TRUE);
-                rmdir($target_dir);
+            $targetDir = FCPATH . '/uploads/album/' . $album_id;
+            if (file_exists($targetDir)) {
+                delete_files($targetDir, TRUE);
+                rmdir($targetDir);
+            }
+            //cache delete
+            $targetDirCache = FCPATH . '/cache/uploads/album/' . $album_id;
+            if (file_exists($targetDirCache)) {
+                delete_files($targetDirCache, TRUE);
+                rmdir($targetDirCache);
             }
 
 

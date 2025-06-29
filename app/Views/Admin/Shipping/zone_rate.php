@@ -144,6 +144,34 @@
 
 <?= $this->section('java_script') ?>
 <script>
+    function add_zone_rate(id) {
+        var new_chq_no = parseInt($('#total_item_'+id).val()) + 1;
+        var new_input = "<div class='col-md-12 mt-2'><input type='text' class='form-input' placeholder='Up To Value'  name='up_to_value[]' style='width: 40%;margin-right: 2px;'><input type='text' class='form-input'  name='cost[]' placeholder='Cost' style='width: 45%;margin-left: 3px;'><input type='hidden' value='"+id+"' name='geo_zone_id[]'><input type='hidden' value='' name='cc_geo_zone_shipping_rate_id[]'> <a href='javascript:void(0)' onclick='remove_option(this)' class='btn btn-danger' style='margin-top: -5px;width: 5%;'>X</a></div>";
+
+        $('#new_rate_'+id).append(new_input);
+        $('#total_item_'+id).val(new_chq_no);
+    }
+
+    function removeRate(id){
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('zone_rate_delete') ?>",
+            data: {
+                cc_geo_zone_shipping_rate_id: id
+            },
+            beforeSend: function() {
+                $("#loading-image").show();
+            },
+            success: function(data) {
+                $("#mess").html(data);
+            }
+
+        });
+    }
+
+    function remove_option(data) {
+        $(data).parent().remove();
+    }
 
 </script>
 <?= $this->endSection() ?>

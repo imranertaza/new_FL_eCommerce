@@ -85,6 +85,9 @@ class Products extends BaseController
             $table = DB()->table('cc_product_category');
             $data['prodCat'] = $table->get()->getResult();
 
+            $tableBrand = DB()->table('cc_brand');
+            $data['brands'] = $tableBrand->where('status','Active')->orderBy('name','ASC')->get()->getResult();
+
             //$perm = array('create','read','update','delete','mod_access');
             $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
             foreach ($perm as $key => $val) {
@@ -593,6 +596,9 @@ class Products extends BaseController
             $table = DB()->table('cc_product_category');
             $data['prodCat'] = $table->get()->getResult();
 
+            $tableBrand = DB()->table('cc_brand');
+            $data['brands'] = $tableBrand->where('status','Active')->orderBy('name','ASC')->get()->getResult();
+
             $tablecat = DB()->table('cc_product_to_category');
             $data['prodCatSel'] = $tablecat->where('product_id', $product_id)->get()->getResult();
 
@@ -1090,10 +1096,16 @@ class Products extends BaseController
         $table = DB()->table('cc_product_image');
         $data = $table->where('product_image_id', $product_image_id)->get()->getRow();
 
-        $target_dir = FCPATH . '/uploads/products/' . $data->product_id . '/' . $product_image_id;
-        if (file_exists($target_dir)) {
-            delete_files($target_dir, TRUE);
-            rmdir($target_dir);
+        $targetDir = FCPATH . '/uploads/products/' . $data->product_id . '/' . $product_image_id;
+        if (file_exists($targetDir)) {
+            delete_files($targetDir, TRUE);
+            rmdir($targetDir);
+        }
+
+        $targetDirCache = FCPATH . '/cache/uploads/products/' . $data->product_id . '/' . $product_image_id;
+        if (file_exists($targetDirCache)) {
+            delete_files($targetDirCache, TRUE);
+            rmdir($targetDirCache);
         }
 
         $table->where('product_image_id', $product_image_id)->delete();
@@ -1284,10 +1296,16 @@ class Products extends BaseController
             foreach ($allProductId as $product_id) {
 
 
-                $target_dir = FCPATH . '/uploads/products/' . $product_id;
-                if (file_exists($target_dir)) {
-                    delete_files($target_dir, TRUE);
-                    rmdir($target_dir);
+                $targetDir = FCPATH . '/uploads/products/' . $product_id;
+                if (file_exists($targetDir)) {
+                    delete_files($targetDir, TRUE);
+                    rmdir($targetDir);
+                }
+                //cache delete
+                $targetDirCache = FCPATH . '/cache/uploads/products/' . $product_id;
+                if (file_exists($targetDirCache)) {
+                    delete_files($targetDirCache, TRUE);
+                    rmdir($targetDirCache);
                 }
 
                 $proTable = DB()->table('cc_products');

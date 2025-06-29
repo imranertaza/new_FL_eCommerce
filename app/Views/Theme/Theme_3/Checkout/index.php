@@ -317,7 +317,11 @@
                                     $disc = 0;
                                     $offerdisc = 0;
                                 if (isset(newSession()->coupon_discount) || !empty($offer['discount_amount'])) {
-                                    $disc = round((Cart()->total() * newSession()->coupon_discount) / 100);
+                                if (newSession()->discount_type == 'Percentage') {
+                                    $disc = (Cart()->total() * newSession()->coupon_discount) / 100;
+                                }else{
+                                    $disc = newSession()->coupon_discount;
+                                }
                                     $offerdisc = $offer['discount_amount'];
                                     ?>
                                 <span><?php $toDis = $disc + $offerdisc;  echo $cSymbol .$toDis ?></span>

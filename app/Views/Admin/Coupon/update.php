@@ -58,6 +58,8 @@
                                 </select>
                             </div>
 
+
+
                             <div class="form-group " id="shippingMethod" style="<?php echo ($coupon->discount_on == 'Shipping')?'display: block;':'display: none;';?>" >
                                 <label>Shipping Method</label>
                                 <?php foreach ($shipping_method as  $val){ ?>
@@ -69,20 +71,28 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Discount</label>
-                                <input type="text" name="discount" class="form-control" placeholder="Discount" value="<?php echo $coupon->discount?>" required>
+                                <label>Discount Type</label>
+                                <select name="discount_type" class="form-control"  >
+                                    <option value="Percentage" <?php echo ($coupon->discount_type == 'Percentage')?'selected':''; ?> >Percentage</option>
+                                    <option value="Flat" <?php echo ($coupon->discount_type == 'Flat')?'selected':''; ?> >Flat</option>
+                                </select>
                             </div>
 
-                            <div class="form-group">
-                                <label>Total Useable</label>
-                                <input type="text" name="total_useable" class="form-control" placeholder="Total Useable" value="<?php echo $coupon->total_useable?>" required>
-                            </div>
 
                             <input type="hidden" name="coupon_id" value="<?php echo $coupon->coupon_id;?>"  required>
                             <button class="btn btn-primary" >update</button>
                             <a href="<?php echo base_url('coupon')?>" class="btn btn-danger" >Back</a>
                         </div>
                         <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Discount</label>
+                                <input type="text" name="discount" class="form-control" placeholder="Discount" value="<?php echo $coupon->discount?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Total Useable</label>
+                                <input type="text" name="total_useable" class="form-control" placeholder="Total Useable" value="<?php echo $coupon->total_useable?>" required>
+                            </div>
+
                             <div class="form-group">
                                 <label>Subscribed User</label>
                                 <select name="for_subscribed_user" class="form-control" >
