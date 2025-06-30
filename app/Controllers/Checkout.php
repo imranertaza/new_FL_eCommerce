@@ -297,9 +297,13 @@ class Checkout extends BaseController
                 $disc = null;
                 if (isset($this->session->coupon_discount)) {
                     if (newSession()->discount_type == 'Percentage') {
-                        $disc = round(($this->cart->total() * $this->session->coupon_discount) / 100);
+                        $disc = ($this->cart->total() * $this->session->coupon_discount) / 100;
                     }else{
-                        $disc = $this->session->coupon_discount;
+                        if ($this->cart->total() > $this->session->coupon_discount) {
+                            $disc = $this->session->coupon_discount;
+                        }else{
+                            $disc = $this->cart->total();
+                        }
                     }
                 }
 
@@ -316,8 +320,11 @@ class Checkout extends BaseController
                     $table->where('coupon_id',$this->session->coupon_id)->update($newQtyCupUsed);
                 }
 
-                $offer = $this->offer_calculate->offer_discount($this->cart,$shipping_charge);
+                //offer shipping discount
+                $geo_zone_id = $this->zone_rate_shipping->zone_id($data['payment_country_id'], $data['payment_city']);
+                $offer = $this->offer_calculate->offer_discount($this->cart,$shipping_charge,$geo_zone_id);
                 $offerDiscount = $offer['discount_amount'] + $offer['discount_shipping_amount'];
+
 
                 $finalAmo = number_format($this->cart->total() - $disc - $offerDiscount,2);
                 if (!empty($shipping_charge)) {
@@ -546,7 +553,11 @@ class Checkout extends BaseController
                 if (newSession()->discount_type == 'Percentage') {
                     $dis = ($charge * newSession()->coupon_discount_shipping) / 100;
                 }else{
-                    $dis = newSession()->coupon_discount_shipping;
+                    if ($charge > newSession()->coupon_discount_shipping) {
+                        $dis = newSession()->coupon_discount_shipping;
+                    }else{
+                        $dis = $charge;
+                    }
                 }
             }else{
                 $dis =  0;
@@ -555,7 +566,11 @@ class Checkout extends BaseController
             if (newSession()->discount_type == 'Percentage') {
                 $dis = ($charge * newSession()->coupon_discount_shipping) / 100;
             }else{
-                $dis = newSession()->coupon_discount_shipping;
+                if ($charge > newSession()->coupon_discount_shipping) {
+                    $dis = newSession()->coupon_discount_shipping;
+                }else{
+                    $dis = $charge;
+                }
             }
         }
 
