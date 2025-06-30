@@ -102,7 +102,11 @@
                                     if (newSession()->discount_type == 'Percentage') {
                                         $disc = (Cart()->total() * newSession()->coupon_discount / 100);
                                     }else{
-                                        $disc = newSession()->coupon_discount;
+                                        if (Cart()->total() > newSession()->coupon_discount) {
+                                            $disc = newSession()->coupon_discount;
+                                        }else{
+                                            $disc = Cart()->total();
+                                        }
                                     }
 
                                     $offerdisc = $offer['discount_amount']; ?>
