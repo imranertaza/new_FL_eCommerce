@@ -552,7 +552,7 @@ function getParentCategoryArray()
 function getCategoryBySubArray($cat_id,$orderBy,$type)
 {
     $table = DB()->table('cc_product_category');
-    $query = $table->where('parent_id', $cat_id)->orderBy($orderBy, $type)->get()->getResult();
+    $query = $table->where('parent_id', $cat_id)->where('status','1')->orderBy($orderBy, $type)->get()->getResult();
     return $query;
 }
 
@@ -1311,7 +1311,7 @@ function order_id_by_status($order_id)
 function getSideMenuArray()
 {
     $table = DB()->table('cc_product_category');
-    $query = $table->where('side_menu', 1)->orderBy('sort_order', 'ASC')->get()->getResult();
+    $query = $table->where('side_menu', 1)->where('status','1')->orderBy('sort_order', 'ASC')->get()->getResult();
     return $query;
 }
 
