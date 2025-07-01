@@ -45,7 +45,7 @@ class Category extends BaseController {
         $data['totalPro'] = $data['pager']->getTotal();
 
         $table = DB()->table('cc_product_category');
-        $data['parent_Cat'] = $table->where('parent_id',$cat_id)->orderBy('category_name','ASC')->get()->getResult();
+        $data['parent_Cat'] = $table->where('parent_id',$cat_id)->where('status','1')->orderBy('category_name','ASC')->get()->getResult();
         $data['main_Cat'] = $table->where('parent_id',null)->get()->getResult();
 
         $data['keywords'] = $settings['meta_keyword'];

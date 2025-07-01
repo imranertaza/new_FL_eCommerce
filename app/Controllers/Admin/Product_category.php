@@ -165,6 +165,7 @@ class Product_category extends BaseController
         $popular = $this->request->getPost('popular');
         $shop_by = $this->request->getPost('shop_by');
         $data['category_name'] = $this->request->getPost('category_name');
+        $data['status'] = $this->request->getPost('status');
         $data['icon_id'] = !empty($this->request->getPost('icon_id')) ? $this->request->getPost('icon_id') : null;
         $data['parent_id'] = !empty($this->request->getPost('parent_id')) ? $this->request->getPost('parent_id') : null;
         $data['description'] = $this->request->getPost('description');
