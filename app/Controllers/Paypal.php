@@ -187,22 +187,24 @@ class Paypal extends BaseController
             if (isset($this->session->cusUserId)) {
                 $data['customer_id'] = $this->session->cusUserId;
             }
-            $disc = null;
+            $discCouponProduct = null;
             if (isset($this->session->coupon_discount)) {
                 if ($this->session->discount_type == 'Percentage') {
-                    $disc = ($this->cart->total() * $this->session->coupon_discount) / 100;
+                    $discCouponProduct = ($this->cart->total() * $this->session->coupon_discount) / 100;
                 }else{
                     if ($this->cart->total() > $this->session->coupon_discount) {
-                        $disc = $this->session->coupon_discount;
+                        $discCouponProduct = $this->session->coupon_discount;
                     }else{
-                        $disc = $this->cart->total();
+                        $discCouponProduct = $this->cart->total();
                     }
                 }
             }
 
+            //Coupon shipping amount all discount calculate
+            $discCouponShipping = null;
             if (!empty($data['shipping_charge'])) {
                 if (isset($this->session->coupon_discount_shipping)) {
-                    $disc = $this->shipping_discount_calculate($data['shipping_charge'],$data['shipping_method']);
+                    $discCouponShipping = $this->shipping_discount_calculate($data['shipping_charge'],$data['shipping_method']);
                 }
             }
 
@@ -215,16 +217,33 @@ class Paypal extends BaseController
 
             $geo_zone_id = $this->zone_rate_shipping->zone_id($data['payment_country_id'], $data['payment_city']);
             $offer = $this->offer_calculate->offer_discount($this->cart,$data['shipping_charge'],$geo_zone_id);
-            $offerDiscount = $offer['discount_amount'] + $offer['discount_shipping_amount'];
+            //offer all product amount discount calculate
+            $offerDiscountProduct = $offer['discount_amount'];
+            //offer all shipping amount discount calculate
+            $offerDiscountShipping = $offer['discount_shipping_amount'];
 
-            $finalAmo = number_format($this->cart->total() - $disc - $offerDiscount,2);
+            //total coupon or offer product amount discount calculate
+            $totalProductDiscount = $discCouponProduct + $offerDiscountProduct;
+
+            //total coupon or offer product shipping discount calculate
+            $totalShippingDiscount = $discCouponShipping + $offerDiscountShipping;
+
+            //maximum discount calculate
+            $finalProductDiscount = ($this->cart->total() > $totalProductDiscount)?$totalProductDiscount:$this->cart->total();
+            //final product amount calculate
+            $finalAmo = number_format($this->cart->total() - $finalProductDiscount,2);
+
+            $finalShippingDiscount = null;
             if (!empty($data['shipping_charge'])) {
-                $finalAmo = number_format(($this->cart->total() + $data['shipping_charge']) - $disc - $offerDiscount,2);
+                //maximum discount calculate
+                $finalShippingDiscount = ($data['shipping_charge'] > $totalShippingDiscount)?$totalShippingDiscount:$data['shipping_charge'];
+                //final product and shipping amount calculate
+                $finalAmo = number_format(($this->cart->total() + $data['shipping_charge']) - $finalShippingDiscount - $finalProductDiscount,2);
             }
 
             $data['payment_status'] = 'Paid';
             $data['total'] = $this->cart->total();
-            $data['discount'] = $disc + $offerDiscount;
+            $data['discount'] = $finalProductDiscount + $finalShippingDiscount;
             $data['final_amount'] = $finalAmo;
 
 
