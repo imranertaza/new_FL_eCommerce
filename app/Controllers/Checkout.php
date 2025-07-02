@@ -294,18 +294,25 @@ class Checkout extends BaseController
                     $data['customer_id'] = $this->session->cusUserId;
                 }
 
-                $disc = null;
+                //Coupon product amount all discount calculate
+                $discCouponProduct = null;
                 if (isset($this->session->coupon_discount)) {
                     if (newSession()->discount_type == 'Percentage') {
-                        $disc = round(($this->cart->total() * $this->session->coupon_discount) / 100);
+                        $discCouponProduct = ($this->cart->total() * $this->session->coupon_discount) / 100;
                     }else{
-                        $disc = $this->session->coupon_discount;
+                        if ($this->cart->total() > $this->session->coupon_discount) {
+                            $discCouponProduct = $this->session->coupon_discount;
+                        }else{
+                            $discCouponProduct = $this->cart->total();
+                        }
                     }
                 }
 
+                //Coupon shipping amount all discount calculate
+                $discCouponShipping = null;
                 if (!empty($shipping_charge)) {
                     if (isset($this->session->coupon_discount_shipping)) {
-                        $disc = $this->shipping_discount_calculate($shipping_charge,$data['shipping_method']);
+                        $discCouponShipping = $this->shipping_discount_calculate($shipping_charge,$data['shipping_method']);
                     }
                 }
 
@@ -316,12 +323,33 @@ class Checkout extends BaseController
                     $table->where('coupon_id',$this->session->coupon_id)->update($newQtyCupUsed);
                 }
 
-                $offer = $this->offer_calculate->offer_discount($this->cart,$shipping_charge);
-                $offerDiscount = $offer['discount_amount'] + $offer['discount_shipping_amount'];
+                //offer discount calculate
+                $geo_zone_id = $this->zone_rate_shipping->zone_id($data['payment_country_id'], $data['payment_city']);
+                $offer = $this->offer_calculate->offer_discount($this->cart,$shipping_charge,$geo_zone_id);
 
-                $finalAmo = number_format($this->cart->total() - $disc - $offerDiscount,2);
+                //offer all product amount discount calculate
+                $offerDiscountProduct = $offer['discount_amount'];
+                //offer all shipping amount discount calculate
+                $offerDiscountShipping = $offer['discount_shipping_amount'];
+
+                //total coupon or offer product amount discount calculate
+                $totalProductDiscount = $discCouponProduct + $offerDiscountProduct;
+
+                //total coupon or offer product shipping discount calculate
+                $totalShippingDiscount = $discCouponShipping + $offerDiscountShipping;
+
+                //maximum discount calculate
+                $finalProductDiscount = ($this->cart->total() > $totalProductDiscount)?$totalProductDiscount:$this->cart->total();
+
+                //final product amount calculate
+                $finalAmo = number_format($this->cart->total() - $finalProductDiscount,2);
+
+                $finalShippingDiscount = null;
                 if (!empty($shipping_charge)) {
-                    $finalAmo = number_format(($this->cart->total() + $shipping_charge) - $disc - $offerDiscount,2);
+                    //maximum discount calculate
+                    $finalShippingDiscount = ($shipping_charge > $totalShippingDiscount)?$totalShippingDiscount:$shipping_charge;
+                    //final product and shipping amount calculate
+                    $finalAmo = number_format(($this->cart->total() + $shipping_charge) - $finalShippingDiscount - $finalProductDiscount,2);
                 }
 
                 if ($data['payment_method'] == '8') {
@@ -358,7 +386,7 @@ class Checkout extends BaseController
 
 
                 $data['total'] = $this->cart->total();
-                $data['discount'] = $disc + $offerDiscount;
+                $data['discount'] = $finalProductDiscount + $finalShippingDiscount;
                 $data['final_amount'] = $finalAmo;
 
                 $data['status'] = $order_status_id;
@@ -530,6 +558,12 @@ class Checkout extends BaseController
             $data['discount'] += $offer['discount_shipping_amount'];
         }
 
+        if ($data['charge'] > $data['discount']){
+            $data['discount'] = $data['discount'];
+        }else{
+            $data['discount'] = $data['charge'];
+        }
+
         return $this->response->setJSON($data);
     }
 
@@ -546,7 +580,11 @@ class Checkout extends BaseController
                 if (newSession()->discount_type == 'Percentage') {
                     $dis = ($charge * newSession()->coupon_discount_shipping) / 100;
                 }else{
-                    $dis = newSession()->coupon_discount_shipping;
+                    if ($charge > newSession()->coupon_discount_shipping) {
+                        $dis = newSession()->coupon_discount_shipping;
+                    }else{
+                        $dis = $charge;
+                    }
                 }
             }else{
                 $dis =  0;
@@ -555,7 +593,11 @@ class Checkout extends BaseController
             if (newSession()->discount_type == 'Percentage') {
                 $dis = ($charge * newSession()->coupon_discount_shipping) / 100;
             }else{
-                $dis = newSession()->coupon_discount_shipping;
+                if ($charge > newSession()->coupon_discount_shipping) {
+                    $dis = newSession()->coupon_discount_shipping;
+                }else{
+                    $dis = $charge;
+                }
             }
         }
 

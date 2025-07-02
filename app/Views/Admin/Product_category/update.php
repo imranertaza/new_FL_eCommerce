@@ -113,6 +113,13 @@
 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
+                                                        <label>Status</label>
+                                                        <select name="status" class="form-control">
+                                                            <option value="1" <?php echo ($category->status == '1')?'selected':'';?> >Active</option>
+                                                            <option value="0" <?php echo ($category->status == '0')?'selected':'';?> >Inactive</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
                                                         <label>Description</label>
                                                         <textarea name="description" rows="4" class="form-control"><?php echo $category->description; ?></textarea>
                                                     </div>

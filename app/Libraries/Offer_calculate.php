@@ -173,7 +173,7 @@ class Offer_calculate
                         if (empty($pro->brand_id) && empty($pro->prod_cat_id) && empty($pro->product_id)) {
                             foreach ($cart->contents() as $cartItem) {
                                 if ($cartItem['qty'] >= $firstOffer->qty) {
-                                    $this->product_discount($offer, $cartItem['price'], $cartItem['qty'], $shipAmount, $geo_zone_id);
+                                    $this->product_discount($firstOffer, $cartItem['price'], $cartItem['qty'], $shipAmount, $geo_zone_id);
                                 }
                             }
                         }
@@ -250,7 +250,11 @@ class Offer_calculate
         if ($result->discount_calculate_on == 'percentage') {
             return ($baseAmount * $result->discount_amount) / 100;
         } else {
-            return $result->discount_amount;
+            if ($baseAmount > $result->discount_amount) {
+                return $result->discount_amount;
+            }else{
+                return $baseAmount;
+            }
         }
 
         return 0;
@@ -270,7 +274,11 @@ class Offer_calculate
             if ($result->discount_calculate_on == 'percentage') {
                 return ($baseAmount * $result->discount_amount) / 100;
             } else {
-                return $result->discount_amount;
+                if ($baseAmount > $result->discount_amount) {
+                    return $result->discount_amount;
+                }else{
+                    return $baseAmount;
+                }
             }
         } else {
             if (!empty($geo_zone_id)) {
@@ -280,7 +288,11 @@ class Offer_calculate
                     if ($query->discount_calculate_on == 'percentage') {
                         return ($baseAmount * $query->discount_amount) / 100;
                     } else {
-                        return $query->discount_amount;
+                        if ($baseAmount > $query->discount_amount) {
+                            return $query->discount_amount;
+                        }else{
+                            return $baseAmount;
+                        }
                     }
                 }
             }

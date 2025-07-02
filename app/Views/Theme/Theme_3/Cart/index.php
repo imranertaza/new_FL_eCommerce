@@ -102,14 +102,23 @@
                                     if (newSession()->discount_type == 'Percentage') {
                                         $disc = (Cart()->total() * newSession()->coupon_discount / 100);
                                     }else{
-                                        $disc = newSession()->coupon_discount;
+                                        if (Cart()->total() > newSession()->coupon_discount) {
+                                            $disc = newSession()->coupon_discount;
+                                        }else{
+                                            $disc = Cart()->total();
+                                        }
                                     }
 
-                                    $offerdisc = $offer['discount_amount']; ?>
+                                    $offerdisc = $offer['discount_amount'];
+
+                                    $totalDiscount = $disc + $offerdisc;
+                                    $finalDiscount = (Cart()->total() > $totalDiscount)?$totalDiscount:Cart()->total();
+
+                                    ?>
                                     <span class=" fs-4"><?php echo currency_symbol_with_symbol(Cart()->total(),$symbol) ?></span><br>
-                                    <span class=" fs-4"><?php echo currency_symbol_with_symbol(($disc + $offerdisc),$symbol) ?></span><br>
+                                    <span class=" fs-4"><?php echo currency_symbol_with_symbol(($finalDiscount),$symbol) ?></span><br>
                                 <?php }
-                                $total = (isset(newSession()->coupon_discount) || !empty($offer['discount_amount']) ) ? Cart()->total() - $disc - $offerdisc : Cart()->total(); ?>
+                                $total = (isset(newSession()->coupon_discount) || !empty($offer['discount_amount']) ) ? Cart()->total() - $finalDiscount : Cart()->total(); ?>
                                 <span class="fw-bold fs-4"><?php echo currency_symbol_with_symbol($total,$symbol) ?></span>
                             </td>
                         </tr>

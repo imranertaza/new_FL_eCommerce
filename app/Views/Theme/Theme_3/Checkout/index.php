@@ -317,18 +317,24 @@
                                     $disc = 0;
                                     $offerdisc = 0;
                                 if (isset(newSession()->coupon_discount) || !empty($offer['discount_amount'])) {
-                                if (newSession()->discount_type == 'Percentage') {
-                                    $disc = (Cart()->total() * newSession()->coupon_discount) / 100;
-                                }else{
-                                    $disc = newSession()->coupon_discount;
-                                }
+                                    if (newSession()->discount_type == 'Percentage') {
+                                        $disc = (Cart()->total() * newSession()->coupon_discount) / 100;
+                                    }else{
+                                        if (Cart()->total() > newSession()->coupon_discount) {
+                                            $disc = newSession()->coupon_discount;
+                                        }else{
+                                            $disc = Cart()->total();
+                                        }
+                                    }
                                     $offerdisc = $offer['discount_amount'];
+                                    $totalDiscount = $disc + $offerdisc;
+                                    $finalDiscount = (Cart()->total() > $totalDiscount)?$totalDiscount:Cart()->total();
                                     ?>
-                                <span><?php $toDis = $disc + $offerdisc;  echo $cSymbol .$toDis ?></span>
+                                <span><?php  echo $cSymbol .$finalDiscount ?></span>
                                 <?php } else {
                                     echo '<span>' . $cSymbol .$disc . '</span>';
                                 }
-                                $total = (isset(newSession()->coupon_discount) || !empty($offer['discount_amount'])) ? Cart()->total() - $disc - $offerdisc : Cart()->total(); ?>
+                                $total = (isset(newSession()->coupon_discount) || !empty($offer['discount_amount'])) ? Cart()->total() - $finalDiscount : Cart()->total(); ?>
                             </div>
                         </div>
 
