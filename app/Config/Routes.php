@@ -339,6 +339,8 @@ $routes->post('/bulk_bought_together_action', 'Admin\Advanced_products::bulk_bou
 $routes->get('/bulk_product_list', 'Admin\Advanced_products::product_list');
 
 $routes->post('/image_download_action', 'Admin\Advanced_products::image_download_action');
+$routes->get('/multi_related_product', 'Admin\Advanced_products::multiRelatedProduct');
+
 
 
 $routes->get('blog_category', 'Admin\Blog_category::index');
@@ -462,6 +464,7 @@ $routes->post('/removeToCompare', 'Compare::removeToCompare');
 //Category
 $routes->get('/category/(:num)', 'Category::index/$1');
 $routes->Post('/category_url_generate', 'Category::url_generate');
+$routes->get('/category-not-found', 'Category::categoryNotFound');
 
 //Search top
 $routes->post('/top_search', 'Search::search_action');
