@@ -164,7 +164,7 @@ class Category extends BaseController {
         $data['description'] = $settings['meta_description'];
         $data['title'] = !empty($settings['meta_title'])?$settings['meta_title']:$settings['store_name'];
 
-        $data['page_title'] = 'Product Not Found';
+        $data['page_title'] = 'Category Not Found';
         echo view('Theme/'.$settings['Theme'].'/header',$data);
         echo view('Theme/'.$settings['Theme'].'/Category/not_found');
         echo view('Theme/'.$settings['Theme'].'/footer');
