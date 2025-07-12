@@ -32,6 +32,7 @@ class Blog extends BaseController
         $table = DB()->table('cc_category');
         $data['category'] = $table->get()->getResult();
 
+        $data['catBtn'] = 'All';
         $data['keywords'] = $settings['meta_keyword'];
         $data['description'] = $settings['meta_description'];
         $data['title'] = !empty($settings['meta_title']) ? $settings['meta_title'] : $settings['store_name'];
@@ -40,7 +41,26 @@ class Blog extends BaseController
         echo view('Theme/' . $settings['Theme'] . '/Blog/index', $data);
         echo view('Theme/' . $settings['Theme'] . '/footer');
     }
+    public function category($cat_id)
+    {
+        $settings = get_settings();
 
+        $data['blog']  = $this->blogModel->where('status', '1')->where('cat_id', $cat_id)->orderBy('blog_id', 'ASC')->paginate(12);
+        $data['pager'] = $this->blogModel->pager;
+        $data['links'] = $data['pager']->links('default', 'custome_link');
+
+        $table            = DB()->table('cc_category');
+        $data['category'] = $table->get()->getResult();
+
+        $data['catBtn']      = $cat_id;
+        $data['keywords']    = $settings['meta_keyword'];
+        $data['description'] = $settings['meta_description'];
+        $data['title']       = !empty($settings['meta_title']) ? $settings['meta_title'] : $settings['store_name'];
+
+        echo view('Theme/' . $settings['Theme'] . '/header', $data);
+        echo view('Theme/' . $settings['Theme'] . '/Blog/index', $data);
+        echo view('Theme/' . $settings['Theme'] . '/footer');
+    }
     /**
      * @description This method provides Qc picture detail page view
      * @param int $album_id

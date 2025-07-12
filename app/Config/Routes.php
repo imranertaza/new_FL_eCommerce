@@ -488,6 +488,7 @@ $routes->get('/image-resize/(:any)/(:any)/(:any)', 'Image::resize/$1/$2/$3');
 
 //Blog
 $routes->get('/blog', 'Blog::index');
+$routes->get('/blog-category/(:num)', 'Blog::category/$1');
 $routes->get('/blog-view/(:num)', 'Blog::view/$1');
 $routes->post('/blog-comment-action', 'Blog::commentAction');
 $routes->post('/blog-comment-reply-action', 'Blog::commentReplyAction');

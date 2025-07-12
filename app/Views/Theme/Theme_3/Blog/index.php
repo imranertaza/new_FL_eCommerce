@@ -2,14 +2,14 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
-                <button class="btn btn-blog-category btn-selected">All</button>
-                <?php foreach ($category as $item){ ?>
-                    <button class="btn btn-blog-category"><?php echo $item->category_name;?></button>
+                <a href="<?php echo base_url('blog');?>" class="btn btn-blog-category <?php echo ($catBtn == 'All') ? 'btn-selected' : '';?>">All</a>
+                <?php foreach ($category as $item) { ?>
+                    <a href="<?php echo base_url('blog-category/' . $item->cat_id);?>" class="btn btn-blog-category <?php echo ($catBtn == $item->cat_id) ? 'btn-selected' : '';?>"><?php echo $item->category_name;?></a>
                 <?php } ?>
             </div>
             <div class="col-md-12 mt-5">
                 <div class="row">
-                    <?php foreach ($blog as $val ){ ?>
+                    <?php if (!empty($blog)) { foreach ($blog as $val ){ ?>
                     <div class="col-md-6 mt-4 div-pad">
                         <div class="row class-border">
                             <div class="col-md-5 col-sm-12 position-relative mob-view-img">
@@ -53,7 +53,7 @@
                             </div>
                         </div>
                     </div>
-                    <?php }?>
+                    <?php } } else { echo '<p>No data available</p>'; }?>
 
                 </div>
             </div>
