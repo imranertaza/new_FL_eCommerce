@@ -30,7 +30,7 @@
                     <div class="accordion-body p-0">
                         <?php foreach ($pCatAr as $sCat) { ?>
                             <div class="accordion-item border-0">
-                                <h2 class="accordion-header" id="<?="panelsStayOpen-panelsStayOpen-heading".$pcat->prod_cat_id."-inner-heading".$sCat->prod_cat_id?>">
+                                <h2 class="accordion-header d-flex" id="<?="panelsStayOpen-panelsStayOpen-heading".$pcat->prod_cat_id."-inner-heading".$sCat->prod_cat_id?>">
                                     <a href=<?php echo base_url('category/' . $sCat->prod_cat_id); ?> class="accordion-button collapsed py-2 px-2 pl-20">
                                     <span>
                                                                 <svg class="svgIcon-accordion" width="100%" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -38,7 +38,7 @@
                                                                 <path d="M9.5 7L14.5 12L9.5 17" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"/>
                                                                 </svg>
                                                             </span>
-                                    <span> <?php echo $sCat->category_name; ?></span>
+                                    <span> <?php echo $sCat->category_name; ?></span></a>
                                     <?php $sCatAr = getCategoryBySubArray($sCat->prod_cat_id,$sCat->order_by,$sCat->order_type); if (!empty(count($sCatAr))) { ?>
                                         <button class="btn ms-auto button-collapse py-2 collappse-btn"
                                                 id= "<?="accordionPanelsStayOpen-panelsStayOpen-heading".$pcat->prod_cat_id."-inner-heading".$sCat->prod_cat_id?>" type="button"
@@ -47,7 +47,7 @@
                                                 aria-controls=<?="#panelsStayOpen-panelsStayOpen-heading".$pcat->prod_cat_id."-inner-collapse".$sCat->prod_cat_id?> >
                                         </button>
                                     <?php }?>
-                                    </a>
+
                                 </h2>
                                 <div id="<?="panelsStayOpen-panelsStayOpen-heading".$pcat->prod_cat_id."-inner-collapse".$sCat->prod_cat_id?>" class="accordion-collapse collapse"
                                      aria-labelledby=<?="panelsStayOpen-panelsStayOpen-heading".$pcat->prod_cat_id."-inner-heading".$sCat->prod_cat_id?>>
@@ -57,7 +57,7 @@
                                         <div class="accordion-body p-0">
                                             <?php foreach ($sCatAr as $ssCat) { ?>
                                                 <div class="accordion-item border-0 ">
-                                                    <h2 class="accordion-header" id="panelsStayOpen-panelsStayOpen-heading-2-inner-heading-2">
+                                                    <h2 class="accordion-header d-flex" id="panelsStayOpen-panelsStayOpen-heading-2-inner-heading-2">
                                                         <a href="<?php echo base_url('category/' . $ssCat->prod_cat_id); ?>" class="accordion-button collapsed py-2 px-2 pl-34">
                                                                             <span>
                                                                                 <svg class="svgIcon-accordion" width="100%" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -65,7 +65,7 @@
                                                                                 <path d="M9.5 7L14.5 12L9.5 17" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"/>
                                                                                 </svg>
                                                                             </span>
-                                                            <span><?php echo $ssCat->category_name; ?></span>
+                                                            <span><?php echo $ssCat->category_name; ?></span></a>
                                                             <?php if (!empty(count(getCategoryBySubArray($ssCat->prod_cat_id,$ssCat->order_by,$ssCat->order_type)))) { ?>
                                                                 <button class="btn ms-auto button-collapse py-2 collappse-btn"
                                                                         id="accordionPanelsStayOpen-panelsStayOpen-heading-2-inner-2" type="button"
@@ -74,7 +74,7 @@
                                                                         aria-controls="panelsStayOpen-panelsStayOpen-heading-2-inner-collapse-2">
                                                                 </button>
                                                             <?php }?>
-                                                        </a>
+
                                                     </h2>
                                                     <div id="panelsStayOpen-panelsStayOpen-heading-2-inner-collapse-2" class="accordion-collapse collapse"
                                                          aria-labelledby="anelsStayOpen-panelsStayOpen-heading-2-inner-heading-2">

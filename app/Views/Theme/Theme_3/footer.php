@@ -308,8 +308,8 @@
 
 
 
-<script src="<?php echo base_url() ?>/assets/assets_fl/script.js"></script>
-<script src="<?php echo base_url() ?>/assets/assets_fl/slick/slick.js" type="text/javascript" charset="utf-8"> </script>
+<script src="<?php echo base_url() ?>/assets/assets_fl/script.min.js"></script>
+<script src="<?php echo base_url() ?>/assets/assets_fl/slick/slick.min.js" type="text/javascript" charset="utf-8"> </script>
 <script src="<?php echo base_url() ?>/admin_assets/plugins/select2/js/select2.full.min.js"></script>
 <script src="<?php echo base_url() ?>/assets/assets_fl/datatable/datatables.min.js" ></script>
 
@@ -326,6 +326,8 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
+        // Add a class to the body to indicate the page is loaded
+        document.body.classList.add('loaded');
         const div = document.getElementById('catBox');
         const navbar = document.getElementById('menu-sticky');
         const navbarOffsetTop = navbar.offsetTop;
@@ -1276,6 +1278,6 @@
 
 </script>
 
-<script src="<?php echo base_url() ?>/assets/assets_fl/validation.js " type="text/javascript"> </script>
+<script src="<?php echo base_url() ?>/assets/assets_fl/validation.min.js " type="text/javascript"> </script>
 </body>
 </html>

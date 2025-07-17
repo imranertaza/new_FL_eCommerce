@@ -58,7 +58,7 @@
 
                             <div class="form-group mt-4">
                                 <label class="w-100" for="payment_city">District <span style="color:red; ">*</span></label>
-                                <select name="zone_id" class="form-control in_err" id="stateView" required >
+                                <select name="zone_id" class="form-control in_err" id="stateView"  >
                                     <option value="" >Please select</option>
                                     <?php echo state_with_country(!empty($address->country_id)?$address->country_id:'',!empty($address->zone_id)?$address->zone_id:'');?>
                                 </select>
