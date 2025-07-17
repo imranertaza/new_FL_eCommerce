@@ -326,6 +326,8 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
+        // Add a class to the body to indicate the page is loaded
+        document.body.classList.add('loaded');
         const div = document.getElementById('catBox');
         const navbar = document.getElementById('menu-sticky');
         const navbarOffsetTop = navbar.offsetTop;
