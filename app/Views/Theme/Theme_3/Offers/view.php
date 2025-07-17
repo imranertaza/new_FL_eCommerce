@@ -15,9 +15,9 @@
                 <div class="col-lg-12 mt-4">
                     <h4 class="text-capitalize"> Offer On Products</h4>
                     <ul>
-                        <?php $i = 1; foreach ($products as $val){ ?>
+                        <?php $i = 1; foreach ($products as $val){ if (!empty($val->product_id)){ ?>
                             <li><a href="<?= base_url('detail/'.$val->product_id)?>"><?= $i++;?>.  <?= get_data_by_id('name','cc_products','product_id',$val->product_id);?></a></li>
-                        <?php } ?>
+                        <?php } } ?>
                     </ul>
                 </div>
 

@@ -340,7 +340,7 @@ $routes->get('/bulk_product_list', 'Admin\Advanced_products::product_list');
 
 $routes->post('/image_download_action', 'Admin\Advanced_products::image_download_action');
 $routes->get('/multi_related_product', 'Admin\Advanced_products::multiRelatedProduct');
-
+$routes->post('/multi_related_product_action', 'Admin\Advanced_products::multiRelatedProductAction');
 
 
 $routes->get('blog_category', 'Admin\Blog_category::index');

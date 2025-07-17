@@ -945,8 +945,57 @@ class Advanced_products extends BaseController
         }
     }
 
+    public function multiRelatedProduct(){
+
+        $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
+        $adRoleId = $this->session->adRoleId;
+        if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
+            return redirect()->to(site_url('admin'));
+        } else {
+
+            $table = DB()->table('cc_products');
+            $data['products'] = $table->where('status','Active')->get()->getResult();
+
+            //$perm = array('create','read','update','delete','mod_access');
+            $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
+            foreach ($perm as $key => $val) {
+                $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
+            }
+            if (isset($data['mod_access']) and $data['mod_access'] == 1) {
+                echo view('Admin/Advanced_products/multi_related_product', $data);
+            } else {
+                echo view('Admin/no_permission');
+            }
+        }
+    }
+
+    public function multiRelatedProductAction(){
+        $productIdRelated =  $this->request->getPost('productIdRelated[]');
+        $allProductId =  $this->request->getPost('productId[]');
+
+        if( !empty($productIdRelated) && !empty($allProductId) ){
+            $dataArray = [];
+            foreach ($productIdRelated as $product){
+                foreach ($allProductId as $related){
+                    $dataArray[] = [
+                        'product_id' => $product,
+                        'related_id' => $related
+                    ];
+                }
+            }
+            $table = DB()->table('cc_product_related');
+            $table->insertBatch($dataArray);
+
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Related Product Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please input product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        }
+
+        return redirect()->to('multi_related_product');
 
 
+    }
 
 
 

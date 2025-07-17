@@ -243,7 +243,9 @@
 
     </header>
     <button id="scrollToTopBtn" title="Go to top">↑</button>
-
+    <div class="preloader">
+        <img src="<?php echo base_url('uploads/loader.gif')?>" alt="">
+    </div>
     <script>
 
         addEventListener("load", (event) => {

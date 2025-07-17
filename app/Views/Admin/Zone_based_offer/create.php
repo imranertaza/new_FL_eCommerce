@@ -93,33 +93,31 @@
 
                                 <div class="form-group category" id="offer_product_all">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" name="allProduct" id="all2" value="1">
+                                        <input class="form-check-input allPro" onclick="selectAllProduct()" type="checkbox" name="allProduct" id="all2" value="1">
                                         <label class="form-check-label" for="all2">All Products</label>
                                     </div>
                                 </div>
 
                                 <div class="form-group category" id="offer_product_brand">
                                     <label>Brand </label>
-                                    <select class="select2bs4" name="brand[]" multiple="multiple" data-placeholder="Select a Brand" style="width: 100%;" >
+                                    <select class="select2bs4" name="brand[]" id="brand" multiple="multiple" data-placeholder="Select a Brand" style="width: 100%;" >
                                         <?php foreach ($brand as $br) { ?>
                                             <option value="<?php echo $br->brand_id; ?>"><?php echo $br->name; ?></option>
                                         <?php } ?>
-
                                     </select>
                                 </div>
 
                                 <div class="form-group category" id="offer_product_category">
                                     <label>Category </label>
-                                    <select class="select2bs4" name="categorys[]" multiple="multiple" data-placeholder="Select a Category" style="width: 100%;" >
+                                    <select class="select2bs4" name="categorys[]" id="category" multiple="multiple" data-placeholder="Select a Category" style="width: 100%;" >
                                         <?php foreach ($prodCat as $cat) { ?>
                                             <option value="<?php echo $cat->prod_cat_id; ?>"><?php echo display_category_with_parent($cat->prod_cat_id); ?></option>
                                         <?php } ?>
-
                                     </select>
                                 </div>
                                 <div class="form-group" id="offer_product">
                                     <label>Products</label>
-                                    <select class="select2_pro" id="keyword" name="products[]" multiple="multiple" style="width: 100%;" ></select>
+                                    <select class="select2_pro" id="keyword"  name="products[]" multiple="multiple" style="width: 100%;" ></select>
                                 </div>
                                 <div class="form-group" id="offer_qty">
                                     <label>Quantity</label>
@@ -233,6 +231,18 @@
                 $('#discType').show();
                 $('#amount').show();
                 $('#discountType1').prop('checked', true);
+            }
+        }
+
+        function selectAllProduct(){
+            if($('.allPro').prop('checked')) {
+                $('#keyword').prop('disabled', true);
+                $('#brand').prop('disabled', true);
+                $('#category').prop('disabled', true);
+            } else {
+                $('#keyword').prop('disabled', false);
+                $('#brand').prop('disabled', false);
+                $('#category').prop('disabled', false);
             }
         }
 
