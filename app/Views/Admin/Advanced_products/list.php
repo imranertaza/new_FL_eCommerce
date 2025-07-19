@@ -62,6 +62,7 @@
                                 <button type="submit" formaction="<?php echo base_url('image_download_action'); ?>" class="btn btn-primary btn-xs float-right mr-2 mb-2"><i class="fas fa-edit"></i> Image Download</button>
                             <?php } ?>
                             </form>
+                            <a href="<?php echo base_url('multi_related_product') ?>" class="btn btn-warning btn-xs float-right mr-2 mb-2" ><i class="fas fa-edit"></i> Multi Related Product</a>
                             <a href="<?php echo base_url('products') ?>" class="btn btn-danger float-right mr-2 btn-xs" >Back</a>
                         </div>
                         <div class="col-md-12" id="message" style="margin-top: 10px">

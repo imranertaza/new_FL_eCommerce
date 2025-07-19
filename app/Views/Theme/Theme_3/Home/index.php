@@ -35,7 +35,7 @@
                 <?php $theme_settings = get_theme_settings();?>
                 <div class="side-banner d-flex flex-column flex-sm-row flex-sm-row flex-lg-column gap-1" id="bannerSiderParent">
                     <div class="side-banner-box position-relative custom-d-50">
-                        <a href="<?php echo base_url('category/'.$theme_settings['head_side_category_1']); ?>">
+                        <a href="<?php echo $theme_settings['head_side_category_1']; ?>">
                             <?php
                                 $side_baner_1 = $theme_settings['head_side_baner_1'];
                             ?>
@@ -46,7 +46,7 @@
                         </a>
                     </div>
                     <div class="side-banner-box position-relative custom-d-50 w-100">
-                        <a   href="<?php echo base_url('category/'.$theme_settings['head_side_category_2']); ?>" >
+                        <a   href="<?php echo $theme_settings['head_side_category_2']; ?>" >
                             <?php
                                 $side_baner_2 = $theme_settings['head_side_baner_2'];
                             ?>
@@ -67,7 +67,7 @@
 <section class="main-container">
     <div class="container">
         <div class="featured-category mb-5">
-            <a href="<?php echo base_url('category/'.$theme_settings['banner_top_category']); ?>">
+            <a href="<?php echo $theme_settings['banner_top_category']; ?>">
             <div class="row row-cols-lg-6 row-cols-md-3 row-cols-sm-3 row-cols-2 row-cols-1">
 
                 <?php $banner_top = $theme_settings['banner_top']; ?>
@@ -104,7 +104,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-3">
-                    <a href="<?php echo base_url('category/'.$theme_settings['home_category_1']); ?>">
+                    <a href="<?php echo $theme_settings['home_category_1']; ?>">
                     <?php $category_baner_1 = $theme_settings['home_category_baner_1']; ?>
                     <?php echo common_image_view('uploads/home_category', '', $category_baner_1, 'noimage.png', 'w-100', '', '261', '522');?>
                     </a>
@@ -145,7 +145,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-3">
-                    <a href="<?php echo base_url('category/'.$theme_settings['home_category_2']); ?>">
+                    <a href="<?php echo $theme_settings['home_category_2']; ?>">
                     <?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_2'], 'noimage.png', 'w-100', '', '261', '522');?>
                     </a>
                 </div>
@@ -185,7 +185,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-3">
-                    <a href="<?php echo base_url('category/'.$theme_settings['home_category_3']); ?>">
+                    <a href="<?php echo $theme_settings['home_category_3']; ?>">
                     <?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_3'], 'noimage.png', 'w-100', '', '261', '522');?>
                     </a>
                 </div>
@@ -226,7 +226,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-3">
-                    <a href="<?php echo base_url('category/'.$theme_settings['home_category_4']); ?>">
+                    <a href="<?php echo $theme_settings['home_category_4']; ?>">
                     <?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_4'], 'noimage.png', 'w-100', '', '261', '522');?>
                     </a>
                 </div>
@@ -266,7 +266,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-3">
-                    <a href="<?php echo base_url('category/'.$theme_settings['home_category_5']); ?>">
+                    <a href="<?php echo $theme_settings['home_category_5']; ?>">
                     <?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_5'], 'noimage.png', 'w-100', '', '261', '522');?>
                     </a>
                 </div>
@@ -285,7 +285,7 @@
             </div>
         </div>
         <div class="home-banner mb-5">
-            <a href="<?php echo base_url('category/'.$theme_settings['banner_bottom_category']); ?>">
+            <a href="<?php echo $theme_settings['banner_bottom_category']; ?>">
             <?php echo common_image_view('uploads/banner_bottom', '', $theme_settings['banner_bottom'], 'noimage.png', 'w-100', '', '1116', '422');?>
             </a>
         </div>
