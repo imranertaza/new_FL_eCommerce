@@ -75,7 +75,7 @@
             </div>
             </a>
         </div>
-        <a href="<?php echo base_url('category/'.$theme_settings['banner_featured_category_category']); ?>">
+        <a href="<?php echo $theme_settings['banner_featured_category_category']; ?>">
         <div class="home-banner mb-5">
             <?php $banner_bottom = $theme_settings['banner_featured_category'];  ?>
             <?php echo common_image_view('uploads/banner_featured_category', '', $banner_bottom, 'noimage.png', 'w-100', '', '1116', '211');?>
