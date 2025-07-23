@@ -16,7 +16,9 @@ body {
     background-color: #FFFFFF;
     font-size: 1rem;
 }
-
+.h-cat-ban{
+    object-fit: cover;
+}
 @media (min-width:1400px) {
     .container {
         max-width: 1180px;
@@ -24,48 +26,41 @@ body {
 }
 @media (max-width:1700px) {
     .h-cat-ban{
-        object-fit: cover;
         height: 589px;
     }
 }
 
 @media (max-width:1390px) {
     .h-cat-ban{
-        object-fit: cover;
         height: 580px;
     }
 }
 
 @media (max-width:1199px) {
     .h-cat-ban{
-        object-fit: cover;
         height: 522px ;
     }
 }
 
 @media (max-width:990px) {
     .h-cat-ban{
-        object-fit: cover;
         height: 590px ;
     }
 }
 
 @media (max-width:900px) {
     .h-cat-ban{
-        object-fit: cover;
         height: 560px ;
     }
 }
 
 @media (max-width:650px) {
     .h-cat-ban{
-        object-fit: cover;
         height: 540px ;
     }
 }
 @media (max-width:650px) {
     .h-cat-ban{
-        object-fit: cover;
         height: auto;
     }
 }
