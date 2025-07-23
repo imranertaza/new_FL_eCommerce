@@ -16,10 +16,52 @@ body {
     background-color: #FFFFFF;
     font-size: 1rem;
 }
-
+.h-cat-ban{
+    object-fit: cover;
+}
 @media (min-width:1400px) {
     .container {
         max-width: 1180px;
+    }
+}
+@media (max-width:1700px) {
+    .h-cat-ban{
+        height: 589px;
+    }
+}
+
+@media (max-width:1390px) {
+    .h-cat-ban{
+        height: 580px;
+    }
+}
+
+@media (max-width:1199px) {
+    .h-cat-ban{
+        height: 522px ;
+    }
+}
+
+@media (max-width:990px) {
+    .h-cat-ban{
+        height: 590px ;
+    }
+}
+
+@media (max-width:900px) {
+    .h-cat-ban{
+        height: 560px ;
+    }
+}
+
+@media (max-width:650px) {
+    .h-cat-ban{
+        height: 540px ;
+    }
+}
+@media (max-width:650px) {
+    .h-cat-ban{
+        height: auto;
     }
 }
 
@@ -133,6 +175,9 @@ a {
 }
 
 @media (max-width:991px) {
+    .sid-text-n{
+        text-align: center;
+    }
     .navbar-primary .navbar-nav .nav-link {
         color: #FFF;
     }
@@ -911,7 +956,18 @@ a {
     .title-shadow {
         font-size: 4.5rem;
     }
-
+    .cat-menu-static{
+        height: unset !important;
+    }
+    .accordion-cat{
+        height: auto !important;
+    }
+    .cat-m-d{
+        display: block;
+    }
+    .sid-text-n{
+        left: 30% !important;
+    }
     .btn-cat-show {
         display: none;
     }
@@ -2577,7 +2633,9 @@ input[type='radio']:checked {
 
 
 @media(min-width:768px) and (max-width:1199px) {
-
+    .cat-m-d{
+        display: none;
+    }
     .product-filter,
     .product-filter label {
         font-size: 12px;
@@ -2627,6 +2685,9 @@ input[type='radio']:checked {
 }
 
 @media (max-width:767px) {
+    .cat-m-d{
+        display: none;
+    }
     .bannerSlide {
         margin: 15px 0;
         max-width: 100%;
@@ -3212,4 +3273,7 @@ ul > li:last-child {
 
 .loaded .preloader {
     display: none; /* Hide the preloader */
+}
+.arrow-width{
+    width: 22px;
 }

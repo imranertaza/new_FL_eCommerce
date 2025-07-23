@@ -1060,7 +1060,7 @@ function order_email_template($orderId)
         $proName = get_data_by_id('name', 'cc_products', 'product_id', $row->product_id);
         $model = get_data_by_id('model', 'cc_products', 'product_id', $row->product_id);
         $image = get_data_by_id('image', 'cc_products', 'product_id', $row->product_id);
-        $imgView = image_view('uploads/products', $row->product_id, '100_' . $image, 'noimage.png', '');
+        $imgView = product_image_view('uploads/products', $row->product_id, $image, 'noimage.png', 'img-fluid', '', '', '100', '100');
         $url = base_url('detail/' . $row->product_id);
         $price = currency_symbol($row->total_price);
         $total = currency_symbol($row->final_price);
@@ -1861,7 +1861,7 @@ function product_multi_image_view($url, $slug, $slug2, $image, $no_image, $class
                     $urlNew = base64_encode($url . '/' . $slug . '/'. $slug2 . '/');
                     $imgFinal = base_url('image-resize/' . $urlNew . '/' . $width . 'x' . $height . '/' . $imgMain);
                 }
-                $result   = '<img data-sizes="auto" src="' . $imgFinal . '" class="' . $class . '" id="'.$id.'" loading="lazy">';
+                $result   = '<img data-sizes="auto" src="' . $imgFinal . '" class="' . $class . '" id="'.$id.'" >';
             } else {
                 $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" id="'.$id.'" loading="lazy">';
             }

@@ -152,7 +152,7 @@
                                 </li>
                             </ul>
                             <div class="footer-logo">
-                                <img src="<?php echo base_url() ?>/assets/assets_fl/img/logo-footer.png" class="img-fluid" alt="Logo">
+                                <img src="<?php echo base_url() ?>/assets/assets_fl/img/logo-footer.png" class="img-fluid" alt="Logo" loading="lazy" >
                             </div>
                         </div>
                     </div>

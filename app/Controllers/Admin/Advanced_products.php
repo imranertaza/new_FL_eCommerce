@@ -997,6 +997,49 @@ class Advanced_products extends BaseController
 
     }
 
+    public function bulkInfoUpdater(){
+        $redirect_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
+        $allProductId =  $this->request->getPost('productId[]');
+        if (!empty($allProductId)){
 
+            $data['all_product'] = $allProductId;
+
+            $table = DB()->table('cc_products');
+            $table->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id');
+            $data['products'] = $table->whereIn('cc_products.product_id', $allProductId)->get()->getResult();
+
+            echo view('Admin/Advanced_products/bulk_info_updater', $data);
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to($redirect_url);
+        }
+
+    }
+    public function bulkInfoUpdaterAction(){
+        $product_id =  $this->request->getPost('product_id[]');
+        $weight =  $this->request->getPost('weight[]');
+        $description =  $this->request->getPost('description[]');
+        $meta_title =  $this->request->getPost('meta_title[]');
+        $meta_description =  $this->request->getPost('meta_description[]');
+        $meta_keyword =  $this->request->getPost('meta_keyword[]');
+
+        foreach ($product_id as $key => $proId){
+            $dataPro['weight'] = $weight[$key];
+            $tableProduct = DB()->table('cc_products');
+            $tableProduct->where('product_id',$proId)->update($dataPro);
+
+            //description update
+            $dataDes['description'] = $description[$key];
+            $dataDes['meta_title'] = $meta_title[$key];
+            $dataDes['meta_description'] = $meta_description[$key];
+            $dataDes['meta_keyword'] = $meta_keyword[$key];
+            $tableDescription = DB()->table('cc_product_description');
+            $tableDescription->where('product_id',$proId)->update($dataDes);
+        }
+
+        $redirect_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
+        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Product info Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        return redirect()->to($redirect_url);
+    }
 
 }
