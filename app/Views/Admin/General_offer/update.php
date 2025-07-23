@@ -99,13 +99,39 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group category" id="offer_product_all" <?= ($offer->offer_on == 'product')?'style="display:block"':'style="display:none"';?>>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input allPro" onclick="selectAllProduct()" type="checkbox" <?php foreach ($offer_product as $val){ echo (($val->brand_id == null) && ($val->prod_cat_id == null) && ($val->product_id == null) )?'checked':''; } ?>  name="allProduct" id="all2" value="1">
+                                        <label class="form-check-label" for="all2">All Products</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group category" id="offer_product_brand" <?= ($offer->offer_on == 'product')?'style="display:block"':'style="display:none"';?>>
+                                    <label>Brand </label>
+                                    <select class="select2bs4" name="brand[]" id="brand" multiple="multiple" data-placeholder="Select a Brand" style="width: 100%;"  >
+                                        <?php foreach ($brand as $br) { ?>
+                                            <option value="<?php echo $br->brand_id; ?>" <?php foreach ($offer_product as $val){ echo ($val->brand_id == $br->brand_id)?'selected':''; } ?>><?php echo $br->name; ?></option>
+                                        <?php } ?>
+
+                                    </select>
+                                </div>
+
+                                <div class="form-group category" id="offer_product_category" <?= ($offer->offer_on == 'product')?'style="display:block"':'style="display:none"';?>>
+                                    <label>Category </label>
+                                    <select class="select2bs4" name="categorys[]" id="category" multiple="multiple" data-placeholder="Select a Category" style="width: 100%;" >
+                                        <?php foreach ($prodCat as $cat) {  ?>
+                                            <option value="<?php echo $cat->prod_cat_id; ?>" <?php foreach ($offer_product as $val){ echo ($val->prod_cat_id == $cat->prod_cat_id)?'selected':''; } ?> ><?php echo display_category_with_parent($cat->prod_cat_id); ?></option>
+                                        <?php } ?>
+
+                                    </select>
+                                </div>
 
                                 <div class="form-group" id="offer_product" <?= ($offer->offer_on == 'product')?'style="display:block"':'style="display:none"';?> >
                                     <label>Products</label>
                                     <select class="select2_pro" id="keyword" name="products[]" multiple="multiple" style="width: 100%;" >
-                                        <?php foreach ($offer_product as $val){ ?>
+                                        <?php foreach ($offer_product as $val){ if (!empty($val->product_id)){ ?>
                                             <option value="<?php echo $val->product_id;?>" selected ><?php echo get_data_by_id('name','cc_products','product_id',$val->product_id);?> </option>
-                                        <?php } ?>
+                                        <?php } } ?>
                                     </select>
                                 </div>
                                 <div class="form-group" id="offer_qty" <?= ($offer->offer_on == 'product')?'style="display:block"':'style="display:none"';?> >
@@ -189,6 +215,9 @@
                 $('#discount2').prop('checked', false);
 
                 $('#offer_product').show();
+                $('#offer_product_category').show();
+                $('#offer_product_brand').show();
+                $('#offer_product_all').show();
                 $('#offer_qty').show();
                 $('#dis_product').show();
                 $('#offer_amount').hide();
@@ -200,6 +229,9 @@
                 $('#discount2').prop('checked', true);
 
                 $('#offer_product').hide();
+                $('#offer_product_category').hide();
+                $('#offer_product_brand').hide();
+                $('#offer_product_all').hide();
                 $('#offer_qty').hide();
                 $('#dis_product').hide();
                 $('#offer_amount').show();
@@ -218,6 +250,25 @@
                 $('#discountType1').prop('checked', true);
             }
         }
+
+        function selectAllProduct(){
+            if($('.allPro').prop('checked')) {
+                $('#keyword').prop('disabled', true);
+                $('#brand').prop('disabled', true);
+                $('#category').prop('disabled', true);
+            } else {
+                $('#keyword').prop('disabled', false);
+                $('#brand').prop('disabled', false);
+                $('#category').prop('disabled', false);
+            }
+        }
+        $(document).ready(function() {
+            if($('.allPro').prop('checked')) {
+                $('#keyword').prop('disabled', true);
+                $('#brand').prop('disabled', true);
+                $('#category').prop('disabled', true);
+            }
+        });
 
     </script>
 <?= $this->endSection() ?>

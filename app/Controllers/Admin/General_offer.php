@@ -69,6 +69,12 @@ class General_offer extends BaseController
             $table = DB()->table('cc_shipping_method');
             $data['shipping_method'] = $table->where('status',1)->get()->getResult();
 
+            $table = DB()->table('cc_product_category');
+            $data['prodCat'] = $table->get()->getResult();
+
+            $tableBrand = DB()->table('cc_brand');
+            $data['brand'] = $tableBrand->get()->getResult();
+
             //$perm = array('create','read','update','delete','mod_access');
             $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
             foreach ($perm as $key => $val) {
@@ -96,6 +102,9 @@ class General_offer extends BaseController
         $data['expire_date'] = $this->request->getPost('expire_date');
         $data['offer_type'] = $this->request->getPost('offer_type');
 
+        $data['categorys'] = $this->request->getPost('categorys[]');
+        $data['brand'] = $this->request->getPost('brand[]');
+        $data['allProduct'] = $this->request->getPost('allProduct');
 
         $data['offer_on'] = $this->request->getPost('offer_on');
         $data['qty'] = $this->request->getPost('qty');
@@ -163,6 +172,37 @@ class General_offer extends BaseController
                     $tablePro->insertBatch($dataDiscount);
                 }
 
+                //offer discount category
+                if (!empty($data['categorys'])) {
+                    $dataDiscountCat = array();
+                    foreach ($data['categorys'] as $cat) {
+                        $dataCat['offer_id'] = $offer_id;
+                        $dataCat['prod_cat_id'] = $cat;
+                        array_push($dataDiscountCat, $dataCat);
+                    }
+                    $tableProCat = DB()->table('cc_offer_on_product');
+                    $tableProCat->insertBatch($dataDiscountCat);
+                }
+
+                //offer discount brand
+                if (!empty($data['brand'])) {
+                    $dataBrandArray = array();
+                    foreach ($data['brand'] as $brand) {
+                        $dataBrand['offer_id'] = $offer_id;
+                        $dataBrand['brand_id'] = $brand;
+                        array_push($dataBrandArray, $dataBrand);
+                    }
+                    $tableBra = DB()->table('cc_offer_on_product');
+                    $tableBra->insertBatch($dataBrandArray);
+                }
+
+                //offer discount all product
+                if ($data['allProduct'] == 1){
+                    $dataAll['offer_id'] = $offer_id;
+                    $tableAll = DB()->table('cc_offer_on_product');
+                    $tableAll->insert($dataAll);
+                }
+
 
 
                 //Offer table data insert(end)
@@ -207,12 +247,19 @@ class General_offer extends BaseController
             $table = DB()->table('cc_offer');
             $data['offer'] = $table->where('offer_id', $offer_id)->get()->getRow();
 
+            $table = DB()->table('cc_product_category');
+            $data['prodCat'] = $table->get()->getResult();
+
+            $tableBrand = DB()->table('cc_brand');
+            $data['brand'] = $tableBrand->get()->getResult();
 
             $tableCoup = DB()->table('cc_offer_on_product');
             $data['offer_product'] = $tableCoup->where('offer_id', $offer_id)->get()->getResult();
 
             $tableDis = DB()->table('cc_offer_discount');
             $data['discount'] = $tableDis->where('offer_id', $offer_id)->get()->getRow();
+
+
 
             //$perm = array('create','read','update','delete','mod_access');
             $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
@@ -239,9 +286,13 @@ class General_offer extends BaseController
         $data['slug'] = $this->request->getPost('slug');
         $data['description'] = $this->request->getPost('description');
         $data['products'] = $this->request->getPost('products[]');
+        $data['categorys'] = $this->request->getPost('categorys[]');
         $data['start_date'] = $this->request->getPost('start_date');
         $data['expire_date'] = $this->request->getPost('expire_date');
         $data['offer_type'] = $this->request->getPost('offer_type');
+
+        $data['brand'] = $this->request->getPost('brand[]');
+        $data['allProduct'] = $this->request->getPost('allProduct');
 
         $data['offer_on'] = $this->request->getPost('offer_on');
         $data['on_amount'] = $this->request->getPost('on_amount');
@@ -310,6 +361,39 @@ class General_offer extends BaseController
                     }
                     $tablePro = DB()->table('cc_offer_on_product');
                     $tablePro->insertBatch($dataDiscount);
+                }
+
+                //offer discount brand
+                if (!empty($data['brand'])) {
+                    $dataBrandArray = array();
+                    foreach ($data['brand'] as $brand) {
+                        $dataBrand['offer_id'] = $offer_id;
+                        $dataBrand['brand_id'] = $brand;
+                        array_push($dataBrandArray, $dataBrand);
+                    }
+                    $tableBra = DB()->table('cc_offer_on_product');
+                    $tableBra->insertBatch($dataBrandArray);
+                }
+
+                //offer discount all product
+                if ($data['allProduct'] == 1){
+                    $dataAll['offer_id'] = $offer_id;
+                    $tableAll = DB()->table('cc_offer_on_product');
+                    $tableAll->insert($dataAll);
+                }
+
+
+
+                //offer discount
+                if (!empty($data['categorys'])) {
+                    $dataDiscountCat = array();
+                    foreach ($data['categorys'] as $cat) {
+                        $dataCat['offer_id'] = $offer_id;
+                        $dataCat['prod_cat_id'] = $cat;
+                        array_push($dataDiscountCat, $dataCat);
+                    }
+                    $tableProCat = DB()->table('cc_offer_on_product');
+                    $tableProCat->insertBatch($dataDiscountCat);
                 }
 
 

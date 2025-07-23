@@ -9,6 +9,7 @@
     <meta name="keywords" content="<?php echo $keywords;?>">
 
     <link rel="shortcut icon" href="<?php echo base_url() ?>/uploads/logo/<?php echo get_lebel_by_value_in_theme_settings('favicon');?>">
+    <link rel="preload" href="<?php echo base_url('uploads/loader.gif')?>" as="image">
 
     <link rel="stylesheet" href="<?php echo base_url() ?>/assets/assets_fl/bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo base_url() ?>/assets/assets_fl/swiper-bundle.min.css">
