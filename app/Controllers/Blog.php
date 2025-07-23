@@ -29,8 +29,9 @@ class Blog extends BaseController
         $data['pager'] = $this->blogModel->pager;
         $data['links'] = $data['pager']->links('default', 'custome_link');
 
-        $table = DB()->table('cc_category');
-        $data['category'] = $table->get()->getResult();
+        $table = DB()->table('cc_blog');
+        $table->join('cc_category', 'cc_category.cat_id = cc_blog.cat_id')->where('cc_blog.status', '1');
+        $data['category'] = $table->groupBy('cc_category.cat_id')->get()->getResult();
 
         $data['catBtn'] = 'All';
         $data['keywords'] = $settings['meta_keyword'];
@@ -41,26 +42,29 @@ class Blog extends BaseController
         echo view('Theme/' . $settings['Theme'] . '/Blog/index', $data);
         echo view('Theme/' . $settings['Theme'] . '/footer');
     }
+
     public function category($cat_id)
     {
         $settings = get_settings();
 
-        $data['blog']  = $this->blogModel->where('status', '1')->where('cat_id', $cat_id)->orderBy('blog_id', 'ASC')->paginate(12);
+        $data['blog'] = $this->blogModel->where('status', '1')->where('cat_id', $cat_id)->orderBy('blog_id', 'ASC')->paginate(12);
         $data['pager'] = $this->blogModel->pager;
         $data['links'] = $data['pager']->links('default', 'custome_link');
 
-        $table            = DB()->table('cc_category');
-        $data['category'] = $table->get()->getResult();
+        $table = DB()->table('cc_blog');
+        $table->join('cc_category', 'cc_category.cat_id = cc_blog.cat_id')->where('cc_blog.status', '1');
+        $data['category'] = $table->groupBy('cc_category.cat_id')->get()->getResult();
 
-        $data['catBtn']      = $cat_id;
-        $data['keywords']    = $settings['meta_keyword'];
+        $data['catBtn'] = $cat_id;
+        $data['keywords'] = $settings['meta_keyword'];
         $data['description'] = $settings['meta_description'];
-        $data['title']       = !empty($settings['meta_title']) ? $settings['meta_title'] : $settings['store_name'];
+        $data['title'] = !empty($settings['meta_title']) ? $settings['meta_title'] : $settings['store_name'];
 
         echo view('Theme/' . $settings['Theme'] . '/header', $data);
         echo view('Theme/' . $settings['Theme'] . '/Blog/index', $data);
         echo view('Theme/' . $settings['Theme'] . '/footer');
     }
+
     /**
      * @description This method provides Qc picture detail page view
      * @param int $album_id
@@ -77,7 +81,7 @@ class Blog extends BaseController
         $data['image'] = $tableImage->where('blog_id', $blog_id)->get()->getResult();
 
         $tableComments = DB()->table('cc_blog_comments');
-        $data['comments'] = $tableComments->where('blog_id', $blog_id)->where('comment_parent_id',null)->get()->getResult();
+        $data['comments'] = $tableComments->where('blog_id', $blog_id)->where('comment_parent_id', null)->get()->getResult();
 
         $data['keywords'] = $settings['meta_keyword'];
         $data['description'] = $settings['meta_description'];
@@ -92,7 +96,8 @@ class Blog extends BaseController
      * @description This method provides Comment action
      * @return void
      */
-    public function commentAction(){
+    public function commentAction()
+    {
         $data['blog_id'] = $this->request->getPost('blog_id');
         $data['comment'] = $this->request->getPost('comment');
         $data['email'] = $this->request->getPost('email');
@@ -105,7 +110,7 @@ class Blog extends BaseController
         ]);
 
         if ($this->validation->run($data) == false) {
-            print  $this->validation->listErrors() ;
+            print  $this->validation->listErrors();
         } else {
             $dataComment['blog_id'] = $data['blog_id'];
             $dataComment['comment_author'] = $data['name'];
@@ -124,25 +129,28 @@ class Blog extends BaseController
      * @description This method provides Client Ip
      * @return array|false|string
      */
-    public function getClientIp() {
+    public function getClientIp()
+    {
         $ipaddress = '';
         if (getenv('HTTP_CLIENT_IP'))
             $ipaddress = getenv('HTTP_CLIENT_IP');
-        else if(getenv('HTTP_X_FORWARDED_FOR'))
+        else if (getenv('HTTP_X_FORWARDED_FOR'))
             $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
-        else if(getenv('HTTP_X_FORWARDED'))
+        else if (getenv('HTTP_X_FORWARDED'))
             $ipaddress = getenv('HTTP_X_FORWARDED');
-        else if(getenv('HTTP_FORWARDED_FOR'))
+        else if (getenv('HTTP_FORWARDED_FOR'))
             $ipaddress = getenv('HTTP_FORWARDED_FOR');
-        else if(getenv('HTTP_FORWARDED'))
+        else if (getenv('HTTP_FORWARDED'))
             $ipaddress = getenv('HTTP_FORWARDED');
-        else if(getenv('REMOTE_ADDR'))
+        else if (getenv('REMOTE_ADDR'))
             $ipaddress = getenv('REMOTE_ADDR');
         else
             $ipaddress = 'UNKNOWN';
         return $ipaddress;
     }
-    public function commentReplyAction(){
+
+    public function commentReplyAction()
+    {
         $data['comment_id'] = $this->request->getPost('comment_id');
         $data['com_name'] = $this->request->getPost('com_name');
         $data['com_email'] = $this->request->getPost('com_email');
@@ -155,9 +163,9 @@ class Blog extends BaseController
         ]);
 
         if ($this->validation->run($data) == false) {
-            print  $this->validation->listErrors() ;
+            print  $this->validation->listErrors();
         } else {
-            $blog_id = get_data_by_id('blog_id','cc_blog_comments','comment_id',$data['comment_id']);
+            $blog_id = get_data_by_id('blog_id', 'cc_blog_comments', 'comment_id', $data['comment_id']);
             $dataComment['blog_id'] = $blog_id;
             $dataComment['comment_author'] = $data['com_name'];
             $dataComment['comment_author_email'] = $data['com_email'];
@@ -171,7 +179,6 @@ class Blog extends BaseController
             print 'Comment Save successfully';
         }
     }
-
 
 
 }

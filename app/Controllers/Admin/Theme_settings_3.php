@@ -62,6 +62,7 @@ class Theme_settings_3 extends BaseController
     public function header_section_one_update(){
         $data['head_side_title_1'] = $this->request->getPost('head_side_title_1');
         $data['head_side_category_1'] = $this->request->getPost('head_side_category_1');
+        $data['head_side_url_1'] = $this->request->getPost('head_side_url_1');
 
         if (!empty($_FILES['head_side_baner_1']['name'])) {
             $target_dir = FCPATH . '/uploads/top_side_baner/';
@@ -96,6 +97,7 @@ class Theme_settings_3 extends BaseController
     public function header_section_two_update(){
         $data['head_side_title_2'] = $this->request->getPost('head_side_title_2');
         $data['head_side_category_2'] = $this->request->getPost('head_side_category_2');
+        $data['head_side_url_2'] = $this->request->getPost('head_side_url_2');
 
         if (!empty($_FILES['head_side_baner_2']['name'])) {
             $target_dir = FCPATH . '/uploads/top_side_baner/';
@@ -131,6 +133,7 @@ class Theme_settings_3 extends BaseController
         $prefix = $this->request->getPost('prefix');
         $data['home_category_'.$prefix] = $this->request->getPost('home_category_'.$prefix);
         $data['home_category_title_'.$prefix] = $this->request->getPost('home_category_title_'.$prefix);
+        $data['home_category_url_'.$prefix] = $this->request->getPost('home_category_url_'.$prefix);
 
         if (!empty($_FILES['home_category_baner_'.$prefix]['name'])) {
             $target_dir = FCPATH . '/uploads/home_category/';
@@ -182,9 +185,14 @@ class Theme_settings_3 extends BaseController
             $table->where('label', 'banner_bottom')->update($data);
         }
 
-        $dataCat['value'] = $this->request->getPost('banner_bottom_category');
-        $table = DB()->table('cc_theme_settings');
-        $table->where('label', 'banner_bottom_category')->update($dataCat);
+        $dataCat['banner_bottom_category'] = $this->request->getPost('banner_bottom_category');
+        $dataCat['banner_bottom_url'] = $this->request->getPost('banner_bottom_url');
+
+        foreach($dataCat as $key => $val){
+            $dataUpdate['value'] = $val;
+            $table = DB()->table('cc_theme_settings');
+            $table->where('label', $key)->update($dataUpdate);
+        }
 
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Bottom Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('theme_settings?sel=home_settings');
@@ -214,9 +222,13 @@ class Theme_settings_3 extends BaseController
             $table->where('label', 'banner_featured_category')->update($data);
         }
 
-        $dataCat['value'] = $this->request->getPost('banner_featured_category_category');
-        $table = DB()->table('cc_theme_settings');
-        $table->where('label', 'banner_featured_category_category')->update($dataCat);
+        $dataCat['banner_featured_category_category'] = $this->request->getPost('banner_featured_category_category');
+        $dataCat['banner_featured_category_url'] = $this->request->getPost('banner_featured_category_url');
+        foreach($dataCat as $key => $val){
+            $dataUpdate['value'] = $val;
+            $table = DB()->table('cc_theme_settings');
+            $table->where('label', $key)->update($dataUpdate);
+        }
 
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Featured Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('theme_settings?sel=home_settings');
@@ -453,9 +465,13 @@ class Theme_settings_3 extends BaseController
             $table->where('label', 'banner_top')->update($data);
         }
 
-        $dataCat['value'] = $this->request->getPost('banner_top_category');
-        $table = DB()->table('cc_theme_settings');
-        $table->where('label', 'banner_top_category')->update($dataCat);
+        $dataCat['banner_top_category'] = $this->request->getPost('banner_top_category');
+        $dataCat['banner_top_category_url'] = $this->request->getPost('banner_top_category_url');
+        foreach($dataCat as $key => $val){
+            $dataUpdate['value'] = $val;
+            $table = DB()->table('cc_theme_settings');
+            $table->where('label', $key)->update($dataUpdate);
+        }
 
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Top Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('theme_settings?sel=home_settings');

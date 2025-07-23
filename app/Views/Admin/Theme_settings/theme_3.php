@@ -16,8 +16,22 @@
 
             <div class="form-group">
                 <label><?php echo $themeSettingTitle['head_side_category_1'];?></label>
-                <input type="text" class="form-control"  name="head_side_category_1"
-                       value="<?php echo $themeSetting['head_side_category_1'];?>">
+                <select name="head_side_category_1" class="form-control" required>
+                    <option value="">Please Select</option>
+                    <?php
+                    $catSel = $themeSetting['head_side_category_1'];
+                    foreach ($cat as $val){
+                        ?>
+                        <option value="<?php echo $val->prod_cat_id;?>"
+                            <?php echo ($val->prod_cat_id == $catSel)?'selected':'';?>><?php echo display_category_with_parent($val->prod_cat_id);?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label><?php echo $themeSettingTitle['head_side_url_1'];?></label>
+                <input type="text" class="form-control"  name="head_side_url_1" value="<?php echo $themeSetting['head_side_url_1'];?>" >
             </div>
 
             <div class="form-group">
@@ -48,8 +62,22 @@
 
             <div class="form-group">
                 <label><?php echo $themeSettingTitle['head_side_category_2'];?></label>
-                <input type="text" class="form-control"  name="head_side_category_2"
-                       value="<?php echo $themeSetting['head_side_category_2'];?>">
+                <select name="head_side_category_2" class="form-control" required>
+                    <option value="">Please Select</option>
+                    <?php
+                    $catSel2 = $themeSetting['head_side_category_2'];
+                    foreach ($cat as $val){
+                        ?>
+                        <option value="<?php echo $val->prod_cat_id;?>"
+                            <?php echo ($val->prod_cat_id == $catSel2)?'selected':'';?>><?php echo display_category_with_parent($val->prod_cat_id);?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label><?php echo $themeSettingTitle['head_side_url_2'];?></label>
+                <input type="text" class="form-control"  name="head_side_url_2" value="<?php echo $themeSetting['head_side_url_2'];?>" >
             </div>
 
             <div class="form-group">
@@ -78,7 +106,22 @@
             </div>
             <div class="form-group">
                 <label><?php echo $themeSettingTitle['home_category_1'];?> </label>
-                <input type="text" class="form-control"  name="home_category_1" value="<?php echo $themeSetting['home_category_1'];?>" required>
+                <select name="home_category_1" class="form-control" required>
+                    <option value="">Please Select</option>
+                    <?php
+                    $catSel_1 = get_lebel_by_value_in_theme_settings('home_category_1');
+                    foreach ($cat as $val){
+                        ?>
+                        <option value="<?php echo $val->prod_cat_id;?>"
+                            <?php echo ($val->prod_cat_id == $catSel_1)?'selected':'';?>><?php echo display_category_with_parent($val->prod_cat_id);?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label><?php echo $themeSettingTitle['home_category_url_1'];?></label>
+                <input type="text" class="form-control"  name="home_category_url_1" value="<?php echo $themeSetting['home_category_url_1'];?>" >
             </div>
 
             <div class="form-group">
@@ -105,8 +148,23 @@
             </div>
             <div class="form-group">
                 <label><?php echo $themeSettingTitle['home_category_2'];?> </label>
-                <input type="text" class="form-control"  name="home_category_2" value="<?php echo $themeSetting['home_category_2'];?>" required>
+                <select name="home_category_2" class="form-control" required>
+                    <option value="">Please Select</option>
+                    <?php
+                    $catSel_1 = get_lebel_by_value_in_theme_settings('home_category_2');
+                    foreach ($cat as $val){
+                        ?>
+                        <option value="<?php echo $val->prod_cat_id;?>"
+                            <?php echo ($val->prod_cat_id == $catSel_1)?'selected':'';?>><?php echo display_category_with_parent($val->prod_cat_id);?>
+                        </option>
+                    <?php } ?>
+                </select>
 
+            </div>
+
+            <div class="form-group">
+                <label><?php echo $themeSettingTitle['home_category_url_2'];?></label>
+                <input type="text" class="form-control"  name="home_category_url_2" value="<?php echo $themeSetting['home_category_url_2'];?>" >
             </div>
 
             <div class="form-group">
@@ -133,8 +191,23 @@
             </div>
             <div class="form-group">
                 <label><?php echo $themeSettingTitle['home_category_3'];?> </label>
-                <input type="text" class="form-control"  name="home_category_3" value="<?php echo $themeSetting['home_category_3'];?>" required>
+                <select name="home_category_3" class="form-control" required>
+                    <option value="">Please Select</option>
+                    <?php
+                    $catSel_1 = get_lebel_by_value_in_theme_settings('home_category_3');
+                    foreach ($cat as $val){
+                        ?>
+                        <option value="<?php echo $val->prod_cat_id;?>"
+                            <?php echo ($val->prod_cat_id == $catSel_1)?'selected':'';?>><?php echo display_category_with_parent($val->prod_cat_id);?>
+                        </option>
+                    <?php } ?>
+                </select>
 
+            </div>
+
+            <div class="form-group">
+                <label><?php echo $themeSettingTitle['home_category_url_3'];?></label>
+                <input type="text" class="form-control"  name="home_category_url_3" value="<?php echo $themeSetting['home_category_url_3'];?>" >
             </div>
 
             <div class="form-group">
@@ -161,7 +234,21 @@
             </div>
             <div class="form-group">
                 <label><?php echo $themeSettingTitle['home_category_4'];?> </label>
-                <input type="text" class="form-control"  name="home_category_4" value="<?php echo $themeSetting['home_category_4'];?>" required>
+                <select name="home_category_4" class="form-control" required>
+                    <option value="">Please Select</option>
+                    <?php
+                    $catSel_1 = get_lebel_by_value_in_theme_settings('home_category_4');
+                    foreach ($cat as $val){
+                        ?>
+                        <option value="<?php echo $val->prod_cat_id;?>"
+                            <?php echo ($val->prod_cat_id == $catSel_1)?'selected':'';?>><?php echo display_category_with_parent($val->prod_cat_id);?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label><?php echo $themeSettingTitle['home_category_url_4'];?></label>
+                <input type="text" class="form-control"  name="home_category_url_4" value="<?php echo $themeSetting['home_category_url_4'];?>" >
             </div>
 
             <div class="form-group">
@@ -188,8 +275,23 @@
             </div>
             <div class="form-group">
                 <label><?php echo $themeSettingTitle['home_category_5'];?> </label>
-                <input type="text" class="form-control"  name="home_category_5" value="<?php echo $themeSetting['home_category_5'];?>" required>
+                <select name="home_category_5" class="form-control" required>
+                    <option value="">Please Select</option>
+                    <?php
+                    $catSel_1 = $themeSetting['home_category_5'];
+                    foreach ($cat as $val){
+                        ?>
+                        <option value="<?php echo $val->prod_cat_id;?>"
+                            <?php echo ($val->prod_cat_id == $catSel_1)?'selected':'';?>><?php echo display_category_with_parent($val->prod_cat_id);?>
+                        </option>
+                    <?php } ?>
+                </select>
 
+            </div>
+
+            <div class="form-group">
+                <label><?php echo $themeSettingTitle['home_category_url_5'];?></label>
+                <input type="text" class="form-control"  name="home_category_url_5" value="<?php echo $themeSetting['home_category_url_5'];?>" >
             </div>
 
             <div class="form-group">
@@ -211,8 +313,22 @@
             <h3>Banner Bottom</h3>
             <div class="form-group">
                 <label><?php echo $themeSettingTitle['banner_bottom_category'];?></label>
-                <input type="text" class="form-control"  name="banner_bottom_category" value="<?php echo $themeSetting['banner_bottom_category'];?>" required>
+                <select name="banner_bottom_category" class="form-control" required>
+                    <option value="">Please Select</option>
+                    <?php
+                    $catSel = $themeSetting['banner_bottom_category'];
+                    foreach ($cat as $val){
+                        ?>
+                        <option value="<?php echo $val->prod_cat_id;?>"
+                            <?php echo ($val->prod_cat_id == $catSel)?'selected':'';?>><?php echo display_category_with_parent($val->prod_cat_id);?>
+                        </option>
+                    <?php } ?>
+                </select>
 
+            </div>
+            <div class="form-group">
+                <label><?php echo $themeSettingTitle['banner_bottom_url'];?></label>
+                <input type="text" class="form-control"  name="banner_bottom_url" value="<?php echo $themeSetting['banner_bottom_url'];?>" >
             </div>
             <div class="form-group">
                 <?php
@@ -231,8 +347,22 @@
             <h3 class="mt-5"><?php echo $themeSettingTitle['banner_featured_category'];?></h3>
             <div class="form-group">
                 <label><?php echo $themeSettingTitle['banner_featured_category_category'];?></label>
-                <input type="text" class="form-control"  name="banner_featured_category_category" value="<?php echo $themeSetting['banner_featured_category_category'];?>" required>
+                <select name="banner_featured_category_category" class="form-control" required>
+                    <option value="">Please Select</option>
+                    <?php
+                    $catSel = $themeSetting['banner_featured_category_category'];
+                    foreach ($cat as $val){
+                        ?>
+                        <option value="<?php echo $val->prod_cat_id;?>"
+                            <?php echo ($val->prod_cat_id == $catSel)?'selected':'';?>><?php echo display_category_with_parent($val->prod_cat_id);?>
+                        </option>
+                    <?php } ?>
+                </select>
 
+            </div>
+            <div class="form-group">
+                <label><?php echo $themeSettingTitle['banner_featured_category_url'];?></label>
+                <input type="text" class="form-control"  name="banner_featured_category_url" value="<?php echo $themeSetting['banner_featured_category_url'];?>" >
             </div>
             <div class="form-group">
                 <?php
@@ -254,8 +384,22 @@
             <h3 class="mt-5"><?php echo $themeSettingTitle['banner_top'];?></h3>
             <div class="form-group">
                 <label><?php echo $themeSettingTitle['banner_top_category'];?></label>
-                <input type="text" class="form-control"  name="banner_top_category" value="<?php echo $themeSetting['banner_top_category'];?>" required>
+                <select name="banner_top_category" class="form-control" required>
+                    <option value="">Please Select</option>
+                    <?php
+                    $catSel = $themeSetting['banner_top_category'];
+                    foreach ($cat as $val){
+                        ?>
+                        <option value="<?php echo $val->prod_cat_id;?>"
+                            <?php echo ($val->prod_cat_id == $catSel)?'selected':'';?>><?php echo display_category_with_parent($val->prod_cat_id);?>
+                        </option>
+                    <?php } ?>
+                </select>
 
+            </div>
+            <div class="form-group">
+                <label><?php echo $themeSettingTitle['banner_top_category_url'];?></label>
+                <input type="text" class="form-control"  name="banner_top_category_url" value="<?php echo $themeSetting['banner_top_category_url'];?>" >
             </div>
             <div class="form-group">
                 <?php

@@ -61,8 +61,15 @@
                             <?php if(modules_key_by_access('multi_image_download') == '1' ){ ?>
                                 <button type="submit" formaction="<?php echo base_url('image_download_action'); ?>" class="btn btn-primary btn-xs float-right mr-2 mb-2"><i class="fas fa-edit"></i> Image Download</button>
                             <?php } ?>
+
+                            <?php if(modules_key_by_access('bulk_info_updater') == '1' ){ ?>
+                                <button type="submit" formaction="<?php echo base_url('bulk_info_updater'); ?>" class="btn btn-info btn-xs float-right mr-2 mb-2"><i class="fas fa-edit"></i> Bulk Info Updater</button>
+                            <?php } ?>
                             </form>
+                            <?php if(modules_key_by_access('multi_related_product') == '1' ){ ?>
                             <a href="<?php echo base_url('multi_related_product') ?>" class="btn btn-warning btn-xs float-right mr-2 mb-2" ><i class="fas fa-edit"></i> Multi Related Product</a>
+                            <?php } ?>
+
                             <a href="<?php echo base_url('products') ?>" class="btn btn-danger float-right mr-2 btn-xs" >Back</a>
                         </div>
                         <div class="col-md-12" id="message" style="margin-top: 10px">
