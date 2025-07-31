@@ -5,7 +5,7 @@
                 <div class="col-lg-12  ">
                     <h3 class="text-capitalize mb-4"><?php echo $pageData->page_title;?></h3>
                     <ul>
-                        <?php foreach (parent_qc_picture() as $val){ ?>
+                        <?php foreach (parent_qc_picture() as $val){ if (!empty(idByShowPermission($val->album_id))){ ?>
                             <li>
                                 <?php if ($val->is_parent == 1){ ?>
                                 <a href="<?= base_url('qc-picture-view-category/'.$val->album_id);?>">
@@ -14,7 +14,7 @@
                                 <?php }?>
                                 <?php echo $val->name; ?>
                             </li>
-                        <?php } ?>
+                        <?php } } ?>
                     </ul>
                 </div>
             </div>
