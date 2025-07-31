@@ -32,7 +32,7 @@
             </div>
 
             <div class="col-md-12 mt-5">
-                <div id="carouselExampleIndicators" class="carousel slide">
+                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
                     <div class="carousel-indicators">
                         <?php foreach ($image as $key => $val){ ?>
                         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="<?php echo $key;?>"
@@ -41,7 +41,7 @@
                     </div>
                     <div class="carousel-inner">
                         <?php foreach ($image as $key => $val){ ?>
-                        <div class="carousel-item <?php echo ($key == '0')?'active':'';?>" data-bs-interval="2000">
+                        <div class="carousel-item <?php echo ($key == '0')?'active':'';?>" >
                             <?php echo common_image_view('uploads/blog', $blog->blog_id.'/'.$val->blog_crassula_image_id, $val->image, 'noimage.png', 'd-block w-100', '', '1116', '481');?>
                         </div>
                         <?php } ?>

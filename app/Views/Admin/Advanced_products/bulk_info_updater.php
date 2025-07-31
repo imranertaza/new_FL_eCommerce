@@ -62,15 +62,15 @@
                                         <tr>
                                             <td width="40"><?php echo $i++;?></td>
                                             <td><?php echo product_image_view('uploads/products', $val->product_id, $val->image, 'noimage.png', 'img-fluid', '', '', '50', '50') ?></td>
-                                            <td>
+                                            <td width="150">
                                                 <?php echo $val->name; ?>
                                                 <input type="hidden" name="product_id[]" value="<?php echo $val->product_id; ?>">
                                             </td>
-                                            <td><textarea  name="weight[]" ><?php echo $val->weight; ?></textarea></td>
-                                            <td><textarea  name="description[]" > <?php echo $val->description; ?></textarea></td>
-                                            <td><textarea  name="meta_title[]" ><?php echo $val->meta_title; ?></textarea></td>
-                                            <td><textarea  name="meta_description[]" ><?php echo $val->meta_description; ?></textarea></td>
-                                            <td><textarea  name="meta_keyword[]" ><?php echo $val->meta_keyword; ?></textarea></td>
+                                            <td><textarea  name="weight[]"  cols="5" rows="1"><?php echo $val->weight; ?></textarea></td>
+                                            <td><textarea  name="description[]"  rows="6" > <?php echo $val->description; ?></textarea></td>
+                                            <td><textarea  name="meta_title[]" rows="6" ><?php echo $val->meta_title; ?></textarea></td>
+                                            <td><textarea  name="meta_description[]" rows="6" ><?php echo $val->meta_description; ?></textarea></td>
+                                            <td><textarea  name="meta_keyword[]" rows="6" ><?php echo $val->meta_keyword; ?></textarea></td>
                                         </tr>
                                     <?php } ?>
 

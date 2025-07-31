@@ -1985,3 +1985,39 @@ function comment_id_by_reply_comment($comment_id){
     $table = DB()->table('cc_blog_comments');
     return $table->where('	comment_parent_id', $comment_id)->get()->getResult();
 }
+
+function idByShowPermission($parentId){
+    $table = DB()->table('cc_album');
+    $albums = $table->get()->getResult();
+
+    $map = [];
+    foreach ($albums as $album) {
+        $map[$album->parent_album_id][] = $album;
+    }
+    $allAlbumIDs = getDescendantAlbumIds($parentId, $map);
+
+    if (empty($allAlbumIDs)) {
+        $allAlbumIDs = [$parentId];
+    }
+
+    return albumAvailableCheckByAlbumID($allAlbumIDs);
+}
+
+function getDescendantAlbumIds($parentId, $map) {
+    $result = [];
+
+    if (!isset($map[$parentId])) {
+        return $result;
+    }
+
+    foreach ($map[$parentId] as $childAlbum) {
+        $result[] = $childAlbum->album_id;
+        $result = array_merge($result, getDescendantAlbumIds($childAlbum->album_id, $map));
+    }
+
+    return $result;
+}
+
+function albumAvailableCheckByAlbumID($allAlbumID){
+    return DB()->table('cc_album_details')->whereIn('album_id',$allAlbumID)->countAllResults();
+}

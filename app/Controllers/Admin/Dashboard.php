@@ -27,6 +27,11 @@ class Dashboard extends BaseController
      */
     public function index()
     {
+//        $descendants = idByShowPermission(33);
+//
+//        print_r($descendants);
+//
+//        die();
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
         if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
