@@ -281,18 +281,18 @@
                                             <?php if(!empty($parent_Cat)){ ?>
                                                 <p class="mb-2">Sub Category</p>
                                                     <ul class="list-unstyled lh-lg">
-                                                        <?php $i = 1;$j = 1; foreach ($parent_Cat as $cat){ ?>
+                                                        <?php $i = 1;$j = 1; foreach ($parent_Cat as $cat){ $categoryProductCount = category_id_by_product_count($cat->prod_cat_id); if (!empty($categoryProductCount)){ ?>
                                                         <li>
                                                             <div class="form-check d-flex flex-row align-items-center gap-1">
                                                                 <input class="form-check-input" form="searchForm" onclick="formSubmit()" <?php echo ((isset($_GET['category'])) && ($_GET['category'] == $cat->prod_cat_id)) ? 'checked' : ''; ?>  name="category" type="radio" value="<?php echo $cat->prod_cat_id;?>" id="flexCheck_<?php echo $i++;?>">
                                                                     <label class="form-check-label w-100 mb-0" for="flexCheck_<?php echo $j++;?>">
-                                                                        <?php echo $cat->category_name;?> <span class="count"><?php echo category_id_by_product_count($cat->prod_cat_id)?></span>
+                                                                        <?php echo $cat->category_name;?> <span class="count"><?php echo $categoryProductCount?></span>
                                                                     </label>
                                                             </div>
 
 
                                                         </li>
-                                                        <?php } ?>
+                                                        <?php } } ?>
                                                     </ul>
                                                     <?php } else{ if (!empty($main_Cat)){?>
                                                     <p class="mb-2">Category</p>
@@ -359,16 +359,16 @@
                                                 <input type="hidden" form="searchForm" name="prod_cat_id" value="<?php echo $prod_cat_id?>">
                                                 <input type="hidden" form="searchForm" name="cat" value="<?php echo $prod_cat_id?>">
                                                 <ul class="list-unstyled lh-lg">
-                                                    <?php $i = 1;$j = 1; foreach ($parent_Cat as $cat){ ?>
+                                                    <?php $i = 1;$j = 1; foreach ($parent_Cat as $cat){ $categoryProductCount = category_id_by_product_count($cat->prod_cat_id); if (!empty($categoryProductCount)){?>
                                                     <li>
                                                         <div class="form-check d-flex flex-row align-items-center gap-1">
                                                             <input class="form-check-input" form="searchForm" onclick="formSubmit()" <?php echo ((isset($_GET['category'])) && ($_GET['category'] == $cat->prod_cat_id)) ? 'checked' : ''; ?>  name="category" type="radio" value="<?php echo $cat->prod_cat_id;?>" id="flexCheck_<?php echo $i++;?>">
                                                             <label class="form-check-label w-100 mb-0" for="flexCheck_<?php echo $j++;?>">
-                                                                <?php echo $cat->category_name;?> <span class="count"><?php echo category_id_by_product_count($cat->prod_cat_id)?></span>
+                                                                <?php echo $cat->category_name;?> <span class="count"><?php echo $categoryProductCount?></span>
                                                             </label>
                                                         </div>
                                                     </li>
-                                                    <?php } ?>
+                                                    <?php } } ?>
                                                 </ul>
 
                                                 <?php } else{ if (!empty($main_Cat)){?>

@@ -3277,3 +3277,6 @@ ul > li:last-child {
 .arrow-width{
     width: 22px;
 }
+.select2-container{
+    z-index:2000;
+}
