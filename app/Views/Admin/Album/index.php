@@ -53,7 +53,7 @@
                         <tr>
                             <td width="40"><?php echo $i++;?></td>
                             <td><?php echo $val->name;?></td>
-                            <td><?php echo common_image_view('uploads/album', $val->album_id, $val->thumb, 'noimage.png', '', '', '50', '50');?></td>
+                            <td><img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/album', $val->album_id, $val->thumb, 'noimage.png', '50', '50');?>" alt="<?php echo $val->alt_name?>" class="img-fluid " loading="lazy"></td>
                             <td width="240">
                                 <?php if ($val->is_album_uploadable == 0){ ?>
                                     <a href="<?php echo base_url('album_sub_category_list/'.$val->album_id);?>" class="btn btn-info btn-xs"><i class="fas fa-list"></i> Sub Category List</a>

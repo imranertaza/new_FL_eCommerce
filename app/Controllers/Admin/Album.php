@@ -116,6 +116,7 @@ class Album extends BaseController
     public function album_category_create_action()
     {
         $data['name'] = $this->request->getPost('name');
+        $data['alt_name'] = $this->request->getPost('name');
         $data['parent_album_id'] = $this->request->getPost('parent_album_id');
         $data['is_parent'] = '1';
         $data['createdBy'] = $this->session->adUserId;
@@ -200,6 +201,7 @@ class Album extends BaseController
     {
         $album_id = $this->request->getPost('album_id');
         $data['name'] = $this->request->getPost('name');
+        $data['alt_name'] = $this->request->getPost('alt_name');
         $data['parent_album_id'] = $this->request->getPost('parent_album_id');
         $data['sort_order'] = $this->request->getPost('sort_order_al');
 
@@ -316,6 +318,7 @@ class Album extends BaseController
     public function create_action()
     {
         $data['name'] = $this->request->getPost('name');
+        $data['alt_name'] = $this->request->getPost('name');
         $data['parent_album_id'] = $this->request->getPost('parent_album_id');
         $data['createdBy'] = $this->session->adUserId;
 
@@ -436,6 +439,7 @@ class Album extends BaseController
         $data['name'] = $this->request->getPost('name');
         $data['parent_album_id'] = $this->request->getPost('parent_album_id');
         $data['sort_order'] = $this->request->getPost('sort_order_al');
+        $data['alt_name'] = $this->request->getPost('alt_name');
 
         $this->validation->setRules([
             'name' => ['label' => 'Name', 'rules' => 'required'],
@@ -480,6 +484,7 @@ class Album extends BaseController
 
                     if ($file->isValid() && !$file->hasMoved()) {
                         $dataMultiImg['album_id'] = $album_id;
+                        $dataMultiImg['alt_name'] = $data['name'];
                         $proImgTable = DB()->table('cc_album_details');
                         $proImgTable->insert($dataMultiImg);
                         $albumImgId = DB()->insertID();
@@ -552,6 +557,19 @@ class Album extends BaseController
         $album_details_id = $this->request->getPost('album_details_id');
 
         $data['sort_order'] = $this->request->getPost('value');
+        $table = DB()->table('cc_album_details');
+        $table->where('album_details_id', $album_details_id)->update($data);
+    }
+
+    /**
+     * @description This method provides album alt name action
+     * @return void
+     */
+    public function album_image_alt_name_action()
+    {
+        $album_details_id = $this->request->getPost('album_details_id');
+
+        $data['alt_name'] = $this->request->getPost('value');
         $table = DB()->table('cc_album_details');
         $table->where('album_details_id', $album_details_id)->update($data);
     }

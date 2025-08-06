@@ -69,12 +69,16 @@
                         <div class="col-md-8">
                             <div class="row ">
                                 <div class="col-md-2 img_view">
-                                    <?php echo common_image_view('uploads/album', $album->album_id, $album->thumb, 'noimage.png', 'img-w-h-100', '', '100', '100');?>
+                                    <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/album', $album->album_id, $album->thumb, 'noimage.png', '100', '100');?>" alt="<?php echo $album->alt_name?>" class="img-w-h-100" loading="lazy">
                                 </div>
                             </div>
                             <div id="framesdef"></div><br>
                             <input type="file" id="defimage" name="thumb" accept="image/*" class="form-control" >
 
+                            <div class="form-group">
+                                <label>ALT Name</label>
+                                <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $album->alt_name; ?>" >
+                            </div>
                         </div>
                         <div class="col-md-12">
                             <hr>
@@ -86,10 +90,10 @@
                             <div id="success"  style="display:none;"  class="alert alert-success alert-dismissible w-50 mb-1 text-center " role="alert">Update Success </div>
                             <div class="row mb-4" >
                                 <?php foreach ($albumAll as $img){ ?>
-                                    <div class="col-md-2 img_view">
+                                    <div class="col-md-4 img_view">
                                         <input type="text" onchange="album_image_sort_update('<?=$img->album_details_id?>',this.value)" class="form-control mb-2 text-center" style="height: 25px;" name="sort_order" value="<?= $img->sort_order;?>">
-                                        <?php echo product_multi_image_view('uploads/album', $img->album_id, $img->album_details_id, $img->image, 'noimage.png', '', '100', '100')?>
-
+                                        <img data-sizes="auto"  id="" src="<?php echo product_multi_image_view('uploads/album', $img->album_id, $img->album_details_id, $img->image, 'noimage.png', '100', '100')?>" alt="<?php echo $img->alt_name?>" class="img-fluid" loading="lazy">
+                                        <input type="text" onchange="album_image_alt_name_update('<?=$img->album_details_id?>',this.value)" class="form-control mt-2 mb-2 text-center" style="height: 25px;" placeholder="Alt Name" name="alt_name" value="<?= $img->alt_name;?>">
                                         <a href="javascript:void(0)" onclick="removeAlbumImg(<?php echo $img->album_details_id;?>)" class="btn del-btn"><i class="fas fa-trash"></i> Delete</a>
                                     </div>
                                 <?php } ?>
@@ -130,6 +134,20 @@
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('album_image_sort_action') ?>",
+            data: {album_details_id: album_details_id,value:val},
+            beforeSend: function () {
+                $("#loading-image").show();
+            },
+            success: function (data) {
+                $("#success").show(0).delay(1000).fadeOut();
+            }
+        });
+    }
+
+    function album_image_alt_name_update(album_details_id,val){
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('album_image_alt_name_action') ?>",
             data: {album_details_id: album_details_id,value:val},
             beforeSend: function () {
                 $("#loading-image").show();

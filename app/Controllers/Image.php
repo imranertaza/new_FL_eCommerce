@@ -46,7 +46,7 @@ class Image extends BaseController {
         // Load the image library
         $img = \Config\Services::image();
 
-        // Create a simple image (e.g., image with text)
+        // Create a simple image (e.g., image with text) and save it to cache path
         $img->withFile($imageUrl)
             ->fit($width, $height, 'center')
             ->save($imagePath);

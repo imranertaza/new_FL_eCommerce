@@ -104,6 +104,7 @@ class User extends BaseController
             $check = is_exists('cc_users','email',$data['email']);
             if ($check == true) {
                 $data2['name'] = $this->request->getPost('name');
+                $data2['alt_name'] = $this->request->getPost('name');
                 $data2['email'] = $this->request->getPost('email');
                 $data2['role_id'] = $this->request->getPost('role_id');
                 $data2['pass'] = $this->request->getPost('password');
@@ -231,6 +232,7 @@ class User extends BaseController
      */
     public function image_action(){
         $user_id = $this->request->getPost('user_id');
+        $alt_name = $this->request->getPost('alt_name');
 
         if (!empty($_FILES['pic']['name'])) {
             $target_dir = FCPATH . '/uploads/user/';
@@ -255,6 +257,7 @@ class User extends BaseController
             $this->crop->withFile($target_dir . $namePic)->fit(250, 150, 'center')->save($target_dir . $news_img);
             unlink($target_dir . $namePic);
             $data['pic'] = $news_img;
+            $data['alt_name'] = $alt_name;
 
             $table = DB()->table('cc_users');
             $table->where('user_id', $user_id)->update($data);

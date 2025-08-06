@@ -60,7 +60,7 @@
                                     <?php foreach ($products as $product){ ?>
                                         <tr>
                                             <td><input type="checkbox" name="productIdRelated[]" value="<?php echo $product->product_id;?>" ></td>
-                                            <td><?php echo product_image_view('uploads/products', $product->product_id, $product->image, 'noimage.png', 'img-fluid', '', '', '50', '50') ?></td>
+                                            <td><img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $product->product_id, $product->image, 'noimage.png', '50', '50') ?>" alt="<?php echo $product->alt_name?>" class="img-fluid" loading="lazy"></td>
                                             <td><?php echo $product->name;?></td>
                                         </tr>
                                     <?php } ?>
@@ -85,7 +85,7 @@
                                     <?php foreach ($products as $product){ ?>
                                         <tr>
                                             <td><input type="checkbox" name="productId[]" value="<?php echo $product->product_id;?>" ></td>
-                                            <td><?php echo product_image_view('uploads/products', $product->product_id, $product->image, 'noimage.png', 'img-fluid', '', '', '50', '50') ?></td>
+                                            <td><img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $product->product_id, $product->image, 'noimage.png', '50', '50') ?>" alt="<?php echo $product->alt_name?>" class="img-fluid" loading="lazy"></td>
                                             <td><?php echo $product->name;?></td>
                                         </tr>
                                     <?php } ?>

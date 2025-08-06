@@ -8,7 +8,7 @@
                             <?php
                             $modules = modules_access();
                             $img_size = ($modules['watermark'] == '1')?'100_wm_':'100_';
-                            $logoImg = get_lebel_by_value_in_theme_settings('side_logo');
+                            $logoImg = get_lebel_by_value_in_theme_settings('side_logo')->value;
                             echo image_view('uploads/logo','',$logoImg,'noimage.png','img-fluid');?>
                         </div>
                         <div class="address">
@@ -80,10 +80,8 @@
                                 <tr>
                                     <td width="700">
                                         <div class="img-table" style="width:12%; float:left;">
-                                        <?php
-                                        $img = get_data_by_id('image','cc_products','product_id',$item->product_id);
-                                        echo product_image_view('uploads/products', $item->product_id, $img, 'noimage.png', 'img-fluid', '', '', '100', '100')
-                                        ?>
+                                        <?php $img = get_all_row_data_by_id('cc_products', 'product_id', $item->product_id);; ?>
+                                            <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $item->product_id, $img->image, 'noimage.png',  '100', '100');?>" alt="<?php echo $img->alt_name?>" class="img-fluid" loading="lazy">
                                         </div>
                                         <div class="img-text" style="width:88%;float:left; padding-left: 10px">
                                         <?php echo get_data_by_id('name','cc_products','product_id',$item->product_id) ;?>

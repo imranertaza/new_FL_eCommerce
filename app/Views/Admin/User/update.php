@@ -127,6 +127,11 @@
                                                 <span>Recommended Size: 250 x 150</span>
                                             </div>
 
+                                            <div class="form-group">
+                                                <label>ALT Name</label>
+                                                <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $user->alt_name; ?>" >
+                                            </div>
+
                                             <input type="hidden" name="user_id" value="<?php echo $user->user_id;?>" required>
                                             <button class="btn btn-primary" >Update</button>
                                             <a href="<?php echo base_url('user')?>" class="btn btn-danger" >Back</a>

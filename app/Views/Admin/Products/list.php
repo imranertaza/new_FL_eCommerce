@@ -105,7 +105,7 @@
                                 <input type="checkbox" name="productId[]" value="<?php echo $val->product_id;?>" form="multisubmitform" >
                             </td>
                             <td><?php echo $i++;?></td>
-                            <td width="50"><?php echo product_image_view('uploads/products', $val->product_id, $val->image, 'noimage.png', 'img-fluid', '', '', '50', '50') ?></td>
+                            <td width="50"><img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $val->product_id, $val->image, 'noimage.png',  '50', '50') ?>" alt="<?php echo $val->alt_name?>" class="img-fluid" loading="lazy"></td>
                             <td><?php echo $val->name;?></td>
                             <td><?php echo $val->model;?></td>
                             <td> <?php echo $val->quantity;?></td>

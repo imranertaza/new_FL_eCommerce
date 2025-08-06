@@ -67,16 +67,22 @@
                         <div class="col-md-4">
                             <h3>Default Image <span class="requi">*</span></h3>
                         </div>
+
                         <div class="col-md-8">
                             <div class="row ">
                                 <div class="col-md-2 img_view">
-                                    <?php echo common_image_view('uploads/album', $album->album_id, $album->thumb, 'noimage.png', 'img-w-h-100', '', '198', '198');?>
+                                    <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/album', $album->album_id, $album->thumb, 'noimage.png', '100', '100');?>" alt="<?php echo $album->alt_name?>" class="img-w-h-100" loading="lazy">
                                 </div>
                             </div>
                             <div id="framesdef"></div><br>
                             <input type="file" id="defimage" name="thumb" accept="image/*" class="form-control" >
 
+                            <div class="form-group">
+                                <label>ALT Name</label>
+                                <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $album->alt_name; ?>" >
+                            </div>
                         </div>
+
                         <div class="col-md-12">
                             <hr>
                         </div>

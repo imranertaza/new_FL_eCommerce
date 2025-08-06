@@ -95,8 +95,6 @@
                         <div class="products cat-pro-mob">
                             <div class="row gx-0 row-cols-1 row-cols-sm-2 row-cols-md-3 h-100 " id="grid-view">
                                 <?php $modules = modules_access();
-                                $img_size = ($modules['watermark'] == '1')?'191_wm_':'191_';
-                                $img_size_198 = ($modules['watermark'] == '1')?'198_wm_':'198_';
                                 $symbol = get_lebel_by_value_in_settings('currency_symbol');
                                 if (!empty($products)) {
                                     foreach ($products as $pro) { ?>
@@ -135,7 +133,7 @@
 
                                                 <div class="product-top text-center">
                                                     <a href="<?php echo base_url('detail/' . $pro->product_id) ?>">
-                                                        <?php echo product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', 'img-fluid', '', '', '191', '191')?>
+                                                        <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', '191', '191');?>" alt="<?php echo $pro->alt_name?>"class="img-fluid " loading="lazy">
                                                     </a>
                                                     <div class="rating text-center my-2">
                                                         <?php //echo product_id_by_rating($pro->product_id); ?>
@@ -205,7 +203,7 @@
 
                                             <div class="product-top text-center" style="width:40%;float:left; ">
                                                 <a href="<?php echo base_url('detail/' . $pro->product_id) ?>">
-                                                    <?php echo product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', 'img-fluid', '', '', '198', '198')?>
+                                                    <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', '198', '198');?>" alt="<?php echo $pro->alt_name?>" class="img-fluid " loading="lazy">
                                                 </a>
 
                                             </div>

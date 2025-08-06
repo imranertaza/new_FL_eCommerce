@@ -64,6 +64,11 @@
                             <span>Recommended Size: 250 x 150</span>
                         </div>
 
+                        <div class="form-group">
+                            <label>ALT Name</label>
+                            <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $brand->alt_name; ?>" >
+                        </div>
+
                         <button class="btn btn-primary" >Update</button>
                         <a href="<?php echo base_url('brand')?>" class="btn btn-danger" >Back</a>
                     </div>

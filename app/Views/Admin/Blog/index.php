@@ -57,7 +57,7 @@ foreach ($blog as $val) { ?>
                             <td width="40"><?php echo $i++;?></td>
                             <td><?php echo $val->blog_title;?></td>
                             <td><?php echo $val->short_des;?></td>
-                            <td><?php echo common_image_view('uploads/blog', $val->blog_id, $val->image, 'noimage.png', '', '', '100', '100');?></td>
+                            <td><img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/blog', $val->blog_id, $val->image, 'noimage.png', '100', '100');?>" alt="<?php echo $val->alt_name?>" class="" loading="lazy"></td>
 
                             <td><?php echo statusView($val->status);?></td>
                             <td width="180">

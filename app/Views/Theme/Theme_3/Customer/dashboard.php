@@ -13,7 +13,6 @@
                                 <span class="mt-3 con-tit">Total Order</span>
                                 <?php
                                     $modules = modules_access();
-                                    $img_size = ($modules['watermark'] == '1')?'100_wm_':'100_';
                                     $all = 0;
                                     foreach ($order as $acVal){ $all++;}
                                 ?>
@@ -81,10 +80,8 @@
                             <h4 class="ti-or-n">Recent Order</h4>
                             <?php if (!empty($orderItem)){  foreach ($orderItem as $item){ ?>
                                 <div class="d-flex">
-                                    <div><?php
-                                        $img = get_data_by_id('image','cc_products','product_id',$item->product_id);
-                                        echo product_image_view('uploads/products', $item->product_id, $img, 'noimage.png', 'img-fluid', '', '', '100', '100')
-                                        ?>
+                                    <div><?php $img = get_all_row_data_by_id('cc_products', 'product_id', $item->product_id); ?>
+                                        <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $item->product_id, $img->image, 'noimage.png', '100', '100');?>" alt="<?php echo $img->alt_name?>" class="img-fluid" loading="lazy">
 
                                     </div>
                                     <div class="ms-3">

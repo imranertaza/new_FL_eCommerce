@@ -395,6 +395,10 @@
                                             <div class="form-group"><label>Description Image </label>
                                                 <div id="framessingle"></div><br>
                                                 <input type="file" id="singleimage" name="description_image" class="form-control" >
+                                                <div class="form-group">
+                                                    <label>ALT Name </label>
+                                                    <input type="text" name="alt_name_des" class="form-control" placeholder="Alt Name" value="<?php echo $prod->altDes; ?>" >
+                                                </div>
                                                 <br>
                                                 <?php if (!empty($prod->description_image)){ ?>
                                                     <?php echo image_view('uploads/products',$prod->product_id,$prod->description_image,'','img-w-h-100');?>
@@ -418,12 +422,15 @@
                                         <div class="col-md-8">
                                             <div class="row ">
                                                 <div class="col-md-2 img_view">
-                                                <?php echo product_image_view('uploads/products', $prod->product_id, $prod->image, 'noimage.png', 'img-w-h-100', '', '', '100', '100') ?>
+                                                    <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $prod->product_id, $prod->image, 'noimage.png',  '100', '100') ?>" alt="<?php echo $prod->alt_name?>" class="img-w-h-100" loading="lazy">
                                                 </div>
                                             </div>
                                             <div id="framesdef"></div><br>
                                             <input type="file" id="defimage" name="image" class="form-control">
-
+                                            <div class="form-group">
+                                                <label>ALT Name </label>
+                                                <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $prod->altPro; ?>" >
+                                            </div>
                                         </div>
                                         <div class="col-md-12">
                                             <hr>
@@ -435,10 +442,11 @@
                                             <div id="success"  style="display:none;"  class="alert alert-success alert-dismissible w-50 mb-1 text-center " role="alert">Update Success </div>
                                             <div class="row mb-4" >
                                             <?php foreach ($prodimage as $img){ ?>
-                                                <div class="col-md-2 img_view">
+                                                <div class="col-md-4 img_view">
 
                                                     <input type="text" onchange="image_sort_update('<?=$img->product_image_id?>',this.value)" class="form-control mb-2 text-center" style="height: 25px;" name="sort_order" value="<?= $img->sort_order;?>">
-                                                    <?php echo product_multi_image_view('uploads/products', $img->product_id, $img->product_image_id,  $img->image, 'noimage.png', 'img-fluid', '91', '91');?>
+                                                    <img data-sizes="auto"  id="" src="<?php echo product_multi_image_view('uploads/products', $img->product_id, $img->product_image_id,  $img->image, 'noimage.png', '100', '100');?>" alt="<?php echo $img->alt_name?>" class="" loading="lazy">
+                                                    <input type="text" onchange="image_alt_name_update('<?=$img->product_image_id?>',this.value)" class="form-control mt-2 mb-2 text-center" style="height: 25px;" value="<?= $img->alt_name;?>">
                                                     <a href="javascript:void(0)" onclick="removeImg(<?php echo $img->product_image_id;?>)" class="btn del-btn"><i class="fas fa-trash"></i> Delete</a>
                                                 </div>
                                             <?php } ?>
@@ -588,6 +596,20 @@
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('product_image_sort_action') ?>",
+            data: {product_image_id: product_image_id,value:val},
+            beforeSend: function () {
+                $("#loading-image").show();
+            },
+            success: function (data) {
+                $("#success").show(0).delay(1000).fadeOut();
+            }
+        });
+    }
+
+    function image_alt_name_update(product_image_id,val){
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('product_image_alt_name_action') ?>",
             data: {product_image_id: product_image_id,value:val},
             beforeSend: function () {
                 $("#loading-image").show();

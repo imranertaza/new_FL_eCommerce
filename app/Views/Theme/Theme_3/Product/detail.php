@@ -12,22 +12,19 @@
                                             <div class="row">
                                                 <?php
                                                 $modules = modules_access();
-                                                $img_size = ($modules['watermark'] == '1')?'100_wm_':'100_';
-                                                $img_size_437 = ($modules['watermark'] == '1')?'437_wm_':'437_';
-                                                $img_size_191 = ($modules['watermark'] == '1')?'191_wm_':'191_';
                                                 ?>
                                                 <div class="col-2 col-sm-3 col-md-2 col-lg-3 px-0">
                                                     <div class="slider slider-nav thumb-image">
                                                         <div class="thumbnail-image">
                                                             <div class="thumbImg">
-                                                                <?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', 'img-fluid', '', '', '100', '100') ?>
+                                                                <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', '100', '100');?>" alt="<?php echo $products->alt_name?>" class="img-fluid " >
                                                             </div>
                                                         </div>
 
                                                         <?php
                                                         if (!empty($proImg)) {
                                                             foreach ($proImg as $imgval) {
-                                                                echo '<div class="thumbnail-image"><div class="thumbImg">' . product_multi_image_view('uploads/products', $imgval->product_id, $imgval->product_image_id,  $imgval->image, 'noimage.png', 'img-fluid', '100', '100'). '</div></div>';
+                                                                echo '<div class="thumbnail-image"><div class="thumbImg"><img data-sizes="auto"  id="" src="' . product_multi_image_view('uploads/products', $imgval->product_id, $imgval->product_image_id,  $imgval->image, 'noimage.png', '100', '100'). '" alt="'.$imgval->alt_name.'" class="img-fluid " ></div></div>';
                                                             }
                                                         }
                                                         ?>
@@ -36,7 +33,7 @@
                                                             <div class="thumbImg video-thum">
                                                                 <a href="javascript:void(0)" data-bs-toggle="modal"
                                                                     data-bs-target="#videoeModal">
-                                                                    <?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', 'img-fluid', '', '', '100', '100') ?>
+                                                                    <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', '100', '100');?>" alt="<?php echo $products->alt_name?>" class="img-fluid " >
                                                                     <img src="<?php echo base_url('uploads/play.png') ?>"
                                                                         alt="" class="play-image">
                                                                 </a>
@@ -49,14 +46,14 @@
                                                 <div class="col-10 col-sm-9 col-md-10 col-lg-9 position-relative">
                                                     <div class="slider slider-for slider-cus-css">
                                                         <div class="slider-banner-image">
-                                                            <?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', 'img-fluid', '', '', '437', '437');?>
+                                                            <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png',  '437', '437');?>" alt="<?php echo $products->alt_name?>" class="img-fluid " >
                                                         </div>
 
                                                         <?php
                                                         if (!empty($proImg)) {
                                                             foreach ($proImg as $imgval) {
-                                                                echo '<div class="slider-banner-image">' .
-                                                                    product_multi_image_view('uploads/products', $imgval->product_id, $imgval->product_image_id,  $imgval->image, 'noimage.png', 'img-fluid', '437', '437'). '</div>';
+                                                                echo '<div class="slider-banner-image"><img data-sizes="auto"  id="" src="' .
+                                                                    product_multi_image_view('uploads/products', $imgval->product_id, $imgval->product_image_id,  $imgval->image, 'noimage.png','437', '437'). '" alt="'.$imgval->alt_name.'" class="img-fluid w-100" ></div>';
                                                             }
                                                         }
                                                         ?>
@@ -319,39 +316,6 @@
                                     Accept payments online
                                 </td>
                             </tr>
-
-
-
-<!--                            <tr>-->
-<!--                                <td class="td-pd">-->
-<!--                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="18" viewBox="0 0 20 18"-->
-<!--                                        fill="none">-->
-<!--                                        <path d="M4.5 1L1 4L4.5 7.5" stroke="#2E2E2E" stroke-width="2"-->
-<!--                                            stroke-linecap="round" stroke-linejoin="round" />-->
-<!--                                        <path-->
-<!--                                            d="M1 4H12.497C15.9385 4 18.861 6.81 18.995 10.25C19.137 13.885 16.1335 17 12.497 17H3.999"-->
-<!--                                            stroke="#2E2E2E" stroke-width="2" stroke-linecap="round"-->
-<!--                                            stroke-linejoin="round" />-->
-<!--                                    </svg>-->
-<!--                                </td>-->
-<!--                                <td class="td-pd">-->
-<!--                                    24 months warranty-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!---->
-<!--                            <tr>-->
-<!--                                <td class="td-pd">-->
-<!--                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"-->
-<!--                                        fill="none">-->
-<!--                                        <path-->
-<!--                                            d="M9.0669 6.0049L9.2509 5.9999H16.7509C17.5809 5.99983 18.3794 6.3173 18.9828 6.88721C19.5862 7.45711 19.9487 8.23627 19.9959 9.0649L20.0009 9.2499V16.7499C20.001 17.58 19.6833 18.3787 19.1132 18.9821C18.5431 19.5855 17.7637 19.9479 16.9349 19.9949L16.7509 19.9999H9.2509C8.42076 20 7.62207 19.6823 7.01867 19.1122C6.41526 18.5421 6.0529 17.7627 6.0059 16.9339L6.0009 16.7509V9.2509C6.00084 8.42076 6.31845 7.62207 6.88857 7.01867C7.45869 6.41526 8.23809 6.0529 9.0669 6.0059V6.0049ZM16.7509 7.4999H9.2509C8.81171 7.49991 8.38858 7.66507 8.06551 7.96258C7.74243 8.26009 7.54304 8.6682 7.5069 9.1059L7.5009 9.2499V16.7499C7.50094 17.1892 7.66623 17.6125 7.96395 17.9356C8.26166 18.2587 8.67002 18.458 9.1079 18.4939L9.2509 18.4999H16.7509C17.1902 18.4999 17.6135 18.3346 17.9366 18.0368C18.2597 17.7391 18.459 17.3308 18.4949 16.8929L18.5009 16.7499V9.2499C18.5009 8.78577 18.3165 8.34065 17.9883 8.01246C17.6601 7.68427 17.215 7.4999 16.7509 7.4999ZM13.0009 9.0009C13.1998 9.0009 13.3906 9.07992 13.5312 9.22057C13.6719 9.36122 13.7509 9.55198 13.7509 9.7509V12.2489H16.2509C16.4498 12.2489 16.6406 12.3279 16.7812 12.4686C16.9219 12.6092 17.0009 12.8 17.0009 12.9989C17.0009 13.1978 16.9219 13.3886 16.7812 13.5292C16.6406 13.6699 16.4498 13.7489 16.2509 13.7489H13.7509V16.2509C13.7509 16.4498 13.6719 16.6406 13.5312 16.7812C13.3906 16.9219 13.1998 17.0009 13.0009 17.0009C12.802 17.0009 12.6112 16.9219 12.4706 16.7812C12.3299 16.6406 12.2509 16.4498 12.2509 16.2509V13.7489H9.7509C9.55198 13.7489 9.36122 13.6699 9.22057 13.5292C9.07992 13.3886 9.0009 13.1978 9.0009 12.9989C9.0009 12.8 9.07992 12.6092 9.22057 12.4686C9.36122 12.3279 9.55198 12.2489 9.7509 12.2489H12.2509V9.7509C12.2509 9.55198 12.3299 9.36122 12.4706 9.22057C12.6112 9.07992 12.802 9.0009 13.0009 9.0009ZM13.5829 2.2339L13.6349 2.4109L14.3279 4.9989H12.7749L12.1869 2.7989C12.1275 2.57679 12.0249 2.36856 11.885 2.18613C11.745 2.00369 11.5705 1.85061 11.3714 1.73564C11.1723 1.62067 10.9525 1.54606 10.7245 1.51608C10.4966 1.48609 10.265 1.50132 10.0429 1.5609L2.7989 3.5029C2.37603 3.6163 2.01102 3.88408 1.77591 4.25341C1.5408 4.62273 1.45266 5.06677 1.5289 5.4979L1.5609 5.6459L3.5029 12.8899C3.59399 13.2303 3.78572 13.5353 4.053 13.7649C4.32028 13.9945 4.65066 14.1381 5.0009 14.1769V15.6829C4.35072 15.6441 3.72716 15.4111 3.21099 15.0138C2.69483 14.6166 2.30984 14.0735 2.1059 13.4549L2.0539 13.2789L0.112898 6.0339C-0.102099 5.23227 -0.0022662 4.37877 0.391926 3.6484C0.786117 2.91803 1.4448 2.36614 2.2329 2.1059L2.4109 2.0539L9.6549 0.112898C10.4565 -0.102099 11.31 -0.0022662 12.0404 0.391926C12.7708 0.786117 13.3227 1.4458 13.5829 2.2339Z"-->
-<!--                                            fill="#2E2E2E" />-->
-<!--                                    </svg>-->
-<!--                                </td>-->
-<!--                                <td class="td-pd">-->
-<!--                                    30 days cancellation-->
-<!--                                </td>-->
-<!--                            </tr>-->
                             <?php $modulId = get_data_by_id('module_id','cc_modules','module_key','contact_with_whatsapp');?>
                             <tr>
                                 <td class="td-pd">
@@ -473,7 +437,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4 mb-3">
-                    <?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', 'img-fluid w-100', '', '', '437', '437');?>
+                    <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png',  '437', '437');?>" alt="<?php echo $products->alt_name?>" class="img-fluid" loading="lazy">
                 </div>
             </div>
         </div>
@@ -508,7 +472,7 @@
                                                 <div
                                                     class="product-grid h-100 d-flex align-items-stretch flex-column position-relative">
                                                     <div class="product-top border p-2">
-                                                        <?php echo product_image_view('uploads/products', $bought->product_id, $bought->image, 'noimage.png', 'img-fluid w-100', '', '', '191', '191');?>
+                                                        <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $bought->product_id, $bought->image, 'noimage.png','191', '191');?>" alt="<?php echo $bought->alt_name?>" class="img-fluid w-100" loading="lazy">
                                                         <input type="checkbox" name="both_product[]"
                                                             onchange="bothPriceCalculat()"
                                                             class="form-check-input check-input"
@@ -614,7 +578,7 @@
                                     <?php } ?>
                                     <div class="product-top text-center">
                                         <a href="<?php echo base_url('detail/' . $rPro->product_id) ?>">
-                                            <?php echo product_image_view('uploads/products', $rPro->product_id, $rPro->image, 'noimage.png', 'img-fluid', '', '', '191', '191');?>
+                                            <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $rPro->product_id, $rPro->image, 'noimage.png','191', '191');?>" alt="<?php echo $rPro->alt_name?>" class="img-fluid" loading="lazy">
                                         </a>
                                         <div class="rating text-center my-2">
                                             <?php echo product_id_by_rating($rPro->product_id); ?>
@@ -711,7 +675,7 @@
                                     <?php } ?>
                                     <div class="product-top text-center">
                                         <a href="<?php echo base_url('detail/' . $rPro->product_id) ?>">
-                                            <?php echo product_image_view('uploads/products', $rPro->product_id, $rPro->image, 'noimage.png', 'img-fluid', '', '', '191', '191');?>
+                                            <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $rPro->product_id, $rPro->image, 'noimage.png','191', '191');?>" alt="<?php echo $rPro->alt_name?>" class="img-fluid" loading="lazy">
                                         </a>
                                         <div class="rating text-center my-2">
                                             <?php echo product_id_by_rating($rPro->product_id); ?>

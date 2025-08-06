@@ -11,23 +11,23 @@
                     <div class="swiper-wrapper">
                         <?php $sli_1 = get_lebel_by_value_in_theme_settings('slider_1'); ?>
                         <div class="swiper-slide">
-                            <?php echo common_image_view('uploads/slider', '', $sli_1, 'noimage.png', 'img-fluid w-100', '', '605', '401');?>
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/slider', '', $sli_1->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_1->alt_name?>" class="img-fluid w-100" loading="lazy">
                         </div>
                         <?php $sli_2 = get_lebel_by_value_in_theme_settings('slider_2'); ?>
                         <div class="swiper-slide">
-                            <?php echo common_image_view('uploads/slider', '', $sli_2, 'noimage.png', 'img-fluid w-100', '', '605', '401');?>
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/slider', '', $sli_2->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_2->alt_name?>" class="img-fluid w-100" loading="lazy">
                         </div>
                         <?php $sli_3 = get_lebel_by_value_in_theme_settings('slider_3'); ?>
                         <div class="swiper-slide">
-                            <?php echo common_image_view('uploads/slider', '', $sli_3, 'noimage.png', 'img-fluid w-100', '', '605', '401');?>
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/slider', '', $sli_3->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_3->alt_name?>" class="img-fluid w-100" loading="lazy">
                         </div>
                         <?php $sli_4 = get_lebel_by_value_in_theme_settings('slider_4'); ?>
                         <div class="swiper-slide">
-                            <?php echo common_image_view('uploads/slider', '', $sli_4, 'noimage.png', 'img-fluid w-100', '', '605', '401');?>
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/slider', '', $sli_4->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_4->alt_name?>" class="img-fluid w-100" loading="lazy">
                         </div>
                         <?php $sli_5 = get_lebel_by_value_in_theme_settings('slider_5'); ?>
                         <div class="swiper-slide">
-                            <?php echo common_image_view('uploads/slider', '', $sli_5, 'noimage.png', 'img-fluid w-100', '', '605', '401');?>
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/slider', '', $sli_5->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_5->alt_name?>" class="img-fluid w-100" loading="lazy">
                         </div>
                     </div>
                     <div class="swiper-pagination"></div>
@@ -35,25 +35,24 @@
                 <?php $theme_settings = get_theme_settings();?>
                 <div class="side-banner d-flex flex-column flex-sm-row flex-sm-row flex-lg-column gap-1" id="bannerSiderParent">
                     <div class="side-banner-box position-relative text-center custom-d-50 w-100">
-                        <a href="<?php echo !empty($theme_settings['head_side_url_1'])?$theme_settings['head_side_url_1']:base_url('category/'.$theme_settings['head_side_category_1']); ?>">
+                        <a href="<?php echo !empty($theme_settings['head_side_url_1']['value'])?$theme_settings['head_side_url_1']['value']:base_url('category/'.$theme_settings['head_side_category_1']['value']); ?>">
                             <?php
-                                $side_baner_1 = $theme_settings['head_side_baner_1'];
+                                $side_baner_1 = $theme_settings['head_side_baner_1']['value'];
                             ?>
-                            <?php echo common_image_view('uploads/top_side_baner', '', $side_baner_1, 'noimage.png', 'img-fluid ', '', '228', '199');?>
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/top_side_baner', '', $side_baner_1, 'noimage.png', '228', '199');?>" alt="<?php echo $theme_settings['head_side_baner_1']['alt_name']?>" class="img-fluid" loading="lazy">
                             <div class="position-absolute sid-text-n top-0 p-3">
-                                <h4><?php echo $theme_settings['head_side_title_1'];?></h4>
+                                <h4><?php echo $theme_settings['head_side_title_1']['value'];?></h4>
                             </div>
                         </a>
                     </div>
                     <div class="side-banner-box position-relative text-center custom-d-50 w-100">
-                        <a   href="<?php echo !empty($theme_settings['head_side_url_2'])?$theme_settings['head_side_url_2']:base_url('category/'.$theme_settings['head_side_category_2']); ?>" >
+                        <a   href="<?php echo !empty($theme_settings['head_side_url_2']['value'])?$theme_settings['head_side_url_2']['value']:base_url('category/'.$theme_settings['head_side_category_2']['value']); ?>" >
                             <?php
-                                $side_baner_2 = $theme_settings['head_side_baner_2'];
+                                $side_baner_2 = $theme_settings['head_side_baner_2']['value'];
                             ?>
-                            <?php echo common_image_view('uploads/top_side_baner', '', $side_baner_2, 'noimage.png', 'img-fluid ', '', '228', '199');?>
-
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/top_side_baner', '', $side_baner_2, 'noimage.png', '228', '199');?>" alt="<?php echo $theme_settings['head_side_baner_2']['alt_name']?>" class="img-fluid" loading="lazy">
                             <div class="position-absolute sid-text-n top-0 p-3">
-                                <h4><?php echo $theme_settings['head_side_title_2'];?></h4>
+                                <h4><?php echo $theme_settings['head_side_title_2']['value'];?></h4>
 
                             </div>
                         </a>
@@ -67,18 +66,17 @@
 <section class="main-container">
     <div class="container">
         <div class="featured-category mb-5">
-            <a href="<?php echo !empty($theme_settings['banner_top_category_url'])?$theme_settings['banner_top_category_url']:base_url('category/'.$theme_settings['banner_top_category']); ?>">
-            <div class="row row-cols-lg-6 row-cols-md-3 row-cols-sm-3 row-cols-2 row-cols-1">
+            <a href="<?php echo !empty($theme_settings['banner_top_category_url']['value'])?$theme_settings['banner_top_category_url']['value']:base_url('category/'.$theme_settings['banner_top_category']['value']); ?>">
 
-                <?php $banner_top = $theme_settings['banner_top']; ?>
-                <?php echo common_image_view('uploads/banner_top', '', $banner_top, 'noimage.png', 'w-100', '', '1116', '211');?>
-            </div>
+            <?php $banner_top = $theme_settings['banner_top']['value']; ?>
+            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/banner_top', '', $banner_top, 'noimage.png', '1116', '211');?>" alt="<?php echo $theme_settings['banner_top']['alt_name']?>" class="img-fluid " loading="lazy">
+
             </a>
         </div>
-        <a href="<?php echo !empty($theme_settings['banner_featured_category_url'])?$theme_settings['banner_featured_category_url']:base_url('category/'.$theme_settings['banner_featured_category_category']); ?>">
+        <a href="<?php echo !empty($theme_settings['banner_featured_category_url']['value'])?$theme_settings['banner_featured_category_url']['value']:base_url('category/'.$theme_settings['banner_featured_category_category']['value']); ?>">
         <div class="home-banner mb-5">
-            <?php $banner_bottom = $theme_settings['banner_featured_category'];  ?>
-            <?php echo common_image_view('uploads/banner_featured_category', '', $banner_bottom, 'noimage.png', 'w-100', '', '1116', '211');?>
+            <?php $banner_bottom = $theme_settings['banner_featured_category']['value'];  ?>
+            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/banner_featured_category', '', $banner_bottom, 'noimage.png', '1116', '211');?>" alt="<?php echo $theme_settings['banner_featured_category']['alt_name']?>" class="img-fluid" loading="lazy">
         </div>
         </a>
 
@@ -86,7 +84,7 @@
             <div class="cat-title">
                 <div class="row">
                     <div class="col-6 col-md-3">
-                        <h3 class="title-header"><?php echo $theme_settings['home_category_title_1'];?></h3>
+                        <h3 class="title-header"><?php echo $theme_settings['home_category_title_1']['value'];?></h3>
                     </div>
                     <div class="col-6 col-md-9 d-flex justify-content-end align-items-center">
                         <div class="apparels-button-prev">
@@ -104,9 +102,9 @@
             </div>
             <div class="row">
                 <div class="col-sm-3">
-                    <a href="<?php echo !empty($theme_settings['home_category_url_1'])?$theme_settings['home_category_url_1']:base_url('category/'.$theme_settings['home_category_1']); ?>">
-                    <?php $category_baner_1 = $theme_settings['home_category_baner_1']; ?>
-                    <?php echo common_image_view('uploads/home_category', '', $category_baner_1, 'noimage.png', 'w-100 h-cat-ban', '', '261', '522');?>
+                    <a href="<?php echo !empty($theme_settings['home_category_url_1']['value'])?$theme_settings['home_category_url_1']['value']:base_url('category/'.$theme_settings['home_category_1']['value']); ?>">
+                    <?php $category_baner_1 = $theme_settings['home_category_baner_1']['value']; ?>
+                    <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $category_baner_1, 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_1']['alt_name']?>" class=" h-cat-ban" loading="lazy">
                     </a>
                 </div>
                 <div class="col-sm-9">
@@ -114,7 +112,7 @@
                         <div class="swiper apparelsSlide">
                             <div class="swiper-wrapper">
                             <?php 
-                                $home_category_1 = $theme_settings['home_category_1'];
+                                $home_category_1 = $theme_settings['home_category_1']['value'];
                                 echo get_category_id_by_product_show_home_slide($home_category_1);
                             ?>
                             </div>
@@ -127,7 +125,7 @@
             <div class="cat-title">
                 <div class="row">
                     <div class="col-6 col-md-3">
-                        <h3 class="title-header"><?php echo $theme_settings['home_category_title_2'];?></h3>
+                        <h3 class="title-header"><?php echo $theme_settings['home_category_title_2']['value'];?></h3>
                     </div>
                     <div class="col-6 col-md-9 d-flex justify-content-end align-items-center">
                         <div class="treasures-button-prev">
@@ -145,8 +143,8 @@
             </div>
             <div class="row">
                 <div class="col-sm-3">
-                    <a href="<?php echo !empty($theme_settings['home_category_url_2'])?$theme_settings['home_category_url_2']:base_url('category/'.$theme_settings['home_category_2']); ?>">
-                    <?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_2'], 'noimage.png', 'w-100 h-cat-ban', '', '261', '522');?>
+                    <a href="<?php echo !empty($theme_settings['home_category_url_2']['value'])?$theme_settings['home_category_url_2']['value']:base_url('category/'.$theme_settings['home_category_2']['value']); ?>">
+                        <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_2']['value'], 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_2']['alt_name']?>" class=" h-cat-ban" loading="lazy">
                     </a>
                 </div>
                 <div class="col-sm-9">
@@ -154,7 +152,7 @@
                         <div class="swiper treasuresSlide">
                             <div class="swiper-wrapper">
                             <?php 
-                                $home_category_2 = $theme_settings['home_category_2'];
+                                $home_category_2 = $theme_settings['home_category_2']['value'];
                                 echo get_category_id_by_product_show_home_slide($home_category_2);
                             ?>
                             </div>
@@ -167,7 +165,7 @@
             <div class="cat-title">
                 <div class="row">
                     <div class="col-6 col-md-3">
-                        <h3 class="title-header"><?php echo $theme_settings['home_category_title_3'];?></h3>
+                        <h3 class="title-header"><?php echo $theme_settings['home_category_title_3']['value'];?></h3>
                     </div>
                     <div class="col-6 col-md-9 d-flex justify-content-end align-items-center">
                         <div class="bag-button-prev">
@@ -185,8 +183,8 @@
             </div>
             <div class="row">
                 <div class="col-sm-3">
-                    <a href="<?php echo !empty($theme_settings['home_category_url_3'])?$theme_settings['home_category_url_3']:base_url('category/'.$theme_settings['home_category_3']); ?>">
-                    <?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_3'], 'noimage.png', 'w-100 h-cat-ban', '', '261', '522');?>
+                    <a href="<?php echo !empty($theme_settings['home_category_url_3']['value'])?$theme_settings['home_category_url_3']['value']:base_url('category/'.$theme_settings['home_category_3']['value']); ?>">
+                        <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_3']['value'], 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_3']['alt_name']?>" class=" h-cat-ban" loading="lazy">
                     </a>
                 </div>
                 <div class="col-sm-9">
@@ -194,7 +192,7 @@
                         <div class="swiper bagSlide">
                             <div class="swiper-wrapper">
                                 <?php 
-                                    $home_category_3 = $theme_settings['home_category_3'];
+                                    $home_category_3 = $theme_settings['home_category_3']['value'];
                                     echo get_category_id_by_product_show_home_slide($home_category_3);                                  
                                         
                                 ?> 
@@ -208,7 +206,7 @@
             <div class="cat-title">
                 <div class="row">
                     <div class="col-6 col-md-3">
-                        <h3 class="title-header"><?php echo $theme_settings['home_category_title_4'];?></h3>
+                        <h3 class="title-header"><?php echo $theme_settings['home_category_title_4']['value'];?></h3>
                     </div>
                     <div class="col-6 col-md-9 d-flex justify-content-end align-items-center">
                         <div class="jewelry-button-prev">
@@ -226,8 +224,8 @@
             </div>
             <div class="row">
                 <div class="col-sm-3">
-                    <a href="<?php echo !empty($theme_settings['home_category_url_4'])?$theme_settings['home_category_url_4']:base_url('category/'.$theme_settings['home_category_4']); ?>">
-                    <?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_4'], 'noimage.png', 'w-100 h-cat-ban', '', '261', '522');?>
+                    <a href="<?php echo !empty($theme_settings['home_category_url_4']['value'])?$theme_settings['home_category_url_4']['value']:base_url('category/'.$theme_settings['home_category_4']['value']); ?>">
+                        <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_4']['value'], 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_4']['alt_name']?>" class=" h-cat-ban" loading="lazy">
                     </a>
                 </div>
                 <div class="col-sm-9">
@@ -235,7 +233,7 @@
                         <div class="swiper jewelrySlide">
                             <div class="swiper-wrapper">
                             <?php 
-                                $home_category_4 = $theme_settings['home_category_4'];
+                                $home_category_4 = $theme_settings['home_category_4']['value'];
                                 echo get_category_id_by_product_show_home_slide($home_category_4);
                             ?>
                             </div>
@@ -248,7 +246,7 @@
             <div class="cat-title">
                 <div class="row">
                     <div class="col-6 col-md-3">
-                        <h3 class="title-header"><?php echo $theme_settings['home_category_title_5'];?></h3>
+                        <h3 class="title-header"><?php echo $theme_settings['home_category_title_5']['value'];?></h3>
                     </div>
                     <div class="col-6 col-md-9 d-flex justify-content-end align-items-center">
                         <div class="shoes-button-prev">
@@ -266,8 +264,8 @@
             </div>
             <div class="row">
                 <div class="col-sm-3">
-                    <a href="<?php echo !empty($theme_settings['home_category_url_5'])?$theme_settings['home_category_url_5']:base_url('category/'.$theme_settings['home_category_5']); ?>">
-                    <?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_5'], 'noimage.png', 'w-100 h-cat-ban', '', '261', '522');?>
+                    <a href="<?php echo !empty($theme_settings['home_category_url_5']['value'])?$theme_settings['home_category_url_5']['value']:base_url('category/'.$theme_settings['home_category_5']['value']); ?>">
+                        <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_5']['value'], 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_5']['alt_name']?>" class=" h-cat-ban" loading="lazy">
                     </a>
                 </div>
                 <div class="col-sm-9">
@@ -275,7 +273,7 @@
                         <div class="swiper shoesSlide">
                             <div class="swiper-wrapper">
                             <?php 
-                                $home_category_5 = $theme_settings['home_category_5'];
+                                $home_category_5 = $theme_settings['home_category_5']['value'];
                                 echo get_category_id_by_product_show_home_slide($home_category_5);
                             ?>
                             </div>
@@ -285,8 +283,8 @@
             </div>
         </div>
         <div class="home-banner mb-5">
-            <a href="<?php echo !empty($theme_settings['banner_bottom_url'])?$theme_settings['banner_bottom_url']:base_url('category/'.$theme_settings['banner_bottom_category']); ?>">
-            <?php echo common_image_view('uploads/banner_bottom', '', $theme_settings['banner_bottom'], 'noimage.png', 'w-100', '', '1116', '422');?>
+            <a href="<?php echo !empty($theme_settings['banner_bottom_url']['value'])?$theme_settings['banner_bottom_url']['value']:base_url('category/'.$theme_settings['banner_bottom_category']['value']); ?>">
+                <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/banner_bottom', '', $theme_settings['banner_bottom']['value'], 'noimage.png', '1116', '422');?>" alt="<?php echo $theme_settings['banner_bottom']['alt_name']?>" class="" loading="lazy">
             </a>
         </div>
     </div>

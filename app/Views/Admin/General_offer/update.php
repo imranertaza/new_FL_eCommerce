@@ -83,6 +83,11 @@
                                     <label>Banner</label>
                                     <input type="file" name="banner" class="form-control" placeholder="banner" >
                                 </div>
+
+                                <div class="form-group">
+                                    <label>ALT Name</label>
+                                    <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $offer->alt_name; ?>" >
+                                </div>
                             </div>
 
                             <div class="col-md-6">

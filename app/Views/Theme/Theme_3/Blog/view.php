@@ -42,7 +42,7 @@
                     <div class="carousel-inner">
                         <?php foreach ($image as $key => $val){ ?>
                         <div class="carousel-item <?php echo ($key == '0')?'active':'';?>" >
-                            <?php echo common_image_view('uploads/blog', $blog->blog_id.'/'.$val->blog_crassula_image_id, $val->image, 'noimage.png', 'd-block w-100', '', '1116', '481');?>
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/blog', $blog->blog_id.'/'.$val->blog_crassula_image_id, $val->image, 'noimage.png',  '1116', '481');?>" alt="<?php echo $blog->alt_name?>" class="d-block w-100" loading="lazy">
                         </div>
                         <?php } ?>
                     </div>

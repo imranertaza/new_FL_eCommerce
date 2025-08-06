@@ -98,6 +98,7 @@ $routes->post('/product_multi_delete_action', 'Admin\Products::multi_delete_acti
 $routes->post('/remove_cropped_images_action', 'Admin\Products::removeCroppedImagesAction');
 
 $routes->post('/product_image_sort_action', 'Admin\Products::product_image_sort_action');
+$routes->post('/product_image_alt_name_action', 'Admin\Products::productImageAltNameAction');
 
 $routes->get('/products_list', 'Admin\Products::products_list');
 
@@ -112,6 +113,7 @@ $routes->post('/album_update_action', 'Admin\Album::update_action');
 $routes->get('/album_update/(:num)', 'Admin\Album::update/$1');
 $routes->get('/album_delete/(:num)', 'Admin\Album::delete/$1');
 $routes->post('/album_image_sort_action', 'Admin\Album::album_image_sort_action');
+$routes->post('/album_image_alt_name_action', 'Admin\Album::album_image_alt_name_action');
 $routes->post('/album_image_delete', 'Admin\Album::image_delete');
 
 $routes->get('/album_category_create', 'Admin\Album::album_category_create');
@@ -361,6 +363,7 @@ $routes->post('blog_update_action', 'Admin\Blog::updateAction');
 $routes->get('blog_update/(:num)', 'Admin\Blog::update/$1');
 $routes->get('blog_delete/(:num)', 'Admin\Blog::delete/$1');
 $routes->post('blog_image_remove_action', 'Admin\Blog::imageRemoveAction');
+$routes->post('blog_image_alt_name_action', 'Admin\Blog::imageAltNameAction');
 
 //login routes
 $routes->get('/register', 'Login::register');

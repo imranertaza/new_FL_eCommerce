@@ -86,6 +86,10 @@ class Theme_settings_3 extends BaseController
             $table->where('label', $key)->update($dataUpdate);
         }
 
+        $dataAltNameUpdate['alt_name'] = $this->request->getPost('alt_name');
+        $table = DB()->table('cc_theme_settings');
+        $table->where('label', 'head_side_baner_1')->update($dataAltNameUpdate);
+
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Header Section Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('theme_settings?sel=home_settings');
     }
@@ -98,6 +102,7 @@ class Theme_settings_3 extends BaseController
         $data['head_side_title_2'] = $this->request->getPost('head_side_title_2');
         $data['head_side_category_2'] = $this->request->getPost('head_side_category_2');
         $data['head_side_url_2'] = $this->request->getPost('head_side_url_2');
+        $dataUpdate['alt_name'] = $this->request->getPost('alt_name');
 
         if (!empty($_FILES['head_side_baner_2']['name'])) {
             $target_dir = FCPATH . '/uploads/top_side_baner/';
@@ -120,6 +125,10 @@ class Theme_settings_3 extends BaseController
             $table = DB()->table('cc_theme_settings');
             $table->where('label', $key)->update($dataUpdate);
         }
+
+        $dataAltNameUpdate['alt_name'] = $this->request->getPost('alt_name');
+        $table = DB()->table('cc_theme_settings');
+        $table->where('label', 'head_side_baner_2')->update($dataAltNameUpdate);
 
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Header Section Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('theme_settings?sel=home_settings');
@@ -156,6 +165,10 @@ class Theme_settings_3 extends BaseController
             $table = DB()->table('cc_theme_settings');
             $table->where('label', $key)->update($dataUpdate);
         }
+
+        $dataAltNameUpdate['alt_name'] = $this->request->getPost('alt_name');
+        $table = DB()->table('cc_theme_settings');
+        $table->where('label', 'home_category_baner_'.$prefix)->update($dataAltNameUpdate);
 
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Home Category Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('theme_settings?sel=home_settings');
@@ -194,6 +207,10 @@ class Theme_settings_3 extends BaseController
             $table->where('label', $key)->update($dataUpdate);
         }
 
+        $dataAltNameUpdate['alt_name'] = $this->request->getPost('alt_name');
+        $table = DB()->table('cc_theme_settings');
+        $table->where('label', 'banner_bottom')->update($dataAltNameUpdate);
+
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Bottom Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('theme_settings?sel=home_settings');
     }
@@ -229,6 +246,10 @@ class Theme_settings_3 extends BaseController
             $table = DB()->table('cc_theme_settings');
             $table->where('label', $key)->update($dataUpdate);
         }
+
+        $dataAltNameUpdate['alt_name'] = $this->request->getPost('alt_name');
+        $table = DB()->table('cc_theme_settings');
+        $table->where('label', 'banner_featured_category')->update($dataAltNameUpdate);
 
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Featured Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('theme_settings?sel=home_settings');
@@ -472,6 +493,10 @@ class Theme_settings_3 extends BaseController
             $table = DB()->table('cc_theme_settings');
             $table->where('label', $key)->update($dataUpdate);
         }
+
+        $dataAltNameUpdate['alt_name'] = $this->request->getPost('alt_name');
+        $table = DB()->table('cc_theme_settings');
+        $table->where('label', 'banner_top')->update($dataAltNameUpdate);
 
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Top Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('theme_settings?sel=home_settings');

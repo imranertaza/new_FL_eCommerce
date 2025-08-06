@@ -83,6 +83,7 @@ class Brand extends BaseController
     public function create_action()
     {
         $data['name'] = $this->request->getPost('name');
+        $data['alt_name'] = $this->request->getPost('name');
         $data['createdBy'] = $this->session->adUserId;
 
         $this->validation->setRules([
@@ -157,6 +158,7 @@ class Brand extends BaseController
         $data['name'] = $this->request->getPost('name');
         $data['status'] = $this->request->getPost('status');
         $data['sort_order'] = $this->request->getPost('sort_order');
+        $data['alt_name'] = $this->request->getPost('alt_name');
         $data['updatedBy'] = $this->session->adUserId;
 
         $this->validation->setRules([
