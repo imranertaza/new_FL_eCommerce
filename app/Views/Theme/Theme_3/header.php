@@ -8,7 +8,7 @@
     <meta name="description" content="<?php echo $description;?>">
     <meta name="keywords" content="<?php echo $keywords;?>">
 
-    <link rel="shortcut icon" href="<?php echo base_url() ?>/uploads/logo/<?php echo get_lebel_by_value_in_theme_settings('favicon');?>">
+    <link rel="shortcut icon" href="<?php echo base_url() ?>/uploads/logo/<?php echo get_lebel_by_value_in_theme_settings('favicon')->value;?>">
     <link rel="preload" href="<?php echo base_url('uploads/loader.gif')?>" as="image">
 
     <link rel="stylesheet" href="<?php echo base_url() ?>/assets/assets_fl/bootstrap.min.css">
@@ -119,7 +119,7 @@
                         <div class="logo text-center text-sm-start">
                         <a href="<?php echo base_url() ?>">
                                 <?php $logoImg = get_lebel_by_value_in_theme_settings('side_logo');
-                                echo image_view('uploads/logo', '', $logoImg, 'noimage.png', 'img-fluid side_logo'); ?>
+                                echo image_view('uploads/logo', '', $logoImg->value, 'noimage.png', 'img-fluid side_logo'); ?>
                             </a>
                         </div>
                     </div>

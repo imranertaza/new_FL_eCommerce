@@ -832,12 +832,7 @@ function get_lebel_by_value_in_theme_settings($lable)
 {
     $table = DB()->table('cc_theme_settings');
     $data = $table->where('label', $lable)->get()->getRow();
-    if (!empty($data)) {
-        $result = $data->value;
-    } else {
-        $result = '';
-    }
-    return $result;
+    return $data;
 }
 
 /**
@@ -965,7 +960,7 @@ function order_email_template($orderId)
 
     $tableItem = DB()->table('cc_order_item');
     $item = $tableItem->where('order_id', $orderId)->get()->getResult();
-    $logoImg = get_lebel_by_value_in_theme_settings('side_logo');
+    $logoImg = get_lebel_by_value_in_theme_settings('side_logo')->value;
     $logo = image_view('uploads/logo', '', $logoImg, 'noimage.png', 'logo-css');
 
     $titleStore = get_lebel_by_value_in_settings('store_name');
@@ -1060,7 +1055,7 @@ function order_email_template($orderId)
         $proName = get_data_by_id('name', 'cc_products', 'product_id', $row->product_id);
         $model = get_data_by_id('model', 'cc_products', 'product_id', $row->product_id);
         $image = get_data_by_id('image', 'cc_products', 'product_id', $row->product_id);
-        $imgView = product_image_view('uploads/products', $row->product_id, $image, 'noimage.png', 'img-fluid', '', '', '100', '100');
+        $imgView = '<img data-sizes="auto"  id="" src="'.product_image_view('uploads/products', $row->product_id, $image, 'noimage.png',  '100', '100').'" >';
         $url = base_url('detail/' . $row->product_id);
         $price = currency_symbol($row->total_price);
         $total = currency_symbol($row->final_price);
@@ -1143,7 +1138,7 @@ function order_email_template_card($orderId)
     $tableItem = DB()->table('cc_order_card_details');
     $cardDetail = $tableItem->where('order_id', $orderId)->get()->getRow();
 
-    $logoImg = get_lebel_by_value_in_theme_settings('side_logo');
+    $logoImg = get_lebel_by_value_in_theme_settings('side_logo')->value;
     $logo = image_view('uploads/logo', '', $logoImg, 'noimage.png', 'logo-css');
 
     $titleStore = get_lebel_by_value_in_settings('store_name');
@@ -1247,7 +1242,7 @@ function order_email_template_card($orderId)
 function success_email_template($title, $message, $url)
 {
     $address = get_lebel_by_value_in_settings('address');
-    $logoImg = get_lebel_by_value_in_theme_settings('side_logo');
+    $logoImg = get_lebel_by_value_in_theme_settings('side_logo')->value;
     $logo = image_view('uploads/logo', '', $logoImg, 'noimage.png', 'logo-css');
     $titleStore = get_lebel_by_value_in_settings('store_name');
 
@@ -1485,7 +1480,7 @@ function get_category_id_by_product_show_home_slide($category_id)
         }
 
         $view .= '<div class="product-top mb-2">
-                    ' . product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', 'img-fluid w-100', '', '', '132', '132') . '                    
+                <img data-sizes="auto"  id="" src="' . product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', '132', '132') . '" alt="'.$pro->alt_name.'" class="img-fluid w-100" loading="lazy">                 
                 </div>
                 <div class="product-bottom mt-auto">
                     <div class="product-title product_title_area mb-2">
@@ -1594,7 +1589,7 @@ function get_theme_settings(){
     foreach ($data as $key => $val){
         foreach($val as $k=>$v) {
             if ($k == 'label') {
-                $settings[$v] = $data[$key]->value;
+                $settings[$v] = ['value' => $data[$key]->value,'alt_name' => $data[$key]->alt_name];
             }
         }
     }
@@ -1741,7 +1736,7 @@ function parent_qc_picture(){
     return $album;
 }
 
-function common_image_view($url, $slug, $image, $no_image, $class = '', $id = '', $width = '', $height = "")
+function common_image_view($url, $slug, $image, $no_image, $width = '', $height = '')
 {
 
     $imgMain = str_replace("pro_", "", $image);
@@ -1759,7 +1754,7 @@ function common_image_view($url, $slug, $image, $no_image, $class = '', $id = ''
 
     if (!empty($image)) {
         if (!file_exists($dir)) {
-            $result = '<img data-sizes="auto" id="' . $id . '" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+            $result = $no_img;
         } else {
             $imgPath = $dir . '/' . $imgMain;
 
@@ -1773,18 +1768,18 @@ function common_image_view($url, $slug, $image, $no_image, $class = '', $id = ''
                     $imgFinal = base_url('image-resize/' . $urlNew . '/' . $width . 'x' . $height . '/' . $imgMain);
                 }
 
-                $result   = '<img data-sizes="auto"  id="' . $id . '" src="' . $imgFinal . '" class="' . $class . '" loading="lazy">';
+                $result = $imgFinal;
             } else {
-                $result = '<img data-sizes="auto" id="' . $id . '" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+                $result = $no_img;
             }
         }
     } else {
-        $result = '<img data-sizes="auto" id="' . $id . '" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+        $result = $no_img;
     }
 
     return $result;
 }
-function product_image_view($url, $slug, $image, $no_image, $class = '', $id = '', $attr = '', $width = '', $height = "")
+function product_image_view($url, $slug, $image, $no_image, $width = '', $height = '')
 {
     $modules = modules_access();
     $im  = str_replace("pro_", "", $image);
@@ -1803,7 +1798,7 @@ function product_image_view($url, $slug, $image, $no_image, $class = '', $id = '
 
     if (!empty($image)) {
         if (!file_exists($dir)) {
-            $result = '<img data-sizes="auto" id="' . $id . '" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+            $result = $no_img;
         } else {
             $imgPath = $dir . '/' . $imgMain;
 
@@ -1816,18 +1811,18 @@ function product_image_view($url, $slug, $image, $no_image, $class = '', $id = '
                     $urlNew = base64_encode($url . '/' . $slug . '/');
                     $imgFinal = base_url('image-resize/' . $urlNew . '/' . $width . 'x' . $height . '/' . $imgMain);
                 }
-                $result   = '<img data-sizes="auto" ' . $attr . ' id="' . $id . '" src="' . $imgFinal . '" class="' . $class . '" loading="lazy">';
+                $result   = $imgFinal;
             } else {
-                $result = '<img data-sizes="auto" id="' . $id . '" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+                $result = $no_img;
             }
         }
     } else {
-        $result = '<img data-sizes="auto" id="' . $id . '" src="' . $no_img . '" class="' . $class . '" loading="lazy">';
+        $result = $no_img;
     }
 
     return $result;
 }
-function product_multi_image_view($url, $slug, $slug2, $image, $no_image, $class = '', $width = '', $height = '',$id='')
+function product_multi_image_view($url, $slug, $slug2, $image, $no_image, $width = '', $height = '')
 {
     $modules = modules_access();
     $im  = str_replace("pro_", "", $image);
@@ -1848,7 +1843,7 @@ function product_multi_image_view($url, $slug, $slug2, $image, $no_image, $class
 
     if (!empty($image)) {
         if (!file_exists($dir)) {
-            $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" id="'.$id.'" loading="lazy">';
+            $result = $no_img;
         } else {
             $imgPath = $dir . '/' . $imgMain;
 
@@ -1861,13 +1856,13 @@ function product_multi_image_view($url, $slug, $slug2, $image, $no_image, $class
                     $urlNew = base64_encode($url . '/' . $slug . '/'. $slug2 . '/');
                     $imgFinal = base_url('image-resize/' . $urlNew . '/' . $width . 'x' . $height . '/' . $imgMain);
                 }
-                $result   = '<img data-sizes="auto" src="' . $imgFinal . '" class="' . $class . '" id="'.$id.'" >';
+                $result   = $imgFinal;
             } else {
-                $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" id="'.$id.'" loading="lazy">';
+                $result = $no_img;
             }
         }
     } else {
-        $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" id="'.$id.'" loading="lazy">';
+        $result = $no_img;
     }
 
     return $result;

@@ -13,7 +13,8 @@
                     <?php }else{ ?>
                         <a href="<?= base_url('qc-picture-view/'.$val->album_id);?>">
                     <?php }?>
-                    <?php echo product_image_view('uploads/album', $val->album_id, $val->thumb, 'noimage.png', '', '', '', '261', '261') ?>
+
+                    <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/album', $val->album_id, $val->thumb, 'noimage.png', '261', '261') ?>" alt="<?php echo $val->alt_name?>" class="img-fluid" loading="lazy">
                         <p class="text-capitalize text-black mt-3"><b><?php echo $val->name; ?></b></p>
                     </a>
                 </div>

@@ -93,6 +93,7 @@ class Blog extends BaseController
     public function createAction()
     {
         $data['blog_title'] = $this->request->getPost('blog_title');
+        $data['alt_name'] = $this->request->getPost('blog_title');
         $data['slug'] = $this->request->getPost('slug');
         $data['cat_id'] = $this->request->getPost('cat_id');
         $data['video_id'] = $this->request->getPost('video_id');
@@ -149,6 +150,7 @@ class Blog extends BaseController
 
                     if ($file->isValid() && !$file->hasMoved()) {
                         $dataMultiImg['blog_id'] = $blogId;
+                        $dataMultiImg['alt_name'] = $data['alt_name'];
                         $blogImgTable = DB()->table('cc_blog_carousel_image');
                         $blogImgTable->insert($dataMultiImg);
                         $blogCrassulaImageId = DB()->insertID();
@@ -219,6 +221,7 @@ class Blog extends BaseController
     {
         $blogId = $this->request->getPost('blog_id');
         $data['blog_title'] = $this->request->getPost('blog_title');
+        $data['alt_name'] = $this->request->getPost('alt_name');
         $data['slug'] = $this->request->getPost('slug');
         $data['cat_id'] = $this->request->getPost('cat_id');
         $data['video_id'] = $this->request->getPost('video_id');
@@ -272,6 +275,7 @@ class Blog extends BaseController
 
                     if ($file->isValid() && !$file->hasMoved()) {
                         $dataMultiImg['blog_id'] = $blogId;
+                        $dataMultiImg['alt_name'] = $data['alt_name'];
                         $blogImgTable = DB()->table('cc_blog_carousel_image');
                         $blogImgTable->insert($dataMultiImg);
                         $blogCrassulaImageId = DB()->insertID();
@@ -360,5 +364,17 @@ class Blog extends BaseController
 
         print '<div class="alert alert-success alert-dismissible" role="alert">Delete Record Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
 
+    }
+    /**
+     * @description This method provides album alt name action
+     * @return void
+     */
+    public function imageAltNameAction()
+    {
+        $blog_crassula_image_id = $this->request->getPost('blog_crassula_image_id');
+
+        $data['alt_name'] = $this->request->getPost('value');
+        $table = DB()->table('cc_blog_carousel_image');
+        $table->where('blog_crassula_image_id', $blog_crassula_image_id)->update($data);
     }
 }

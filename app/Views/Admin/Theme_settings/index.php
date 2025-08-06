@@ -71,15 +71,20 @@
                                             <div class="form-group mt-5">
                                                 <?php
                                                 $sli_1 = get_lebel_by_value_in_theme_settings('slider_1');
-                                                echo image_view('uploads/slider', '', $sli_1, 'noimage.png', 'width-full-100');
+                                                echo image_view('uploads/slider', '', $sli_1->value, 'noimage.png', 'width-full-100');
                                                 ?>
                                             </div>
                                             <div class="form-group">
                                                 <label>Slider 1</label>
-                                                <input type="file" name="slider" class="form-control" required>
+                                                <input type="file" name="slider" class="form-control" >
                                                 <input type="hidden" name="nameslider" class="form-control"
-                                                       value="slider_1" required>
+                                                       value="slider_1" >
                                                        <small>Recommended Size: <?php echo $theme_libraries->slider_width; ?> x <?php echo $theme_libraries->slider_height; ?></small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>ALT Name</label>
+                                                <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $sli_1->alt_name; ?>" >
                                             </div>
                                             
                                             <button type="submit" class="btn btn-primary">Save</button>
@@ -92,15 +97,20 @@
                                             <div class="form-group mt-5">
                                                 <?php
                                                 $sli_3 = get_lebel_by_value_in_theme_settings('slider_3');
-                                                echo image_view('uploads/slider', '', $sli_3, 'noimage.png', 'width-full-100');
+                                                echo image_view('uploads/slider', '', $sli_3->value, 'noimage.png', 'width-full-100');
                                                 ?>
                                             </div>
                                             <div class="form-group">
                                                 <label>Slider 3</label>
-                                                <input type="file" name="slider" class="form-control" required>
+                                                <input type="file" name="slider" class="form-control" >
                                                 <input type="hidden" name="nameslider" class="form-control"
-                                                       value="slider_3" required>
+                                                       value="slider_3" >
                                                 <small>Recommended Size: <?php echo $theme_libraries->slider_width; ?> x <?php echo $theme_libraries->slider_height; ?></small>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label>ALT Name</label>
+                                                <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $sli_3->alt_name; ?>" >
                                             </div>
                                             <button type="submit" class="btn btn-primary">Save</button>
                                         </form>
@@ -111,15 +121,20 @@
                                             <div class="form-group mt-5">
                                                 <?php
                                                 $sli_2 = get_lebel_by_value_in_theme_settings('slider_2');
-                                                echo image_view('uploads/slider', '', $sli_2, 'noimage.png', 'width-full-100');
+                                                echo image_view('uploads/slider', '', $sli_2->value, 'noimage.png', 'width-full-100');
                                                 ?>
                                             </div>
                                             <div class="form-group">
                                                 <label>Slider 2</label>
-                                                <input type="file" name="slider" class="form-control" required>
+                                                <input type="file" name="slider" class="form-control" >
                                                 <input type="hidden" name="nameslider" class="form-control"
-                                                       value="slider_2" required>
+                                                       value="slider_2" >
                                                 <small>Recommended Size: <?php echo $theme_libraries->slider_width; ?> x <?php echo $theme_libraries->slider_height; ?></small>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label>ALT Name</label>
+                                                <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $sli_2->alt_name; ?>" >
                                             </div>
                                             <button type="submit" class="btn btn-primary">Save</button>
                                         </form>
@@ -129,15 +144,21 @@
                                             <div class="form-group mt-5">
                                                 <?php
                                                 $sli_4 = get_lebel_by_value_in_theme_settings('slider_4');
-                                                echo image_view('uploads/slider', '', $sli_4, 'noimage.png', 'width-full-100');
+                                                echo image_view('uploads/slider', '', $sli_4->value, 'noimage.png', 'width-full-100');
                                                 ?>
                                             </div>
                                             <div class="form-group">
                                                 <label>Slider 4</label>
-                                                <input type="file" name="slider" class="form-control" required>
+                                                <input type="file" name="slider" class="form-control" >
                                                 <input type="hidden" name="nameslider" class="form-control"
-                                                       value="slider_4" required>
+                                                       value="slider_4" >
                                                 <small>Recommended Size: <?php echo $theme_libraries->slider_width; ?> x <?php echo $theme_libraries->slider_height; ?></small>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>ALT Name</label>
+                                                <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $sli_4->alt_name; ?>" >
                                             </div>
                                             <button type="submit" class="btn btn-primary">Save</button>
                                         </form>
@@ -149,16 +170,22 @@
                                             <div class="form-group mt-5">
                                                 <?php
                                                 $sli_5 = get_lebel_by_value_in_theme_settings('slider_5');
-                                                echo image_view('uploads/slider', '', $sli_5, 'noimage.png', 'width-full-100');
+                                                echo image_view('uploads/slider', '', $sli_5->value, 'noimage.png', 'width-full-100');
                                                 ?>
                                             </div>
                                             <div class="form-group">
                                                 <label>Slider 5</label>
-                                                <input type="file" name="slider" class="form-control" required>
+                                                <input type="file" name="slider" class="form-control" >
                                                 <input type="hidden" name="nameslider" class="form-control"
-                                                       value="slider_5" required>
+                                                       value="slider_5" >
                                                 <small>Recommended Size: <?php echo $theme_libraries->slider_width; ?> x <?php echo $theme_libraries->slider_height; ?></small>
+
                                             </div>
+                                            <div class="form-group">
+                                                <label>ALT Name</label>
+                                                <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $sli_5->alt_name; ?>" >
+                                            </div>
+
                                             <button type="submit" class="btn btn-primary">Save</button>
                                         </form>
                                     </div>
@@ -175,13 +202,18 @@
                                             <div class="form-group mt-5">
                                                 <?php
                                                 $side_logo = get_lebel_by_value_in_theme_settings('side_logo');
-                                                echo image_view('uploads/logo', '', $side_logo, 'noimage.png', '');
+                                                echo image_view('uploads/logo', '', $side_logo->value, 'noimage.png', '');
                                                 ?>
                                             </div>
                                             <div class="form-group">
                                                 <label>Logo</label>
-                                                <input type="file" name="side_logo" class="form-control" required>
+                                                <input type="file" name="side_logo" class="form-control" >
                                                 <small>Recommended Size: <?php echo $theme_libraries->logo_width; ?> x <?php echo $theme_libraries->logo_height; ?></small>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label>ALT Name</label>
+                                                <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $side_logo->alt_name; ?>" >
                                             </div>
                                             <button type="submit" class="btn btn-primary">Save</button>
                                         </form>
@@ -193,7 +225,7 @@
                                             <div class="form-group mt-5">
                                                 <?php
                                                 $favicon = get_lebel_by_value_in_theme_settings('favicon');
-                                                echo image_view('uploads/logo', '', $favicon, 'noimage.png', '');
+                                                echo image_view('uploads/logo', '', $favicon->value, 'noimage.png', '');
                                                 ?>
                                             </div>
                                             <div class="form-group">
