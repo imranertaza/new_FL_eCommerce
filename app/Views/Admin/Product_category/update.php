@@ -91,6 +91,11 @@
                                                     </div>
 
                                                     <div class="form-group">
+                                                        <label>ALT Name</label>
+                                                        <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $category->alt_name; ?>" >
+                                                    </div>
+
+                                                    <div class="form-group">
                                                         <label>Icon</label>
                                                         <?php $icons = get_all_data_array('cc_icons'); ?>
                                                         <div class="row">

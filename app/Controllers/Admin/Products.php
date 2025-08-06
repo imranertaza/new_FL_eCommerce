@@ -134,6 +134,7 @@ class Products extends BaseController
             $storeId = get_data_by_id('store_id', 'cc_stores', 'is_default', '1');
             $proData['store_id'] = $storeId;
             $proData['name'] = $data['pro_name'];
+            $proData['alt_name'] = $data['pro_name'];
             $proData['model'] = $data['model'];
             $proData['brand_id'] = !empty($this->request->getPost('brand_id')) ? $this->request->getPost('brand_id') : null;
             $proData['price'] = $data['price'];
@@ -183,6 +184,7 @@ class Products extends BaseController
 
                     if ($file->isValid() && !$file->hasMoved()) {
                         $dataMultiImg['product_id'] = $productId;
+                        $dataMultiImg['alt_name'] = $data['pro_name'];
                         $proImgTable = DB()->table('cc_product_image');
                         $proImgTable->insert($dataMultiImg);
                         $proImgId = DB()->insertID();
@@ -590,6 +592,7 @@ class Products extends BaseController
         } else {
 
             $table = DB()->table('cc_products');
+            $table->select('cc_products.*, cc_product_description.*,cc_product_description.alt_name AS altDes ,cc_products.alt_name AS altPro');
             $table->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id ');
             $data['prod'] = $table->where('cc_products.product_id', $product_id)->get()->getRow();
 
@@ -649,6 +652,7 @@ class Products extends BaseController
         $product_id = $this->request->getPost('product_id');
 
         $data['pro_name'] = $this->request->getPost('pro_name');
+        $data['alt_name'] = $this->request->getPost('alt_name');
         $data['model'] = $this->request->getPost('model');
         $data['categorys'] = $this->request->getPost('categorys[]');
         $data['price'] = $this->request->getPost('price');
@@ -670,6 +674,7 @@ class Products extends BaseController
 
             //product table data insert(start)
             $proData['name'] = $data['pro_name'];
+            $proData['alt_name'] = $data['alt_name'];
             $proData['model'] = $data['model'];
             $proData['brand_id'] = !empty($this->request->getPost('brand_id')) ? $this->request->getPost('brand_id') : null;
             $proData['price'] = $data['price'];
@@ -719,6 +724,7 @@ class Products extends BaseController
 
                     if ($file->isValid() && !$file->hasMoved()) {
                         $dataMultiImg['product_id'] = $product_id;
+                        $dataMultiImg['alt_name'] = $data['alt_name'];
                         $proImgTable = DB()->table('cc_product_image');
                         $proImgTable->insert($dataMultiImg);
                         $proImgId = DB()->insertID();
@@ -773,6 +779,7 @@ class Products extends BaseController
             //product description table data insert(start)
             $proDescData['product_id'] = $product_id;
             $proDescData['description'] = !empty($this->request->getPost('description')) ? $this->request->getPost('description') : null;
+            $proDescData['alt_name'] = !empty($this->request->getPost('alt_name_des')) ? $this->request->getPost('alt_name_des') : null;
             $proDescData['tag'] = !empty($this->request->getPost('tag')) ? $this->request->getPost('tag') : null;
             $proDescData['meta_title'] = !empty($this->request->getPost('meta_title')) ? $this->request->getPost('meta_title') : null;
             $proDescData['meta_description'] = !empty($this->request->getPost('meta_description')) ? $this->request->getPost('meta_description') : null;
@@ -1366,6 +1373,19 @@ class Products extends BaseController
         $product_image_id = $this->request->getPost('product_image_id');
 
         $data['sort_order'] = $this->request->getPost('value');
+        $table = DB()->table('cc_product_image');
+        $table->where('product_image_id', $product_image_id)->update($data);
+    }
+
+    /**
+     * @description This method provides product image alt name action
+     * @return void
+     */
+    public function productImageAltNameAction()
+    {
+        $product_image_id = $this->request->getPost('product_image_id');
+
+        $data['alt_name'] = $this->request->getPost('value');
         $table = DB()->table('cc_product_image');
         $table->where('product_image_id', $product_image_id)->update($data);
     }

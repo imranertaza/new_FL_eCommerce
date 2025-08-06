@@ -88,6 +88,10 @@
                                                         <label>Image</label>
                                                         <input type="file" name="image" class="form-control" placeholder="image">
                                                     </div>
+                                                    <div class="form-group">
+                                                        <label>ALT Name</label>
+                                                        <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $category->alt_name; ?>" >
+                                                    </div>
 
                                                     <div class="form-group">
                                                         <label>Icon</label>

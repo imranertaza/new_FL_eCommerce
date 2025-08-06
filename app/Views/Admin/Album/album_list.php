@@ -90,7 +90,7 @@
                                     $url = base_url('uploads/album/' . $val->album_id . '/wm_' . $img); ?>
                                     <a class="album-image-link" href="<?= $url; ?>"
                                        data-lightbox="album-set-<?= $val->album_id; ?>">
-                                        <?php echo common_image_view('uploads/album', $val->album_id, $val->thumb, 'noimage.png', '', '', '50', '50'); ?>
+                                        <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/album', $val->album_id, $val->thumb, 'noimage.png', '50', '50');?>" alt="<?php echo $val->alt_name?>" class="img-fluid " loading="lazy">
                                     </a>
 
                                 </td>
