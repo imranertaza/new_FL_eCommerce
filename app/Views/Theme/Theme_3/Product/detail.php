@@ -17,7 +17,7 @@
                                                     <div class="slider slider-nav thumb-image">
                                                         <div class="thumbnail-image">
                                                             <div class="thumbImg">
-                                                                <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', '100', '100');?>" alt="<?php echo $products->alt_name?>" class="img-fluid " >
+                                                                <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', '100', '100');?>" alt="<?php echo $products->altPro?>" class="img-fluid " >
                                                             </div>
                                                         </div>
 
@@ -33,7 +33,7 @@
                                                             <div class="thumbImg video-thum">
                                                                 <a href="javascript:void(0)" data-bs-toggle="modal"
                                                                     data-bs-target="#videoeModal">
-                                                                    <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', '100', '100');?>" alt="<?php echo $products->alt_name?>" class="img-fluid " >
+                                                                    <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', '100', '100');?>" alt="<?php echo $products->altPro?>" class="img-fluid " >
                                                                     <img src="<?php echo base_url('uploads/play.png') ?>"
                                                                         alt="" class="play-image">
                                                                 </a>
@@ -46,7 +46,7 @@
                                                 <div class="col-10 col-sm-9 col-md-10 col-lg-9 position-relative">
                                                     <div class="slider slider-for slider-cus-css">
                                                         <div class="slider-banner-image">
-                                                            <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png',  '437', '437');?>" alt="<?php echo $products->alt_name?>" class="img-fluid " >
+                                                            <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png',  '437', '437');?>" alt="<?php echo $products->altPro?>" class="img-fluid " >
                                                         </div>
 
                                                         <?php
@@ -437,7 +437,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4 mb-3">
-                    <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png',  '437', '437');?>" alt="<?php echo $products->alt_name?>" class="img-fluid" loading="lazy">
+                    <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png',  '437', '437');?>" alt="<?php echo $products->altPro?>" class="img-fluid" loading="lazy">
                 </div>
             </div>
         </div>

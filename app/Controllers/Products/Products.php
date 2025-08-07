@@ -30,6 +30,7 @@ class Products extends BaseController {
 
         $settings = get_settings();
         $table = DB()->table('cc_products');
+        $table->select('cc_products.*, cc_product_description.*,cc_product_description.alt_name AS altDes ,cc_products.alt_name AS altPro');
         $table->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id ');
         $data['products'] = $table->where('cc_products.product_id',$product_id)->where('cc_products.status','Active')->get()->getRow();
 
