@@ -16,7 +16,7 @@
     <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>/assets/assets_fl/slick/slick.min.css">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>/assets/assets_fl/slick/slick-theme.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <link rel="stylesheet" href="<?php echo base_url() ?>/assets/assets_fl/style.min.css">
+    <link rel="stylesheet" href="<?php echo base_url() ?>/assets/assets_fl/style.min.css?v1.0.2">
 
 
     <!-- Select2 -->
