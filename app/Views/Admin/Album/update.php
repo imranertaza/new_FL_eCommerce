@@ -93,7 +93,7 @@
                                     <div class="col-md-4 img_view">
                                         <input type="text" onchange="album_image_sort_update('<?=$img->album_details_id?>',this.value)" class="form-control mb-2 text-center" style="height: 25px;" name="sort_order" value="<?= $img->sort_order;?>">
                                         <img data-sizes="auto"  id="" src="<?php echo product_multi_image_view('uploads/album', $img->album_id, $img->album_details_id, $img->image, 'noimage.png', '100', '100')?>" alt="<?php echo $img->alt_name?>" class="img-fluid" loading="lazy">
-                                        <input type="text" onchange="album_image_alt_name_update('<?=$img->album_details_id?>',this.value)" class="form-control mt-2 mb-2 text-center" style="height: 25px;" placeholder="Alt Name" name="alt_name" value="<?= $img->alt_name;?>">
+                                        <input type="text" onchange="album_image_alt_name_update('<?=$img->album_details_id?>',this.value)" class="form-control mt-2 mb-2 text-center" style="height: 25px;" placeholder="Alt Name" value="<?= $img->alt_name;?>">
                                         <a href="javascript:void(0)" onclick="removeAlbumImg(<?php echo $img->album_details_id;?>)" class="btn del-btn"><i class="fas fa-trash"></i> Delete</a>
                                     </div>
                                 <?php } ?>
