@@ -133,6 +133,7 @@ class General_offer extends BaseController
             DB()->transStart();
 
                 $dataOff['name'] = $data['offer'];
+                $dataOff['alt_name'] = $data['offer'];
                 $dataOff['qty'] = $data['qty'];
                 $dataOff['slug'] = $data['slug'];
                 $dataOff['description'] = $data['description'];
@@ -282,6 +283,7 @@ class General_offer extends BaseController
     {
         $offer_id = $this->request->getPost('offer_id');
         $data['offer'] = $this->request->getPost('offer');
+        $data['alt_name'] = $this->request->getPost('alt_name');
         $data['qty'] = $this->request->getPost('qty');
         $data['slug'] = $this->request->getPost('slug');
         $data['description'] = $this->request->getPost('description');
@@ -318,6 +320,7 @@ class General_offer extends BaseController
                 $dataOff['name'] = $data['offer'];
                 $dataOff['qty'] = $data['qty'];
                 $dataOff['slug'] = $data['slug'];
+                $dataOff['alt_name'] = $data['alt_name'];
                 $dataOff['description'] = $data['description'];
                 $dataOff['discount_on'] = $data['discount_on'];
                 $dataOff['start_date'] = $data['start_date'];

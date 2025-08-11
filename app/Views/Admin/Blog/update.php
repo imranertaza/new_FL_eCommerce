@@ -32,6 +32,7 @@
                     <div class="col-md-4"> </div>
                     <div class="col-md-12" style="margin-top: 10px" id="message">
                         <?php if (session()->getFlashdata('message') !== null) : echo session()->getFlashdata('message'); endif; ?>
+
                     </div>
                 </div>
             </div>
@@ -62,11 +63,15 @@
                             </div>
 
                             <div class="form-group">
-                                <?php echo common_image_view('uploads/blog', $blog->blog_id, $blog->image, 'noimage.png', '', '', '100', '100');?><br>
+                                <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/blog', $blog->blog_id, $blog->image, 'noimage.png', '100', '100');?>" alt="<?php echo $blog->alt_name?>" class="" loading="lazy"><br>
 
                                 <label>Image </label>
                                 <input type="file" name="image"  class="form-control" placeholder="Image" >
                                 <span>Recommended Size (900x500)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>ALT Name</label>
+                                <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $blog->alt_name; ?>" >
                             </div>
 
                             <div class="form-group">
@@ -110,15 +115,17 @@
                             </div>
 
                             <div class="form-group ">
+                                <div id="success"  style="display:none; "  class="alert alert-success alert-dismissible w-100 mb-1 text-center " role="alert">Update Success </div>
                                 <br><label>Carousel Image</label>
                                 <div id="frames"></div><br>
                                 <input type="file" class="form-control" id="image" name="multiImage[]" multiple />
                                 Recommended Size (900x500)
                                 <div class="row" id="reloadImg">
                                     <?php foreach ($crassulaImage as $img){ ?>
-                                        <div class="col-md-4 position-relative">
-                                            <?php echo common_image_view('uploads/blog', $blog->blog_id.'/'.$img->blog_crassula_image_id, $img->image, 'noimage.png', 'mt-2', '100', '150', '100');?>
+                                        <div class="col-md-4 position-relative text-center">
+                                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/blog', $blog->blog_id.'/'.$img->blog_crassula_image_id, $img->image, 'noimage.png', '100', '100');?>" alt="<?php echo $img->alt_name?>" class="mt-2" loading="lazy">
                                             <a href="javascript:void(0);" onclick="removeBlogImage('<?php echo $img->blog_crassula_image_id;?>','<?php echo $blog->blog_id;?>')" class="btn btn-danger remove_btn" >X</a>
+                                            <input type="text" onchange="album_image_alt_name_update('<?=$img->blog_crassula_image_id?>',this.value)" class="form-control mt-2" placeholder="Alt Name" value="<?php echo $img->alt_name; ?>">
                                         </div>
                                     <?php } ?>
                                 </div>
@@ -161,6 +168,20 @@
                     }
                 });
             }
+        }
+
+        function album_image_alt_name_update(blog_crassula_image_id,val){
+            $.ajax({
+                method: "POST",
+                url: "<?php echo base_url('blog_image_alt_name_action') ?>",
+                data: {blog_crassula_image_id: blog_crassula_image_id,value:val},
+                beforeSend: function () {
+                    $("#loading-image").show();
+                },
+                success: function (data) {
+                    $("#success").show(0).delay(1000).fadeOut();
+                }
+            });
         }
     </script>
 <?= $this->endSection() ?>
