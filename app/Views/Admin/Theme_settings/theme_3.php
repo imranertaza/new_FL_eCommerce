@@ -118,7 +118,7 @@
                 <select name="home_category_1" class="form-control" required>
                     <option value="">Please Select</option>
                     <?php
-                    $catSel_1 = get_lebel_by_value_in_theme_settings('home_category_1');
+                    $catSel_1 = get_lebel_by_value_in_theme_settings('home_category_1')->value;
                     foreach ($cat as $val){
                         ?>
                         <option value="<?php echo $val->prod_cat_id;?>"
@@ -164,7 +164,7 @@
                 <select name="home_category_2" class="form-control" required>
                     <option value="">Please Select</option>
                     <?php
-                    $catSel_1 = get_lebel_by_value_in_theme_settings('home_category_2');
+                    $catSel_1 = get_lebel_by_value_in_theme_settings('home_category_2')->value;
                     foreach ($cat as $val){
                         ?>
                         <option value="<?php echo $val->prod_cat_id;?>"
@@ -212,7 +212,7 @@
                 <select name="home_category_3" class="form-control" required>
                     <option value="">Please Select</option>
                     <?php
-                    $catSel_1 = get_lebel_by_value_in_theme_settings('home_category_3');
+                    $catSel_1 = get_lebel_by_value_in_theme_settings('home_category_3')->value;
                     foreach ($cat as $val){
                         ?>
                         <option value="<?php echo $val->prod_cat_id;?>"
@@ -259,7 +259,7 @@
                 <select name="home_category_4" class="form-control" required>
                     <option value="">Please Select</option>
                     <?php
-                    $catSel_1 = get_lebel_by_value_in_theme_settings('home_category_4');
+                    $catSel_1 = get_lebel_by_value_in_theme_settings('home_category_4')->value;
                     foreach ($cat as $val){
                         ?>
                         <option value="<?php echo $val->prod_cat_id;?>"
