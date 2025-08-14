@@ -368,6 +368,7 @@ class Album extends BaseController
 
                     if ($file->isValid() && !$file->hasMoved()) {
                         $dataMultiImg['album_id'] = $albumId;
+                        $dataMultiImg['alt_name'] = $data['alt_name'];
                         $albumImgTable = DB()->table('cc_album_details');
                         $albumImgTable->insert($dataMultiImg);
                         $albumImgId = DB()->insertID();
