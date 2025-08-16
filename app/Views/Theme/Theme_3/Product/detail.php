@@ -17,14 +17,14 @@
                                                     <div class="slider slider-nav thumb-image">
                                                         <div class="thumbnail-image">
                                                             <div class="thumbImg">
-                                                                <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', '100', '100');?>" alt="<?php echo $products->altPro?>" class="img-fluid " >
+                                                                <img data-sizes="auto"  data-proId="<?php echo $products->product_id; ?>" data-imgId="" id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', '100', '100');?>" alt="<?php echo $products->altPro?>" class="img-fluid " >
                                                             </div>
                                                         </div>
 
                                                         <?php
                                                         if (!empty($proImg)) {
                                                             foreach ($proImg as $imgval) {
-                                                                echo '<div class="thumbnail-image"><div class="thumbImg"><img data-sizes="auto"  id="" src="' . product_multi_image_view('uploads/products', $imgval->product_id, $imgval->product_image_id,  $imgval->image, 'noimage.png', '100', '100'). '" alt="'.$imgval->alt_name.'" class="img-fluid " ></div></div>';
+                                                                echo '<div class="thumbnail-image"><div class="thumbImg"><img data-sizes="auto"  data-proId="'.$imgval->product_id.'" data-imgId="'.$imgval->product_image_id.'" id="" src="' . product_multi_image_view('uploads/products', $imgval->product_id, $imgval->product_image_id,  $imgval->image, 'noimage.png', '100', '100'). '" alt="'.$imgval->alt_name.'" class="img-fluid " ></div></div>';
                                                             }
                                                         }
                                                         ?>
@@ -46,13 +46,13 @@
                                                 <div class="col-10 col-sm-9 col-md-10 col-lg-9 position-relative">
                                                     <div class="slider slider-for slider-cus-css">
                                                         <div class="slider-banner-image">
-                                                            <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png',  '437', '437');?>" alt="<?php echo $products->altPro?>" class="img-fluid " >
+                                                            <img data-sizes="auto" data-proId="<?php echo $products->product_id; ?>" data-imgId="" id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png',  '437', '437');?>" alt="<?php echo $products->altPro?>" class="img-fluid " >
                                                         </div>
 
                                                         <?php
                                                         if (!empty($proImg)) {
                                                             foreach ($proImg as $imgval) {
-                                                                echo '<div class="slider-banner-image"><img data-sizes="auto"  id="" src="' .
+                                                                echo '<div class="slider-banner-image"><img data-sizes="auto" data-proId="'.$imgval->product_id.'" data-imgId="'.$imgval->product_image_id.'" id="" src="' .
                                                                     product_multi_image_view('uploads/products', $imgval->product_id, $imgval->product_image_id,  $imgval->image, 'noimage.png','437', '437'). '" alt="'.$imgval->alt_name.'" class="img-fluid w-100" ></div>';
                                                             }
                                                         }

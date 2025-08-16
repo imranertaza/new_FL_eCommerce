@@ -32,6 +32,9 @@
                                 <h3 class="card-title">Album List</h3>
                             </div>
                             <div class="col-md-8 text-right">
+                                <?php if (modules_key_by_access('remove_watermark_images') == '1') { ?>
+                                    <button type="submit" formaction="<?php echo base_url('remove-album-watermark-images-action'); ?>" class="btn btn-info btn-xs "><i class="fas fa-trash"></i> Remove Watermark Image </button>
+                                <?php } ?>
                                 <?php if (modules_key_by_access('remove_cropped_images') == '1') { ?>
                                     <button type="submit"
                                             formaction="<?php echo base_url('remove_album_cropped_images_action'); ?>"

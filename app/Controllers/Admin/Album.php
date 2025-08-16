@@ -771,6 +771,35 @@ class Album extends BaseController
         }
         return redirect()->to('album_list/' . $parent_album_id);
     }
+    public function removeWatermarkImagesAction()
+    {
+        $albumId = $this->request->getPost('album_id[]');
+        $parent_album_id = $this->request->getPost('parent_album_id');
+        if (!empty($albumId)) {
+            DB()->transStart();
+            foreach ($albumId as $album_id) {
+                $mainImage = get_data_by_id('thumb', 'cc_album', 'album_id', $album_id);
+                $mainImageFinal = str_replace("pro_", "", $mainImage);
+                if (!empty($mainImage)) {
+                    $basePath = FCPATH . 'uploads/album/' . $album_id . '/wm_'.$mainImageFinal;
+                    $this->imageProcessing->image_unlink($basePath);
+                }
+
+                // Multiple album images
+                $images = DB()->table('cc_album_details')->where('album_id', $album_id)->get()->getResult();
+                foreach ($images as $img) {
+                    $imageFinal = str_replace("pro_", "", $img->image);
+                    $multiPath = FCPATH . 'uploads/album/' . $album_id . '/' . $img->album_details_id . '/wm_'.$imageFinal;
+                    $this->imageProcessing->image_unlink($multiPath);
+                }
+            }
+            DB()->transComplete();
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Image remove successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        } else {
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        }
+        return redirect()->to('album_list/' . $parent_album_id);
+    }
 
 
 }

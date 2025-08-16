@@ -96,6 +96,7 @@ $routes->post('/product_option_value_search', 'Admin\Products::product_option_va
 $routes->post('/product_image_crop_action', 'Admin\Products::image_crop');
 $routes->post('/product_multi_delete_action', 'Admin\Products::multi_delete_action');
 $routes->post('/remove_cropped_images_action', 'Admin\Products::removeCroppedImagesAction');
+$routes->post('/remove-watermark-images-action', 'Admin\Products::removeWatermarkImagesAction');
 
 $routes->post('/product_image_sort_action', 'Admin\Products::product_image_sort_action');
 $routes->post('/product_image_alt_name_action', 'Admin\Products::productImageAltNameAction');
@@ -115,6 +116,7 @@ $routes->get('/album_delete/(:num)', 'Admin\Album::delete/$1');
 $routes->post('/album_image_sort_action', 'Admin\Album::album_image_sort_action');
 $routes->post('/album_image_alt_name_action', 'Admin\Album::album_image_alt_name_action');
 $routes->post('/album_image_delete', 'Admin\Album::image_delete');
+$routes->post('/remove-album-watermark-images-action', 'Admin\Album::removeWatermarkImagesAction');
 
 $routes->get('/album_category_create', 'Admin\Album::album_category_create');
 $routes->post('/album_category_create_action', 'Admin\Album::album_category_create_action');
@@ -457,6 +459,9 @@ $routes->post('/review', 'Products\Products::review');
 $routes->post('/both_product_price', 'Products\Products::both_product_price');
 $routes->post('/optionPriceCalculate', 'Products\Products::optionPriceCalculate');
 
+$routes->post('/product-image-download', 'Products\Products::productImageDownload');
+$routes->post('/product-image-unlink', 'Products\Products::productImageUnlink');
+
 $routes->get('/featuredproducts', 'Featuredproducts::index');
 
 
@@ -479,6 +484,9 @@ $routes->get('/qc-picture-view-category/(:num)', 'Album::qc_picture_view_categor
 $routes->get('/qc-picture-view/(:num)', 'Album::view/$1');
 $routes->post('/qc-picture-query', 'Album::qc_picture_query');
 $routes->get('/qc-picture-not-found', 'Album::picture_not_found');
+
+$routes->post('/album-image-download', 'Album::albumImageDownload');
+$routes->post('/album-image-unlink', 'Album::albumImageUnlink');
 
 //offers
 $routes->get('/offers', 'Offers::index');
