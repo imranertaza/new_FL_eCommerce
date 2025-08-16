@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Libraries\Image_processing;
 use App\Models\AlbumModel;
 
 class Album extends BaseController {
@@ -10,6 +11,7 @@ class Album extends BaseController {
     protected $session;
     protected $encrypter;
     protected $albumModel;
+    protected $image_processing;
 
     public function __construct()
     {
@@ -17,6 +19,7 @@ class Album extends BaseController {
         $this->session = \Config\Services::session();
         $this->encrypter = \Config\Services::encrypter();
         $this->albumModel = new AlbumModel();
+        $this->image_processing = new Image_processing();
     }
 
     /**
@@ -129,7 +132,52 @@ class Album extends BaseController {
 
         print $message;
     }
+    /**
+     * @description This method provides album image download
+     * @return false|string
+     */
+    public function albumImageDownload(){
+        $album_id = $this->request->getPost('album_id');
+        $image_id = $this->request->getPost('image_id');
+        $condition = $this->request->getPost('condition');
+        $downloadUrl = '';
+        $unlinkUrl = '';
+        if (empty($image_id)) {
+            $target_dir = FCPATH . '/uploads/album/' . $album_id . '/';
+            $image = get_data_by_id('thumb', 'cc_album', 'album_id', $album_id);
+            $mainImage = str_replace("pro_", "", $image);
+            $downloadUrl = base_url('/uploads/album/' . $album_id . '/'. $mainImage) ;
+            if ($condition == 'watermark') {
+                $this->image_processing->watermark_main_image($target_dir, $mainImage);
+                $downloadUrl = base_url('/uploads/album/' . $album_id . '/'.'wm_' . $mainImage) ;
+                $unlinkUrl = $target_dir.'wm_'.$mainImage;
+            }
 
+        }else {
+            $target_dir = FCPATH . '/uploads/album/' . $album_id . '/' . $image_id . '/';
+            $image = get_data_by_id('image', 'cc_album_details', 'album_details_id', $image_id);
+            $subImage = str_replace("pro_", "", $image);
+            $downloadUrl = base_url('/uploads/album/' . $album_id . '/'. $image_id . '/'. $subImage) ;
+            if ($condition == 'watermark') {
+                $this->image_processing->watermark_main_image($target_dir, $subImage);
+                $downloadUrl = base_url('/uploads/album/' . $album_id . '/'. $image_id . '/'. 'wm_' .$subImage);
+                $unlinkUrl = $target_dir.'wm_'.$subImage;
+            }
 
+        }
+
+        $data['downloadUrl'] = $downloadUrl;
+        $data['unlinkUrl'] = $unlinkUrl;
+
+        return json_encode($data);
+    }
+    /**
+     * @description This method provides album image unlink
+     * @return void
+     */
+    public function albumImageUnlink(){
+        $url = $this->request->getPost('url');
+        $this->image_processing->image_unlink($url);
+    }
 
 }

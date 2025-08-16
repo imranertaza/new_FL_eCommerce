@@ -1,6 +1,7 @@
 <?php namespace App\Controllers\Products;
 
 use App\Controllers\BaseController;
+use App\Libraries\Image_processing;
 use CodeIgniter\HTTP\RedirectResponse;
 
 class Products extends BaseController {
@@ -8,9 +9,11 @@ class Products extends BaseController {
     protected $validation;
     protected $session;
     protected $cart;
+    protected $image_processing;
 
     public function __construct()
     {
+        $this->image_processing = new Image_processing();
         $this->validation = \Config\Services::validation();
         $this->session = \Config\Services::session();
         $this->cart = \Config\Services::cart();
@@ -290,5 +293,53 @@ class Products extends BaseController {
         echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
+    /**
+     * @description This method provides product image download
+     * @return false|string
+     */
+    public function productImageDownload(){
+        $product_id = $this->request->getPost('product_id');
+        $image_id = $this->request->getPost('image_id');
+        $condition = $this->request->getPost('condition');
+        $downloadUrl = '';
+        $unlinkUrl = '';
+        if (empty($image_id)) {
+            $target_dir = FCPATH . '/uploads/products/' . $product_id . '/';
+            $image = get_data_by_id('image', 'cc_products', 'product_id', $product_id);
+            $mainImage = str_replace("pro_", "", $image);
+            $downloadUrl = base_url('/uploads/products/' . $product_id . '/'. $mainImage) ;
+            if ($condition == 'watermark') {
+                $this->image_processing->watermark_main_image($target_dir, $mainImage);
+                $downloadUrl = base_url('/uploads/products/' . $product_id . '/'.'wm_' . $mainImage) ;
+                $unlinkUrl = $target_dir.'wm_'.$mainImage;
+            }
+
+        }else {
+            $target_dir = FCPATH . '/uploads/products/' . $product_id . '/'. $image_id . '/';
+            $image = get_data_by_id('image', 'cc_product_image', 'product_image_id', $image_id);
+            $subImage = str_replace("pro_", "", $image);
+            $downloadUrl = base_url('/uploads/products/' . $product_id . '/'. $image_id . '/'. $subImage) ;
+            if ($condition == 'watermark') {
+                $this->image_processing->watermark_main_image($target_dir, $subImage);
+                $downloadUrl = base_url('/uploads/products/' . $product_id . '/'. $image_id . '/'. 'wm_' .$subImage);
+                $unlinkUrl = $target_dir.'wm_'.$subImage;
+            }
+
+        }
+
+        $data['downloadUrl'] = $downloadUrl;
+        $data['unlinkUrl'] = $unlinkUrl;
+
+        return json_encode($data);
+    }
+
+    /**
+     * @description This method provides product image unlink
+     * @return void
+     */
+    public function productImageUnlink(){
+        $url = $this->request->getPost('url');
+        $this->image_processing->image_unlink($url);
+    }
 
 }

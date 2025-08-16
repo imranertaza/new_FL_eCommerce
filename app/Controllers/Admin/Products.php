@@ -1603,6 +1603,36 @@ class Products extends BaseController
         }
         return redirect()->to($redirect_url);
     }
+    public function removeWatermarkImagesAction()
+    {
+        $redirect_url = isset($_COOKIE['product_url_path']) ? $_COOKIE['product_url_path'] : 'admin/products';
+        $allProductId = $this->request->getPost('productId[]');
+        if (!empty($allProductId)) {
+            DB()->transStart();
+            foreach ($allProductId as $product_id) {
+                // Main product image
+                $mainImage = get_data_by_id('image', 'cc_products', 'product_id', $product_id);
+                $mainImageFinal = str_replace("pro_", "", $mainImage);
+                if (!empty($mainImage)) {
+                    $basePath = FCPATH . 'uploads/products/' . $product_id . '/wm_'.$mainImageFinal;
+                    $this->imageProcessing->image_unlink($basePath);
+                }
+
+                // Multiple product images
+                $images = DB()->table('cc_product_image')->where('product_id', $product_id)->get()->getResult();
+                foreach ($images as $img) {
+                    $imageFinal = str_replace("pro_", "", $img->image);
+                    $multiPath = FCPATH . 'uploads/products/' . $product_id . '/' . $img->product_image_id . '/wm_'.$imageFinal;
+                    $this->imageProcessing->image_unlink($multiPath);
+                }
+            }
+            DB()->transComplete();
+            $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Image remove successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        } else {
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select at least one product<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        }
+        return redirect()->to($redirect_url);
+    }
 
 
 }
