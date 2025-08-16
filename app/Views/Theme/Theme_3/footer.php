@@ -384,16 +384,36 @@
     //social chat script (end)
 
     function watermark_image_download(condition){
-        var activeImage = $('.slick-active').children().children().children('img').attr('src');
-        if (condition == 'watermark') {
-            var newName = activeImage.replace("437_wm_pro_", 'wm_');
-        }else{
-            var newName = activeImage.replace("437_wm_pro_", '');
-        }
-        var a = $("<a>").attr("href", newName).attr("download", "download_img.jpg").appendTo("body");
-        a[0].click();
-        a.remove();
-        $('.dw-btn-group').hide();
+
+        var proID = $('.slick-active').children().children().children('img').attr('data-proId');
+        var imageId = $('.slick-active').children().children().children('img').attr('data-imgId');
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('product-image-download') ?>",
+            data: {
+                product_id: proID,image_id:imageId,condition:condition
+            },
+            dataType: 'json',
+            success: function(response) {
+                var a = $("<a>").attr("href", response.downloadUrl).attr("download", "download_img.jpg").appendTo("body");
+                a[0].click();
+                a.remove();
+                $('.dw-btn-group').hide();
+
+                if (response.unlinkUrl.trim() !== '') {
+                    imageUnlink(response.unlinkUrl);
+                }
+            }
+        });
+    }
+    function imageUnlink(unlinkUrl){
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('product-image-unlink') ?>",
+            data: {
+                url: unlinkUrl
+            }
+        });
     }
 
 
@@ -1177,18 +1197,36 @@
      }
 
      function album_watermark_image_download(condition,imgId){
+         var albumId = $('#'+imgId).attr('data-albumId');
+         var imageId = $('#'+imgId).attr('data-imageId');
+         $.ajax({
+             method: "POST",
+             url: "<?php echo base_url('album-image-download') ?>",
+             data: {
+                 album_id: albumId,image_id:imageId,condition:condition
+             },
+             dataType: 'json',
+             success: function(response) {
+                 var a = $("<a>").attr("href", response.downloadUrl).attr("download", "download_album_img.jpg").appendTo("body");
+                 a[0].click();
+                 a.remove();
+                 $('.btn-group-al').hide();
 
-         var activeImage = $('#'+imgId).attr('src');
+                 if (response.unlinkUrl.trim() !== '') {
+                     albumImageUnlink(response.unlinkUrl);
+                 }
+             }
+         });
+     }
 
-         if (condition == 'watermark') {
-             var newName = activeImage.replace("261_wm_pro_", 'wm_');
-         }else{
-             var newName = activeImage.replace("261_wm_pro_", '');
-         }
-         var a = $("<a>").attr("href", newName).attr("download", "download_img.jpg").appendTo("body");
-         a[0].click();
-         a.remove();
-         $('.btn-group-al').hide();
+     function albumImageUnlink(unlinkUrl){
+         $.ajax({
+             method: "POST",
+             url: "<?php echo base_url('album-image-unlink') ?>",
+             data: {
+                 url: unlinkUrl
+             }
+         });
      }
 
      function subscribe_album(emailID,proId) {
