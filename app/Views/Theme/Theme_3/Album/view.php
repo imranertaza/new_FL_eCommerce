@@ -12,7 +12,7 @@
                     <?php } ?>
                 </div>
                 <div class="col-4 col-md-3 mt-4 text-center position-relative">
-                    <?php $img = str_replace("pro_", "", $album->thumb); $url = base_url('uploads/album/'.$album->album_id.'/wm_'.$img); ?>
+                    <?php $img = str_replace("pro_", "", $album->thumb); $url = base_url('uploads/album/'.$album->album_id.'/600_wm_'.$img); ?>
                     <a class="example-image-link" href="<?= $url;?>" data-lightbox="example-set">
                         <img data-sizes="auto" data-albumId="<?php echo $album->album_id;?>" data-imageId=""  id="<?php echo $album->album_id.'_image';?>" src="<?php echo product_image_view('uploads/album', $album->album_id, $album->thumb, 'noimage.png',  '261', '261') ?>" alt="<?php echo $album->alt_name?>" class="<?php echo $album->album_id.'_image';?>" loading="lazy">
                     </a>
@@ -33,7 +33,7 @@
                         </div>
                     </div>
                 </div>
-                <?php foreach ($albumAll as $val){ $img2 = str_replace("pro_", "", $val->image); $url2 = base_url('uploads/album/'.$val->album_id.'/'.$val->album_details_id.'/wm_'.$img2); ?>
+                <?php foreach ($albumAll as $val){ $img2 = str_replace("pro_", "", $val->image); $url2 = base_url('uploads/album/'.$val->album_id.'/'.$val->album_details_id.'/600_wm_'.$img2); ?>
                 <div class="col-4 col-md-3 mt-4 text-center position-relative">
                     <a class="example-image-link" href="<?= $url2;?>" data-lightbox="example-set" >
                         <img data-sizes="auto" data-albumId="<?php echo $val->album_id;?>" data-imageId="<?php echo $val->album_details_id;?>"  id="<?php echo $val->album_details_id.'_dt_image'?>" src="<?php echo product_multi_image_view('uploads/album', $val->album_id, $val->album_details_id,  $val->image, 'noimage.png', '261','261');?>" alt="<?php echo $val->alt_name?>" class="img-fluid" loading="lazy">
