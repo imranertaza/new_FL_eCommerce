@@ -118,8 +118,8 @@
                     <div class="col-12 col-sm-4 col-lg-3 order-1 mb-3 mb-sm-0">
                         <div class="logo text-center text-sm-start">
                         <a href="<?php echo base_url() ?>">
-                                <?php $logoImg = get_lebel_by_value_in_theme_settings('side_logo');
-                                echo image_view('uploads/logo', '', $logoImg->value, 'noimage.png', 'img-fluid side_logo'); ?>
+                                <?php $logoImg = get_lebel_by_value_in_theme_settings('side_logo');  ?>
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/logo', '', $logoImg->value, 'noimage.png', '261', '70');?>" alt="<?php echo $logoImg->alt_name?>" class="img-fluid side_logo" >
                             </a>
                         </div>
                     </div>
