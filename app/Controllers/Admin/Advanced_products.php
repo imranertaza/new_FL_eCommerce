@@ -1042,4 +1042,32 @@ class Advanced_products extends BaseController
         return redirect()->to($redirect_url);
     }
 
+    public function bulkDescriptionUpdater(){
+        $redirect_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
+        $allProductId =  $this->request->getPost('productId[]');
+        if (!empty($allProductId)){
+
+            $data['all_product'] = $allProductId;
+
+            echo view('Admin/Advanced_products/bulk_description_updater', $data);
+        }else{
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to($redirect_url);
+        }
+    }
+
+    public function bulkDescriptionUpdaterAction(){
+        $redirect_url = isset($_COOKIE['bulk_url_path']) ? $_COOKIE['bulk_url_path'] : '';
+        $productId =  $this->request->getPost('productId[]');
+        $description =  $this->request->getPost('description');
+        foreach ($productId as $product){
+            $data['description'] = $description;
+            $table = DB()->table('cc_product_description');
+            $table->where('product_id',$product)->update($data);
+        }
+
+        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Product Description Update Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        return redirect()->to($redirect_url);
+    }
+
 }

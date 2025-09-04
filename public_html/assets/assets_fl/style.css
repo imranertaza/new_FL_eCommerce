@@ -1093,6 +1093,9 @@ a {
     .fa-comment-dots{
         font-size: 3rem !important;
     }
+    .left-img{
+        display: none;
+    }
 }
 
 
@@ -3120,6 +3123,7 @@ ul > li:last-child {
 
 .fixed-top{
     transition-delay: 0.2s;
+    z-index: 11030;
 }
 .cat-m-d{
     padding-right: 6px;
