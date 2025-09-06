@@ -347,6 +347,8 @@ $routes->get('/multi_related_product', 'Admin\Advanced_products::multiRelatedPro
 $routes->post('/multi_related_product_action', 'Admin\Advanced_products::multiRelatedProductAction');
 $routes->post('/bulk_info_updater', 'Admin\Advanced_products::bulkInfoUpdater');
 $routes->post('/bulk_info_updater_action', 'Admin\Advanced_products::bulkInfoUpdaterAction');
+$routes->post('/bulk_description_updater', 'Admin\Advanced_products::bulkDescriptionUpdater');
+$routes->post('/bulk_description_updater_action', 'Admin\Advanced_products::bulkDescriptionUpdaterAction');
 
 $routes->get('blog_category', 'Admin\Blog_category::index');
 $routes->get('blog_category_create', 'Admin\Blog_category::create');
