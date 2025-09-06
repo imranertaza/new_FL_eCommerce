@@ -61,7 +61,7 @@
                                     foreach ($products as $val) { ?>
                                         <tr>
                                             <td width="40"><?php echo $i++;?></td>
-                                            <td><?php echo product_image_view('uploads/products', $val->product_id, $val->image, 'noimage.png', 'img-fluid', '', '', '50', '50') ?></td>
+                                            <td><img src="<?php echo product_image_view('uploads/products', $val->product_id, $val->image, 'noimage.png',  '50', '50') ?>" class="img-fluid" alt=""></td>
                                             <td width="150">
                                                 <?php echo $val->name; ?>
                                                 <input type="hidden" name="product_id[]" value="<?php echo $val->product_id; ?>">

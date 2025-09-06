@@ -95,3 +95,6 @@ table.dataTable thead .sorting_desc {
     right: 19px;
     top: 8px;
 }
+.bulkUpDes .note-editable{
+    height: 300px !important;
+}

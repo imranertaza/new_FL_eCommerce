@@ -101,7 +101,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-3 left-img">
                     <a href="<?php echo !empty($theme_settings['home_category_url_1']['value'])?$theme_settings['home_category_url_1']['value']:base_url('category/'.$theme_settings['home_category_1']['value']); ?>">
                     <?php $category_baner_1 = $theme_settings['home_category_baner_1']['value']; ?>
                     <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $category_baner_1, 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_1']['alt_name']?>" class=" h-cat-ban" loading="lazy">
@@ -142,7 +142,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-3 left-img">
                     <a href="<?php echo !empty($theme_settings['home_category_url_2']['value'])?$theme_settings['home_category_url_2']['value']:base_url('category/'.$theme_settings['home_category_2']['value']); ?>">
                         <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_2']['value'], 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_2']['alt_name']?>" class=" h-cat-ban" loading="lazy">
                     </a>
@@ -182,7 +182,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-3 left-img">
                     <a href="<?php echo !empty($theme_settings['home_category_url_3']['value'])?$theme_settings['home_category_url_3']['value']:base_url('category/'.$theme_settings['home_category_3']['value']); ?>">
                         <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_3']['value'], 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_3']['alt_name']?>" class=" h-cat-ban" loading="lazy">
                     </a>
@@ -223,7 +223,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-3 left-img">
                     <a href="<?php echo !empty($theme_settings['home_category_url_4']['value'])?$theme_settings['home_category_url_4']['value']:base_url('category/'.$theme_settings['home_category_4']['value']); ?>">
                         <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_4']['value'], 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_4']['alt_name']?>" class=" h-cat-ban" loading="lazy">
                     </a>
@@ -263,7 +263,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-3 left-img">
                     <a href="<?php echo !empty($theme_settings['home_category_url_5']['value'])?$theme_settings['home_category_url_5']['value']:base_url('category/'.$theme_settings['home_category_5']['value']); ?>">
                         <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_5']['value'], 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_5']['alt_name']?>" class=" h-cat-ban" loading="lazy">
                     </a>

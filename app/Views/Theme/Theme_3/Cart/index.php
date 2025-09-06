@@ -22,7 +22,6 @@
                     <tbody>
                         <?php
                         $modules = modules_access();
-                        $img_size = ($modules['watermark'] == '1')?'100_wm_':'100_';
                         $symbol = get_lebel_by_value_in_settings('currency_symbol');
                         foreach (Cart()->contents() as $val) { ?>
                             <tr>
