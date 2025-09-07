@@ -115,6 +115,28 @@ function get_data_by_id($needCol, $table, $whereCol, $whereInfo)
 }
 
 /**
+ * @description This function provides get  last row by id
+ * @param string|int $needCol
+ * @param string $table
+ * @param string|int $whereCol
+ * @param string|int $whereInfo
+ * @return false|null
+ */
+function get_last_row_by_id($needCol, $table, $whereCol, $whereInfo)
+{
+    $table = DB()->table($table);
+
+    $query = $table->where($whereCol, $whereInfo)->get();
+    $findResult = $query->getLastRow();
+    if (!empty($findResult)) {
+        $col = ($findResult->$needCol == NULL) ? NULL : $findResult->$needCol;
+    } else {
+        $col = false;
+    }
+    return $col;
+}
+
+/**
  * @description This function provides show with currency symbol
  * @param string|int|float  $money
  * @return string

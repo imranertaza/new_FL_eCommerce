@@ -352,10 +352,11 @@
                                         <div class="card p-3 rounded-0 ">
                                             <?php if (empty($keywordSearch)){ ?>
                                             <div class="product-filter">
+                                            <input type="hidden" form="searchForm" name="prod_cat_id" value="<?php echo $prod_cat_id?>">
+                                                <input type="hidden" form="searchForm" name="cat" value="<?php echo $prod_cat_id?>">
                                                 <?php if(!empty($parent_Cat)){ ?>
                                                 <p class="mb-2">Sub Category</p>
-                                                <input type="hidden" form="searchForm" name="prod_cat_id" value="<?php echo $prod_cat_id?>">
-                                                <input type="hidden" form="searchForm" name="cat" value="<?php echo $prod_cat_id?>">
+
                                                 <ul class="list-unstyled lh-lg">
                                                     <?php $i = 1;$j = 1; foreach ($parent_Cat as $cat){ $categoryProductCount = category_id_by_product_count($cat->prod_cat_id); if (!empty($categoryProductCount)){?>
                                                     <li>

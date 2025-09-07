@@ -212,6 +212,7 @@
                                 <table class="table  table-striped text-capitalize">
                                     <thead>
                                     <tr>
+                                        <th>Image</th>
                                         <th>Product</th>
                                         <th>Quantity</th>
                                         <th>Unit Price</th>
@@ -219,8 +220,18 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <?php foreach ($orderItem as $vew) { ?>
+                                    <?php foreach ($orderItem as $vew) {
+                                        $image = get_data_by_id('image', 'cc_products', 'product_id', $vew->product_id);
+                                        $alt_name = get_data_by_id('alt_name', 'cc_products', 'product_id', $vew->product_id);
+                                        $img = str_replace("pro_", "", $image);
+                                        $url = (!empty($image)) ? base_url('uploads/products/' . $vew->product_id . '/' . $img):base_url('uploads/products/noimage.png' );
+                                        ?>
                                         <tr>
+                                            <td>
+                                                <a class="product-image-link" href="<?= $url;?>" data-lightbox="product-set-<?= $vew->product_id;?>">
+                                                    <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $vew->product_id, $image, 'noimage.png', '50', '50') ?>" alt="<?php echo $alt_name?>" class="img-fluid" loading="lazy">
+                                                </a>
+                                            </td>
                                             <td width="400">
                                                 <?php echo get_data_by_id('name', 'cc_products', 'product_id', $vew->product_id); ?><br>
                                                 <?php
