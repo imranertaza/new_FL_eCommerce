@@ -69,7 +69,7 @@ class Album extends BaseController
             return redirect()->to(site_url('admin'));
         } else {
             $table = DB()->table('cc_album');
-            $data['albumParent'] = $table->where('is_parent', '1')->where('is_album_uploadable', '1')->get()->getResult();
+            $data['albumParent'] = $table->where('is_parent', '1')->where('is_album_uploadable', '1')->orderBy('name','ASC')->get()->getResult();
 
             //$perm = array('create','read','update','delete','mod_access');
             $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
@@ -415,7 +415,7 @@ class Album extends BaseController
             $data['albumAll'] = $tableAl->where('album_id', $album_id)->get()->getResult();
 
             $tablePar = DB()->table('cc_album');
-            $data['albumParent'] = $tablePar->where('is_parent', '1')->where('is_album_uploadable', '1')->get()->getResult();
+            $data['albumParent'] = $tablePar->where('is_parent', '1')->where('is_album_uploadable', '1')->orderBy('name','ASC')->get()->getResult();
 
             //$perm = array('create','read','update','delete','mod_access');
             $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);

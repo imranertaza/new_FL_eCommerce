@@ -238,11 +238,16 @@
                                     <th>Action</th>
                                 </tr>
                                 </thead>
-                                <?php foreach ($orderLast as $val){ $fname = !empty($val->firstname)?$val->firstname:$val->payment_firstname; $lname = !empty($val->lastname)?$val->lastname:$val->payment_lastname; ?>
+                                <?php foreach ($orderLast as $val){
+                                    $fname = !empty($val->firstname)?$val->firstname:$val->payment_firstname;
+                                    $lname = !empty($val->lastname)?$val->lastname:$val->payment_lastname;
+
+                                    $status = getLastRowById('order_status_id','cc_order_history','order_id',$val->order_id);
+                                    ?>
                                     <tr>
                                         <td><?php echo $val->order_id;?></td>
                                         <td><?php echo $fname.' '.$lname;?></td>
-                                        <td><span class="badge badge-default"><?php echo get_data_by_id('name','cc_order_status','order_status_id',$val->status);?></span></td>
+                                        <td><span class="badge badge-default"><?php echo get_data_by_id('name','cc_order_status','order_status_id',$status);?></span></td>
 
                                         <td><a href="<?php echo base_url('order_view/'.$val->order_id);?>" class="btn btn-success btn-xs"><i class="fas fa-eye"></i> View</a></td>
 

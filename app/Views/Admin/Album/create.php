@@ -48,7 +48,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Album Category</label>
-                                <select name="parent_album_id" class="form-control" required>
+                                <select name="parent_album_id" class="form-control" id="mySelect" required>
                                     <option value="">Please Select</option>
                                     <?php foreach ($albumParent as $val){ ?>
                                         <option value="<?= $val->album_id?>"><?= display_category_parent_with_parent($val->album_id); ?></option>
@@ -102,5 +102,27 @@
 <?= $this->section('java_script') ?>
     <script>
 
+        window.onload = sortSelect;
+        function sortSelect() {
+            const select = document.getElementById("mySelect");
+
+            // Get the first option (e.g., "Please Select")
+            const firstOption = select.options[0];
+
+            // Get the rest of the options as an array
+            const optionsArray = Array.from(select.options).slice(1);
+
+            // Sort remaining options alphabetically
+            optionsArray.sort((a, b) => a.text.localeCompare(b.text));
+
+            // Clear select
+            select.innerHTML = "";
+
+            // Add the first option back
+            select.add(firstOption);
+
+            // Add sorted options
+            optionsArray.forEach(option => select.add(option));
+        }
     </script>
 <?= $this->endSection() ?>

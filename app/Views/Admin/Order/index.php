@@ -56,7 +56,7 @@
                             <td><?php echo order_id_by_status($val->order_id) ;?></td>
                             <td width="180">
                                 <a href="<?php echo base_url('order_view/'.$val->order_id);?>" class="btn btn-primary btn-xs"><i class="fas fa-eye"></i> View</a>
-
+                                <a href="<?php echo base_url('order_delete/'.$val->order_id);?>" onclick="return confirm('Are you sure you want to Delete?')" class="btn btn-danger btn-xs"><i class="fas fa-trash"></i> Delete</a>
                             </td>
                         </tr>
                     <?php } ?>
