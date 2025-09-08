@@ -122,7 +122,7 @@ function get_data_by_id($needCol, $table, $whereCol, $whereInfo)
  * @param string|int $whereInfo
  * @return false|null
  */
-function get_last_row_by_id($needCol, $table, $whereCol, $whereInfo)
+function getLastRowById($needCol, $table, $whereCol, $whereInfo)
 {
     $table = DB()->table($table);
 

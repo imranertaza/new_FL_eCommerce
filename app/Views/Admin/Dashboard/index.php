@@ -242,7 +242,7 @@
                                     $fname = !empty($val->firstname)?$val->firstname:$val->payment_firstname;
                                     $lname = !empty($val->lastname)?$val->lastname:$val->payment_lastname;
 
-                                    $status = get_last_row_by_id('order_status_id','cc_order_history','order_id',$val->order_id);
+                                    $status = getLastRowById('order_status_id','cc_order_history','order_id',$val->order_id);
                                     ?>
                                     <tr>
                                         <td><?php echo $val->order_id;?></td>
