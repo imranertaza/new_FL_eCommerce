@@ -16,7 +16,7 @@
                     </div>
                     <span class="text-danger err d-inline-block text-capitalize mb-4" id="OtpError"></span>
                     <div class="form-group">
-                        <input type="submit" value="Otp Submit" class="btn btn-sign bg-transparent border-1 rounded-2 w-100 text-black fw-bold fs-5 border-dark">
+                        <input type="submit" value="OTP Submit" class="btn btn-sign bg-transparent border-1 rounded-2 w-100 text-black fw-bold fs-5 border-dark">
                     </div>
                 </form>
             </div>
