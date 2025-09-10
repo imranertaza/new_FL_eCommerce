@@ -303,6 +303,26 @@ class Order extends BaseController
         }
     }
 
+    public function delete($id){
+        DB()->transStart();
+        $table = DB()->table('cc_order_option');
+        $table->where('order_id', $id)->delete();
 
+        $table = DB()->table('cc_order_item');
+        $table->where('order_id', $id)->delete();
+
+        $table = DB()->table('cc_order_history');
+        $table->where('order_id', $id)->delete();
+
+        $table = DB()->table('cc_order_card_details');
+        $table->where('order_id', $id)->delete();
+
+        $table = DB()->table('cc_order');
+        $table->where('order_id', $id)->delete();
+        DB()->transComplete();
+
+        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Order Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        return redirect()->to('order_list');
+    }
 
 }
