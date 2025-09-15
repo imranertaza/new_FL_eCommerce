@@ -209,7 +209,7 @@ class General_offer extends BaseController
                 //Offer table data insert(end)
                 if (!empty($_FILES['banner']['name'])) {
                     //image size array
-                    $this->imageProcessing->sizeArray = [['width'=>'880', 'height'=>'400', ],['width'=>'50', 'height'=>'50', ],];
+                    $this->imageProcessing->sizeArray = [['width'=>'50', 'height'=>'50', ]];
 
                     $target_dir = FCPATH . '/uploads/offer/'.$offer_id.'/';
                     $this->imageProcessing->directory_create($target_dir);
@@ -404,7 +404,7 @@ class General_offer extends BaseController
                 //Offer table data insert(end)
                 if (!empty($_FILES['banner']['name'])) {
                     //image size array
-                    $this->imageProcessing->sizeArray = [['width'=>'880', 'height'=>'400', ],['width'=>'50', 'height'=>'50', ],];
+                    $this->imageProcessing->sizeArray = [['width'=>'50', 'height'=>'50', ]];
                     $oldImg = get_data_by_id('banner','cc_offer','offer_id',$offer_id);
 
                     $target_dir = FCPATH . '/uploads/offer/'.$offer_id.'/';

@@ -3284,3 +3284,12 @@ ul > li:last-child {
 .select2-container{
     z-index:2000;
 }
+
+@media (max-width:340px) {
+    .shortBy {
+        width: 100px;
+    }
+    .numSearch{
+        margin: unset!important;
+    }
+}
