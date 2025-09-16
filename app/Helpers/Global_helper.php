@@ -988,7 +988,8 @@ function order_email_template($orderId)
     $titleStore = get_lebel_by_value_in_settings('store_name');
 
     $paymentMet = get_data_by_id('name','cc_payment_method','payment_method_id',$val->payment_method);
-
+    $state = get_data_by_id('name', 'cc_zone', 'zone_id', $val->shipping_city);
+    $country = get_data_by_id('name', 'cc_country', 'country_id', $val->shipping_country_id);
     $view = '';
     $view .= "<div style='width:680px'><style> .logo-css{ margin-bottom:20px;border:none; } </style>
     <a href='#' title='$titleStore' target='_blank' >
@@ -1039,10 +1040,10 @@ function order_email_template($orderId)
         <tbody>
         <tr>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
-                $val->payment_address_1
+                $val->payment_address_1, $val->shipping_postcode, $state, $country
             </td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
-                $val->shipping_address_1
+                $val->shipping_address_1, $val->shipping_postcode, $state, $country
             </td>
         </tr>
         </tbody>

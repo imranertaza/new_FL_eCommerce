@@ -63,7 +63,7 @@
 
 
 
-                                    <div class="form-group float-end me-2">
+                                    <div class="form-group float-end me-2 numSearch">
                                         <label class="d-none d-sm-inline">Show</label>
                                         <select name="show" form="searchForm" onchange="formSubmit()" class="shortBy border">
                                             <option value="<?php echo get_lebel_by_value_in_settings('category_product_limit'); ?>" <?php echo ((isset($_GET['show'])) && ($_GET['show'] == get_lebel_by_value_in_settings('category_product_limit'))) ? 'selected' : ''; ?>><?php echo get_lebel_by_value_in_settings('category_product_limit'); ?></option>

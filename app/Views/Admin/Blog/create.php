@@ -109,7 +109,7 @@
                                 <label>Carousel Image</label>
                                 <div id="frames"></div><br>
                                 <input type="file" class="form-control" id="image" name="multiImage[]" multiple />
-                                Recommended Size (900x500)
+                                Recommended Size (1116x481)
                             </div>
                         </div>
                     </div>
