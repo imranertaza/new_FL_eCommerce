@@ -73,6 +73,7 @@
                                 <div class="form-group">
                                     <label>Banner</label>
                                     <input type="file" name="banner" class="form-control" placeholder="banner" >
+                                    Recommended Size (1116x481)
                                 </div>
                                 <div class="form-group">
                                     <label>ALT Name</label>

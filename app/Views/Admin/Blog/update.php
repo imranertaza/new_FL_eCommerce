@@ -119,7 +119,7 @@
                                 <br><label>Carousel Image</label>
                                 <div id="frames"></div><br>
                                 <input type="file" class="form-control" id="image" name="multiImage[]" multiple />
-                                Recommended Size (900x500)
+                                Recommended Size (1116x481)
                                 <div class="row" id="reloadImg">
                                     <?php foreach ($crassulaImage as $img){ ?>
                                         <div class="col-md-4 position-relative text-center">
