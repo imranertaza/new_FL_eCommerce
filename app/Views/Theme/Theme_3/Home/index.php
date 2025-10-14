@@ -80,11 +80,16 @@
         </div>
         </a>
 
-        <div class="product-category mb-5">
+        <div class="product-category mb-5 section-one">
+            <?php $scheduleOne = getScheduleBySectionId($schedules,'1');?>
             <div class="cat-title">
                 <div class="row">
                     <div class="col-6 col-md-3">
-                        <h3 class="title-header"><?php echo $theme_settings['home_category_title_1']['value'];?></h3>
+                        <?php if (!empty($scheduleOne)){ ?>
+                            <h3 class="title-header"><?= $scheduleOne->section_name;?></h3>
+                        <?php }else{?>
+                            <h3 class="title-header"><?php echo $theme_settings['home_category_title_1']['value'];?></h3>
+                        <?php } ?>
                     </div>
                     <div class="col-6 col-md-9 d-flex justify-content-end align-items-center">
                         <div class="apparels-button-prev">
@@ -102,30 +107,45 @@
             </div>
             <div class="row">
                 <div class="col-sm-3 left-img">
-                    <a href="<?php echo !empty($theme_settings['home_category_url_1']['value'])?$theme_settings['home_category_url_1']['value']:base_url('category/'.$theme_settings['home_category_1']['value']); ?>">
-                    <?php $category_baner_1 = $theme_settings['home_category_baner_1']['value']; ?>
-                    <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $category_baner_1, 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_1']['alt_name']?>" class=" h-cat-ban" loading="lazy">
-                    </a>
+                    <?php if (!empty($scheduleOne)){ ?>
+                        <a href="<?= $scheduleOne->url; ?>">
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/sections', '', $scheduleOne->image, 'noimage.png', '261', '522');?>" alt="<?= $scheduleOne->alt_name;?>" class=" h-cat-ban" loading="lazy">
+                        </a>
+                    <?php }else{?>
+                        <a href="<?php echo !empty($theme_settings['home_category_url_1']['value'])?$theme_settings['home_category_url_1']['value']:base_url('category/'.$theme_settings['home_category_1']['value']); ?>">
+                        <?php $category_baner_1 = $theme_settings['home_category_baner_1']['value']; ?>
+                        <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $category_baner_1, 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_1']['alt_name']?>" class=" h-cat-ban" loading="lazy">
+                        </a>
+                    <?php } ?>
                 </div>
                 <div class="col-sm-9">
                     <div class="products h-100">
                         <div class="swiper apparelsSlide">
                             <div class="swiper-wrapper">
-                            <?php 
-                                $home_category_1 = $theme_settings['home_category_1']['value'];
-                                echo get_category_id_by_product_show_home_slide($home_category_1);
-                            ?>
+                                <?php if (!empty($scheduleOne)){ ?>
+                                    <?php echo getProductByScheduleIdShowHomeSlider($scheduleOne->featured_schedule_id);?>
+                                <?php }else{ ?>
+                                    <?php  $home_category_1 = $theme_settings['home_category_1']['value'];
+                                        echo get_category_id_by_product_show_home_slide($home_category_1);
+                                    ?>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="product-category mb-5">
+
+        <div class="product-category mb-5 section-two">
+            <?php $scheduleTwo = getScheduleBySectionId($schedules,'2');?>
             <div class="cat-title">
                 <div class="row">
                     <div class="col-6 col-md-3">
-                        <h3 class="title-header"><?php echo $theme_settings['home_category_title_2']['value'];?></h3>
+                        <?php if (!empty($scheduleTwo)){ ?>
+                            <h3 class="title-header"><?= $scheduleTwo->section_name;?></h3>
+                        <?php }else{ ?>
+                            <h3 class="title-header"><?php echo $theme_settings['home_category_title_2']['value'];?></h3>
+                        <?php } ?>
                     </div>
                     <div class="col-6 col-md-9 d-flex justify-content-end align-items-center">
                         <div class="treasures-button-prev">
@@ -143,29 +163,43 @@
             </div>
             <div class="row">
                 <div class="col-sm-3 left-img">
-                    <a href="<?php echo !empty($theme_settings['home_category_url_2']['value'])?$theme_settings['home_category_url_2']['value']:base_url('category/'.$theme_settings['home_category_2']['value']); ?>">
-                        <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_2']['value'], 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_2']['alt_name']?>" class=" h-cat-ban" loading="lazy">
-                    </a>
+                    <?php if (!empty($scheduleTwo)){ ?>
+                        <a href="<?= $scheduleTwo->url;?>">
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/sections', '', $scheduleTwo->image, 'noimage.png', '261', '522');?>" alt="<?= $scheduleTwo->alt_name;?>" class=" h-cat-ban" loading="lazy">
+                        </a>
+                    <?php }else{ ?>
+                        <a href="<?php echo !empty($theme_settings['home_category_url_2']['value'])?$theme_settings['home_category_url_2']['value']:base_url('category/'.$theme_settings['home_category_2']['value']); ?>">
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_2']['value'], 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_2']['alt_name']?>" class=" h-cat-ban" loading="lazy">
+                        </a>
+                    <?php } ?>
                 </div>
                 <div class="col-sm-9">
                     <div class="products h-100">
                         <div class="swiper treasuresSlide">
                             <div class="swiper-wrapper">
-                            <?php 
-                                $home_category_2 = $theme_settings['home_category_2']['value'];
-                                echo get_category_id_by_product_show_home_slide($home_category_2);
-                            ?>
+                                <?php if (!empty($scheduleTwo)){ ?>
+                                    <?php echo getProductByScheduleIdShowHomeSlider($scheduleTwo->featured_schedule_id);?>
+                                <?php }else{ ?>
+                                    <?php $home_category_2 = $theme_settings['home_category_2']['value'];
+                                        echo get_category_id_by_product_show_home_slide($home_category_2); ?>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="product-category mb-5">
+
+        <div class="product-category mb-5 section-three">
+            <?php $scheduleThree = getScheduleBySectionId($schedules,'3');?>
             <div class="cat-title">
                 <div class="row">
                     <div class="col-6 col-md-3">
-                        <h3 class="title-header"><?php echo $theme_settings['home_category_title_3']['value'];?></h3>
+                        <?php if (!empty($scheduleThree)){ ?>
+                            <h3 class="title-header"><?= $scheduleThree->section_name?></h3>
+                        <?php }else{ ?>
+                            <h3 class="title-header"><?php echo $theme_settings['home_category_title_3']['value'];?></h3>
+                        <?php } ?>
                     </div>
                     <div class="col-6 col-md-9 d-flex justify-content-end align-items-center">
                         <div class="bag-button-prev">
@@ -183,30 +217,43 @@
             </div>
             <div class="row">
                 <div class="col-sm-3 left-img">
-                    <a href="<?php echo !empty($theme_settings['home_category_url_3']['value'])?$theme_settings['home_category_url_3']['value']:base_url('category/'.$theme_settings['home_category_3']['value']); ?>">
-                        <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_3']['value'], 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_3']['alt_name']?>" class=" h-cat-ban" loading="lazy">
-                    </a>
+                    <?php if (!empty($scheduleThree)){ ?>
+                        <a href="<?= $scheduleThree->url;?>">
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/sections', '', $scheduleThree->image, 'noimage.png', '261', '522');?>" alt="<?= $scheduleThree->alt_name;?>" class=" h-cat-ban" loading="lazy">
+                        </a>
+                    <?php }else{ ?>
+                        <a href="<?php echo !empty($theme_settings['home_category_url_3']['value'])?$theme_settings['home_category_url_3']['value']:base_url('category/'.$theme_settings['home_category_3']['value']); ?>">
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_3']['value'], 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_3']['alt_name']?>" class=" h-cat-ban" loading="lazy">
+                        </a>
+                    <?php } ?>
                 </div>
                 <div class="col-sm-9">
                     <div class="products h-100">
                         <div class="swiper bagSlide">
                             <div class="swiper-wrapper">
-                                <?php 
-                                    $home_category_3 = $theme_settings['home_category_3']['value'];
-                                    echo get_category_id_by_product_show_home_slide($home_category_3);                                  
-                                        
-                                ?> 
+                                <?php if (!empty($scheduleThree)){ ?>
+                                    <?php echo getProductByScheduleIdShowHomeSlider($scheduleThree->featured_schedule_id);?>
+                                <?php }else{ ?>
+                                    <?php $home_category_3 = $theme_settings['home_category_3']['value'];
+                                    echo get_category_id_by_product_show_home_slide($home_category_3);  ?>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="product-category mb-5">
+
+        <div class="product-category mb-5 section-four">
+            <?php $scheduleFour = getScheduleBySectionId($schedules,'4');?>
             <div class="cat-title">
                 <div class="row">
                     <div class="col-6 col-md-3">
-                        <h3 class="title-header"><?php echo $theme_settings['home_category_title_4']['value'];?></h3>
+                        <?php if (!empty($scheduleFour)){ ?>
+                            <h3 class="title-header"><?= $scheduleFour->section_name?></h3>
+                        <?php }else{ ?>
+                            <h3 class="title-header"><?php echo $theme_settings['home_category_title_4']['value'];?></h3>
+                        <?php } ?>
                     </div>
                     <div class="col-6 col-md-9 d-flex justify-content-end align-items-center">
                         <div class="jewelry-button-prev">
@@ -224,29 +271,43 @@
             </div>
             <div class="row">
                 <div class="col-sm-3 left-img">
-                    <a href="<?php echo !empty($theme_settings['home_category_url_4']['value'])?$theme_settings['home_category_url_4']['value']:base_url('category/'.$theme_settings['home_category_4']['value']); ?>">
-                        <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_4']['value'], 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_4']['alt_name']?>" class=" h-cat-ban" loading="lazy">
-                    </a>
+                    <?php if (!empty($scheduleFour)){ ?>
+                        <a href="<?= $scheduleFour->url ?>">
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/sections', '', $scheduleFour->image, 'noimage.png', '261', '522');?>" alt="<?= $scheduleFour->alt_name;?>" class=" h-cat-ban" loading="lazy">
+                        </a>
+                    <?php }else{ ?>
+                        <a href="<?php echo !empty($theme_settings['home_category_url_4']['value'])?$theme_settings['home_category_url_4']['value']:base_url('category/'.$theme_settings['home_category_4']['value']); ?>">
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_4']['value'], 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_4']['alt_name']?>" class=" h-cat-ban" loading="lazy">
+                        </a>
+                    <?php } ?>
                 </div>
                 <div class="col-sm-9">
                     <div class="products h-100">
                         <div class="swiper jewelrySlide">
                             <div class="swiper-wrapper">
-                            <?php 
-                                $home_category_4 = $theme_settings['home_category_4']['value'];
-                                echo get_category_id_by_product_show_home_slide($home_category_4);
-                            ?>
+                                <?php if (!empty($scheduleFour)){ ?>
+                                    <?php echo getProductByScheduleIdShowHomeSlider($scheduleFour->featured_schedule_id);?>
+                                <?php }else{ ?>
+                                    <?php $home_category_4 = $theme_settings['home_category_4']['value'];
+                                    echo get_category_id_by_product_show_home_slide($home_category_4); ?>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="product-category mb-5">
+
+        <div class="product-category mb-5 section-five">
+            <?php $scheduleFive = getScheduleBySectionId($schedules,'5');?>
             <div class="cat-title">
                 <div class="row">
                     <div class="col-6 col-md-3">
-                        <h3 class="title-header"><?php echo $theme_settings['home_category_title_5']['value'];?></h3>
+                        <?php if (!empty($scheduleFive)){ ?>
+                            <h3 class="title-header"><?= $scheduleFive->section_name?></h3>
+                        <?php }else{ ?>
+                            <h3 class="title-header"><?php echo $theme_settings['home_category_title_5']['value'];?></h3>
+                        <?php } ?>
                     </div>
                     <div class="col-6 col-md-9 d-flex justify-content-end align-items-center">
                         <div class="shoes-button-prev">
@@ -264,24 +325,33 @@
             </div>
             <div class="row">
                 <div class="col-sm-3 left-img">
-                    <a href="<?php echo !empty($theme_settings['home_category_url_5']['value'])?$theme_settings['home_category_url_5']['value']:base_url('category/'.$theme_settings['home_category_5']['value']); ?>">
-                        <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_5']['value'], 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_5']['alt_name']?>" class=" h-cat-ban" loading="lazy">
-                    </a>
+                    <?php if (!empty($scheduleFive)){ ?>
+                        <a href="<?= $scheduleFive->url ?>">
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/sections', '', $scheduleFive->image, 'noimage.png', '261', '522');?>" alt="<?= $scheduleFive->alt_name;?>" class=" h-cat-ban" loading="lazy">
+                        </a>
+                    <?php }else{ ?>
+                        <a href="<?php echo !empty($theme_settings['home_category_url_5']['value'])?$theme_settings['home_category_url_5']['value']:base_url('category/'.$theme_settings['home_category_5']['value']); ?>">
+                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/home_category', '', $theme_settings['home_category_baner_5']['value'], 'noimage.png', '261', '522');?>" alt="<?php echo $theme_settings['home_category_baner_5']['alt_name']?>" class=" h-cat-ban" loading="lazy">
+                        </a>
+                    <?php } ?>
                 </div>
                 <div class="col-sm-9">
                     <div class="products h-100">
                         <div class="swiper shoesSlide">
                             <div class="swiper-wrapper">
-                            <?php 
-                                $home_category_5 = $theme_settings['home_category_5']['value'];
-                                echo get_category_id_by_product_show_home_slide($home_category_5);
-                            ?>
+                                <?php if (!empty($scheduleFive)){ ?>
+                                    <?php echo getProductByScheduleIdShowHomeSlider($scheduleFive->featured_schedule_id);?>
+                                <?php }else{ ?>
+                                    <?php $home_category_5 = $theme_settings['home_category_5']['value'];
+                                        echo get_category_id_by_product_show_home_slide($home_category_5); ?>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="home-banner mb-5">
             <a href="<?php echo !empty($theme_settings['banner_bottom_url']['value'])?$theme_settings['banner_bottom_url']['value']:base_url('category/'.$theme_settings['banner_bottom_category']['value']); ?>">
                 <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/banner_bottom', '', $theme_settings['banner_bottom']['value'], 'noimage.png', '1116', '422');?>" alt="<?php echo $theme_settings['banner_bottom']['alt_name']?>" class="" loading="lazy">

@@ -312,6 +312,17 @@
                     </li>
                 <?php } ?>
 
+                <?php if ($modules['featured_section'] == 1) {?>
+                <li class="nav-item">
+                    <a href="<?php echo base_url('featured_section'); ?>" class="nav-link">
+                        <i class="nav-icon far fa-calendar-alt"></i>
+                        <p>
+                            Featured section
+                        </p>
+                    </a>
+                </li>
+                <?php } ?>
+
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon far fa-calendar-alt"></i>
