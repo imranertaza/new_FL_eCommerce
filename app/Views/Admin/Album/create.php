@@ -106,6 +106,9 @@
         function sortSelect() {
             const select = document.getElementById("mySelect");
 
+            // Remember the currently selected value
+            const selectedValue = select.value;
+
             // Get the first option (e.g., "Please Select")
             const firstOption = select.options[0];
 
@@ -123,6 +126,9 @@
 
             // Add sorted options
             optionsArray.forEach(option => select.add(option));
+
+            // Restore the previously selected value
+            select.value = selectedValue;
         }
     </script>
 <?= $this->endSection() ?>

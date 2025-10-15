@@ -370,6 +370,13 @@ $routes->get('blog_delete/(:num)', 'Admin\Blog::delete/$1');
 $routes->post('blog_image_remove_action', 'Admin\Blog::imageRemoveAction');
 $routes->post('blog_image_alt_name_action', 'Admin\Blog::imageAltNameAction');
 
+//Featured Section
+$routes->get('featured_section', 'Admin\FeaturedSection::index');
+$routes->get('/section_view/(:num)', 'Admin\FeaturedSection::sectionView/$1');
+$routes->post('section_view_action', 'Admin\FeaturedSection::sectionViewAction');
+$routes->post('section_view_update_action', 'Admin\FeaturedSection::sectionViewUpdateAction');
+$routes->get('section_view_delete/(:num)', 'Admin\FeaturedSection::delete/$1');
+
 //login routes
 $routes->get('/register', 'Login::register');
 $routes->get('/login', 'Login::index');

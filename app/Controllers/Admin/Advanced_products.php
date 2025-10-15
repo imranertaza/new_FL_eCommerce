@@ -167,8 +167,19 @@ class Advanced_products extends BaseController
         $table2 = DB()->table('cc_products');
         $data['val'] = $table2->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id')->where('cc_products.product_id', $product_id)->get()->getRow();
 
-        echo view('Admin/Advanced_products/row', $data);
+        if (!empty($name)) {
+            echo view('Admin/Advanced_products/name', $data);
+        }
 
+        if (!empty($model)) {
+            echo view('Admin/Advanced_products/model', $data);
+        }
+        if (!empty($price)) {
+            echo view('Admin/Advanced_products/price', $data);
+        }
+        if (!empty($quantity)) {
+            echo view('Admin/Advanced_products/quantity', $data);
+        }
 
     }
 
@@ -202,7 +213,18 @@ class Advanced_products extends BaseController
         $table2 = DB()->table('cc_products');
         $data['val'] = $table2->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id')->where('cc_products.product_id', $product_id)->get()->getRow();
 
-        echo view('Admin/Advanced_products/row', $data);
+
+        if (isset($meta_title)) {
+            echo view('Admin/Advanced_products/metaTitle', $data);
+        }
+
+        if (isset($meta_description)) {
+            echo view('Admin/Advanced_products/metaDescription', $data);
+        }
+
+        if (isset($meta_keyword)) {
+            echo view('Admin/Advanced_products/metaKeyword', $data);
+        }
     }
 
     /**
@@ -223,7 +245,13 @@ class Advanced_products extends BaseController
         $table2 = DB()->table('cc_products');
         $data['val'] = $table2->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id')->where('cc_products.product_id', $product_id)->get()->getRow();
 
-        echo view('Admin/Advanced_products/row', $data);
+        if($field == 'status'){
+            echo view('Admin/Advanced_products/status', $data);
+        }
+        if($field == 'featured'){
+            echo view('Admin/Advanced_products/featured', $data);
+        }
+
     }
 
     /**
