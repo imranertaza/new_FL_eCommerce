@@ -342,14 +342,14 @@ class Checkout extends BaseController
                 $finalProductDiscount = ($this->cart->total() > $totalProductDiscount)?$totalProductDiscount:$this->cart->total();
 
                 //final product amount calculate
-                $finalAmo = number_format($this->cart->total() - $finalProductDiscount,2);
+                $finalAmo = $this->cart->total() - $finalProductDiscount;
 
                 $finalShippingDiscount = null;
                 if (!empty($shipping_charge)) {
                     //maximum discount calculate
                     $finalShippingDiscount = ($shipping_charge > $totalShippingDiscount)?$totalShippingDiscount:$shipping_charge;
                     //final product and shipping amount calculate
-                    $finalAmo = number_format(($this->cart->total() + $shipping_charge) - $finalShippingDiscount - $finalProductDiscount,2);
+                    $finalAmo =($this->cart->total() + $shipping_charge) - $finalShippingDiscount - $finalProductDiscount;
                 }
 
                 if ($data['payment_method'] == '8') {
