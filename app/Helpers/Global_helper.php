@@ -1479,19 +1479,23 @@ function get_category_id_by_product_show_home_slide($category_id)
 }
 
 function getProductByScheduleIdShowHomeSlider($scheduleId){
-    $builder = DB()->table('cc_products p');
-    $builder->distinct()
-        ->select('p.*')
-        ->join('cc_featured_product fp', 'p.product_id = fp.product_id OR p.brand_id = fp.brand_id')
-        ->join('cc_featured_schedule fs', 'fs.featured_schedule_id = fp.featured_schedule_id')
-        ->join('cc_product_to_category ptc', 'p.product_id = ptc.product_id AND ptc.category_id = fp.prod_cat_id', 'left' )
+    $builder = DB()->table('cc_products p')
+        ->select('p.*, fp.featured_product_id, ptc.category_id')
+        ->join('cc_product_to_category ptc', 'ptc.product_id = p.product_id', 'left')
+        ->join('cc_featured_product fp',
+            '(fp.product_id = p.product_id 
+                    OR fp.brand_id = p.brand_id 
+                    OR fp.prod_cat_id = ptc.category_id)',
+            'left'
+        )
         ->where('p.status', 'Active')
         ->where('p.featured', '1')
-        ->where('fs.featured_schedule_id', $scheduleId)
-        ->orderBy('p.product_id', 'DESC');
+        ->where('fp.featured_schedule_id', $scheduleId)
+        ->groupBy('p.product_id')
+        ->orderBy('p.product_id', 'DESC')
+        ->limit(20);
 
-    $query = $builder->limit(20)->get();
-    $result = $query->getResult();
+    $result = $builder->get()->getResult();
 
     return  sectionProductViewByProductArray($result);
 }

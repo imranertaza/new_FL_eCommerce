@@ -35,7 +35,6 @@ class Home extends BaseController
         $tabPopuler->join('cc_product_category', 'cc_product_category.prod_cat_id = cc_product_category_popular.prod_cat_id')->join('cc_icons', 'cc_icons.icon_id = cc_product_category.icon_id');
         $data['populerCat'] = $tabPopuler->limit(12)->get()->getResult();
 
-
         $data['home_menu'] = true;
         $data['theme'] = $theme;
 
