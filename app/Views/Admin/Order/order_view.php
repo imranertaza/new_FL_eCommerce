@@ -31,7 +31,7 @@
 
                     </div>
                     <div class="col-md-4">
-                        <a href="<?php echo base_url('order_list');?>" class="btn btn-danger btn-sm float-end" >Back</a>
+                        <a href="<?php echo base_url('order_list');?>" class="btn btn-danger btn-sm float-right" >Back</a>
                     </div>
                     <div class="col-md-12" style="margin-top: 10px" id="message">
                         <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message');
@@ -257,19 +257,19 @@
                                     <?php } ?>
 
                                     <tr>
-                                        <td class="text-right" colspan="3">Sub-Total:</td>
+                                        <td class="text-right" colspan="4">Sub-Total:</td>
                                         <td><?php echo currency_symbol_with_symbol($order->total,$symbol); ?></td>
                                     </tr>
                                     <tr>
-                                        <td class="text-right" colspan="3">Discount:</td>
+                                        <td class="text-right" colspan="4">Discount:</td>
                                         <td><?php echo currency_symbol_with_symbol($order->discount,$symbol); ?></td>
                                     </tr>
                                     <tr>
-                                        <td class="text-right" colspan="3">Shipping Charge:</td>
+                                        <td class="text-right" colspan="4">Shipping Charge:</td>
                                         <td><?php echo currency_symbol_with_symbol($order->shipping_charge,$symbol); ?></td>
                                     </tr>
                                     <tr>
-                                        <td class="text-right" colspan="3">Total:</td>
+                                        <td class="text-right" colspan="4">Total:</td>
                                         <td><?php echo currency_symbol_with_symbol($order->final_amount,$symbol); ?></td>
                                     </tr>
                                     </tbody>

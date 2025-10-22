@@ -175,16 +175,16 @@ class StripeController extends BaseController {
         $totalShippingDiscount = $discCouponShipping + $offerDiscountShipping;
 
         //maximum discount calculate
-        $finalProductDiscount = ($this->cart->total() > $totalProductDiscount)?$totalProductDiscount:$this->cart->total();
+        $finalProductDiscount =  round(($this->cart->total() > $totalProductDiscount)?$totalProductDiscount:$this->cart->total(),2);
         //final product amount calculate
-        $finalAmo = number_format($this->cart->total() - $finalProductDiscount,2);
+        $finalAmo = $this->cart->total() - $finalProductDiscount;
 
         $finalShippingDiscount = null;
         if (!empty($data['shipping_charge'])) {
             //maximum discount calculate
             $finalShippingDiscount = ($data['shipping_charge'] > $totalShippingDiscount)?$totalShippingDiscount:$data['shipping_charge'];
             //final product and shipping amount calculate
-            $finalAmo = number_format(($this->cart->total() + $data['shipping_charge']) - $finalShippingDiscount - $finalProductDiscount,2);
+            $finalAmo = round(($this->cart->total() + $data['shipping_charge']) - $finalShippingDiscount - $finalProductDiscount,2);
         }
 
         $data['payment_status'] = 'Paid';

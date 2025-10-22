@@ -1475,11 +1475,36 @@ function get_category_id_by_product_show_home_slide($category_id)
     $table->join('cc_product_to_category', 'cc_product_to_category.product_id = cc_products.product_id')->where('cc_products.status', 'Active')->where('cc_products.featured', '1');
     $result = $table->where('cc_product_to_category.category_id', $category_id)->orderBy('cc_products.product_id','DESC')->limit(20)->get()->getResult();
 
+    return  sectionProductViewByProductArray($result);
+}
+
+function getProductByScheduleIdShowHomeSlider($scheduleId){
+    $builder = DB()->table('cc_products p')
+        ->select('p.*, fp.featured_product_id, ptc.category_id')
+        ->join('cc_product_to_category ptc', 'ptc.product_id = p.product_id', 'left')
+        ->join('cc_featured_product fp',
+            '(fp.product_id = p.product_id 
+                    OR fp.brand_id = p.brand_id 
+                    OR fp.prod_cat_id = ptc.category_id)',
+            'left'
+        )
+        ->where('p.status', 'Active')
+        ->where('p.featured', '1')
+        ->where('fp.featured_schedule_id', $scheduleId)
+        ->groupBy('p.product_id')
+        ->orderBy('p.product_id', 'DESC')
+        ->limit(20);
+
+    $result = $builder->get()->getResult();
+
+    return  sectionProductViewByProductArray($result);
+}
+
+function sectionProductViewByProductArray($product){
     $modules = modules_access();
-    $img_size = ($modules['watermark'] == '1')?'191_wm_':'191_';
     $view = '';
     $count = 0;
-    foreach ($result as $pro) {
+    foreach ($product as $pro) {
         if ($count % 2 == 0) $view .= '<div class="swiper-slide">' . "\n";
         $view .= '<div class="border p-3 product-grid h-100 d-flex align-items-stretch flex-column position-relative">
             <div class="product-grid position-relative">';
@@ -1524,10 +1549,7 @@ function get_category_id_by_product_show_home_slide($category_id)
     if ($count % 2 != 0) {
         $view .= '</div>';
     }
-
-
     return $view;
-
 }
 
 /**
@@ -2038,4 +2060,14 @@ function getDescendantAlbumIds($parentId, $map) {
 
 function albumAvailableCheckByAlbumID($allAlbumID){
     return DB()->table('cc_album_details')->whereIn('album_id',$allAlbumID)->countAllResults();
+}
+
+function getScheduleBySectionId($schedule,$sectionId)
+{
+    foreach ($schedule as $row) {
+        if ($row->featured_section_id == $sectionId) {
+            return $row;
+        }
+    }
+    return null;
 }
