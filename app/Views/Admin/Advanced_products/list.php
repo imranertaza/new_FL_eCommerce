@@ -258,19 +258,13 @@
                                     </td>
                                     <td class="colum_status row_show" id="reStatusUpdate_<?php echo $val->product_id?>">
 
-                                        <?php if ($val->status == 'Active') { ?>
-                                        <button type="button" onclick="bulkAllStatusUpdate('<?php echo $val->product_id; ?>','Inactive','status','reStatusUpdate_<?php echo $val->product_id?>')" class="btn btn-success btn-xs"><?php echo $val->status; ?></button>
-                                        <?php } else { ?>
-                                        <button type="button"  onclick="bulkAllStatusUpdate('<?php echo $val->product_id; ?>','Active','status','reStatusUpdate_<?php echo $val->product_id?>')" class="btn btn-warning btn-xs"><?php echo $val->status; ?></button>
-                                        <?php } ?>
+                                        <button type="button" onclick="bulkAllStatusUpdate('<?php echo $val->product_id; ?>','<?php echo ($val->status == 'Active')?'Inactive':'Active';?>','status','reStatusUpdate_<?php echo $val->product_id?>')" class="btn <?php echo ($val->status == 'Active')?'btn-success':'btn-warning';?> btn-xs"><?php echo $val->status; ?></button>
 
                                     </td>
                                     <td class="colum_featured row_show" id="reFeaturedUpdate_<?php echo $val->product_id?>">
-                                        <?php if ($val->featured == '1') { ?>
-                                        <button type="button" onclick="bulkAllStatusUpdate('<?php echo $val->product_id; ?>','0','featured','reFeaturedUpdate_<?php echo $val->product_id?>')"  class="btn btn-success btn-xs">On</button>
-                                        <?php } else { ?>
-                                        <button type="button" onclick="bulkAllStatusUpdate('<?php echo $val->product_id; ?>','1','featured','reFeaturedUpdate_<?php echo $val->product_id?>')" class="btn btn-warning btn-xs">Off</button>
-                                        <?php } ?>
+
+                                        <button type="button" onclick="bulkAllStatusUpdate('<?php echo $val->product_id; ?>','<?php echo ($val->featured == '1')?0:'1';?>','featured','reFeaturedUpdate_<?php echo $val->product_id?>')" class="btn <?php echo ($val->featured == '1')?'btn-success':'btn-warning';?> btn-xs"><?php echo ($val->featured == '1')?'On':'Off';?></button>
+
                                     </td>
                                     <td class="colum_optionrow row_show">
                                         <button type="button" onclick="optionBulkUpdate('<?php echo $val->product_id; ?>')" class="btn btn-xs btn-secondary" >Show</button>
