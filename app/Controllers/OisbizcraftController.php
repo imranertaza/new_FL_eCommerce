@@ -309,9 +309,9 @@ class OisbizcraftController extends BaseController {
         $totalShippingDiscount = $discCouponShipping + $offerDiscountShipping;
 
         //maximum discount calculate
-        $finalProductDiscount =  round(($this->cart->total() > $totalProductDiscount)?$totalProductDiscount:$this->cart->total(),2);
+        $finalProductDiscount =  ($this->cart->total() > $totalProductDiscount)?$totalProductDiscount:$this->cart->total();
         //final product amount calculate
-        $finalAmo = $this->cart->total() - $finalProductDiscount;
+        $finalAmo = round($this->cart->total() - $finalProductDiscount,2);
 
         $finalShippingDiscount = null;
         if (!empty($data['shipping_charge'])) {
