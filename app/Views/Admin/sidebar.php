@@ -326,6 +326,59 @@
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon far fa-calendar-alt"></i>
+                        <p>Home Schedule <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <?php if ($modules['featured_section'] == 1) {?>
+                            <li class="nav-item">
+                                <a href="<?php echo base_url('slider_section'); ?>" class="nav-link">
+                                    <i class="nav-icon fas fa-circle"></i>
+                                    <p>
+                                        Slider Schedule
+                                    </p>
+                                </a>
+                            </li>
+                        <?php } ?>
+
+                        <?php if ($modules['featured_section'] == 1) {?>
+                            <li class="nav-item">
+                                <a href="<?php echo base_url('slider_right_section'); ?>" class="nav-link">
+                                    <i class="nav-icon fas fa-circle"></i>
+                                    <p>
+                                        Banner Right Schedule
+                                    </p>
+                                </a>
+                            </li>
+                        <?php } ?>
+
+                        <?php if ($modules['featured_section'] == 1) {?>
+                            <li class="nav-item">
+                                <a href="<?php echo base_url('logo_section'); ?>" class="nav-link">
+                                    <i class="nav-icon fas fa-circle"></i>
+                                    <p>
+                                        Logo Schedule
+                                    </p>
+                                </a>
+                            </li>
+                        <?php } ?>
+
+                        <?php if ($modules['featured_section'] == 1) {?>
+                            <li class="nav-item">
+                                <a href="<?php echo base_url('banner_section'); ?>" class="nav-link">
+                                    <i class="nav-icon fas fa-circle"></i>
+                                    <p>
+                                        Banner Schedule
+                                    </p>
+                                </a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon far fa-calendar-alt"></i>
                         <p> Localization <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>

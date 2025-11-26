@@ -91,10 +91,13 @@
 <?= $this->section('java_script') ?>
 <script>
     function update_payment_status(id) {
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('payment_status_update') ?>",
             data: {
+                [csrfName]: csrfHash,
                 id: id
             },
             beforeSend: function() {

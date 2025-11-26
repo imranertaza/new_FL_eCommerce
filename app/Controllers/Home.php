@@ -133,12 +133,49 @@ class Home extends BaseController
             ->get()
             ->getResult();
 
+        //slider
+        $data['sliders'] = [];
+        $sliderSchedules = DB()->table('cc_slider_schedule')
+            ->where('start_date <=',$now)
+            ->where('end_date >=',$now)
+            ->orderBy('start_date', 'ASC')
+            ->get()
+            ->getRow();
+        if (!empty($sliderSchedules)) {
+            $data['sliders'] = DB()->table('cc_slider_schedule_image')->where('slider_schedule_id',$sliderSchedules->slider_schedule_id)->get()->getResult();
+        }
+
+        //slider banner
+        $data['slidersBanner'] = [];
+        $sliderBanner = DB()->table('cc_banner_side_schedule')
+            ->where('start_date <=',$now)
+            ->where('end_date >=',$now)
+            ->orderBy('start_date', 'ASC')
+            ->get()
+            ->getRow();
+        if (!empty($sliderBanner)) {
+            $data['slidersBanner'] = DB()->table('cc_banner_side_schedule_image')->where('banner_side_schedule_id',$sliderBanner->banner_side_schedule_id)->get()->getResult();
+        }
+
+        //Category banner
+        $data['categoryBanner'] = [];
+        $categoryBanner = DB()->table('cc_banner_schedule')
+            ->where('start_date <=',$now)
+            ->where('end_date >=',$now)
+            ->orderBy('start_date', 'ASC')
+            ->get()
+            ->getRow();
+        if (!empty($categoryBanner)) {
+            $data['categoryBanner'] = DB()->table('cc_banner_schedule_image')->where('banner_schedule_id',$categoryBanner->banner_schedule_id)->get()->getResult();
+        }
+
+
         return $data;
     }
 
     /**
      * @description This method provides user subscribe
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function user_subscribe()
     {
@@ -162,14 +199,18 @@ class Home extends BaseController
             $this->session->set($sessionArray);
 
             if (email_send($email, $subject, $message) == true) {
-                print "Please Verify Your Email Address to Complete Your Subscription!";
+                $message = "Please Verify Your Email Address to Complete Your Subscription!";
             } else {
-                print 'Something went wrong! Please try again.';
+                $message = 'Something went wrong! Please try again.';
             }
 
         } else {
-            print 'Email required';
+            $message = 'Email required';
         }
+
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
     }
 
     /**

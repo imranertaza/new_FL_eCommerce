@@ -43,7 +43,7 @@ class Pages extends BaseController {
 
     /**
      * @description This method provides contact action
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function contact_action(){
 
@@ -66,7 +66,9 @@ class Pages extends BaseController {
             $message = 'Your message was successfully submitted';
             email_send($data['email'], $subject, $message);
 
-            print $message;
+            return $this->response
+                ->setHeader('X-CSRF-TOKEN', csrf_hash())
+                ->setBody($message);
         }
     }
 

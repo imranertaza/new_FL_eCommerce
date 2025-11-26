@@ -130,7 +130,9 @@ class Album extends BaseController {
             $message = 'Something went wrong! Please try again.';
         }
 
-        print $message;
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
     }
     /**
      * @description This method provides album image download
@@ -168,16 +170,18 @@ class Album extends BaseController {
 
         $data['downloadUrl'] = $downloadUrl;
         $data['unlinkUrl'] = $unlinkUrl;
-
+        $data['csrfToken'] = csrf_hash();
         return json_encode($data);
     }
     /**
      * @description This method provides album image unlink
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function albumImageUnlink(){
         $url = $this->request->getPost('url');
         $this->image_processing->image_unlink($url);
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash());
     }
 
 }

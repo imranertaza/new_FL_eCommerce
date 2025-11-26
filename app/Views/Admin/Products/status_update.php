@@ -41,6 +41,7 @@
 
 
                     <form  action="<?php echo base_url('product_status_update_action') ?>" method="post">
+                        <?= csrf_field() ?>
                         <div class="modal-header">
                             <h4 class="modal-title">Status Update</h4>
                         </div>

@@ -30,7 +30,7 @@
                             <h3 class="card-title">Logo Schedule Create</h3>
                         </div>
                         <div class="col-md-4">
-
+                            <a href="<?= base_url('logo_section');?>" class="btn btn-danger btn-sm float-right" >Back</a>
                         </div>
                         <div class="col-md-12" style="margin-top: 10px">
                             <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
@@ -38,21 +38,24 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="<?= base_url('logo_section_create_action')?>" method="post" enctype="multipart/form-data">
+                    <form action="<?= base_url('logo_section_update_action')?>" method="post" enctype="multipart/form-data">
+                        <?= csrf_field() ?>
                         <div id="schedule-wrapper">
                             <div class="schedule-row row mb-3 border p-3 rounded">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Schedule Title <span class="requi">*</span></label>
-                                        <input type="text" name="schedule_title" placeholder="Schedule Title" class="form-control">
+                                        <input type="text" name="schedule_title" placeholder="Schedule Title" value="<?= $schedule->schedule_title;?>" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-md-6" >
+                                <div class="col-md-6" ></div>
+                                <div class="col-md-12 p-3" >
+                                    <?= image_view('uploads/logo', '', $schedule->image, 'noimage.png', '');?>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Logo <span class="requi">*</span></label>
-                                        <input type="file" name="image" class="form-control" required>
+                                        <input type="file" name="image" class="form-control" >
                                         <small>Recommended Size: 261 x 70</small>
                                     </div>
 
@@ -60,7 +63,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Alt Name <span class="requi">*</span></label>
-                                        <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" required>
+                                        <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?= $schedule->alt_name;?>" required>
                                         <small>&nbsp;</small>
                                     </div>
 
@@ -68,17 +71,18 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Start Date <span class="requi">*</span></label>
-                                        <input type="date" name="start_date" class="form-control" required>
+                                        <input type="date" name="start_date" class="form-control" value="<?= date('Y-m-d', strtotime($schedule->start_date)); ?>" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label>End Date <span class="requi">*</span></label>
-                                    <input type="date" name="end_date" class="form-control" required>
+                                    <input type="date" name="end_date" class="form-control" value="<?= date('Y-m-d', strtotime($schedule->end_date)); ?>" required>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-12 mt-3">
-                            <button class="btn btn-success w-100">Create</button>
+                            <input type="hidden" name="logo_schedule_id" value="<?= $schedule->logo_schedule_id;?>" required>
+                            <button class="btn btn-success w-100">Update</button>
                         </div>
                     </form>
                 </div>

@@ -58,6 +58,7 @@
                                 <div class="tab-content" id="custom-tabs-four-tabContent">
                                     <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
                                         <form action="<?php echo base_url('customers_update_action')?>" method="post" >
+                                            <?= csrf_field() ?>
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
@@ -102,7 +103,7 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
                                         <form action="<?php echo base_url('customers_general_action')?>" method="post">
-
+                                            <?= csrf_field() ?>
 
 
 

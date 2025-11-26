@@ -4,7 +4,7 @@
         <div class="product-category mb-5">
 
 
-            <form action="<?php echo base_url('category_url_generate') ?>" method="post" id="searchForm"> </form>
+            <form action="<?php echo base_url('category_url_generate') ?>" method="post" id="searchForm"><?= csrf_field() ?> </form>
                 <input type="hidden" name="global_search" form="searchForm" value="<?php echo $keywordSearch;?>">
 
                 <div class="row">

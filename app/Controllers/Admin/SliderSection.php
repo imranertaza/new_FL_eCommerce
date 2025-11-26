@@ -4,18 +4,17 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\Permission;
+use App\Libraries\Theme_3;
 use CodeIgniter\HTTP\RedirectResponse;
-use FilesystemIterator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 
-class FeaturedSection extends BaseController
+class SliderSection extends BaseController
 {
 
     protected $validation;
     protected $session;
     protected $crop;
     protected $permission;
+    protected $theme_3;
     private $module_name = 'Theme_settings';
 
     public function __construct()
@@ -24,6 +23,7 @@ class FeaturedSection extends BaseController
         $this->session = \Config\Services::session();
         $this->crop = \Config\Services::image();
         $this->permission = new Permission();
+        $this->theme_3 = new Theme_3();
     }
 
     /**
@@ -38,8 +38,8 @@ class FeaturedSection extends BaseController
             return redirect()->to(site_url('admin'));
         } else {
 
-            $table = DB()->table('cc_settings');
-            $data['settings'] = $table->get()->getResult();
+            $table = DB()->table('cc_slider_schedule');
+            $data['schedule'] = $table->get()->getResult();
 
 
             //$perm = array('create','read','update','delete','mod_access');
@@ -48,299 +48,99 @@ class FeaturedSection extends BaseController
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
             if (isset($data['mod_access']) and $data['mod_access'] == 1) {
-                echo view('Admin/FeaturedSection/index', $data);
+                echo view('Admin/SliderSection/index', $data);
             } else {
                 echo view('Admin/no_permission');
             }
         }
     }
-    public function sectionView($id){
+
+    public function create()
+    {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
         $adRoleId = $this->session->adRoleId;
         if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
             return redirect()->to(site_url('admin'));
         } else {
 
-            $table = DB()->table('cc_featured_schedule');
-            $data['schedule'] = $table->where('featured_section_id',$id)->get()->getResult();
+            $theme = get_lebel_by_value_in_settings('Theme');
+            $data['theme_libraries'] = '';
+            if ($theme == 'Theme_3') {
+                $data['theme_libraries'] = $this->theme_3;
+            }
 
-            $data['sectionId'] = $id;
-
-                //$perm = array('create','read','update','delete','mod_access');
+            //$perm = array('create','read','update','delete','mod_access');
             $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
             foreach ($perm as $key => $val) {
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
             if (isset($data['mod_access']) and $data['mod_access'] == 1) {
-                echo view('Admin/FeaturedSection/view', $data);
+                echo view('Admin/SliderSection/create', $data);
             } else {
                 echo view('Admin/no_permission');
             }
         }
     }
-
-    public function sectionViewAction()
+    public function sliderSectionCreateAction()
     {
-        $featured_section_id = $this->request->getPost('featured_section_id');
-        $section_name        = $this->request->getPost('section_name');
-        $product             = $this->request->getPost('product_id'); // 2D array if multiple
-        $brand_id            = $this->request->getPost('brand_id');
-        $prod_cat_id         = $this->request->getPost('prod_cat_id');
-        $start_date          = $this->request->getPost('start_date');
-        $end_date            = $this->request->getPost('end_date');
-        $alt_name            = $this->request->getPost('alt_name');
-        $url                 = $this->request->getPost('url');
-        $images              = $this->request->getFileMultiple('image');
-
-        // Validate: must have section_name and at least one of product, brand, or category
-        foreach ($section_name as $key => $val) {
-
-            $rules = [
-                'section_name' => [
-                    'label' => 'Section Name',
-                    'rules' => 'required|min_length[2]|max_length[255]',
-                ],
-            ];
-
-            $dataToValidate = ['section_name' => $val];
-
-            if (!$this->validation->setRules($rules)->run($dataToValidate)) {
-                $errors = $this->validation->getErrors();
-                $this->session->setFlashdata('message', '
-                <div class="alert alert-danger alert-dismissible" role="alert">
-                    Section ' . ($key + 1) . ' Error: ' . implode(', ', $errors) . '
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>');
-                return redirect()->back()->withInput();
-            }
-
-            // Must have at least one: product / brand / category
-            $hasProduct  = !empty($product[$key]) && is_array($product[$key]) && count(array_filter($product[$key])) > 0;
-            $hasBrand    = !empty($brand_id[$key]);
-            $hasCategory = !empty($prod_cat_id[$key]);
-
-            if (!$hasProduct && !$hasBrand && !$hasCategory) {
-                $this->session->setFlashdata('message', '
-                <div class="alert alert-danger alert-dismissible" role="alert">
-                    Section ' . ($key + 1) . ' must include at least one Product, Brand, or Category.
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>');
-                return redirect()->back()->withInput();
-            }
+        $theme = get_lebel_by_value_in_settings('Theme');
+        $theme_libraries = '';
+        if($theme == 'Theme_3'){
+            $theme_libraries = $this->theme_3;
         }
+        $schedule_title = $this->request->getPost('schedule_title');
+        $start_date = $this->request->getPost('start_date');
+        $end_date = $this->request->getPost('end_date');
 
 
-        $target_dir = FCPATH . 'uploads/sections/';
+        $alt_names = $this->request->getPost('alt_name');
+        $images = $this->request->getFiles()['slider_image'];
 
+        $target_dir = FCPATH . 'uploads/slider/';
         // Ensure upload directory exists
         if (!is_dir($target_dir)) {
             mkdir($target_dir, 0777, true);
         }
 
-        $db = DB();
-        $db->transStart(); // Start transaction
 
-        foreach ($section_name as $key => $val) {
-            $data = [
-                'featured_section_id' => $featured_section_id,
-                'section_name'        => $val,
-                'start_date'          => $start_date[$key] ?? null,
-                'end_date'            => $end_date[$key] ?? null,
-                'alt_name'            => $alt_name[$key] ?? null,
-                'url'                 => $url[$key] ?? null,
-            ];
-
-            // Handle image upload and crop
-            if (!empty($images[$key]) && $images[$key]->isValid() && !$images[$key]->hasMoved()) {
-                $newName = $images[$key]->getRandomName();
-                $images[$key]->move($target_dir, $newName);
-
-                $croppedName = 'category_' . $newName;
-
-                // Crop and save new image
-                $this->crop->withFile($target_dir . $newName)
-                    ->fit(271, 590, 'center')
-                    ->save($target_dir . $croppedName, 100);
-
-                // Remove the temporary original
-                unlink($target_dir . $newName);
-
-                $data['image'] = $croppedName;
-            }
-
-            // Insert into featured_schedule
-            $db->table('cc_featured_schedule')->insert($data);
-            $featured_schedule_id = $db->insertID();
-
-
-            // Insert multiple brand if available
-            if (!empty($brand_id[$key])) {
-                foreach ($brand_id[$key] as $bra_id) {
-                    if (!empty($bra_id)) {
-                        $db->table('cc_featured_product')->insert([
-                            'featured_schedule_id' => $featured_schedule_id,
-                            'brand_id' => $bra_id,
-                        ]);
-                    }
-                }
-            }
-
-            // Insert multiple category if available
-            if (!empty($prod_cat_id[$key])) {
-                foreach ($prod_cat_id[$key] as $cat_id) {
-                    if (!empty($cat_id)) {
-                        $db->table('cc_featured_product')->insert([
-                            'featured_schedule_id' => $featured_schedule_id,
-                            'prod_cat_id' => $cat_id,
-                        ]);
-                    }
-                }
-            }
-
-            // Insert multiple products if available
-            if (!empty($product[$key]) && is_array($product[$key])) {
-                foreach ($product[$key] as $prod_id) {
-                    if (!empty($prod_id)) {
-                        $db->table('cc_featured_product')->insert([
-                            'featured_schedule_id' => $featured_schedule_id,
-                            'product_id'           => $prod_id,
-                        ]);
-                    }
-                }
-            }
-        }
-
-        $db->transComplete(); // Commit transaction
-
-        if ($db->transStatus() === false) {
-            $this->session->setFlashdata('message', '
-            <div class="alert alert-danger alert-dismissible" role="alert">
-                Something went wrong while saving. Please try again.
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>');
-        } else {
-            $this->session->setFlashdata('message', '
-            <div class="alert alert-success alert-dismissible" role="alert">
-                Section updated successfully.
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>');
-        }
-
-        return redirect()->to('section_view/' . $featured_section_id);
-    }
-
-    public function sectionViewUpdateAction(){
-        $featured_section_id = $this->request->getPost('featured_section_id');
-        $featured_schedule_id = $this->request->getPost('featured_schedule_id');
-        $section_name        = $this->request->getPost('section_name');
-        $product             = $this->request->getPost('product_id');
-        $brand_id            = $this->request->getPost('brand_id');
-        $prod_cat_id         = $this->request->getPost('prod_cat_id');
-        $start_date          = $this->request->getPost('start_date');
-        $end_date            = $this->request->getPost('end_date');
-        $alt_name            = $this->request->getPost('alt_name');
-        $url                 = $this->request->getPost('url');
-        $images              = $this->request->getFile('image');
-
-        $radio               = $this->request->getPost('radio');
-        $type                = $this->request->getPost($radio);
-
-        $target_dir = FCPATH . 'uploads/sections/';
-
-        // Ensure upload directory exists
-        if (!is_dir($target_dir)) {
-            mkdir($target_dir, 0777, true);
-        }
-
-        $db = DB();
-        $db->transStart(); // Start transaction
+        DB()->transStart();
 
         $data = [
-            'section_name'        => $section_name,
-            'start_date'          => $start_date,
-            'end_date'            => $end_date,
-            'alt_name'            => $alt_name,
-            'url'                 => $url,
+            'schedule_title' => $schedule_title,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
         ];
-
-        // Handle image upload and crop
-        if (!empty($images) && $images->isValid() && !$images->hasMoved()) {
-            //old image unlink
-            $oldImage = get_data_by_id('image','cc_featured_schedule','featured_schedule_id',$featured_schedule_id);
-            if (file_exists($target_dir.$oldImage)) {
-                unlink($target_dir . $oldImage);
-            }
-
-            $newName = $images->getRandomName();
-            $images->move($target_dir, $newName);
-
-            $croppedName = 'category_' . $newName;
-
-            // Crop and save new image
-            $this->crop->withFile($target_dir . $newName)
-                ->fit(271, 590, 'center')
-                ->save($target_dir . $croppedName, 100);
-
-            // Remove the temporary original
-            unlink($target_dir . $newName);
-
-            $data['image'] = $croppedName;
-        }
-        // Update into featured_schedule
-        $db->table('cc_featured_schedule')->where('featured_schedule_id',$featured_schedule_id)->update($data);
+        $table = DB()->table('cc_slider_schedule');
+        $table->insert($data);
+        $slider_schedule_id = DB()->insertID();
 
 
-        // previous data delete
-        $db->table('cc_featured_product')->where('featured_schedule_id',$featured_schedule_id)->delete();
+        if ($images) {
+            foreach ($images as $index => $img) {
+                if ($img->isValid() && !$img->hasMoved()) {
 
-        // Insert brand if available
-        if (!empty($type == 'option2')) {
-            foreach ($brand_id as $bra_id) {
-                if (!empty($bra_id)) {
-                    $db->table('cc_featured_product')->insert([
-                        'featured_schedule_id' => $featured_schedule_id,
-                        'brand_id' => $bra_id,
-                    ]);
+                    $newName = $img->getRandomName();
+                    $img->move($target_dir, $newName);
+                    $news_img = 'slider_' . $img->getName();
+                    $this->crop->withFile($target_dir . $newName)->fit($theme_libraries->slider_width, $theme_libraries->slider_height, 'center')->save($target_dir .  $news_img);
+                    unlink($target_dir .  $newName);
+
+
+                    // Prepare data for DB insert
+                    $dataImage = [
+                        'slider_schedule_id' => $slider_schedule_id,
+                        'image' => $news_img,
+                        'alt_name' => $alt_names[$index] ?? null
+                    ];
+                    $tableImage = DB()->table('cc_slider_schedule_image');
+                    $tableImage->insert($dataImage);
                 }
             }
         }
 
-        // Insert category if available
-        if (!empty($type == 'option3')) {
-            foreach ($prod_cat_id as $cat_id) {
-                if (!empty($cat_id)) {
-                    $db->table('cc_featured_product')->insert([
-                        'featured_schedule_id' => $featured_schedule_id,
-                        'prod_cat_id' => $cat_id,
-                    ]);
-                }
-            }
-        }
+        DB()->transComplete();
 
-        // Insert multiple products if available
-        if (!empty($type == 'option1') && is_array($product)) {
-            foreach ($product as $prod_id) {
-                if (!empty($prod_id)) {
-                    $db->table('cc_featured_product')->insert([
-                        'featured_schedule_id' => $featured_schedule_id,
-                        'product_id'           => $prod_id,
-                    ]);
-                }
-            }
-        }
-
-
-        $db->transComplete(); // Commit transaction
-
-        if ($db->transStatus() === false) {
+        if (DB()->transStatus() === false) {
             $this->session->setFlashdata('message', '
             <div class="alert alert-danger alert-dismissible" role="alert">
                 Something went wrong while saving. Please try again.
@@ -351,46 +151,185 @@ class FeaturedSection extends BaseController
         } else {
             $this->session->setFlashdata('message', '
             <div class="alert alert-success alert-dismissible" role="alert">
-                Section updated successfully.
+                Banner updated successfully.
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>');
         }
 
-        return redirect()->to('section_view/' . $featured_section_id);
+        return redirect()->to('slider_section_create');
 
     }
-    public  function delete($id){
+    public function sliderSectionUpdateAction()
+    {
+        $theme = get_lebel_by_value_in_settings('Theme');
+        $theme_libraries = ($theme == 'Theme_3') ? $this->theme_3 : '';
 
-        $featured_section_id = get_data_by_id('featured_section_id','cc_featured_schedule','featured_schedule_id',$id);
-        $db = DB();
-        //image delete
-        $target_dir = FCPATH . 'uploads/sections/';
-        $oldImage = get_data_by_id('image','cc_featured_schedule','featured_schedule_id',$id);
-        if (file_exists($target_dir.$oldImage)) {
-            unlink($target_dir . $oldImage);
+        $slider_schedule_id      = $this->request->getPost('slider_schedule_id');
+        $schedule_title          = $this->request->getPost('schedule_title');
+        $start_date              = $this->request->getPost('start_date');
+        $end_date                = $this->request->getPost('end_date');
+
+        $slider_schedule_image_id = $this->request->getPost('slider_schedule_image_id');
+        $alt_names               = $this->request->getPost('alt_name');
+        $images                  = $this->request->getFiles()['slider_image'];
+
+        $target_dir = FCPATH . 'uploads/slider/';
+        if (!is_dir($target_dir)) {
+            mkdir($target_dir, 0777, true);
         }
-        //data delete in cc_featured_product
-        $db->table('cc_featured_product')->where('featured_schedule_id',$id)->delete();
 
-        //data delete in cc_featured_schedule
-        $db->table('cc_featured_schedule')->where('featured_schedule_id',$id)->delete();
+        DB()->transStart();
+
+        $data = [
+            'schedule_title' => $schedule_title,
+            'start_date'     => $start_date,
+            'end_date'       => $end_date,
+        ];
+
+        DB()->table('cc_slider_schedule')
+            ->where('slider_schedule_id', $slider_schedule_id)
+            ->update($data);
 
 
-        $this->session->setFlashdata('message', '
-        <div class="alert alert-success alert-dismissible" role="alert">
-            Settings updated successfully.
+        // ---- UPDATE IMAGES ----
+        if ($images) {
+            foreach ($images as $index => $img) {
+
+                if ($img->isValid() && !$img->hasMoved()) {
+
+                    // get old image
+                    $oldImage = get_data_by_id(
+                        'image',
+                        'cc_slider_schedule_image',
+                        'slider_schedule_image_id',
+                        $slider_schedule_image_id[$index]
+                    );
+
+                    // delete old image if exists
+                    if (!empty($oldImage)) {
+                        if (file_exists($target_dir . $oldImage)) {
+                            unlink($target_dir . $oldImage);
+                        }
+                    }
+
+                    // upload new image
+                    $tempName = $img->getRandomName();
+                    $img->move($target_dir, $tempName);
+
+                    $finalName = 'slider_' . $img->getName();
+
+                    // crop
+                    $this->crop->withFile($target_dir . $tempName)
+                        ->fit($theme_libraries->slider_width, $theme_libraries->slider_height, 'center')
+                        ->save($target_dir . $finalName);
+
+                    unlink($target_dir . $tempName);
+
+                    // update DB
+                    $dataImage = [
+                        'image'    => $finalName,
+                        'alt_name' => $alt_names[$index] ?? null,
+                    ];
+
+                    DB()->table('cc_slider_schedule_image')
+                        ->where('slider_schedule_image_id', $slider_schedule_image_id[$index])
+                        ->update($dataImage);
+                }
+            }
+        }
+
+        DB()->transComplete();
+
+        if (!DB()->transStatus()) {
+            $this->session->setFlashdata('message', '
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            Something went wrong while saving. Please try again.
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>');
+        } else {
+            $this->session->setFlashdata('message', '
+        <div class="alert alert-success alert-dismissible" role="alert">
+            Banner updated successfully.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>');
+        }
 
-        return redirect()->to('section_view/' . $featured_section_id);
-
+        return redirect()->to('slider_section_view/' . $slider_schedule_id);
     }
+    public function sliderSectionView($id){
+        $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
+        $adRoleId = $this->session->adRoleId;
+        if (!isset($isLoggedInEcAdmin) || $isLoggedInEcAdmin != TRUE) {
+            return redirect()->to(site_url('admin'));
+        } else {
 
+            $theme = get_lebel_by_value_in_settings('Theme');
+            $data['theme_libraries'] = '';
+            if ($theme == 'Theme_3') {
+                $data['theme_libraries'] = $this->theme_3;
+            }
 
+            $table = DB()->table('cc_slider_schedule');
+            $data['schedule'] = $table->where('slider_schedule_id',$id)->get()->getRow();
+
+            $tableImage = DB()->table('cc_slider_schedule_image');
+            $data['scheduleImage'] = $tableImage->where('slider_schedule_id',$id)->get()->getResult();
+
+            //$perm = array('create','read','update','delete','mod_access');
+            $perm = $this->permission->module_permission_list($adRoleId, $this->module_name);
+            foreach ($perm as $key => $val) {
+                $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
+            }
+            if (isset($data['mod_access']) and $data['mod_access'] == 1) {
+                echo view('Admin/SliderSection/update', $data);
+            } else {
+                echo view('Admin/no_permission');
+            }
+        }
+    }
+    public function delete($id)
+    {
+        $db = DB();
+
+        // --- Delete images from folder ---
+        $tableImage = $db->table('cc_slider_schedule_image');
+        $scheduleImages = $tableImage->where('slider_schedule_id', $id)->get()->getResult();
+
+        $targetDir = FCPATH . 'uploads/slider/';
+
+        foreach ($scheduleImages as $item) {
+            if (!empty($item->image)) {
+                $imagePath = $targetDir . $item->image;
+                if (is_file($imagePath)) {
+                    @unlink($imagePath);
+                }
+            }
+        }
+
+        // --- Delete image records ---
+        $tableImage->where('slider_schedule_id', $id)->delete();
+
+        // --- Delete schedule record ---
+        $db->table('cc_slider_schedule')->where('slider_schedule_id', $id)->delete();
+
+        // --- Flash success message ---
+        $this->session->setFlashdata('message', '
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                Banner deleted successfully.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        ');
+
+        return redirect()->to('slider_section');
+    }
 
 
 

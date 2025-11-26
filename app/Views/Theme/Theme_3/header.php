@@ -8,6 +8,11 @@
     <meta name="description" content="<?php echo $description;?>">
     <meta name="keywords" content="<?php echo $keywords;?>">
 
+    <meta name="csrf-token" content="<?= csrf_hash() ?>">
+    <meta name="csrf-header" content="<?= csrf_header() ?>">
+    <meta name="csrf-name" content="<?= csrf_token() ?>">
+
+
     <link rel="shortcut icon" href="<?php echo base_url() ?>/uploads/logo/<?php echo get_lebel_by_value_in_theme_settings('favicon')->value;?>">
     <link rel="preload" href="<?php echo base_url('uploads/loader.gif')?>" as="image">
 
@@ -117,9 +122,14 @@
                 <div class="row align-items-center">
                     <div class="col-12 col-sm-4 col-lg-3 order-1 mb-3 mb-sm-0">
                         <div class="logo text-center text-sm-start">
-                        <a href="<?php echo base_url() ?>">
+                            <a href="<?php echo base_url() ?>">
+
+                                <?php $logoSchedule = scheduleLogo(); if (empty($logoSchedule)){?>
                                 <?php $logoImg = get_lebel_by_value_in_theme_settings('side_logo');  ?>
-                            <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/logo', '', $logoImg->value, 'noimage.png', '261', '70');?>" alt="<?php echo $logoImg->alt_name?>" class="img-fluid side_logo" >
+                                <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/logo', '', $logoImg->value, 'noimage.png', '261', '70');?>" alt="<?php echo $logoImg->alt_name?>" class="img-fluid side_logo" >
+                                <?php }else{ ?>
+                                    <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/logo', '', $logoSchedule->image, 'noimage.png', '261', '70');?>" alt="<?= $logoSchedule->alt_name?>" class="img-fluid side_logo" >
+                                <?php }?>
                             </a>
                         </div>
                     </div>

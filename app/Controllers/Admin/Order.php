@@ -325,4 +325,58 @@ class Order extends BaseController
         return redirect()->to('order_list');
     }
 
+    public function orderMultiDeleteAction()
+    {
+        $orderIds = $this->request->getPost('order_id');
+
+        // Validate input
+        if (empty($orderIds) || !is_array($orderIds)) {
+            $this->session->setFlashdata('message',
+                '<div class="alert alert-danger alert-dismissible" role="alert">
+                No orders selected!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>'
+            );
+            return redirect()->to('order_list');
+        }
+
+        $db = DB();
+        $db->transStart();
+        foreach ($orderIds as $orderId) {
+            // Delete order-related data in correct dependency order
+            $db->table('cc_order_option')->where('order_id', $orderId)->delete();
+            $db->table('cc_order_item')->where('order_id', $orderId)->delete();
+            $db->table('cc_order_history')->where('order_id', $orderId)->delete();
+            $db->table('cc_order_card_details')->where('order_id', $orderId)->delete();
+            $db->table('cc_order')->where('order_id', $orderId)->delete();
+        }
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
+            // Rollback occurred
+            $this->session->setFlashdata('message',
+                '<div class="alert alert-danger alert-dismissible" role="alert">
+                Something went wrong. Transaction failed!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>'
+            );
+        } else {
+            $this->session->setFlashdata('message',
+                '<div class="alert alert-success alert-dismissible" role="alert">
+                Selected order(s) deleted successfully!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>'
+            );
+        }
+
+        return redirect()->to('order_list');
+    }
+
+
 }

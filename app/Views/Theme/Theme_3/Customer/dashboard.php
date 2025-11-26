@@ -59,6 +59,7 @@
                         <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
                             <h4 class="ti-or-n">Change Password</h4>
                             <form action="<?php echo base_url('password_action_update')?>" method="post" onsubmit="return resetPassword()">
+                                <?= csrf_field() ?>
                             <div class="mb-3 mt-3">
                                 <input type="password" id="current_password" name="current_password" class="form-control con-or in_err fw-bolder" placeholder="Current Password*"  >
                                 <span class="text-danger d-inline-block err text-capitalize" id="password_err_mess"></span>

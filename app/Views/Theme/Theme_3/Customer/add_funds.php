@@ -14,6 +14,7 @@
                     </div>
                     <div class="col-md-6 px-5">
                         <form action="<?php echo base_url('add_funds_action')?>" method="post">
+                            <?= csrf_field() ?>
                             <div class="form-group mt-4">
                                 <label>Amount</label>
                                 <input type="text" name="amount" class="form-control" placeholder="Amount" required>
