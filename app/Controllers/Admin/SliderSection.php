@@ -114,27 +114,36 @@ class SliderSection extends BaseController
         $table->insert($data);
         $slider_schedule_id = DB()->insertID();
 
-
+        $imageDataBatch = [];
         if ($images) {
             foreach ($images as $index => $img) {
                 if ($img->isValid() && !$img->hasMoved()) {
 
                     $newName = $img->getRandomName();
                     $img->move($target_dir, $newName);
+
                     $news_img = 'slider_' . $img->getName();
-                    $this->crop->withFile($target_dir . $newName)->fit($theme_libraries->slider_width, $theme_libraries->slider_height, 'center')->save($target_dir .  $news_img);
-                    unlink($target_dir .  $newName);
 
+                    // Crop & Save
+                    $this->crop->withFile($target_dir . $newName)
+                        ->fit($theme_libraries->slider_width, $theme_libraries->slider_height, 'center')
+                        ->save($target_dir . $news_img);
 
-                    // Prepare data for DB insert
-                    $dataImage = [
+                    // Remove original uploaded file
+                    unlink($target_dir . $newName);
+
+                    // Push into batch array
+                    $imageDataBatch[] = [
                         'slider_schedule_id' => $slider_schedule_id,
-                        'image' => $news_img,
-                        'alt_name' => $alt_names[$index] ?? null
+                        'image'              => $news_img,
+                        'alt_name'           => $alt_names[$index] ?? null
                     ];
-                    $tableImage = DB()->table('cc_slider_schedule_image');
-                    $tableImage->insert($dataImage);
                 }
+            }
+
+            // Insert all images in one query
+            if (!empty($imageDataBatch)) {
+                DB()->table('cc_slider_schedule_image')->insertBatch($imageDataBatch);
             }
         }
 
@@ -171,7 +180,7 @@ class SliderSection extends BaseController
         $start_date              = $this->request->getPost('start_date');
         $end_date                = $this->request->getPost('end_date');
 
-        $slider_schedule_image_id = $this->request->getPost('slider_schedule_image_id');
+        $slider_schedule_image_id= $this->request->getPost('slider_schedule_image_id');
         $alt_names               = $this->request->getPost('alt_name');
         $images                  = $this->request->getFiles()['slider_image'];
 
@@ -194,6 +203,7 @@ class SliderSection extends BaseController
 
 
         // ---- UPDATE IMAGES ----
+        $updateBatch = [];
         if ($images) {
             foreach ($images as $index => $img) {
 
@@ -207,7 +217,7 @@ class SliderSection extends BaseController
                         $slider_schedule_image_id[$index]
                     );
 
-                    // delete old image if exists
+                    // delete old image
                     if (!empty($oldImage)) {
                         if (file_exists($target_dir . $oldImage)) {
                             unlink($target_dir . $oldImage);
@@ -227,16 +237,19 @@ class SliderSection extends BaseController
 
                     unlink($target_dir . $tempName);
 
-                    // update DB
-                    $dataImage = [
-                        'image'    => $finalName,
-                        'alt_name' => $alt_names[$index] ?? null,
+                    // Add row to batch array
+                    $updateBatch[] = [
+                        'slider_schedule_image_id' => $slider_schedule_image_id[$index], // REQUIRED
+                        'image'                    => $finalName,
+                        'alt_name'                 => $alt_names[$index] ?? null,
                     ];
-
-                    DB()->table('cc_slider_schedule_image')
-                        ->where('slider_schedule_image_id', $slider_schedule_image_id[$index])
-                        ->update($dataImage);
                 }
+            }
+
+            // ---- UPDATE WITH ONE QUERY ----
+            if (!empty($updateBatch)) {
+                DB()->table('cc_slider_schedule_image')
+                    ->updateBatch($updateBatch, 'slider_schedule_image_id');
             }
         }
 
