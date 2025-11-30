@@ -1366,33 +1366,128 @@
          }
      }
 
-     $('#commentForm').on('submit', function(event) {
-         event.preventDefault();
-         var formData = new FormData(this);
+     // $('#commentForm').on('submit', function(event) {
+     //     event.preventDefault();
+     //     var formData = new FormData(this);
+     //
+     //     // ADD CSRF TOKEN (important for CI4)
+     //     formData.append(
+     //         $('meta[name="csrf-name"]').attr("content"),
+     //         $('meta[name="csrf-token"]').attr("content")
+     //     );
+     //     $.ajax({
+     //         url: $(this).attr('action'),
+     //         type: "POST",
+     //         data: formData,
+     //         contentType: false,
+     //         cache: false,
+     //         processData: false,
+     //         success: function(response) {
+     //             $('#commentForm')[0].reset();
+     //             $('#mesVal').html(response);
+     //             $('#commentBoxReload').load(document.URL + ' #commentBoxReload');
+     //             $('.message_alert').show();
+     //             setTimeout(function() {
+     //                 $("#messAlt").fadeOut(1500);
+     //             }, 600);
+     //
+     //         }
+     //     });
+     // });
 
-         // ADD CSRF TOKEN (important for CI4)
-         formData.append(
-             $('meta[name="csrf-name"]').attr("content"),
-             $('meta[name="csrf-token"]').attr("content")
-         );
-         $.ajax({
-             url: $(this).attr('action'),
-             type: "POST",
-             data: formData,
-             contentType: false,
-             cache: false,
-             processData: false,
-             success: function(response) {
-                 $('#commentForm')[0].reset();
-                 $('#mesVal').html(response);
-                 $('#commentBoxReload').load(document.URL + ' #commentBoxReload');
-                 $('.message_alert').show();
-                 setTimeout(function() {
-                     $("#messAlt").fadeOut(1500);
-                 }, 600);
+     $(document).ready(function () {
 
+         // On form submit
+         $('#commentForm').on('submit', function (event) {
+             event.preventDefault(); // STOP default submission
+
+             let isValid = true;
+
+             // Get values
+             let name = $("input[name='name']").val().trim();
+             let email = $("input[name='email']").val().trim();
+             let comment = $("textarea[name='comment']").val().trim();
+             let captcha_input = $("#captcha_form").val().trim();
+             let captcha_generated = $("#genaretCapt").val();
+
+             // ----- NAME VALIDATION -----
+             let namePattern = /^[A-Za-z\s]{2,20}$/;
+             if (!namePattern.test(name)) {
+                 $("#messageName").html("Name must be 2–20 letters!");
+                 isValid = false;
+             } else {
+                 $("#messageName").html("");
              }
+
+             // ----- EMAIL VALIDATION -----
+             let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+             if (!emailPattern.test(email)) {
+                 $("#messageEmail").html("Enter a valid email!");
+                 isValid = false;
+             } else {
+                 $("#messageEmail").html("");
+             }
+
+             // ----- COMMENT VALIDATION -----
+             let cleanComment = comment.trim();
+
+             // Allow: letters, numbers, spaces, basic punctuation .,!?-():;
+             let allowedPattern = /^[\p{L}\p{N}\s.,!?()\-:;]{3,500}$/u;
+
+             if (!allowedPattern.test(cleanComment)) {
+                 $("#messageComment").html("Comment must be 3–500 characters and cannot contain special characters!");
+                 isValid = false;
+             } else {
+                 $("#messageComment").html("");
+             }
+
+             // ----- CAPTCHA VALIDATION -----
+             if (captcha_input !== captcha_generated) {
+                 $("#messageRecaptcha").html("Captcha does not match!");
+                 isValid = false;
+             } else {
+                 $("#messageRecaptcha").html("");
+             }
+
+             // ---- IF NOT VALID → STOP ----
+             if (!isValid) {
+                 return false;
+             }
+
+             // ---- IF VALID → RUN AJAX ----
+             var formData = new FormData(this);
+
+             // Add CSRF Token
+             formData.append(
+                 $('meta[name="csrf-name"]').attr("content"),
+                 $('meta[name="csrf-token"]').attr("content")
+             );
+
+             $.ajax({
+                 url: $(this).attr("action"),
+                 type: "POST",
+                 data: formData,
+                 contentType: false,
+                 cache: false,
+                 processData: false,
+
+                 success: function (response) {
+                     // Reset form
+                     $('#commentForm')[0].reset();
+                     // Show response
+                     $('#mesVal').html(response);
+                     // Reload comment box
+                     $('#commentBoxReload').load(location.href + ' #commentBoxReload');
+
+                     $('.message_alert').show();
+                     setTimeout(function () {
+                         $("#messAlt").fadeOut(1500);
+                     }, 600);
+                 }
+             });
+
          });
+
      });
 
     function commentReply(show,id){
@@ -1401,37 +1496,111 @@
         $("#"+show).html(html);
     }
 
+     function commentReplyAction(formID) {
 
+         var form = document.getElementById(formID);
 
-    function commentReplyAction(formID){
-        var form = document.getElementById(formID);
-        var formData = new FormData(form);
+         // Get field values
+         let name = form.querySelector("input[name='com_name']").value.trim();
+         let email = form.querySelector("input[name='com_email']").value.trim();
+         let text = form.querySelector("input[name='com_text']").value.trim();
 
-        // ADD CSRF TOKEN (important for CI4)
-        formData.append(
-            $('meta[name="csrf-name"]').attr("content"),
-            $('meta[name="csrf-token"]').attr("content")
-        );
-        $.ajax({
-            url: $(form).prop('action'),
-            type: "POST",
-            data: formData,
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function(response) {
-                $('#'+formID)[0].reset();
-                $('#'+formID).hide();
-                $('#commentBoxReload').load(document.URL + ' #commentBoxReload');
-                $('#mesVal').html(response);
-                $('.message_alert').show();
-                setTimeout(function () {
-                    $("#messAlt").fadeOut(1500);
-                }, 600);
+         let isValid = true;
 
-            }
-        });
-    }
+         // -------- NAME VALIDATION (letters only, 2–20 chars) ----------
+         let namePattern = /^[A-Za-z\s]{2,20}$/;
+         if (!namePattern.test(name)) {
+             alert("Name must be 2–20 letters only!");
+             isValid = false;
+         }
+
+         // -------- EMAIL VALIDATION (optional but must be valid if entered) ----------
+         let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+         if (email !== "" && !emailPattern.test(email)) {
+             alert("Please enter a valid email address!");
+             isValid = false;
+         }
+
+         // -------- TEXT VALIDATION (3–500 chars + real letters) ----------
+         let cleanText = text.trim();
+         let textPattern = /\p{L}|\p{N}/u; // must contain real characters
+
+         if (cleanText.length < 3 || cleanText.length > 500 || !textPattern.test(cleanText)) {
+             alert("Reply text must be 3–500 valid characters!");
+             isValid = false;
+         }
+
+         // -------- STOP IF INVALID ----------
+         if (!isValid) {
+             return false;
+         }
+
+         // -------- AJAX SUBMIT ----------
+         var formData = new FormData(form);
+
+         // ADD CSRF
+         formData.append(
+             $('meta[name="csrf-name"]').attr("content"),
+             $('meta[name="csrf-token"]').attr("content")
+         );
+
+         $.ajax({
+             url: $(form).prop('action'),
+             type: "POST",
+             data: formData,
+             contentType: false,
+             cache: false,
+             processData: false,
+
+             success: function(response) {
+
+                 // Reset + hide form
+                 $('#' + formID)[0].reset();
+                 $('#' + formID).hide();
+
+                 // Reload comments
+                 $('#commentBoxReload').load(document.URL + ' #commentBoxReload');
+
+                 // Show message
+                 $('#mesVal').html(response);
+                 $('.message_alert').show();
+
+                 setTimeout(function() {
+                     $("#messAlt").fadeOut(1500);
+                 }, 600);
+             }
+         });
+     }
+
+    // function commentReplyAction(formID){
+    //     var form = document.getElementById(formID);
+    //     var formData = new FormData(form);
+    //
+    //     // ADD CSRF TOKEN (important for CI4)
+    //     formData.append(
+    //         $('meta[name="csrf-name"]').attr("content"),
+    //         $('meta[name="csrf-token"]').attr("content")
+    //     );
+    //     $.ajax({
+    //         url: $(form).prop('action'),
+    //         type: "POST",
+    //         data: formData,
+    //         contentType: false,
+    //         cache: false,
+    //         processData: false,
+    //         success: function(response) {
+    //             $('#'+formID)[0].reset();
+    //             $('#'+formID).hide();
+    //             $('#commentBoxReload').load(document.URL + ' #commentBoxReload');
+    //             $('#mesVal').html(response);
+    //             $('.message_alert').show();
+    //             setTimeout(function () {
+    //                 $("#messAlt").fadeOut(1500);
+    //             }, 600);
+    //
+    //         }
+    //     });
+    // }
 
      $(document).ajaxComplete(function(event, xhr) {
          let headerName = $('meta[name="csrf-header"]').attr('content');
