@@ -51,13 +51,16 @@ class Favorite extends BaseController
 
     /**
      * @description This method provides remove to wishlist
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function removeToWishlist(){
         $product_id = $this->request->getPost('product_id');
         $table = DB()->table('cc_customer_wishlist');
         $table->where('customer_id',$this->session->cusUserId)->where('product_id',$product_id)->delete();
-        print 'Successfully removed to wishlist';
+        $message = 'Successfully removed to wishlist';
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
     }
 
 }

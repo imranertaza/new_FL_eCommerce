@@ -39,17 +39,19 @@ class Cart extends BaseController {
 
     /**
      * @description This method provides check option
-     * @return void
+     * @return ResponseInterface
      */
     public function checkoption(){
         $product_id = $this->request->getPost('product_id');
         $table = DB()->table('cc_product_option');
         $check = $table->where('product_id',$product_id)->countAllResults();
-        if (!empty($check)){
-            print false;
-        }else{
-            print true;
-        }
+
+        $result = (!empty($check)) ? 'false' : 'true';
+
+        // Return new CSRF token
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($result);
     }
 
     /**
@@ -67,7 +69,7 @@ class Cart extends BaseController {
 
     /**
      * @description This method provides add to cart
-     * @return void
+     * @return ResponseInterface
      */
     public function addToCart(){
 
@@ -95,10 +97,17 @@ class Cart extends BaseController {
                 'size' => $size,
             );
             $this->cart->insert($data);
-            print 'Successfully add to cart';
+            $message = 'Successfully add to cart';
         }else{
-            print 'not enough quantity!';
+            $message = 'not enough quantity!';
         }
+
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
+
+//        $this->response->setHeader('X-CSRF-TOKEN', csrf_hash());
+//        return $this->response->setBody($message);
     }
 
     /**
@@ -154,7 +163,7 @@ class Cart extends BaseController {
 
     /**
      * @description This method provides add to cart group
-     * @return void
+     * @return ResponseInterface
      */
     public function addToCartGroup(){
 
@@ -175,7 +184,10 @@ class Cart extends BaseController {
             );
             $this->cart->insert($data);
         }
-        print 'Successfully add to cart';
+        $message = 'Successfully add to cart';
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
     }
 
     /**
@@ -203,13 +215,14 @@ class Cart extends BaseController {
             }
         }
         $data['cartTotal'] = Cart()->total();
+        $data['csrfToken'] = csrf_hash();
 
         return $this->response->setJSON($data);
     }
 
     /**
      * @description This method provides remove to cart
-     * @return void
+     * @return ResponseInterface
      */
     public function removeToCart(){
         $rowid = $this->request->getPost('rowid');
@@ -221,7 +234,10 @@ class Cart extends BaseController {
             unset($_SESSION['coupon_discount_shipping']);
         }
 
-        print Cart()->total();
+        $total = Cart()->total();
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($total);
     }
 
     /**

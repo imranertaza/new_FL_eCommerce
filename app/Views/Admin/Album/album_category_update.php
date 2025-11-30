@@ -37,6 +37,7 @@
             </div>
             <div class="card-body">
                 <form action="<?php echo base_url('album_category_update_action')?>" method="post" enctype="multipart/form-data">
+                    <?= csrf_field() ?>
                     <div class="row" id="reloadImg">
 
                         <div class="col-md-6">

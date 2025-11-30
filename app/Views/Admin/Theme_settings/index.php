@@ -68,6 +68,7 @@
                                     <div class="col-md-6">
                                         <form action="<?php echo base_url('slider_update') ?>" method="post"
                                               enctype="multipart/form-data">
+                                            <?= csrf_field() ?>
                                             <div class="form-group mt-5">
                                                 <?php
                                                 $sli_1 = get_lebel_by_value_in_theme_settings('slider_1');
@@ -94,6 +95,7 @@
 
                                         <form action="<?php echo base_url('slider_update') ?>" method="post"
                                               enctype="multipart/form-data">
+                                            <?= csrf_field() ?>
                                             <div class="form-group mt-5">
                                                 <?php
                                                 $sli_3 = get_lebel_by_value_in_theme_settings('slider_3');
@@ -118,6 +120,7 @@
                                     <div class="col-md-6">
                                         <form action="<?php echo base_url('slider_update') ?>" method="post"
                                               enctype="multipart/form-data">
+                                            <?= csrf_field() ?>
                                             <div class="form-group mt-5">
                                                 <?php
                                                 $sli_2 = get_lebel_by_value_in_theme_settings('slider_2');
@@ -141,6 +144,7 @@
 
                                         <form action="<?php echo base_url('slider_update') ?>" method="post"
                                               enctype="multipart/form-data">
+                                            <?= csrf_field() ?>
                                             <div class="form-group mt-5">
                                                 <?php
                                                 $sli_4 = get_lebel_by_value_in_theme_settings('slider_4');
@@ -167,6 +171,7 @@
                                     <div class="col-md-6">
                                         <form action="<?php echo base_url('slider_update') ?>" method="post"
                                               enctype="multipart/form-data">
+                                            <?= csrf_field() ?>
                                             <div class="form-group mt-5">
                                                 <?php
                                                 $sli_5 = get_lebel_by_value_in_theme_settings('slider_5');
@@ -199,6 +204,7 @@
                                     <div class="col-md-6">
                                         <form action="<?php echo base_url('logo_update') ?>" method="post"
                                               enctype="multipart/form-data">
+                                            <?= csrf_field() ?>
                                             <div class="form-group mt-5">
                                                 <?php
                                                 $side_logo = get_lebel_by_value_in_theme_settings('side_logo');
@@ -222,6 +228,7 @@
                                     <div class="col-md-6">
                                         <form action="<?php echo base_url('favicon_update') ?>" method="post"
                                               enctype="multipart/form-data">
+                                            <?= csrf_field() ?>
                                             <div class="form-group mt-5">
                                                 <?php
                                                 $favicon = get_lebel_by_value_in_theme_settings('favicon');

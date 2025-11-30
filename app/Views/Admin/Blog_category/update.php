@@ -61,6 +61,7 @@
                                 <div class="tab-content" id="custom-tabs-four-tabContent">
                                     <div class="tab-pane fade active show" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
                                         <form action="<?php echo base_url('blog_category_update_action') ?>" method="post" enctype="multipart/form-data">
+                                            <?= csrf_field() ?>
                                             <div class="row">
                                                 <div class="col-md-6">
 
@@ -128,6 +129,7 @@ foreach ($icons as $valic) { ?>
                                     </div>
                                     <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
                                         <form action="<?php echo base_url('blog_category_update_action_others') ?>" method="post" enctype="multipart/form-data">
+                                            <?= csrf_field() ?>
                                             <div class="row">
                                                 <div class="col-md-6">
 

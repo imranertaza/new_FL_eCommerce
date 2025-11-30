@@ -94,10 +94,13 @@
 <?= $this->section('java_script') ?>
 <script>
     function changeStatus(id) {
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('module_update') ?>",
             data: {
+                [csrfName]: csrfHash,
                 id: id
             },
             beforeSend: function() {

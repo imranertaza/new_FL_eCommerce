@@ -1,5 +1,6 @@
 
 <form id="categoryForm" action="<?php echo base_url('bulk_category_update') ?>" data-row="update_<?php echo $product_id;?>" method="post">
+    <?= csrf_field() ?>
     <div class="modal-header">
         <h4 class="modal-title">Default Modal</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">

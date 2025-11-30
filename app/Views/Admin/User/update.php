@@ -61,6 +61,7 @@
                                     <div class="tab-content" id="custom-tabs-four-tabContent">
                                         <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
                                             <form action="<?php echo base_url('user_update_action')?>" method="post" >
+                                                <?= csrf_field() ?>
                                             <div class="form-group">
                                                 <label>Name</label>
                                                 <input type="text" name="name" class="form-control" placeholder="Name" value="<?php echo $user->name;?>" required>
@@ -92,6 +93,7 @@
                                         </div>
                                         <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
                                             <form action="<?php echo base_url('user_general_action')?>" method="post">
+                                                <?= csrf_field() ?>
                                             <div class="form-group">
                                                 <label>Mobile</label>
                                                 <input type="mobile" name="mobile" class="form-control" placeholder="Mobile" value="<?php echo $user->mobile;?>" required>
@@ -118,6 +120,7 @@
                                         </div>
                                         <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
                                             <form action="<?php echo base_url('user_image_action')?>" method="post" enctype="multipart/form-data" >
+                                                <?= csrf_field() ?>
                                             <div class="form-group">
                                                 <?php echo image_view('uploads/user','',$user->pic,'noimage.png','');?>
                                             </div>

@@ -35,6 +35,7 @@
                             <a class="btn btn-xs btn-info float-right mr-2 mb-2" data-toggle="collapse" href="#collapseProduct" role="button" aria-expanded="false" aria-controls="collapseProduct">Settings</a>
 
                             <form id="multiActionForm" action="<?= base_url('bulk_product_multi_delete')?>" method="post">
+                                <?= csrf_field() ?>
                                 <button type="submit" formaction="<?= base_url('bulk_product_cpoy')?>" class="btn btn-secondary btn-xs float-right mr-2 mb-2"><i class="nav-icon fas fa-copy"></i> Copy</button>
                                 <?php if($modules['multi_delete'] == '1' ){ ?>
                                 <button type="submit" class="btn btn-danger btn-xs float-right mr-2 mb-2"><i class="fas fa-trash"></i> Multi delete</button>
@@ -170,6 +171,7 @@
                     </div>
                     <div id="tablereload">
                         <form id="tableForm" action="<?php echo base_url('bulk_edit_products')?>" method="GET" >
+                            <?= csrf_field() ?>
                             <div class="row mb-3">
                                 <div class="col-md-2 mx-auto">
 
@@ -347,7 +349,7 @@
     function updateFunction(proId, input, value, viewId, formName,updateRow) {
         var formID = "'" + formName + "'"
         var data = '<form id="' + formName +
-            '" action="<?php echo base_url('bulk_data_update') ?>" onkeydown="if(event.keyCode === 13) {return false;}" data-row="'+updateRow+'" method="post"><input type="text" name="' +
+            '" action="<?php echo base_url('bulk_data_update') ?>" onkeydown="if(event.keyCode === 13) {return false;}" data-row="'+updateRow+'" method="post"><?= csrf_field() ?><input type="text" name="' +
             input +
             '" class="form-control mb-2" value="' + value +
             '" ><input type="hidden" name="product_id" class="form-control mb-2" value="' + proId +
@@ -360,7 +362,7 @@
     function descriptionTableDataUpdateFunction(proId, input, value, viewId, formName,updateRow) {
         var formID = "'" + formName + "'"
         var data = '<form id="' + formName +
-            '" action="<?php echo base_url('description_data_update') ?>" onkeydown="if(event.keyCode === 13) {return false;}" data-row="'+updateRow+'" method="post"><input type="text" name="' +
+            '" action="<?php echo base_url('description_data_update') ?>" onkeydown="if(event.keyCode === 13) {return false;}" data-row="'+updateRow+'" method="post"><?= csrf_field() ?><input type="text" name="' +
             input +
             '" class="form-control mb-2" value="' + value +
             '" ><input type="hidden" name="product_desc_id" class="form-control mb-2" value="' + proId +
@@ -378,11 +380,18 @@
         var form = document.getElementById(formID);
         var upRow = $(form).attr('data-row');
 
+        var formData = new FormData(form);
+
+        // ADD CSRF TOKEN (important for CI4)
+        formData.append(
+            $('meta[name="csrf-name"]').attr("content"),
+            $('meta[name="csrf-token"]').attr("content")
+        );
         var done = false;
         $.ajax({
             url: $(form).prop('action'),
             type: "POST",
-            data: new FormData(form),
+            data: formData,
             contentType: false,
             cache: false,
             processData: false,
@@ -416,11 +425,13 @@
 
 
     function bulkAllStatusUpdate(proId, value, field,upRow) {
-
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: '<?php echo base_url('bulk_all_status_update') ?>',
             type: "POST",
             data: {
+                [csrfName]: csrfHash,
                 product_id: proId,
                 value: value,
                 fieldName: field
@@ -438,10 +449,13 @@
 
     function categoryBulkUpdate(proId) {
         $('#categoryModal').modal('show');
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: '<?php echo base_url('bulk_category_view') ?>',
             type: "POST",
             data: {
+                [csrfName]: csrfHash,
                 product_id: proId
             },
             success: function(data) {
@@ -454,11 +468,14 @@
     }
 
     function optionBulkUpdate(proId){
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $('#optionModal').modal('show');
         $.ajax({
             url: '<?php echo base_url('bulk_option_view') ?>',
             type: "POST",
             data: {
+                [csrfName]: csrfHash,
                 product_id: proId
             },
             success: function(data) {
@@ -532,11 +549,7 @@
             processData: false,
             success: function (data) {
                 $('#categoryModal').modal('hide');
-                // $("#message").html(data);
                 $("#mess").show();
-                // var div = $("#" + upRow).html(data);
-                // div.animate({opacity: '0.5'});
-                // div.animate({opacity: '1'});
                 checkShowHideRow();
 
             }
@@ -552,10 +565,13 @@
     }
 
     function searchOptionUp(key) {
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('product_option_search') ?>",
             data: {
+                [csrfName]: csrfHash,
                 key: key
             },
             beforeSend: function() {
@@ -593,11 +609,13 @@
 
     //option
     function add_option_new_ajax(id, option_id) {
-        // var data = '';
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('product_option_value_search') ?>",
             data: {
+                [csrfName]: csrfHash,
                 option_id: option_id
             },
             success: function(val) {
@@ -615,9 +633,6 @@
             }
 
         });
-
-
-
     }
 
     function remove_option_new_ajax(link, data) {

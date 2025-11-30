@@ -2,6 +2,7 @@
 <!--    id="tableReload"-->
     <div class="container">
         <form id="checkout-form" action="<?php echo base_url('checkout_action')  ?>" method="post" onsubmit="return onchackoutsubmit()">
+            <?= csrf_field() ?>
             <div class="row">
                 <div class="col-lg-12 ">
                     <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
