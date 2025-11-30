@@ -41,6 +41,7 @@
 
 
                 <form id="optionForm" action="<?php echo base_url('bulk_product_multi_price_action') ?>" method="post">
+                    <?= csrf_field() ?>
                     <div class="modal-header">
                         <h4 class="modal-title">Price</h4>
                     </div>

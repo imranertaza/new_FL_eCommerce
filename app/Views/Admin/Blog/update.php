@@ -38,6 +38,7 @@
             </div>
             <div class="card-body">
                 <form action="<?php echo base_url('blog_update_action')?>" method="post" enctype="multipart/form-data">
+                    <?= csrf_field() ?>
                     <div class="row">
 
                         <div class="col-md-6">

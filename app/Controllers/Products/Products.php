@@ -106,7 +106,7 @@ class Products extends BaseController {
 
     /**
      * @description This method provides option price calculate
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function optionPriceCalculate(){
 
@@ -135,7 +135,11 @@ class Products extends BaseController {
             $proPrice = $specialprice;
         }
 
-        print currency_symbol($proPrice + $totalOptionPrice);
+        $total = currency_symbol($proPrice + $totalOptionPrice);
+
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($total);
     }
 
     /**
@@ -173,7 +177,7 @@ class Products extends BaseController {
 
     /**
      * @description This method provides both product price
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function both_product_price(){
         $productId = $this->request->getPost('both_product[]');
@@ -183,7 +187,10 @@ class Products extends BaseController {
             $spPric = get_data_by_id('special_price','cc_product_special','product_id',$id);
             $total += !empty($spPric)?$spPric:$regPric;
         }
-        print currency_symbol($total);
+        $message = currency_symbol($total);
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
     }
 
     /**
@@ -329,17 +336,20 @@ class Products extends BaseController {
 
         $data['downloadUrl'] = $downloadUrl;
         $data['unlinkUrl'] = $unlinkUrl;
+        $data['csrfToken'] = csrf_hash();
 
         return json_encode($data);
     }
 
     /**
      * @description This method provides product image unlink
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function productImageUnlink(){
         $url = $this->request->getPost('url');
         $this->image_processing->image_unlink($url);
+
+        return $this->response->setHeader('X-CSRF-TOKEN', csrf_hash());
     }
 
 }

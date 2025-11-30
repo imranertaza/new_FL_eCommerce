@@ -7,6 +7,7 @@
                 </div>
             </div>
             <div class="col-xl-9 col-sm-12 d-flex flex-column flex-lg-row">
+                <?php if (empty($sliders)){ ?>
                 <div class="swiper bannerSlide me-1">
                     <div class="swiper-wrapper">
                         <?php $sli_1 = get_lebel_by_value_in_theme_settings('slider_1'); ?>
@@ -32,8 +33,23 @@
                     </div>
                     <div class="swiper-pagination"></div>
                 </div>
+                <?php }else{ ?>
+                    <div class="swiper bannerSlide me-1">
+                        <div class="swiper-wrapper">
+                            <?php foreach ($sliders as $slider){ ?>
+                            <div class="swiper-slide">
+                                <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/slider', '', $slider->image, 'noimage.png', '605', '401');?>" alt="<?php echo $slider->alt_name?>" class="img-fluid w-100" loading="lazy">
+                            </div>
+                            <?php } ?>
+
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                <?php }?>
+
                 <?php $theme_settings = get_theme_settings();?>
                 <div class="side-banner d-flex flex-column flex-sm-row flex-sm-row flex-lg-column gap-1" id="bannerSiderParent">
+                    <?php if (empty($slidersBanner)){ ?>
                     <div class="side-banner-box position-relative text-center custom-d-50 w-100">
                         <a href="<?php echo !empty($theme_settings['head_side_url_1']['value'])?$theme_settings['head_side_url_1']['value']:base_url('category/'.$theme_settings['head_side_category_1']['value']); ?>">
                             <?php
@@ -57,6 +73,19 @@
                             </div>
                         </a>
                     </div>
+                    <?php }else{ ?>
+                        <?php foreach ($slidersBanner as $sbanner ){ ?>
+                        <div class="side-banner-box position-relative text-center custom-d-50 w-100">
+                            <a href="<?php echo !empty($sbanner->url)?$sbanner->url:base_url('category/'.$sbanner->prod_cat_id); ?>">
+                                <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/top_side_baner', '', $sbanner->image, 'noimage.png', '228', '199');?>" alt="<?php echo $sbanner->alt_name?>" class="img-fluid" loading="lazy">
+                                <div class="position-absolute sid-text-n top-0 p-3">
+                                    <h4><?php echo $sbanner->title?></h4>
+                                </div>
+                            </a>
+                        </div>
+                        <?php } ?>
+
+                    <?php } ?>
                 </div>
             </div>
         </div>
@@ -65,6 +94,7 @@
 
 <section class="main-container">
     <div class="container">
+        <?php if (empty($categoryBanner)){ ?>
         <div class="featured-category mb-5">
             <a href="<?php echo !empty($theme_settings['banner_top_category_url']['value'])?$theme_settings['banner_top_category_url']['value']:base_url('category/'.$theme_settings['banner_top_category']['value']); ?>">
 
@@ -79,6 +109,15 @@
             <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/banner_featured_category', '', $banner_bottom, 'noimage.png', '1116', '211');?>" alt="<?php echo $theme_settings['banner_featured_category']['alt_name']?>" class="img-fluid" loading="lazy">
         </div>
         </a>
+        <?php }else{ ?>
+            <?php foreach ($categoryBanner as $key => $banner){ if ($key != 2){?>
+                <div class="featured-category mb-5">
+                    <a href="<?= !empty($banner->url)?$banner->url:base_url('category/'.$banner->prod_cat_id); ?>">
+                        <img data-sizes="auto"  id="" src="<?= common_image_view('uploads/banner_bottom', '', $banner->image, 'noimage.png', '1116', '211');?>" alt="<?= $banner->alt_name ?>" class="img-fluid " loading="lazy">
+                    </a>
+                </div>
+            <?php } } ?>
+        <?php }?>
 
         <div class="product-category mb-5 section-one">
             <?php $scheduleOne = getScheduleBySectionId($schedules,'1');?>
@@ -353,9 +392,17 @@
         </div>
 
         <div class="home-banner mb-5">
+            <?php if (empty($categoryBanner)){ ?>
             <a href="<?php echo !empty($theme_settings['banner_bottom_url']['value'])?$theme_settings['banner_bottom_url']['value']:base_url('category/'.$theme_settings['banner_bottom_category']['value']); ?>">
                 <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/banner_bottom', '', $theme_settings['banner_bottom']['value'], 'noimage.png', '1116', '422');?>" alt="<?php echo $theme_settings['banner_bottom']['alt_name']?>" class="" loading="lazy">
             </a>
+            <?php }else{ ?>
+            <?php foreach ($categoryBanner as $index => $banner){ if ($index == 2){?>
+                <a href="<?php echo !empty($banner->url)?$banner->url:base_url('category/'.$banner->prod_cat_id); ?>">
+                    <img data-sizes="auto"  id="" src="<?php echo common_image_view('uploads/banner_bottom', '', $banner->image, 'noimage.png', '1116', '211');?>" alt="<?= $banner->alt_name;?>" class="" loading="lazy">
+                </a>
+            <?php } }?>
+            <?php }?>
         </div>
     </div>
 </section>

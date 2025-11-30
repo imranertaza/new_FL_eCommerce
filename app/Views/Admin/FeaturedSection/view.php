@@ -53,7 +53,8 @@
                         ?>
                         <div class="col-md-12 mt-4 card">
                             <form action="<?= base_url('section_view_update_action')?>" method="post" enctype="multipart/form-data">
-                            <div class="row p-2">
+                                <?= csrf_field() ?>
+                                <div class="row p-2">
                                 <div class="col-md-12">
                                     <!-- Remove button -->
                                     <a href="<?= base_url('section_view_delete/'.$result->featured_schedule_id)?>" class="btn btn-danger float-right" onclick="return confirm('Are you sure you want to delete this section?');" >X</a>
@@ -155,6 +156,7 @@
                         <?php } ?>
 
                         <form action="<?= base_url('section_view_action')?>" method="post" enctype="multipart/form-data">
+                            <?= csrf_field() ?>
                             <div id="formRows">
                                 <div class="col-md-12 mt-4 card formRow">
                                     <div class="row p-2">

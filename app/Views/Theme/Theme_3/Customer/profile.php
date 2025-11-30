@@ -1,6 +1,7 @@
 <section class="main-container my-5">
     <div class="container">
         <form action="<?php echo base_url('profile_update_action')?>" method="Post" onsubmit="return onProfileForm()">
+            <?= csrf_field() ?>
             <div class="card border rounded-0">
                 <div class="card-body p-3 p-md-5">
                     <div class="row mb-4">

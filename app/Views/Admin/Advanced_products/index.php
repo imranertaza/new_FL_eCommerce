@@ -35,6 +35,7 @@
                             <a class="btn btn-xs btn-info float-right mr-2" data-toggle="collapse" href="#collapseProduct" role="button" aria-expanded="false" aria-controls="collapseProduct">Settings</a>
                             <a type="button" onclick="bulk_product_copy()" class="btn btn-secondary btn-xs float-right mr-2"><i class="nav-icon fas fa-copy"></i> Copy</a>
                             <form id="multiActionForm" action="<?= base_url('bulk_product_multi_delete')?>" method="post">
+                                <?= csrf_field() ?>
                             <?php if(modules_key_by_access('multi_delete') == '1' ){ ?>
                             <button type="submit" class="btn btn-danger btn-xs float-right mr-2"><i class="fas fa-trash"></i> Multi delete</button>
                             <?php } ?>

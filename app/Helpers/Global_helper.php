@@ -2071,3 +2071,12 @@ function getScheduleBySectionId($schedule,$sectionId)
     }
     return null;
 }
+function scheduleLogo(){
+    $now = date('Y-m-d H:i:s');
+    return DB()->table('cc_logo_schedule')
+        ->where('start_date <=',$now)
+        ->where('end_date >=',$now)
+        ->orderBy('start_date', 'ASC')
+        ->get()
+        ->getRow();
+}

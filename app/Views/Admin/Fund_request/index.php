@@ -102,6 +102,7 @@
             url: '<?php echo base_url('fund_request_action') ?>',
             type: "POST",
             data: {
+                '<?= csrf_token() ?>': '<?= csrf_hash() ?>',
                 status: val,
                 fund_request_id: id
             },

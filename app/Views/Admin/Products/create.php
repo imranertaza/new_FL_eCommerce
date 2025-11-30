@@ -21,8 +21,8 @@
 
     <!-- Main content -->
     <section class="content">
-        <form action="<?php echo base_url('product_create_action') ?>" method="post"
-              enctype="multipart/form-data">
+        <form action="<?php echo base_url('product_create_action') ?>" method="post" enctype="multipart/form-data">
+            <?= csrf_field() ?>
             <!-- Default box -->
             <div class="card">
                 <div class="card-header">
@@ -403,10 +403,13 @@
 <?= $this->section('java_script') ?>
 <script>
     function searchOptionUp(key) {
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('product_option_search') ?>",
             data: {
+                [csrfName]: csrfHash,
                 key: key
             },
             beforeSend: function() {
@@ -443,15 +446,17 @@
     //option
     function add_option_new_ajax(id, option_id) {
         // var data = '';
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('product_option_value_search') ?>",
             data: {
+                [csrfName]: csrfHash,
                 option_id: option_id
             },
             success: function(val) {
                 var data = val;
-
                 var new_chq_no = parseInt($('#total_chq').val()) + 1;
                 var new_input = "<div class='col-md-12 mt-3' id='new_" + new_chq_no +
                     "' ><input type='hidden' name='option[]' value='" + option_id +

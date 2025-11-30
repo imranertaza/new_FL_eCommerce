@@ -40,6 +40,7 @@
                 </div>
                 <div class="card-body">
                     <form action="<?php echo base_url('bulk_info_updater_action')?>" method="post">
+                        <?= csrf_field() ?>
                         <div class="row">
                             <div class="col-md-12">
                                 <table class="table table-responsive table-bordered table-striped">

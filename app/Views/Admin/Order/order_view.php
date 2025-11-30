@@ -303,6 +303,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <form action="<?php echo base_url('order_history_action') ?>" method="post">
+                                            <?= csrf_field() ?>
                                             <div class="form-group">
                                                 <label>Status <span class="requi">*</span></label>
 
@@ -333,6 +334,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <form action="<?php echo base_url('order_point_action') ?>" method="post">
+                                            <?= csrf_field() ?>
                                             <div class="form-group">
                                                 <label>Status <span class="requi">*</span></label>
                                                 <select class="form-control" name="status" required>

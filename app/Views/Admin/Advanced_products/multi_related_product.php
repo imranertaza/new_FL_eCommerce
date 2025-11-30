@@ -40,6 +40,7 @@
                 </div>
                 <div class="card-body">
                     <form action="<?php echo base_url('multi_related_product_action')?>" method="post">
+                        <?= csrf_field() ?>
                         <div class="row">
                             <div class="col-md-6" style="border: 1px solid #dfdfdf;padding: 10px;">
                                 <div class="form-group text-center" style="background-color: #bfbfbf;">

@@ -41,8 +41,8 @@
                 </div>
             </div>
             <div class="card-body">
-                <form action="<?php echo base_url('product_category_create_action') ?>" method="post"
-                    enctype="multipart/form-data">
+                <form action="<?php echo base_url('product_category_create_action') ?>" method="post" enctype="multipart/form-data">
+                    <?= csrf_field() ?>
                     <div class="row">
 
                         <div class="col-md-6">

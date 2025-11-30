@@ -7,7 +7,7 @@
             <div class="col-lg-6">
                 <form onsubmit="return passwordRecovery()" action="<?php echo base_url('reset_action')?>" method="post" class="sing-up" onchmait=>
                     <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
-
+                    <?= csrf_field() ?>
                     <div class="form-group">
                         <div class="input-group d-flex align-items-center bg-white border rounded-2 px-3 in_err">
                             <input class="form-control border-0 fw-bolder" id="password" name="password" type="password" placeholder="Password" required>

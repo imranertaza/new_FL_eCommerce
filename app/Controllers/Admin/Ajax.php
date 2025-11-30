@@ -41,7 +41,7 @@ class Ajax extends BaseController
 
     /**
      * @description This method provides module update
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function module_update(){
         $id = $this->request->getPost('id');
@@ -54,6 +54,8 @@ class Ajax extends BaseController
         } else {
             $table->where('module_id', $id)->update( ['status' => '1'] );
         }
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash());
     }
 
     /**

@@ -41,6 +41,7 @@
 
 
                 <form id="optionForm" action="<?php echo base_url('bulk_multi_category_action') ?>" method="post">
+                    <?= csrf_field() ?>
                     <div class="modal-header">
                         <h4 class="modal-title">Category</h4>
                     </div>

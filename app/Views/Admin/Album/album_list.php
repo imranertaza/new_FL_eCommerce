@@ -27,6 +27,7 @@
             <div class="card">
                 <div class="card-header">
                     <form id="multisubmitform" action="<?= base_url('album_download_action') ?>" method="post">
+                        <?= csrf_field() ?>
                         <div class="row">
                             <div class="col-md-4">
                                 <h3 class="card-title">Album List</h3>
@@ -145,7 +146,7 @@
         function updateFunctionAlbum(id, input, value, viewId, formName, updateRow) {
             var formID = "'" + formName + "'"
             var data = '<form id="' + formName +
-                '" action="<?php echo base_url('album_bulk_update_action') ?>" onkeydown="if(event.keyCode === 13) {return false;}" data-row="' + updateRow + '" method="post"><input type="text" name="' +
+                '" action="<?php echo base_url('album_bulk_update_action') ?>" onkeydown="if(event.keyCode === 13) {return false;}" data-row="' + updateRow + '" method="post"><?= csrf_field() ?><input type="text" name="' +
                 input +
                 '" class="form-control mb-2" value="' + value +
                 '" ><input type="hidden" name="album_id" class="form-control mb-2" value="' + id +
@@ -163,11 +164,17 @@
             var form = document.getElementById(formID);
             var upRow = $(form).attr('data-row');
 
+            var formData = new FormData(form);
+            // ADD CSRF TOKEN (important for CI4)
+            formData.append(
+                $('meta[name="csrf-name"]').attr("content"),
+                $('meta[name="csrf-token"]').attr("content")
+            );
             var done = false;
             $.ajax({
                 url: $(form).prop('action'),
                 type: "POST",
-                data: new FormData(form),
+                data: formData,
                 contentType: false,
                 cache: false,
                 processData: false,

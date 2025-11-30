@@ -1,6 +1,7 @@
 <div class="row">
 <div class="col-md-6 ">
         <form action="<?php echo base_url('home_category') ?>" method="post" enctype="multipart/form-data">
+            <?= csrf_field() ?>
             <div class="form-group">
                 <label>Home category</label>
                 <select name="home_category" class="form-control" required>
@@ -21,6 +22,7 @@
         </form>
         
         <form action="<?php echo base_url('home_category_banner') ?>" method="post" enctype="multipart/form-data">
+            <?= csrf_field() ?>
             <div class="form-group mt-5">
                 <?php
                     $banner_1 = get_lebel_by_value_in_theme_settings('home_category_banner');
@@ -39,16 +41,17 @@
 
     <div class="col-md-6">
     <form action="<?php echo base_url('settings_update') ?>" method="post" enctype="multipart/form-data">
+        <?= csrf_field() ?>
 
-<div class="form-group">
-    <label>Featured Products Limit</label>
-    <input type="number" name="value" class="form-control"
-        value="<?php echo get_lebel_by_value_in_theme_settings('featured_products_limit');?>" required>
-    <input type="hidden" name="label" value="featured_products_limit" required>
-</div>
+        <div class="form-group">
+            <label>Featured Products Limit</label>
+            <input type="number" name="value" class="form-control"
+                value="<?php echo get_lebel_by_value_in_theme_settings('featured_products_limit');?>" required>
+            <input type="hidden" name="label" value="featured_products_limit" required>
+        </div>
 
-<button class="btn btn-primary">Save</button>
-</form>
+        <button class="btn btn-primary">Save</button>
+    </form>
 
         
 

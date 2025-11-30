@@ -22,6 +22,7 @@
     <!-- Main content -->
     <section class="content">
         <form id="multisubmitform" action="<?php echo base_url('product_copy_action'); ?>" method="post">
+            <?= csrf_field() ?>
         <!-- Default box -->
         <div class="card">
             <div class="card-header">

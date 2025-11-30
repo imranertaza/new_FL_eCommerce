@@ -349,6 +349,7 @@
             method: "POST",
             url: "<?php echo base_url('get_state') ?>",
             data: {
+                '<?= csrf_token() ?>': '<?= csrf_hash() ?>',
                 country_id: country_id
             },
             beforeSend: function() {
