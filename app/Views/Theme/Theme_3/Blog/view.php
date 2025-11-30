@@ -92,23 +92,41 @@
             </div>
 
             <div class="col-md-12 mt-3" >
-                <form id="commentForm" action="<?php echo base_url('blog-comment-action');?>"  method="post">
+                <form id="commentForm" class="login_form" action="<?php echo base_url('blog-comment-action');?>"  method="post">
+                    <?= csrf_field() ?>
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="name" placeholder="Name" required >
+                                <input type="text" class="form-control" name="name" placeholder="Name"  >
+                                <span class="text-danger err d-inline-block text-capitalize" id="messageName"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <input type="email" class="form-control" name="email" placeholder="Email" required >
+                                <input type="email" class="form-control" name="email" placeholder="Email"  >
                                 <input type="hidden" name="blog_id" placeholder="blog_id" value="<?php echo $blog->blog_id; ?>" >
+                                <span class="text-danger err d-inline-block text-capitalize" id="messageEmail"></span>
                             </div>
                         </div>
                     </div>
                     <div class="form-group mt-3">
                         <textarea class="form-control" name="comment" id="exampleFormControlTextarea1" rows="10"
-                                  placeholder="Write a comment" required ></textarea>
+                                  placeholder="Write a comment"  ></textarea>
+                        <span class="text-danger err d-inline-block text-capitalize" id="messageComment"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <div id="captcha" class="form_div mt-3">
+                            <input type="hidden" id="genaretCapt" >
+                            <div class="preview"></div>
+                            <div class="captcha_form">
+                                <input type="text" id="captcha_form" class="form_input_captcha" placeholder="Enter Captcha ">
+                                <button type="button" class="captcha_refersh">
+                                    <i class="fa fa-refresh"></i>
+                                </button>
+                            </div>
+                            <span class="text-danger err d-inline-block text-capitalize" id="messageRecaptcha"></span>
+                        </div>
                     </div>
 
 
@@ -150,3 +168,22 @@
         </div>
     </div>
 </section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // Generate Captcha
+        function generateCaptcha() {
+            let captcha = Math.random().toString(36).substring(2, 8).toUpperCase();
+            document.getElementById("genaretCapt").value = captcha;
+            document.querySelector(".preview").innerHTML = captcha;
+        }
+
+        generateCaptcha();
+
+        document.querySelector(".captcha_refersh").addEventListener("click", function () {
+            generateCaptcha();
+        });
+
+    });
+</script>

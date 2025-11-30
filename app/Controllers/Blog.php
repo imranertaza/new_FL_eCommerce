@@ -104,9 +104,9 @@ class Blog extends BaseController
         $data['name'] = $this->request->getPost('name');
 
         $this->validation->setRules([
-            'comment' => ['label' => 'Comment', 'rules' => 'required'],
-            'email' => ['label' => 'Email', 'rules' => 'required'],
-            'name' => ['label' => 'Name', 'rules' => 'required'],
+            'comment' => ['label' => 'Comment', 'rules' => 'required|min_length[3]|max_length[500]|regex_match[/^[^<>]*$/]'],
+            'email' => ['label' => 'Email', 'rules' => 'required|valid_email'],
+            'name' => ['label' => 'Name', 'rules' => 'required|min_length[2]|max_length[20]|'],
         ]);
 
         if ($this->validation->run($data) == false) {
@@ -157,9 +157,9 @@ class Blog extends BaseController
         $data['com_text'] = $this->request->getPost('com_text');
 
         $this->validation->setRules([
-            'com_email' => ['label' => 'Email', 'rules' => 'required'],
-            'com_name' => ['label' => 'Name', 'rules' => 'required'],
-            'com_text' => ['label' => 'Text', 'rules' => 'required'],
+            'com_email' => ['label' => 'Email', 'rules' => 'required|min_length[3]|max_length[500]|regex_match[/^[^<>]*$/]'],
+            'com_name' => ['label' => 'Name', 'rules' => 'required|min_length[2]|max_length[20]|'],
+            'com_text' => ['label' => 'Text', 'rules' => 'required|valid_email'],
         ]);
 
         if ($this->validation->run($data) == false) {
