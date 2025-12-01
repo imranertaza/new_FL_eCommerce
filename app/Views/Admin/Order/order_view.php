@@ -376,10 +376,12 @@
 <?= $this->section('java_script') ?>
     <script>
         function payment_status_update(status,orderId){
+            let csrfName = $('meta[name="csrf-name"]').attr('content');
+            let csrfHash = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 type: "POST",
                 url: "<?php echo base_url('order_payment_status_action');?>",
-                data: {status:status,order_id:orderId },
+                data: {[csrfName]: csrfHash,status:status,order_id:orderId },
                 success: function(data){
                     $('#message').html(data); // show response from the php script.
                 }

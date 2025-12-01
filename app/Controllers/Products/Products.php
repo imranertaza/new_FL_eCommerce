@@ -182,16 +182,19 @@ class Products extends BaseController {
     public function both_product_price(){
         $productId = $this->request->getPost('both_product[]');
         $total = 0;
-        foreach ($productId as $id){
-            $regPric = get_data_by_id('price','cc_products','product_id',$id);
-            $spPric = get_data_by_id('special_price','cc_product_special','product_id',$id);
-            $total += !empty($spPric)?$spPric:$regPric;
+        if (!empty($productId)) {
+            foreach ($productId as $id) {
+                $regPric = get_data_by_id('price', 'cc_products', 'product_id', $id);
+                $spPric = get_data_by_id('special_price', 'cc_product_special', 'product_id', $id);
+                $total += !empty($spPric) ? $spPric : $regPric;
+            }
         }
         $message = currency_symbol($total);
         return $this->response
             ->setHeader('X-CSRF-TOKEN', csrf_hash())
             ->setBody($message);
     }
+
 
     /**
      * @description This method provides option view

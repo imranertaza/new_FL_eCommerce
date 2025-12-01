@@ -334,7 +334,7 @@ class Advanced_products extends BaseController
 
     /**
      * @description This method provides bulk option update
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function bulk_option_update(){
         $product_id = $this->request->getPost('product_id');
@@ -367,7 +367,9 @@ class Advanced_products extends BaseController
         $table2 = DB()->table('cc_products');
         $data['val'] = $table2->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id')->where('cc_products.product_id', $product_id)->get()->getRow();
 
-        echo view('Admin/Advanced_products/row', $data);
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody(view('Admin/Advanced_products/row', $data));
     }
 
     /**

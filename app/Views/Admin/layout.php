@@ -615,6 +615,7 @@
         let newToken   = xhr.getResponseHeader(headerName);
         if (newToken) {
             $('meta[name="csrf-token"]').attr('content', newToken);
+            $('input[name="<?= csrf_token() ?>"]').val(newToken);
         }
     });
 
