@@ -209,8 +209,11 @@ class Order extends BaseController
 
         }
 
-        print '<div class="alert alert-success alert-dismissible" role="alert"> Payment status update success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        $message = '<div class="alert alert-success alert-dismissible" role="alert"> Payment status update success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
 
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
     }
 
     public function point_action(){
