@@ -967,32 +967,34 @@
 
     }
 
-    function bothPriceCalculat() {
+     function bothPriceCalculat() {
 
-        var formData = $('#both-product').serialize();
-        // ADD CSRF TOKEN (important for CI4)
-        formData.append(
-            $('meta[name="csrf-name"]').attr("content"),
-            $('meta[name="csrf-token"]').attr("content")
-        );
-        $.ajax({
-            type: "POST",
-            url: '<?php echo base_url('both_product_price') ?>',
-            data: formData,
-            success: function(data) {
-                $('#price-both').html(data);
-            }
-        });
-    }
+         let csrfName = $('meta[name="csrf-name"]').attr("content");
+         let csrfHash = $('meta[name="csrf-token"]').attr("content");
+
+         // Serialize form
+         let formData = $('#both-product').serialize();
+
+         // Append CSRF to the serialized string
+         formData += '&' + csrfName + '=' + csrfHash;
+
+         $.ajax({
+             type: "POST",
+             url: "<?php echo base_url('both_product_price') ?>",
+             data: formData,
+             success: function (data) {
+                 $('#price-both').html(data);
+             }
+         });
+     }
 
     function groupAdtoCart() {
+        let csrfName = $('meta[name="csrf-name"]').attr("content");
+        let csrfHash = $('meta[name="csrf-token"]').attr("content");
         var formData = $('#both-product').serialize();
 
         // ADD CSRF TOKEN (important for CI4)
-        formData.append(
-            $('meta[name="csrf-name"]').attr("content"),
-            $('meta[name="csrf-token"]').attr("content")
-        );
+        formData += '&' + csrfName + '=' + csrfHash;
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('addtocartgroup') ?>",
@@ -1571,36 +1573,6 @@
              }
          });
      }
-
-    // function commentReplyAction(formID){
-    //     var form = document.getElementById(formID);
-    //     var formData = new FormData(form);
-    //
-    //     // ADD CSRF TOKEN (important for CI4)
-    //     formData.append(
-    //         $('meta[name="csrf-name"]').attr("content"),
-    //         $('meta[name="csrf-token"]').attr("content")
-    //     );
-    //     $.ajax({
-    //         url: $(form).prop('action'),
-    //         type: "POST",
-    //         data: formData,
-    //         contentType: false,
-    //         cache: false,
-    //         processData: false,
-    //         success: function(response) {
-    //             $('#'+formID)[0].reset();
-    //             $('#'+formID).hide();
-    //             $('#commentBoxReload').load(document.URL + ' #commentBoxReload');
-    //             $('#mesVal').html(response);
-    //             $('.message_alert').show();
-    //             setTimeout(function () {
-    //                 $("#messAlt").fadeOut(1500);
-    //             }, 600);
-    //
-    //         }
-    //     });
-    // }
 
      $(document).ajaxComplete(function(event, xhr) {
          let headerName = $('meta[name="csrf-header"]').attr('content');
