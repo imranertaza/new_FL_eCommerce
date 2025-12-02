@@ -114,10 +114,13 @@
     }
 
     function zoneVal(val,idview){
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('get_zone_value') ?>",
             data: {
+                [csrfName]: csrfHash,
                 country_id: val
             },
             beforeSend: function() {
