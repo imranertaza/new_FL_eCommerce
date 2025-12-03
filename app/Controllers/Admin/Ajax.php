@@ -79,7 +79,7 @@ class Ajax extends BaseController
 
     /**
      * @description This method provides get zone value
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
 
     public function get_zone_value(){
@@ -92,7 +92,10 @@ class Ajax extends BaseController
             $options .= '<option value="' . $value->zone_id . '" ';
             $options .= '>' . $value->name. '</option>';
         }
-        print $options;
+
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($options);
 
 
     }
