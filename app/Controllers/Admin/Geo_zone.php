@@ -237,7 +237,7 @@ class Geo_zone extends BaseController
 
     /**
      * @description This method provides geo zone detail delete
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function geo_zone_detail_delete(){
 
@@ -246,8 +246,11 @@ class Geo_zone extends BaseController
         $table = DB()->table('cc_geo_zone_details');
         $table->where('geo_zone_details_id', $geo_zone_details_id)->delete();
 
-        print '<div class="alert alert-success alert-dismissible" role="alert">Zone Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        $message = '<div class="alert alert-success alert-dismissible" role="alert">Zone Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
 
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
     }
 
     /**
