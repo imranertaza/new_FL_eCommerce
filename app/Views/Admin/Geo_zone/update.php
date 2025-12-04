@@ -146,10 +146,13 @@
     }
 
     function deleteZone(details_id){
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('geo_zone_detail_delete') ?>",
             data: {
+                [csrfName]: csrfHash,
                 geo_zone_details_id: details_id
             },
             beforeSend: function() {
