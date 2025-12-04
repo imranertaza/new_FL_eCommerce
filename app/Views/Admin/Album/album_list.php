@@ -91,7 +91,7 @@
                                 </td>
                                 <td>
                                     <?php $img = str_replace("pro_", "", $val->thumb);
-                                    $url = base_url('uploads/album/' . $val->album_id . '/wm_' . $img); ?>
+                                    $url = base_url('uploads/album/' . $val->album_id . '/600_wm_' . $img); ?>
                                     <a class="album-image-link" href="<?= $url; ?>"
                                        data-lightbox="album-set-<?= $val->album_id; ?>">
                                         <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/album', $val->album_id, $val->thumb, 'noimage.png', '50', '50');?>" alt="<?php echo $val->alt_name?>" class="img-fluid " loading="lazy">
