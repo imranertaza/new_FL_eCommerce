@@ -159,7 +159,7 @@ class Products extends BaseController {
         ]);
 
         if ($this->validation->run($data) == FALSE) {
-            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">' . $this->validation->listErrors() .'</div>');
+            $this->session->setFlashdata('message', $this->validation->listErrors());
             return redirect()->to('detail/'. $data['product_id']);
         } else {
 
@@ -170,7 +170,7 @@ class Products extends BaseController {
             $tablePro = DB()->table('cc_products');
             $tablePro->where('product_id',$data['product_id'])->update($dataRet);
 
-            $this->session->setFlashdata('message', '<div class="alert-success-m alert-success alert-dismissible" role="alert">Successfully submitted review</div>');
+            $this->session->setFlashdata('message', 'Successfully submitted review');
             return redirect()->to('detail/'. $data['product_id']);
         }
     }
