@@ -73,6 +73,7 @@
                     </tbody>
                     <tfoot>
                     <tr>
+                        <th></th>
                         <th>Id</th>
                         <th>Name</th>
                         <th>Amount</th>
