@@ -157,10 +157,12 @@
 
     function product_delete(id){
         if (confirm('Do you want to delete it?')) {
+            let csrfName = $('meta[name="csrf-name"]').attr('content');
+            let csrfHash = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 method: "POST",
                 url: "<?php echo base_url('product_delete') ?>",
-                data: {product_id: id},
+                data: {[csrfName]: csrfHash,product_id: id},
                 beforeSend: function () {
                     $("#loading-image").show();
                 },
