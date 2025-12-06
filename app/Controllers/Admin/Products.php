@@ -993,7 +993,7 @@ class Products extends BaseController
 
     /**
      * @description This method provides product delete
-     * @return void
+     * @return ResponseInterface
      */
     public function delete()
     {
@@ -1053,7 +1053,11 @@ class Products extends BaseController
 
         DB()->transComplete();
 
-        print '<div class="alert alert-success alert-dismissible" role="alert">Products Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        $message = '<div class="alert alert-success alert-dismissible" role="alert">Products Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
     }
 
     /**
