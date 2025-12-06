@@ -161,9 +161,9 @@ class Blog extends BaseController
         $data['com_text'] = $this->request->getPost('com_text');
 
         $this->validation->setRules([
-            'com_email' => ['label' => 'Email', 'rules' => 'required|min_length[3]|max_length[500]|regex_match[/^[^<>]*$/]'],
+            'com_email' => ['label' => 'Email', 'rules' => 'required|valid_email'],
             'com_name' => ['label' => 'Name', 'rules' => 'required|min_length[2]|max_length[20]|'],
-            'com_text' => ['label' => 'Text', 'rules' => 'required|valid_email'],
+            'com_text' => ['label' => 'Text', 'rules' => 'required|min_length[3]|max_length[500]|regex_match[/^[^<>]*$/]'],
         ]);
 
         if ($this->validation->run($data) == false) {
