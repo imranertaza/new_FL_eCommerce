@@ -412,6 +412,7 @@
                             </div>
                             <?php } ?>
                             <form action="<?php echo base_url('review') ?>" method="post" class="product-review w-50">
+                                <?= csrf_field() ?>
                                 <p class="mb-4 mt-2"><strong>Your Rating</strong></p>
                                 <?php if (isset(newSession()->isLoggedInCustomer)) {
                                     if (empty(check_review($products->product_id))) { ?>
