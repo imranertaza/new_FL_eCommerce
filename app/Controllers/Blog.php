@@ -94,7 +94,7 @@ class Blog extends BaseController
 
     /**
      * @description This method provides Comment action
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function commentAction()
     {
@@ -110,7 +110,7 @@ class Blog extends BaseController
         ]);
 
         if ($this->validation->run($data) == false) {
-            print  $this->validation->listErrors();
+            $message =  $this->validation->listErrors();
         } else {
             $dataComment['blog_id'] = $data['blog_id'];
             $dataComment['comment_author'] = $data['name'];
@@ -121,8 +121,12 @@ class Blog extends BaseController
             $table = DB()->table('cc_blog_comments');
             $table->insert($dataComment);
 
-            print 'Comment Save successfully';
+            $message = 'Comment Save successfully';
         }
+
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
     }
 
     /**
@@ -163,7 +167,7 @@ class Blog extends BaseController
         ]);
 
         if ($this->validation->run($data) == false) {
-            print  $this->validation->listErrors();
+            $message =  $this->validation->listErrors();
         } else {
             $blog_id = get_data_by_id('blog_id', 'cc_blog_comments', 'comment_id', $data['comment_id']);
             $dataComment['blog_id'] = $blog_id;
@@ -176,8 +180,12 @@ class Blog extends BaseController
             $table = DB()->table('cc_blog_comments');
             $table->insert($dataComment);
 
-            print 'Comment Save successfully';
+            $message = 'Comment Save successfully';
         }
+
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
     }
 
 
