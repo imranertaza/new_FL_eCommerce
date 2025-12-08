@@ -1479,23 +1479,98 @@ function get_category_id_by_product_show_home_slide($category_id)
 }
 
 function getProductByScheduleIdShowHomeSlider($scheduleId){
-    $builder = DB()->table('cc_products p')
-        ->select('p.*, fp.featured_product_id, ptc.category_id')
-        ->join('cc_product_to_category ptc', 'ptc.product_id = p.product_id', 'left')
-        ->join('cc_featured_product fp',
-            '(fp.product_id = p.product_id 
-                    OR fp.brand_id = p.brand_id 
-                    OR fp.prod_cat_id = ptc.category_id)',
-            'left'
-        )
-        ->where('p.status', 'Active')
-        ->where('p.featured', '1')
-        ->where('fp.featured_schedule_id', $scheduleId)
-        ->groupBy('p.product_id')
-        ->orderBy('p.product_id', 'DESC')
-        ->limit(20);
+//    $builder = DB()->table('cc_products p')
+//        ->select('p.*, fp.featured_product_id, ptc.category_id')
+//        ->join('cc_product_to_category ptc', 'ptc.product_id = p.product_id', 'left')
+//        ->join('cc_featured_product fp',
+//            '(fp.product_id = p.product_id
+//                    OR fp.brand_id = p.brand_id
+//                    OR fp.prod_cat_id = ptc.category_id)',
+//            'left'
+//        )
+//        ->where('p.status', 'Active')
+//        ->where('p.featured', '1')
+//        ->where('fp.featured_schedule_id', $scheduleId)
+//        ->groupBy('p.product_id')
+//        ->orderBy('p.product_id', 'DESC')
+//        ->limit(20);
+//
+//    $result = $builder->get()->getResult();
 
-    $result = $builder->get()->getResult();
+
+    $db = DB();
+    $featured = $db->table('cc_featured_product')
+        ->where('featured_schedule_id', $scheduleId)
+        ->get()
+        ->getResult();
+
+    $result = [];
+
+    // No row found
+    if (empty($featured)) {
+        return sectionProductViewByProductArray([]);
+    }
+
+    // Detect type from first row
+    $type = null;
+    $first = $featured[0];
+
+    if (!empty($first->product_id)) {
+        $type = 'product';
+    } elseif (!empty($first->brand_id)) {
+        $type = 'brand';
+    } elseif (!empty($first->prod_cat_id)) {
+        $type = 'category';
+    }
+
+    // Handle by type
+    if ($type === 'product') {
+
+        foreach ($featured as $item) {
+            $product = $db->table('cc_products')
+                ->where('product_id', $item->product_id)
+                ->where('status', 'Active')
+                ->where('featured', '1')
+                ->get()
+                ->getRow();
+
+            if ($product) {
+                $result[] = $product;
+            }
+        }
+
+    } elseif ($type === 'brand') {
+
+        foreach ($featured as $item) {
+            $product = $db->table('cc_products')
+                ->where('brand_id', $item->brand_id)
+                ->where('status', 'Active')
+                ->where('featured', '1')
+                ->get()
+                ->getRow();
+
+            if ($product) {
+                $result[] = $product;
+            }
+        }
+
+    } elseif ($type === 'category') {
+
+        foreach ($featured as $item) {
+            $product = $db->table('cc_products p')
+                ->join('cc_product_to_category ptc', 'ptc.product_id = p.product_id')
+                ->where('ptc.category_id', $item->prod_cat_id)
+                ->where('p.status', 'Active')
+                ->where('p.featured', '1')
+                ->get()
+                ->getRow();
+
+            if ($product) {
+                $result[] = $product;
+            }
+        }
+
+    }
 
     return  sectionProductViewByProductArray($result);
 }
