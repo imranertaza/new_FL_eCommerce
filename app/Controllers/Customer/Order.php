@@ -40,10 +40,9 @@ class Order extends BaseController
             $data['keywords'] = $settings['meta_keyword'];
             $data['description'] = $settings['meta_description'];
             $data['title'] = 'Order List';
-            echo view('Theme/'.$settings['Theme'].'/header',$data);
-            echo view('Theme/'.$settings['Theme'].'/Customer/menu');
+
             echo view('Theme/'.$settings['Theme'].'/Customer/order',$data);
-            echo view('Theme/'.$settings['Theme'].'/footer');
+
         }
     }
 
@@ -71,10 +70,8 @@ class Order extends BaseController
             $data['description'] = $settings['meta_description'];
             $data['title'] = 'Invoice';
 
-            echo view('Theme/'.$settings['Theme'].'/header',$data);
-            echo view('Theme/'.$settings['Theme'].'/Customer/menu');
             echo view('Theme/'.$settings['Theme'].'/Customer/invoice',$data);
-            echo view('Theme/'.$settings['Theme'].'/footer');
+
         }
     }
 

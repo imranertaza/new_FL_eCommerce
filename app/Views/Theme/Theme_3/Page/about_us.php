@@ -1,4 +1,6 @@
-<section class="main-container my-0">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container my-0">
     <div class="history bg-white py-4">
         <div class="container">
             <div class="row">
@@ -73,4 +75,5 @@
             </div>
         </div>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

@@ -69,15 +69,12 @@ class Category extends BaseController {
         $data['ratingView'] = $filter->product_array_by_rating_view($data['ratingval']);
         $data['productsArr'] = $productsArr;
 
-//        print $data['optionView'];
-//        die();
         setcookie('category_cookie',$cat_id,time()+86400, "/");
 
         $data['prod_cat_id'] = $cat_id;
         $data['page_title'] = 'Category products';
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
+
         echo view('Theme/'.$settings['Theme'].'/Category/index',$data);
-        echo view('Theme/'.$settings['Theme'].'/footer', $data);
     }
 
     /**
@@ -165,8 +162,7 @@ class Category extends BaseController {
         $data['title'] = !empty($settings['meta_title'])?$settings['meta_title']:$settings['store_name'];
 
         $data['page_title'] = 'Category Not Found';
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
-        echo view('Theme/'.$settings['Theme'].'/Category/not_found');
-        echo view('Theme/'.$settings['Theme'].'/footer');
+
+        echo view('Theme/'.$settings['Theme'].'/Category/not_found',$data);
     }
 }

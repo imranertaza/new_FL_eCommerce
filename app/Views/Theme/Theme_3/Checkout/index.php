@@ -1,4 +1,6 @@
-<section class="main-container checkout" id="tableReload2">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container checkout" id="tableReload2">
 <!--    id="tableReload"-->
     <div class="container">
         <form id="checkout-form" action="<?php echo base_url('checkout_action')  ?>" method="post" onsubmit="return onchackoutsubmit()">
@@ -472,10 +474,75 @@
             </div>
         </form>
     </div>
-</section>
-
+</div>
+<?= $this->endSection() ?>
+<?= $this->section('java_script') ?>
 <script>
     $(document).ready(function() {
         shippingCharge();
     });
+    function instruction_view(id, code) {
+        if (code == 'paypal') {
+            $('#checkout-form').attr('action', '<?php echo base_url('payment_paypal'); ?>');
+            $('#checkout-form').attr('method', 'GET');
+        }else if(code == 'stripe'){
+            $('#checkout-form').attr('action', '<?php echo base_url('payment_stripe'); ?>');
+            $('#checkout-form').attr('method', 'POST');
+        }else if(code == 'oisbizcraft'){
+            $('#checkout-form').attr('action', '<?php echo base_url('payment_oisbizcraft'); ?>');
+            $('#checkout-form').attr('method', 'POST');
+        } else {
+            $('#checkout-form').attr('action', '<?php echo base_url('checkout_action'); ?>');
+            $('#checkout-form').attr('method', 'POST');
+        }
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
+
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('payment_instruction') ?>",
+            data: {
+                [csrfName]: csrfHash,
+                id: id
+            },
+            success: function(response) {
+                $('#instruction').html(response);
+                if (code != 'credit_card') {
+                    $('#cardForm').html('');
+                }
+            }
+        });
+    }
+
+    function cardForm(code) {
+        var view =
+            '<div class="title-checkout"><label class="btn bg-custom-color text-white w-100 rounded-0"><span class="text-label">Credit Card</span></label></div><div class="payment-method group-check mb-4 pb-4"><div class="row px-5 py-2"><div class="form-group mb-4 col-md-12"><label class="w-100" for="name">Card Name</label><input class="form-control rounded-0" type="text" id="card_name" name="card_name" placeholder="" required=""></div><div class="form-group mb-4 col-md-12"><label class="w-100" for="name">Card Number</label><input class="form-control rounded-0" type="number" id="card_number" name="card_number" placeholder="" required=""></div><div class="form-group mb-4 col-md-6"><label class="w-100" for="name">Expiration (mmyy)</label><input class="form-control rounded-0" type="text"   id="card_expiration" name="card_expiration" placeholder="" required="" pattern="[0-9]*" inputmode="numeric"></div><div class="form-group mb-4 col-md-6"><label class="w-100" for="name">CVC</label><input class="form-control rounded-0" type="number" id="card_cvc" name="card_cvc" placeholder="" required=""></div></div></div>';
+        if (code == 'credit_card') {
+            $('#cardForm').html(view);
+        }
+    }
+    function livenameView(newVal, viewId) {
+        var f = $('#fname').val();
+        var l = $('#lname').val();
+        $('#' + viewId).html(f + ' ' + l);
+    }
+
+    function livename1View(newVal, viewId) {
+        var f = $('#fname1').val();
+        var l = $('#lname1').val();
+        $('#' + viewId).html(f + ' ' + l);
+    }
+
+    function liveTextView(newVal, viewId) {
+
+        $('#' + viewId).html(newVal);
+
+    }
+
+    function liveView(val, viewId) {
+        // var data = $(val).attr(option);
+        var data = $(val).find('option:selected').html();
+        $('#' + viewId).html(data);
+    }
 </script>
+<?= $this->endSection() ?>

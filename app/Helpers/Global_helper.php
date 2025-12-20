@@ -1603,7 +1603,7 @@ function sectionProductViewByProductArray($product){
         }
 
         $view .= '<div class="product-top mb-2">
-                <img data-sizes="auto"  id="" src="' . product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', '132', '132') . '" alt="'.$pro->alt_name.'" class="img-fluid w-100" loading="lazy">                 
+                <img data-sizes="auto" src="' . product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', '132', '132') . '" alt="'.$pro->alt_name.'" class="img-fluid w-100" loading="lazy">                 
                 </div>
                 <div class="product-bottom mt-auto">
                     <div class="product-title product_title_area mb-2">

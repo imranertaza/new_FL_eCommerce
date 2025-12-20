@@ -1,4 +1,6 @@
-<section class="main-container my-0">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container my-0">
     <div class="container">
         <div class="contact-form bg-white  py-4 mb-5 mt-5">
             <div class="row">
@@ -30,4 +32,5 @@
             </div>
         </div>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>
