@@ -1,6 +1,6 @@
-
-
-<section class="main-container">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-6 text-center mb-4 mb-md-0">
@@ -289,4 +289,5 @@
             <p><a href="<?php echo base_url('register')?>" class="btn bg-custom-color rounded-0 px-5 py-2 fs-5 text-white fw-semibold">Create an account</a></p>
         </div>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

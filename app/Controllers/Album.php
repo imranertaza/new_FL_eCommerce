@@ -39,9 +39,8 @@ class Album extends BaseController {
         $data['description'] = $settings['meta_description'];
         $data['title'] = !empty($settings['meta_title'])?$settings['meta_title']:$settings['store_name'];
 
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
+
         echo view('Theme/'.$settings['Theme'].'/Album/index',$data);
-        echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
     public function qc_picture_view_category($album_id){
@@ -61,9 +60,7 @@ class Album extends BaseController {
         $data['description'] = $settings['meta_description'];
         $data['title'] = !empty($settings['meta_title'])?$settings['meta_title']:$settings['store_name'];
 
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
         echo view('Theme/'.$settings['Theme'].'/Album/index',$data);
-        echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
     /**
@@ -92,9 +89,7 @@ class Album extends BaseController {
         $data['description'] = $settings['meta_description'];
         $data['title'] = !empty($settings['meta_title'])?$settings['meta_title']:$settings['store_name'];
 
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
         echo view('Theme/'.$settings['Theme'].'/Album/view',$data);
-        echo view('Theme/'.$settings['Theme'].'/footer');
     }
     public function picture_not_found(){
         $settings = get_settings();
@@ -104,9 +99,7 @@ class Album extends BaseController {
         $data['description'] = $settings['meta_description'];
         $data['title'] = !empty($settings['meta_title'])?$settings['meta_title']:$settings['store_name'];
 
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
         echo view('Theme/'.$settings['Theme'].'/Album/not_found',$data);
-        echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
     public function qc_picture_query(){

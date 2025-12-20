@@ -1,4 +1,6 @@
-<section class="main-container checkout" >
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container checkout" >
     <!--    id="tableReload"-->
     <div class="container">
         <div class="row justify-content-center">
@@ -20,8 +22,10 @@
             </div>
         </div>
     </div>
-</section>
+</div>
 <?php $key = get_all_row_data_by_id('cc_payment_settings', 'label', 'key');?>
+<?= $this->endSection() ?>
+<?= $this->section('java_script') ?>
 <script src="https://js.stripe.com/v3/" ></script>
 <script>
     var stripe = Stripe("<?php echo $key->value; ?>");
@@ -45,3 +49,4 @@
         });
     }
 </script>
+<?= $this->endSection() ?>

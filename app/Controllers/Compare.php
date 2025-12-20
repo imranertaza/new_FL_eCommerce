@@ -35,9 +35,8 @@ class Compare extends BaseController {
         $data['title'] = 'Product Compare';
 
         $data['page_title'] = 'Compare list';
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
+
         echo view('Theme/'.$settings['Theme'].'/Compare/index',$data);
-        echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
     /**

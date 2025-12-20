@@ -99,9 +99,8 @@ class Products extends BaseController {
         $data['title'] = $data['products']->meta_title;
 
         $data['page_title'] = 'Product Detail';
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
-        echo view('Theme/'.$settings['Theme'].'/Product/detail');
-        echo view('Theme/'.$settings['Theme'].'/footer');
+
+        echo view('Theme/'.$settings['Theme'].'/Product/detail',$data);
     }
 
     /**
@@ -298,9 +297,8 @@ class Products extends BaseController {
         $data['title'] = !empty($settings['meta_title'])?$settings['meta_title']:$settings['store_name'];
 
         $data['page_title'] = 'Product Not Found';
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
-        echo view('Theme/'.$settings['Theme'].'/Product/not_found');
-        echo view('Theme/'.$settings['Theme'].'/footer');
+
+        echo view('Theme/'.$settings['Theme'].'/Product/not_found',$data);
     }
 
     /**

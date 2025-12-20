@@ -32,9 +32,9 @@ class Cart extends BaseController {
         $data['offer'] = $this->offer_calculate->offer_discount($this->cart);
 
         $data['page_title'] = 'Cart';
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
-        echo view('Theme/'.$settings['Theme'].'/Cart/index');
-        echo view('Theme/'.$settings['Theme'].'/footer');
+
+        echo view('Theme/'.$settings['Theme'].'/Cart/index',$data);
+
     }
 
     /**
@@ -105,14 +105,11 @@ class Cart extends BaseController {
         return $this->response
             ->setHeader('X-CSRF-TOKEN', csrf_hash())
             ->setBody($message);
-
-//        $this->response->setHeader('X-CSRF-TOKEN', csrf_hash());
-//        return $this->response->setBody($message);
     }
 
     /**
      * @description This method provides add to cart detail
-     * @return void
+     * @return ResponseInterface
      */
     public function addtocartdetail(){
         $product_id = $this->request->getPost('product_id');
@@ -155,10 +152,14 @@ class Cart extends BaseController {
         $check = $this->check_qty($product_id , $qty);
         if ($check == true) {
             $this->cart->insert($data);
-            print 'Successfully add to cart';
+            $message = 'Successfully add to cart';
         }else{
-            print 'not enough quantity!';
+            $message = 'not enough quantity!';
         }
+
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
     }
 
     /**
@@ -204,9 +205,9 @@ class Cart extends BaseController {
 
 
         foreach($this->cart->contents() as $row) {
-            if ($row['rowid'] == $rowid) {
+            if ($row['rowid'] === $rowid) {
                 $check = $this->check_qty($row['id'], $qty);
-                if ($check == true) {
+                if ($check === true) {
                     $this->cart->update($data);
                     $data['message'] = 'Successfully update to cart';
                 } else {

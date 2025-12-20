@@ -1,4 +1,6 @@
-<section class="main-container my-0">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container my-0">
     <div class="container">
         <div class=" bg-white  py-4 mb-5 mt-5">
             <div class="row">
@@ -61,7 +63,7 @@
             </div>
         </div>
     </div>
-</section>
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="queryModal" tabindex="-1" aria-labelledby="queryModalLabel" aria-hidden="true">
@@ -89,3 +91,141 @@
         </div>
     </div>
 </div>
+<?= $this->endSection() ?>
+<?= $this->section('java_script') ?>
+<script>
+    function download_btn_show(){
+        $('.dw-btn-group').show();
+    }
+    function show_form(){
+        $('.dw-input-group').show();
+    }
+    //QC Pictures query(start)
+    function submitQueryForm(){
+        var email = $('#email').val();
+        var albumId = $('#album_id').val();
+        if (email == ''){
+            $('#errMss').html('Please input email');
+        }else {
+            if (validateEmail(email) == true ) {
+                submitQueryQcpictures(email,albumId);
+            }else {
+                $('#errMss').html('Please input valid email');
+            }
+        }
+    }
+
+    function validateEmail($email) {
+        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        return emailReg.test( $email );
+    }
+
+    function submitQueryQcpictures(email,albumId){
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('qc-picture-query') ?>",
+            data: {
+                [csrfName]: csrfHash,
+                email: email,
+                album_id: albumId,
+            },
+            success: function (response) {
+                $('#email').val('');
+                $('#queryModal').modal('hide');
+                $('#mesVal').html(response);
+                $('.message_alert').show();
+                setTimeout(function() {
+                    $("#messAlt").fadeOut(1500);
+                }, 600);
+            }
+        });
+    }
+    //QC Pictures query(end)
+
+
+    function album_download_btn_show(proId){
+        $('.album-btn-group_'+proId).show();
+    }
+
+    function show_form_alb(proId){
+        $('.album-btn-group_form_'+proId).show();
+        $('.album-btn-group_'+proId).hide();
+    }
+
+    function album_watermark_image_download(condition,imgId){
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
+
+        var albumId = $('#'+imgId).attr('data-albumId');
+        var imageId = $('#'+imgId).attr('data-imageId');
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('album-image-download') ?>",
+            data: {
+                [csrfName]: csrfHash,album_id: albumId,image_id:imageId,condition:condition
+            },
+            dataType: 'json',
+            success: function(response) {
+                var a = $("<a>").attr("href", response.downloadUrl).attr("download", "download_album_img.jpg").appendTo("body");
+                a[0].click();
+                a.remove();
+                $('.btn-group-al').hide();
+
+                if (response.unlinkUrl.trim() !== '') {
+                    albumImageUnlink(response.unlinkUrl);
+                }
+            }
+        });
+    }
+
+    function albumImageUnlink(unlinkUrl){
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('album-image-unlink') ?>",
+            data: {
+                [csrfName]: csrfHash,
+                url: unlinkUrl
+            }
+        });
+    }
+
+    function subscribe_album(emailID,proId) {
+        var email = $('#'+emailID+proId).val();
+
+        var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+        if (!emailRegex.test(email)) {
+            $('#mesVal').html('Email required');
+            $('.message_alert').show();
+            setTimeout(function() {
+                $("#messAlt").fadeOut(1500);
+            }, 600);
+        } else {
+            let csrfName = $('meta[name="csrf-name"]').attr('content');
+            let csrfHash = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                method: "POST",
+                url: "<?php echo base_url('user_subscribe') ?>",
+                data: {
+                    [csrfName]: csrfHash,
+                    email: email
+                },
+                success: function(response) {
+                    $('#'+emailID+proId).val('');
+                    $('#mesVal').html(response);
+                    $('.message_alert').show();
+                    $('.album-btn-group_form_'+proId).hide();
+                    $('.album-btn-group_'+proId).hide();
+                    setTimeout(function() {
+                        $("#messAlt").fadeOut(1500);
+                    }, 600);
+                }
+            });
+        }
+    }
+</script>
+<?= $this->endSection() ?>

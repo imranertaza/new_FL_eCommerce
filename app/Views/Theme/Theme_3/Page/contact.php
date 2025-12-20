@@ -1,4 +1,6 @@
-<section class="main-container my-0">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container my-0">
     <div class="container">
         <div class="contact-info py-5">
             <div class="row align-items-center">
@@ -45,10 +47,6 @@
                             <textarea name="message" class="form-control in_err" id="message" cols="30" rows="6" placeholder="Question"></textarea>
                             <span class="text-danger err d-inline-block text-capitalize" id="messageERR"></span>
                         </div>
-<!--                        <div class="mb-3">-->
-<!--                            <div class="g-recaptcha" id="capReload" data-sitekey="6LfrFKQUAAAAAMzFobDZ7ZWy982lDxeps8cd1I2i" ></div>-->
-<!--                            <span class="text-danger err d-inline-block text-capitalize" id="messageRecaptcha"></span>-->
-<!--                        </div>-->
 
                         <div class="mb-3">
                             <div id="captcha" class="form_div">
@@ -72,8 +70,9 @@
             </div>
         </div>
     </div>
-</section>
-
+</div>
+<?= $this->endSection() ?>
+<?= $this->section('java_script') ?>
 <script>
     (function(){
         const fonts = ["cursive"];
@@ -114,4 +113,44 @@
         initCaptcha();
 
     })();
+
+    function contactFormSubmit(){
+        if (contactForm() == true) {
+
+            let inputcaptchavalue = $('#captcha_form').val();
+            let captchaValue = $('#genaretCapt').val();
+            if (inputcaptchavalue === captchaValue) {
+
+                let email = $('#email').val();
+                let message = $('#message').val();
+                let csrfName = $('meta[name="csrf-name"]').attr('content');
+                let csrfHash = $('meta[name="csrf-token"]').attr('content');
+
+                $.ajax({
+                    method: "POST",
+                    url: "<?php echo base_url('contact_form_action') ?>",
+                    data: {
+                        [csrfName]: csrfHash,
+                        email: email,
+                        message: message,
+                    },
+                    success: function (response) {
+                        // alert(response);
+                        $('#email').val('');
+                        $('#message').val('');
+                        $('#mesVal').html('Your message was successfully submitted');
+                        $('.message_alert').show();
+                        setTimeout(function () {
+                            $("#messAlt").fadeOut(1500);
+                        }, 600);
+                        location.reload();
+                    }
+                })
+            } else {
+                error("#messageRecaptcha", "Please Enter Valid Captcha");
+                return false;
+            }
+        }
+    }
 </script>
+<?= $this->endSection() ?>

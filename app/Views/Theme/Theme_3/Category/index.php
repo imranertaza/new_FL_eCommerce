@@ -1,4 +1,6 @@
-<section class="main-container">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container">
     <div class="container">
 
         <div class="product-category mb-5">
@@ -133,7 +135,7 @@
 
                                                 <div class="product-top text-center">
                                                     <a href="<?php echo base_url('detail/' . $pro->product_id) ?>">
-                                                        <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', '191', '191');?>" alt="<?php echo $pro->alt_name?>"class="img-fluid " loading="lazy">
+                                                        <img data-sizes="auto"   src="<?php echo product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', '191', '191');?>" alt="<?php echo $pro->alt_name?>" class="img-fluid " loading="lazy">
                                                     </a>
                                                     <div class="rating text-center my-2">
                                                         <?php //echo product_id_by_rating($pro->product_id); ?>
@@ -203,7 +205,7 @@
 
                                             <div class="product-top text-center" style="width:40%;float:left; ">
                                                 <a href="<?php echo base_url('detail/' . $pro->product_id) ?>">
-                                                    <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', '198', '198');?>" alt="<?php echo $pro->alt_name?>" class="img-fluid " loading="lazy">
+                                                    <img data-sizes="auto"   src="<?php echo product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', '198', '198');?>" alt="<?php echo $pro->alt_name?>" class="img-fluid " loading="lazy">
                                                 </a>
 
                                             </div>
@@ -252,10 +254,11 @@
 
         </div>
     </div>
-</section>
+</div>
 <?php
     $sSel = !empty($searchPrice)?'form="searchForm"':'';
 ?>
+
 <script>
     if ($(window).width() > 767) {
         var sidebarDesktop = `<div class="d-none d-md-block">
@@ -428,3 +431,22 @@
             "," + $(".slider-range").slider("values", 1));
     });
 </script>
+<?= $this->endSection() ?>
+<?= $this->section('java_script') ?>
+<script>
+    function viewStyle(view) {
+        if (view == 'list') {
+            $("#list-btn").addClass('active-view');
+            $("#gird-btn").removeClass('active-view');
+            $("#grid-view").hide();
+            $("#list-view").show();
+        }
+        if (view == 'gird') {
+            $("#gird-btn").addClass('active-view');
+            $("#list-btn").removeClass('active-view');
+            $("#grid-view").show();
+            $("#list-view").hide();
+        }
+    }
+</script>
+<?= $this->endSection() ?>

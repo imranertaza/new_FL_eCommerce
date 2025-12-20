@@ -41,10 +41,8 @@ class Wallet extends BaseController
             $data['description'] = $settings['meta_description'];
             $data['title'] = 'Wallet';
 
-            echo view('Theme/' . $settings['Theme'] . '/header', $data);
-            echo view('Theme/' . $settings['Theme'] . '/Customer/menu');
-            echo view('Theme/' . $settings['Theme'] . '/Customer/walllet');
-            echo view('Theme/' . $settings['Theme'] . '/footer');
+            echo view('Theme/' . $settings['Theme'] . '/Customer/walllet', $data);
+
         }
     }
 
@@ -72,10 +70,7 @@ class Wallet extends BaseController
             $data['description'] = $settings['meta_description'];
             $data['title'] = 'Account Add Fund';
 
-            echo view('Theme/' . $settings['Theme'] . '/header', $data);
-            echo view('Theme/' . $settings['Theme'] . '/Customer/menu');
             echo view('Theme/' . $settings['Theme'] . '/Customer/add_funds');
-            echo view('Theme/' . $settings['Theme'] . '/footer');
         }
     }
 

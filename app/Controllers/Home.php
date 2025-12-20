@@ -42,9 +42,8 @@ class Home extends BaseController
         $data['description'] = $settings['meta_description'];
         $data['title'] = !empty($settings['meta_title']) ? $settings['meta_title'] : $settings['store_name'];
 
-        echo view('Theme/' . $settings['Theme'] . '/header', $data);
+
         echo view('Theme/' . $settings['Theme'] . '/Home/index', $data);
-        echo view('Theme/' . $settings['Theme'] . '/footer');
     }
 
     /**

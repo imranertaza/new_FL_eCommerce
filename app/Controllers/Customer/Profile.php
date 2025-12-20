@@ -44,10 +44,8 @@ class Profile extends BaseController
             $data['description'] = $settings['meta_description'];
             $data['title'] = 'Profile';
 
-            echo view('Theme/'.$settings['Theme'].'/header',$data);
-            echo view('Theme/'.$settings['Theme'].'/Customer/menu');
             echo view('Theme/'.$settings['Theme'].'/Customer/profile',$data);
-            echo view('Theme/'.$settings['Theme'].'/footer');
+
         }
     }
 

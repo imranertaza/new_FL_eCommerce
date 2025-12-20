@@ -1,4 +1,4 @@
-<section class="manu-container my-3 my-md-5">
+<div class="manu-container my-3 my-md-5">
     <div class="container">
         <div class="mb-0 d-flex d-md-none justify-content-between justify-content-md-start gap-1 bg-custom-color text-white p-3 mb-2 toggleButton">
             <i class="fa-solid order-2 order-md-1 fa-bars me-3 no-mg"></i>
@@ -26,4 +26,4 @@
             </div>
         </div>
     </div>
-</section>
+</div>

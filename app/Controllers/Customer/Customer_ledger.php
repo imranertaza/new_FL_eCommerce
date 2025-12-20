@@ -37,10 +37,9 @@ class Customer_ledger extends BaseController
 
             $data['page_title'] = 'Ledger';
             $data['menu_active'] = 'ledger';
-            echo view('Theme/'.$settings['Theme'].'/header',$data);
-            echo view('Theme/'.$settings['Theme'].'/Customer/menu');
-            echo view('Theme/'.$settings['Theme'].'/Customer/customer_ledger');
-            echo view('Theme/'.$settings['Theme'].'/footer');
+
+            echo view('Theme/'.$settings['Theme'].'/Customer/customer_ledger',$data);
+
         }
     }
 

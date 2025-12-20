@@ -1,6 +1,9 @@
-<section class="main-container my-3 my-md-5">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<?= $this->include('Theme/Theme_3/Customer/menu'); ?>
+<div class="main-container mb-3 my-md-5">
     <div class="container">
-        <div class="popular-category mb-5">
+        <div class="mb-5">
             <div class="card rounded-0 border">
                 <div class="card-body p-3 p-md-5">
                     <div class="row">
@@ -99,4 +102,5 @@
             </div>
         </div>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

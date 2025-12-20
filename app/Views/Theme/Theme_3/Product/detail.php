@@ -1,10 +1,12 @@
-<section class="main-container">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container">
     <div class="container">
         <div class="product-details">
             <div class=" p-3  mb-4 border-bottom">
                 <div class="row">
                     <div class="col-md-7 col-lg-5 col-xl-6 mb-3 mb-lg-0">
-                        <section class="banner-section ">
+                        <div class="banner-section ">
                             <div class="container  product-det-info">
                                 <div class="vehicle-detail-banner banner-content clearfix">
                                     <div class="banner-slider">
@@ -17,14 +19,14 @@
                                                     <div class="slider slider-nav thumb-image">
                                                         <div class="thumbnail-image">
                                                             <div class="thumbImg">
-                                                                <img data-sizes="auto"  data-proId="<?php echo $products->product_id; ?>" data-imgId="" id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', '100', '100');?>" alt="<?php echo $products->altPro?>" class="img-fluid " >
+                                                                <img data-sizes="auto"  data-proId="<?php echo $products->product_id; ?>" data-imgId=""  src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', '100', '100');?>" alt="<?php echo $products->altPro?>" class="img-fluid " >
                                                             </div>
                                                         </div>
 
                                                         <?php
                                                         if (!empty($proImg)) {
                                                             foreach ($proImg as $imgval) {
-                                                                echo '<div class="thumbnail-image"><div class="thumbImg"><img data-sizes="auto"  data-proId="'.$imgval->product_id.'" data-imgId="'.$imgval->product_image_id.'" id="" src="' . product_multi_image_view('uploads/products', $imgval->product_id, $imgval->product_image_id,  $imgval->image, 'noimage.png', '100', '100'). '" alt="'.$imgval->alt_name.'" class="img-fluid " ></div></div>';
+                                                                echo '<div class="thumbnail-image"><div class="thumbImg"><img data-sizes="auto"  data-proId="'.$imgval->product_id.'" data-imgId="'.$imgval->product_image_id.'"   src="' . product_multi_image_view('uploads/products', $imgval->product_id, $imgval->product_image_id,  $imgval->image, 'noimage.png', '100', '100'). '" alt="'.$imgval->alt_name.'" class="img-fluid " ></div></div>';
                                                             }
                                                         }
                                                         ?>
@@ -33,7 +35,7 @@
                                                             <div class="thumbImg video-thum">
                                                                 <a href="javascript:void(0)" data-bs-toggle="modal"
                                                                     data-bs-target="#videoeModal">
-                                                                    <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', '100', '100');?>" alt="<?php echo $products->altPro?>" class="img-fluid " >
+                                                                    <img data-sizes="auto"   src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', '100', '100');?>" alt="<?php echo $products->altPro?>" class="img-fluid " >
                                                                     <img src="<?php echo base_url('uploads/play.png') ?>"
                                                                         alt="" class="play-image">
                                                                 </a>
@@ -46,13 +48,13 @@
                                                 <div class="col-10 col-sm-9 col-md-10 col-lg-9 position-relative">
                                                     <div class="slider slider-for slider-cus-css">
                                                         <div class="slider-banner-image">
-                                                            <img data-sizes="auto" data-proId="<?php echo $products->product_id; ?>" data-imgId="" id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png',  '437', '437');?>" alt="<?php echo $products->altPro?>" class="img-fluid " >
+                                                            <img data-sizes="auto" data-proId="<?php echo $products->product_id; ?>" data-imgId=""   src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png',  '437', '437');?>" alt="<?php echo $products->altPro?>" class="img-fluid " >
                                                         </div>
 
                                                         <?php
                                                         if (!empty($proImg)) {
                                                             foreach ($proImg as $imgval) {
-                                                                echo '<div class="slider-banner-image"><img data-sizes="auto" data-proId="'.$imgval->product_id.'" data-imgId="'.$imgval->product_image_id.'" id="" src="' .
+                                                                echo '<div class="slider-banner-image"><img data-sizes="auto" data-proId="'.$imgval->product_id.'" data-imgId="'.$imgval->product_image_id.'"   src="' .
                                                                     product_multi_image_view('uploads/products', $imgval->product_id, $imgval->product_image_id,  $imgval->image, 'noimage.png','437', '437'). '" alt="'.$imgval->alt_name.'" class="img-fluid w-100" ></div>';
                                                             }
                                                         }
@@ -80,7 +82,8 @@
                                         </div>
                                     </div>
                                 </div>
-                        </section>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-5 col-lg-4 col-xl-3">
                         <div class="product-info-det p-3">
@@ -439,7 +442,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4 mb-3">
-                    <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png',  '437', '437');?>" alt="<?php echo $products->altPro?>" class="img-fluid" loading="lazy">
+                    <img data-sizes="auto"  src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png',  '437', '437');?>" alt="<?php echo $products->altPro?>" class="img-fluid" loading="lazy">
                 </div>
             </div>
         </div>
@@ -474,7 +477,7 @@
                                                 <div
                                                     class="product-grid h-100 d-flex align-items-stretch flex-column position-relative">
                                                     <div class="product-top border p-2">
-                                                        <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $bought->product_id, $bought->image, 'noimage.png','191', '191');?>" alt="<?php echo $bought->alt_name?>" class="img-fluid w-100" loading="lazy">
+                                                        <img data-sizes="auto"  src="<?php echo product_image_view('uploads/products', $bought->product_id, $bought->image, 'noimage.png','191', '191');?>" alt="<?php echo $bought->alt_name?>" class="img-fluid w-100" loading="lazy">
                                                         <input type="checkbox" name="both_product[]"
                                                             onchange="bothPriceCalculat()"
                                                             class="form-check-input check-input"
@@ -580,7 +583,7 @@
                                     <?php } ?>
                                     <div class="product-top text-center">
                                         <a href="<?php echo base_url('detail/' . $rPro->product_id) ?>">
-                                            <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $rPro->product_id, $rPro->image, 'noimage.png','191', '191');?>" alt="<?php echo $rPro->alt_name?>" class="img-fluid" loading="lazy">
+                                            <img data-sizes="auto" src="<?php echo product_image_view('uploads/products', $rPro->product_id, $rPro->image, 'noimage.png','191', '191');?>" alt="<?php echo $rPro->alt_name?>" class="img-fluid" loading="lazy">
                                         </a>
                                         <div class="rating text-center my-2">
                                             <?php echo product_id_by_rating($rPro->product_id); ?>
@@ -677,7 +680,7 @@
                                     <?php } ?>
                                     <div class="product-top text-center">
                                         <a href="<?php echo base_url('detail/' . $rPro->product_id) ?>">
-                                            <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $rPro->product_id, $rPro->image, 'noimage.png','191', '191');?>" alt="<?php echo $rPro->alt_name?>" class="img-fluid" loading="lazy">
+                                            <img data-sizes="auto" src="<?php echo product_image_view('uploads/products', $rPro->product_id, $rPro->image, 'noimage.png','191', '191');?>" alt="<?php echo $rPro->alt_name?>" class="img-fluid" loading="lazy">
                                         </a>
                                         <div class="rating text-center my-2">
                                             <?php echo product_id_by_rating($rPro->product_id); ?>
@@ -713,15 +716,11 @@
         <?php } ?>
 
     </div>
-</section>
+</div>
 
 <div class="modal fade" id="videoeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <!--            <div class="modal-header">-->
-            <!--                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>-->
-
-            <!--            </div>-->
             <div class="modal-body">
                 <button type="button" class="btn-close" onclick="video_close()"
                     style="float: right; font-size: 10px; margin-bottom: 10px;" data-bs-dismiss="modal"
@@ -735,7 +734,8 @@
         </div>
     </div>
 </div>
-
+<?= $this->endSection() ?>
+<?= $this->section('java_script') ?>
 <script>
     window.addEventListener('click', function(e){
         if (document.getElementById('dowBtn').contains(e.target)){
@@ -744,4 +744,97 @@
             $('.dw-input-group').hide();
         }
     });
+    function watermark_image_download(condition){
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
+        var proID = $('.slick-active').children().children().children('img').attr('data-proId');
+        var imageId = $('.slick-active').children().children().children('img').attr('data-imgId');
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('product-image-download') ?>",
+            data: {
+                [csrfName]: csrfHash,product_id: proID,image_id:imageId,condition:condition
+            },
+            dataType: 'json',
+            success: function(response) {
+                var a = $("<a>").attr("href", response.downloadUrl).attr("download", "download_img.jpg").appendTo("body");
+                a[0].click();
+                a.remove();
+                $('.dw-btn-group').hide();
+
+                if (response.unlinkUrl.trim() !== '') {
+                    imageUnlink(response.unlinkUrl);
+                }
+            }
+        });
+    }
+    function imageUnlink(unlinkUrl){
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('product-image-unlink') ?>",
+            data: {
+                [csrfName]: csrfHash,
+                url: unlinkUrl
+            }
+        });
+    }
+
+    function video_close() {
+        $("#sample_video")[0].src += "?autoplay=0";
+    }
+    function download_btn_show(){
+        $('.dw-btn-group').show();
+    }
+    function show_form(){
+        $('.dw-input-group').show();
+    }
+
+    $('.slider-for').slick({
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: false,
+        fade: true,
+        asNavFor: '.slider-nav'
+    });
+    $('.slider-nav').slick({
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        vertical: true,
+        asNavFor: '.slider-for',
+        dots: false,
+        focusOnSelect: true,
+        verticalSwiping: true,
+        responsive: [{
+            breakpoint: 992,
+            settings: {
+                vertical: true,
+                slidesToShow: 5,
+            }
+        },
+            {
+                breakpoint: 768,
+                settings: {
+                    vertical: true,
+                    slidesToShow: 4,
+                }
+            },
+            {
+                breakpoint: 575,
+                settings: {
+                    vertical: true,
+                    slidesToShow: 4,
+                }
+            },
+            {
+                breakpoint: 400,
+                settings: {
+                    vertical: true,
+                    slidesToShow: 5
+                }
+            }
+        ]
+    });
 </script>
+<?= $this->endSection() ?>

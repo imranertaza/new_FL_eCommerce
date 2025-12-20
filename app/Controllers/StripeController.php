@@ -50,9 +50,8 @@ class StripeController extends BaseController {
         $data['keywords'] = $settings['meta_keyword'];
         $data['description'] = $settings['meta_description'];
         $data['title'] = 'Stripe payment';
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
-        echo view('Theme/'.$settings['Theme'].'/Checkout/stripe');
-        echo view('Theme/'.$settings['Theme'].'/footer');
+
+        echo view('Theme/'.$settings['Theme'].'/Checkout/stripe',$data);
     }
 
     /**

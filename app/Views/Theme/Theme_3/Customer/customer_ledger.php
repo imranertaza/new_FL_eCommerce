@@ -1,4 +1,7 @@
-<section class="main-container my-5" >
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<?= $this->include('Theme/Theme_3/Customer/menu'); ?>
+<div class="main-container my-5" >
     <div class="container">
         <div class="col-md-12 px-5">
             <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
@@ -36,4 +39,5 @@
             </div>
         </div>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

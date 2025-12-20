@@ -1,4 +1,7 @@
-<section class="main-container my-5" id="reloadDiv">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<?= $this->include('Theme/Theme_3/Customer/menu'); ?>
+<div class="main-container my-5" id="reloadDiv">
     <div class="container">
         <div class="popular-category mb-5">
 
@@ -78,4 +81,5 @@
 
         </div>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

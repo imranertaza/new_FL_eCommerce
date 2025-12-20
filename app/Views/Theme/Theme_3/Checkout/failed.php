@@ -1,4 +1,6 @@
-<section class="main-container checkout" >
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container checkout" >
     <div class="container">
         <div class="row">
             <div class="col-md-6">
@@ -14,4 +16,5 @@
             </div>
         </div>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>
