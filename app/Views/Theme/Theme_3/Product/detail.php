@@ -82,6 +82,7 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-5 col-lg-4 col-xl-3">
@@ -720,10 +721,6 @@
 <div class="modal fade" id="videoeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <!--            <div class="modal-header">-->
-            <!--                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>-->
-
-            <!--            </div>-->
             <div class="modal-body">
                 <button type="button" class="btn-close" onclick="video_close()"
                     style="float: right; font-size: 10px; margin-bottom: 10px;" data-bs-dismiss="modal"
