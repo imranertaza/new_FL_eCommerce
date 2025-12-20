@@ -27,8 +27,7 @@ class Freedelivery extends BaseController {
         $data['title'] = 'Free delivery';
 
         $data['page_title'] = 'About Us';
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
+
         echo view('Theme/'.$settings['Theme'].'/Home/index',$data);
-        echo view('Theme/'.$settings['Theme'].'/footer');
     }
 }

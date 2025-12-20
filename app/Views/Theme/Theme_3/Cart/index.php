@@ -1,4 +1,6 @@
-<section class="main-container" id="tableReload2">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container" id="tableReload2">
     <div class="container">
         <div class="cart">
             <div class="row">
@@ -131,4 +133,5 @@
             <?php } ?>
         </div>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

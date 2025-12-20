@@ -1,4 +1,6 @@
-<section class="main-container">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container">
     <div class="container">
         <h1 class="page-title mb-3">Compare Products</h1>
         <div class="card p-3 rounded-0">
@@ -72,4 +74,5 @@
         </div>
 
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

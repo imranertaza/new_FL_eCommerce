@@ -1,4 +1,7 @@
-<section class="main-container my-5" >
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<?= $this->include('Theme/Theme_3/Customer/menu'); ?>
+<div class="main-container my-5" >
     <div class="container">
         <div class="col-md-12 px-5">
             <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
@@ -38,4 +41,5 @@
             <a href="https://www.17track.net/en" class="btn btn-success mt-5" target="_blank">Track My Order</a>
         </div>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

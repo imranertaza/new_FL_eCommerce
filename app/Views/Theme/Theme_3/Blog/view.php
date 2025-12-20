@@ -1,4 +1,6 @@
-<section class="main-container">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container">
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-sm-12">
@@ -167,8 +169,9 @@
 
         </div>
     </div>
-</section>
-
+</div>
+<?= $this->endSection() ?>
+<?= $this->section('java_script') ?>
 <script>
 
     $(document).ready(function () {
@@ -279,4 +282,87 @@
         });
 
     });
+
+    function commentReply(show,id){
+        var formID = "'commentReply_" + id+"'" ;
+        var html = '<form id="commentReply_'+id+'" action="<?php echo base_url('blog-comment-reply-action')?>" method="post"><div class="d-flex" > <input type="hidden" name="comment_id" class="comment_id" value="'+id+'" required> <input type="text" name="com_name" placeholder="Name" class="input-c" required> <input type="text" name="com_email" placeholder="Email" class="input-c"> </div> <div class="mt-1"> <input type="text" name="com_text" placeholder="Text" class="input-c input-te" required> <br><button type="button" class="btn btn-reply mt-1" onclick="commentReplyAction('+formID+')" >Reply  Comment</button> </div></form>';
+        $("#"+show).html(html);
+    }
+
+    function commentReplyAction(formID) {
+
+        var form = document.getElementById(formID);
+
+        // Get field values
+        let name = form.querySelector("input[name='com_name']").value.trim();
+        let email = form.querySelector("input[name='com_email']").value.trim();
+        let text = form.querySelector("input[name='com_text']").value.trim();
+
+        let isValid = true;
+
+        // -------- NAME VALIDATION (letters only, 2–20 chars) ----------
+        let namePattern = /^[A-Za-z\s]{2,20}$/;
+        if (!namePattern.test(name)) {
+            alert("Name must be 2–20 letters only!");
+            isValid = false;
+        }
+
+        // -------- EMAIL VALIDATION (optional but must be valid if entered) ----------
+        let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email !== "" && !emailPattern.test(email)) {
+            alert("Please enter a valid email address!");
+            isValid = false;
+        }
+
+        // -------- TEXT VALIDATION (3–500 chars + real letters) ----------
+        let cleanText = text.trim();
+        let textPattern = /\p{L}|\p{N}/u; // must contain real characters
+
+        if (cleanText.length < 3 || cleanText.length > 500 || !textPattern.test(cleanText)) {
+            alert("Reply text must be 3–500 valid characters!");
+            isValid = false;
+        }
+
+        // -------- STOP IF INVALID ----------
+        if (!isValid) {
+            return false;
+        }
+
+        // -------- AJAX SUBMIT ----------
+        var formData = new FormData(form);
+
+        // ADD CSRF
+        formData.append(
+            $('meta[name="csrf-name"]').attr("content"),
+            $('meta[name="csrf-token"]').attr("content")
+        );
+
+        $.ajax({
+            url: $(form).prop('action'),
+            type: "POST",
+            data: formData,
+            contentType: false,
+            cache: false,
+            processData: false,
+
+            success: function(response) {
+
+                // Reset + hide form
+                $('#' + formID)[0].reset();
+                $('#' + formID).hide();
+
+                // Reload comments
+                $('#commentBoxReload').load(document.URL + ' #commentBoxReload');
+
+                // Show message
+                $('#mesVal').html(response);
+                $('.message_alert').show();
+
+                setTimeout(function() {
+                    $("#messAlt").fadeOut(1500);
+                }, 600);
+            }
+        });
+    }
 </script>
+<?= $this->endSection() ?>

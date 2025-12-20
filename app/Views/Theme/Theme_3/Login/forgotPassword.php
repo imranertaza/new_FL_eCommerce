@@ -1,6 +1,6 @@
-
-
-<section class="main-container">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 text-center mb-4 mb-lg-0">
@@ -30,4 +30,5 @@
 
 
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

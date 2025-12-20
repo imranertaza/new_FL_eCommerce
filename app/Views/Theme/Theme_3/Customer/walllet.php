@@ -1,4 +1,7 @@
-<section class="main-container my-5">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<?= $this->include('Theme/Theme_3/Customer/menu'); ?>
+<div class="main-container my-5">
     <div class="container">
         <form action="<?php echo base_url('profile_update_action') ?>" method="Post">
             <?= csrf_field() ?>
@@ -54,4 +57,5 @@
             </div>
         </form>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>
