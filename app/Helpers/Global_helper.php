@@ -1345,13 +1345,13 @@ function addToCartBtn($product_id)
     $btn = '';
     if (!empty($qtyCheck)) {
         if ($optionCheck == true) {
-            $btn = '<a href="javascript:void(0)" onclick="addToCart(' . $product_id . ')" class="btn btn-cart w-100 rounded-0 mt-auto">Add to Cart</a>';
+            $btn = '<button type="button" onclick="addToCart(' . $product_id . ')" class="border-0 btn btn-cart w-100 rounded-0 mt-auto">Add to Cart</button>';
         } else {
             $url = base_url('detail/' . $product_id);
             $btn = '<a href="' . $url . '"  class="btn btn-cart w-100 rounded-0 mt-auto">Add to Cart</a>';
         }
     } else {
-        $btn = '<a href="javascript:void(0)"  class="btn btn-cart w-100 rounded-0 mt-auto">Out of Stock</a>';
+        $btn = '<button type="button"  class="border-0 btn btn-cart w-100 rounded-0 mt-auto">Out of Stock</button>';
     }
     return $btn;
 }
@@ -1589,17 +1589,17 @@ function sectionProductViewByProductArray($product){
                     <span class="btn-wishlist-text position-absolute  mt-5 ms-2">Favorite</span>
                     </a>';
             } else {
-                $view .= '<a href="javascript:void(0)" class="btn-wishlist position-absolute mt-2 ms-2" onclick="addToWishlist(' . $pro->product_id . ')"><i class="fa-solid fa-heart"></i>
+                $view .= '<button type="button" class="border-0 btn-wishlist position-absolute mt-2 ms-2" onclick="addToWishlist(' . $pro->product_id . ')"><i class="fa-solid fa-heart"></i>
                     <span class="btn-wishlist-text position-absolute  mt-5 ms-2">Favorite</span>
-                    </a>';
+                    </button>';
             }
 
         }
 
         if ($modules['compare'] == 1) {
-            $view .= '<a href="javascript:void(0)" onclick="addToCompare(' . $pro->product_id . ')" class="btn-compare position-absolute  mt-5 ms-2"><i class="fa-solid fa-code-compare"></i>
+            $view .= '<button type="button" onclick="addToCompare(' . $pro->product_id . ')" class="border-0 btn-compare position-absolute  mt-5 ms-2"><i class="fa-solid fa-code-compare"></i>
                     <span class="btn-compare-text position-absolute  mt-5 ms-2">Compare</span>
-                </a>';
+                </button>';
         }
 
         $view .= '<div class="product-top mb-2">

@@ -99,9 +99,9 @@ $modules = modules_access();
                         <a class="btn btn-create px-4 py-2" href="<?php echo base_url('register') ?>">Create An Account</a>
                     <?php } else { ?>
 
-                        <a class="dropdown-toggle btn btn-create" href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button type="button" class="dropdown-toggle btn btn-create"  data-bs-toggle="dropdown" aria-expanded="false">
                             My Account
-                        </a>
+                        </button>
                         <ul class="dropdown-menu ">
                             <li><a class="dropdown-item mt-2 mb-2 " href="<?php echo base_url('dashboard') ?>">Dashboard</a></li>
                             <li><a href="<?php echo base_url('profile'); ?>" class="dropdown-item mt-2 mb-2">Profile</a></li>
@@ -294,9 +294,9 @@ $modules = modules_access();
 
         ?>
 
-        <a href="javascript:void(0)" id="message_social">
+        <button type="button" class="border-0 bg-transparent" id="message_social">
             <i class="fas fa-4x fa-comment-dots" style="color:#0594eb;"></i>
-        </a>
+        </button>
 
         <div class="content_mess" id="content_mess" style="display:none;">
             <a target="_blank" href="https://wa.me/<?php echo get_model_settings_value_by_modelId_or_label($modulId, 'whatsapp_number');?>" ><i class="fa-brands fa-square-whatsapp"></i> Whatsapp</a><br>
