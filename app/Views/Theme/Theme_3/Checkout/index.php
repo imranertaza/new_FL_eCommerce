@@ -297,8 +297,8 @@
                                 </button>
                             </div>
                             <div class="remove bg-gray px-3 py-2 rounded-2 align-items-center d-flex pro-bg-check">
-                                <a href="javascript:void(0)" onclick="removeCart('<?php echo $val['rowid']; ?>',this)"><i
-                                        class="fa-solid fa-trash-can"></i></a>
+                                <button type="button" class="border-0 bg-transparent" onclick="removeCart('<?php echo $val['rowid']; ?>',this)"><i
+                                        class="fa-solid fa-trash-can"></i></button>
                             </div>
                         </div>
                         <?php } $cSymbol = get_lebel_by_value_in_settings('currency_symbol') ?>

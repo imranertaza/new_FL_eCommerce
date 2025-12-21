@@ -22,11 +22,11 @@
                     <div id="dowBtn">
                         <button class="btn btn-dow position-absolute" onclick="album_download_btn_show('<?= $album->album_id;?>')"  ><i class="fa-solid fa-download "></i></button>
                         <div class="album-btn-group_<?= $album->album_id;?> btn-group-al position-absolute"  >
-                            <a href="javascript:void(0)"  onclick="album_watermark_image_download('watermark','<?= $album->album_id;?>_image')"  download class=" btn-w-2nd">Watermark Image</a><br>
+                            <button type="button" class="border-0 bg-transparent text-white"  onclick="album_watermark_image_download('watermark','<?= $album->album_id;?>_image')"  download class=" btn-w-2nd">Watermark Image</button><br>
                             <?php if (isset($_COOKIE['download_image'])){ ?>
-                                <a href="javascript:void(0)" onclick="album_watermark_image_download('nowatermark','<?= $album->album_id;?>_image')" class=" btn-w-2nd">Without Watermark Image</a>
+                                <button type="button" class="border-0 bg-transparent text-white" onclick="album_watermark_image_download('nowatermark','<?= $album->album_id;?>_image')" class=" btn-w-2nd">Without Watermark Image</button>
                             <?php }else{?>
-                                <a href="javascript:void(0)" onclick="show_form_alb('<?= $album->album_id;?>')" class="btn-w-2nd">Without Watermark Image</a>
+                                <button type="button" class="border-0 bg-transparent text-white" onclick="show_form_alb('<?= $album->album_id;?>')" class="btn-w-2nd">Without Watermark Image</button>
                             <?php } ?>
                         </div>
                         <div class="album-btn-group_form_<?= $album->album_id;?> dw-input-group_al position-absolute">
