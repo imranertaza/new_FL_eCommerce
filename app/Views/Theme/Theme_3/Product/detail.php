@@ -33,12 +33,12 @@
                                                         <?php if (!empty($products->video)) { ?>
                                                         <div class="thumbnail-image">
                                                             <div class="thumbImg video-thum">
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                                <button type="button" class="border-0 bg-transparent" data-bs-toggle="modal"
                                                                     data-bs-target="#videoeModal">
                                                                     <img data-sizes="auto"   src="<?php echo product_image_view('uploads/products', $products->product_id, $products->image, 'noimage.png', '100', '100');?>" alt="<?php echo $products->altPro?>" class="img-fluid " >
                                                                     <img src="<?php echo base_url('uploads/play.png') ?>"
                                                                         alt="" class="play-image">
-                                                                </a>
+                                                                </button>
                                                             </div>
                                                         </div>
                                                         <?php } ?>
@@ -64,11 +64,11 @@
                                                     <div id="dowBtn">
                                                         <button class="btn btn-dow position-absolute" onclick="download_btn_show()"  ><i class="fa-solid fa-download "></i></button>
                                                         <div class="dw-btn-group position-absolute"  >
-                                                            <a href="javascript:void(0)"  onclick="watermark_image_download('watermark')" download class=" btn-w-2nd">Watermark Image</a><br>
+                                                            <button type="button" onclick="watermark_image_download('watermark')" download class=" btn-w-2nd border-0 bg-transparent">Watermark Image</button><br>
                                                             <?php if (isset($_COOKIE['download_image'])){ ?>
-                                                                <a href="javascript:void(0)" onclick="watermark_image_download('nowatermark')" class=" btn-w-2nd">Without Watermark Image</a>
+                                                                <button type="button" class="border-0 bg-transparent" onclick="watermark_image_download('nowatermark')" class=" btn-w-2nd">Without Watermark Image</button>
                                                             <?php }else{?>
-                                                                <a href="javascript:void(0)" onclick="show_form()" class="btn-w-2nd">Without Watermark Image</a>
+                                                                <button type="button" onclick="show_form()" class="btn-w-2nd border-0 bg-transparent">Without Watermark Image</button>
                                                             <?php } ?>
                                                         </div>
                                                         <div class="dw-input-group position-absolute">
@@ -160,7 +160,7 @@
                                     </svg>
                                     Add to Wishlist</a>
                                 <?php } else { ?>
-                                <a href="javascript:void(0)" class="btn btn-wishlist-2 rounded-0 mt-2 me-1"
+                                <button type="button" class="border-0 btn btn-wishlist-2 rounded-0 mt-2 me-1"
                                     onclick="addToWishlist(<?php echo $products->product_id ?>)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="13" viewBox="0 0 14 13"
                                         fill="none">
@@ -168,12 +168,12 @@
                                             d="M6.99967 13.0009L6.03301 12.1342C4.91079 11.1231 3.98301 10.2509 3.24967 9.51758C2.51634 8.78424 1.93301 8.1258 1.49967 7.54224C1.06634 6.95913 0.763674 6.42313 0.591674 5.93424C0.419674 5.44535 0.333452 4.94535 0.333008 4.43424C0.333008 3.3898 0.683008 2.51758 1.38301 1.81758C2.08301 1.11758 2.95523 0.767578 3.99967 0.767578C4.57745 0.767578 5.12745 0.8898 5.64967 1.13424C6.1719 1.37869 6.6219 1.72313 6.99967 2.16758C7.37745 1.72313 7.82745 1.37869 8.34967 1.13424C8.8719 0.8898 9.4219 0.767578 9.99967 0.767578C11.0441 0.767578 11.9163 1.11758 12.6163 1.81758C13.3163 2.51758 13.6663 3.3898 13.6663 4.43424C13.6663 4.94535 13.5801 5.44535 13.4077 5.93424C13.2352 6.42313 12.9326 6.95913 12.4997 7.54224C12.0663 8.1258 11.483 8.78424 10.7497 9.51758C10.0163 10.2509 9.08856 11.1231 7.96634 12.1342L6.99967 13.0009ZM6.99967 11.2009C8.06634 10.2454 8.94412 9.4258 9.63301 8.74224C10.3219 8.05869 10.8663 7.46447 11.2663 6.95958C11.6663 6.4538 11.9441 6.00358 12.0997 5.60891C12.2552 5.21424 12.333 4.82269 12.333 4.43424C12.333 3.76758 12.1108 3.21202 11.6663 2.76758C11.2219 2.32313 10.6663 2.10091 9.99967 2.10091C9.47745 2.10091 8.99412 2.24802 8.54967 2.54224C8.10523 2.83647 7.79967 3.21158 7.63301 3.66758H6.36634C6.19967 3.21202 5.89412 2.83691 5.44967 2.54224C5.00523 2.24758 4.5219 2.10047 3.99967 2.10091C3.33301 2.10091 2.77745 2.32313 2.33301 2.76758C1.88856 3.21202 1.66634 3.76758 1.66634 4.43424C1.66634 4.82313 1.74412 5.21491 1.89967 5.60958C2.05523 6.00424 2.33301 6.45424 2.73301 6.95958C3.13301 7.46491 3.67745 8.05935 4.36634 8.74291C5.05523 9.42647 5.93301 10.2458 6.99967 11.2009Z"
                                             fill="#444444" />
                                     </svg>
-                                    Add to Wishlist</a>
+                                    Add to Wishlist</button>
                                 <?php } ?>
                                 <?php } ?>
 
                                 <?php if ($modules['compare'] == 1) { ?>
-                                <a href="javascript:void(0)" class="btn btn-wishlist-2 rounded-0 mt-2 ms-1"
+                                <button type="button" class="border-0 btn btn-wishlist-2 rounded-0 mt-2 ms-1"
                                     onclick="addToCompare(<?php echo $products->product_id ?>)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"
                                         fill="none">
@@ -181,7 +181,7 @@
                                             d="M6.88892 11.9906L5.61892 10.7206L6.28892 10.0206L8.41892 12.1506V12.8506L6.28892 14.9806L5.57892 14.2706L6.84892 13.0006H4.99892C4.67024 13.0019 4.34456 12.9381 4.04065 12.813C3.73673 12.6878 3.46061 12.5037 3.2282 12.2713C2.99579 12.0389 2.81169 11.7627 2.68652 11.4588C2.56136 11.1549 2.49759 10.8292 2.49892 10.5006V4.95057C2.0198 4.84856 1.57943 4.61277 1.22892 4.27057C0.880785 3.91882 0.643929 3.47235 0.547898 2.98687C0.451868 2.50138 0.500914 1.99836 0.688917 1.54057C0.878663 1.08432 1.19936 0.694534 1.6105 0.42044C2.02164 0.146346 2.50479 0.000236501 2.99892 0.000565995C3.34188 -0.00680688 3.68256 0.0579233 3.99892 0.190566C4.30197 0.315238 4.57732 0.498734 4.80903 0.730451C5.04075 0.962168 5.22425 1.23751 5.34892 1.54057C5.48192 1.85757 5.54592 2.19857 5.53892 2.54057C5.53904 3.11689 5.34003 3.67556 4.97557 4.12202C4.61112 4.56848 4.1036 4.8753 3.53892 4.99057V10.4906C3.53892 10.8884 3.69695 11.2699 3.97826 11.5512C4.25956 11.8325 4.64109 11.9906 5.03892 11.9906H6.88892ZM2.20892 3.74057C2.49744 3.93279 2.84363 4.01913 3.18862 3.98492C3.53362 3.9507 3.85611 3.79804 4.10125 3.5529C4.34639 3.30776 4.49905 2.98526 4.53327 2.64027C4.56748 2.29528 4.48114 1.94908 4.28892 1.66057C4.12118 1.41206 3.88497 1.21754 3.60892 1.10057C3.33644 0.989575 3.0372 0.961739 2.74892 1.02057C2.45693 1.07703 2.18852 1.21958 1.97823 1.42987C1.76793 1.64017 1.62538 1.90858 1.56892 2.20057C1.51009 2.48884 1.53793 2.78809 1.64892 3.06057C1.76592 3.33757 1.95992 3.57357 2.20892 3.74057ZM12.5389 10.0406C13.0189 10.1386 13.4609 10.3756 13.8089 10.7206C14.2166 11.1308 14.4702 11.6692 14.5267 12.2448C14.5832 12.8205 14.4391 13.3979 14.1189 13.8796C13.9132 14.1862 13.6422 14.4435 13.3253 14.6329C13.0083 14.8223 12.6534 14.9392 12.2859 14.9751C11.9184 15.0111 11.5476 14.9651 11.1999 14.8407C10.8523 14.7162 10.5366 14.5163 10.2754 14.2553C10.0143 13.9943 9.81416 13.6786 9.68949 13.3311C9.56483 12.9836 9.51869 12.6127 9.5544 12.2452C9.59011 11.8777 9.70678 11.5227 9.89602 11.2056C10.0853 10.8886 10.3424 10.6174 10.6489 10.4116C10.9179 10.2296 11.2199 10.1036 11.5389 10.0416V4.49057C11.5389 4.09274 11.3809 3.71121 11.0996 3.42991C10.8183 3.1486 10.4367 2.99057 10.0389 2.99057H8.18892L9.45892 4.26057L8.74892 4.97057L6.61892 2.84057V2.14057L8.74892 0.010566L9.45892 0.720566L8.18892 1.99057H10.0389C10.3676 1.98924 10.6933 2.053 10.9972 2.17817C11.3011 2.30334 11.5772 2.48744 11.8096 2.71985C12.042 2.95226 12.2261 3.22838 12.3513 3.53229C12.4765 3.83621 12.5402 4.16189 12.5389 4.49057V10.0406ZM12.1879 13.9836C12.4451 13.9578 12.6913 13.8659 12.9026 13.7169C13.1139 13.5679 13.283 13.3669 13.3937 13.1332C13.5044 12.8996 13.5528 12.6413 13.5343 12.3835C13.5157 12.1256 13.4309 11.877 13.2879 11.6616C13.1202 11.4131 12.884 11.2185 12.6079 11.1016C12.3357 10.9908 12.0369 10.9629 11.7489 11.0216C11.4569 11.078 11.1885 11.2206 10.9782 11.4309C10.7679 11.6412 10.6254 11.9096 10.5689 12.2016C10.5101 12.4898 10.5379 12.7891 10.6489 13.0616C10.7718 13.3606 10.9881 13.6119 11.2654 13.778C11.5427 13.9441 11.8663 14.0162 12.1879 13.9836Z"
                                             fill="#444444" />
                                     </svg>
-                                    Add to Compare</a>
+                                    Add to Compare</button>
                                 <?php } ?>
 
                             </div>
@@ -211,8 +211,8 @@
                                     <?php  } }?>
                                 </table>
                                 <?php if (!empty($attr)){ ?>
-                                <br><a href="javascript:void(0)" class="btn-see" onclick="myFunction()" id="myBtn">See more
-                                </a>
+                                <br><button type="button" class="border-0 btn-see" onclick="myFunction()" id="myBtn">See more
+                                </button>
                                 <?php } ?>
                             </div>
 
@@ -567,19 +567,19 @@
                                         <span class="btn-wishlist-text position-absolute  mt-5 ms-2">Favorite</span>
                                     </a>
                                     <?php } else { ?>
-                                    <a href="javascript:void(0)" class="btn-wishlist position-absolute mt-2 ms-2"
+                                    <button type="button" class="border-0 btn-wishlist position-absolute mt-2 ms-2"
                                         onclick="addToWishlist(<?php echo $rPro->product_id ?>)"><i
                                             class="fa-solid fa-heart"></i>
                                         <span class="btn-wishlist-text position-absolute  mt-5 ms-2">Favorite</span>
-                                    </a>
+                                    </button>
                                     <?php } ?>
                                     <?php } ?>
                                     <?php if ($modules['compare'] == 1) { ?>
-                                    <a href="javascript:void(0)" onclick="addToCompare(<?php echo $rPro->product_id ?>)"
-                                        class="btn-compare position-absolute  mt-5 ms-2"><i
+                                    <button type="button" onclick="addToCompare(<?php echo $rPro->product_id ?>)"
+                                        class="border-0 btn-compare position-absolute  mt-5 ms-2"><i
                                             class="fa-solid fa-code-compare"></i>
                                         <span class="btn-compare-text position-absolute  mt-5 ms-2">Compare</span>
-                                    </a>
+                                    </button>
                                     <?php } ?>
                                     <div class="product-top text-center">
                                         <a href="<?php echo base_url('detail/' . $rPro->product_id) ?>">
@@ -664,19 +664,19 @@
                                         <span class="btn-wishlist-text position-absolute  mt-5 ms-2">Favorite</span>
                                     </a>
                                     <?php } else { ?>
-                                    <a href="javascript:void(0)" class="btn-wishlist position-absolute mt-2 ms-2"
+                                    <button type="button" class="border-0 btn-wishlist position-absolute mt-2 ms-2"
                                         onclick="addToWishlist(<?php echo $rPro->product_id ?>)"><i
                                             class="fa-solid fa-heart"></i>
                                         <span class="btn-wishlist-text position-absolute  mt-5 ms-2">Favorite</span>
-                                    </a>
+                                    </button>
                                     <?php } ?>
                                     <?php } ?>
                                     <?php if ($modules['compare'] == 1) { ?>
-                                    <a href="javascript:void(0)" onclick="addToCompare(<?php echo $rPro->product_id ?>)"
-                                        class="btn-compare position-absolute  mt-5 ms-2"><i
+                                    <button type="button" onclick="addToCompare(<?php echo $rPro->product_id ?>)"
+                                        class="border-0 btn-compare position-absolute  mt-5 ms-2"><i
                                             class="fa-solid fa-code-compare"></i>
                                         <span class="btn-compare-text position-absolute  mt-5 ms-2">Compare</span>
-                                    </a>
+                                    </button>
                                     <?php } ?>
                                     <div class="product-top text-center">
                                         <a href="<?php echo base_url('detail/' . $rPro->product_id) ?>">

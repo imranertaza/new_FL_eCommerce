@@ -14,7 +14,7 @@
                 <tr>
                     <th style="width: 40%;"></th>
                     <?php foreach ($products as $key => $pro){ ?>
-                    <td class="text-end" style="width: 30%;"><a href="javascript:void(0)" onclick="removeToCompare(<?php echo $key ?>)"><i class="fa-solid fa-close"></i></a></td>
+                    <td class="text-end" style="width: 30%;"><button type="button" class="border-0 bg-transparent" onclick="removeToCompare(<?php echo $key ?>)"><i class="fa-solid fa-close"></i></button></td>
                     <?php } ?>
 
                 </tr>

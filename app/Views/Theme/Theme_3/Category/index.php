@@ -15,7 +15,7 @@
                         <div class="top-bar border">
                             <div class="row">
                                 <div class="col-3 col-md-3">
-                                    <a href="javascript:void(0)" onclick="viewStyle('gird')" id="gird-btn"
+                                    <button type="button" onclick="viewStyle('gird')" id="gird-btn"
                                        class="d-inline-block border p-2 active-view">
                                         <svg aria-hidden="true" focusable="false" width="20px" height="20px"
                                              data-prefix="fas" data-icon="grid" role="img"
@@ -25,9 +25,9 @@
                                                   d="M0 72C0 49.9 17.9 32 40 32H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V72zM0 232c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V232zM128 392v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40zM160 72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V72zM288 232v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM160 392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V392zM448 72v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM320 232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V232zM448 392v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40z"
                                                   class=""></path>
                                         </svg>
-                                    </a>
+                                    </button>
 
-                                    <a href="javascript:void(0)" onclick="viewStyle('list')" id="list-btn"
+                                    <button type="button" onclick="viewStyle('list')" id="list-btn"
                                        class="d-inline-block border p-2">
                                         <svg aria-hidden="true" focusable="false" width="20px" height="20px"
                                              data-prefix="fas" data-icon="list-ul" role="img"
@@ -37,7 +37,7 @@
                                                   d="M64 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM64 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm48-208a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"
                                                   class=""></path>
                                         </svg>
-                                    </a>
+                                    </button>
                                 </div>
                                 <div class="col-3 col-md-3 pt-2">
                                     <label >Results: <?php echo $totalPro;?> showing</label>
@@ -113,23 +113,23 @@
 
                                                     <?php } else { ?>
 
-                                                        <a href="javascript:void(0)"
-                                                           class="btn-wishlist position-absolute mt-2 ms-2"
+                                                        <button type="button"
+                                                           class="border-0 btn-wishlist position-absolute mt-2 ms-2"
                                                            onclick="addToWishlist(<?php echo $pro->product_id ?>)"><i
                                                                     class="fa-solid fa-heart"></i>
                                                             <span class="btn-wishlist-text position-absolute  mt-5 ms-2">Favorite</span>
-                                                        </a>
+                                                        </button>
 
                                                     <?php } ?>
                                                 <?php } ?>
                                                 <?php if ($modules['compare'] == 1) { ?>
 
-                                                    <a href="javascript:void(0)"
+                                                    <button type="button"
                                                        onclick="addToCompare(<?php echo $pro->product_id ?>)"
-                                                       class="btn-compare position-absolute  mt-5 ms-2"><i
+                                                       class="border-0 btn-compare position-absolute  mt-5 ms-2"><i
                                                                 class="fa-solid fa-code-compare"></i>
                                                         <span class="btn-compare-text position-absolute  mt-5 ms-2">Compare</span>
-                                                    </a>
+                                                    </button>
 
                                                 <?php } ?>
 
@@ -182,24 +182,23 @@
 
                                                 <?php } else { ?>
 
-                                                    <a href="javascript:void(0)"
-                                                       class="btn-wishlist position-absolute mt-2 ms-2"
+                                                    <button type="button"
+                                                       class="border-0 btn-wishlist position-absolute mt-2 ms-2"
                                                        style="bottom:57%;"
                                                        onclick="addToWishlist(<?php echo $pro->product_id ?>)"><i
                                                                 class="fa-solid fa-heart"></i>
                                                         <span class="btn-wishlist-text position-absolute  mt-5 ms-2">Favorite</span>
-                                                    </a>
+                                                    </button>
 
                                                 <?php } ?>
                                             <?php } ?>
                                             <?php if ($modules['compare'] == 1) { ?>
 
-                                                <a href="javascript:void(0)"
-                                                   onclick="addToCompare(<?php echo $pro->product_id ?>)"
-                                                   class="btn-compare position-absolute  mt-5 ms-2"><i
+                                                <button type="button" onclick="addToCompare(<?php echo $pro->product_id ?>)"
+                                                   class="border-0 btn-compare position-absolute  mt-5 ms-2"><i
                                                             class="fa-solid fa-code-compare"></i>
                                                     <span class="btn-compare-text position-absolute  mt-5 ms-2">Compare</span>
-                                                </a>
+                                                </button>
 
                                             <?php } ?>
 
