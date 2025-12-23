@@ -5,7 +5,7 @@
         <div class="row gx-0">
             <div class="col-xl-3 col-lg-3 col-sm-3 col-12 mb-2 mb-sm-0 cat-m-d">
                 <div class="border cat-menu-static accordion-cat" >
-                    <?= view('Theme/Theme_3/category_menu') ?>
+                    <?= view('Theme/Theme_3/category_menu', ['prefix' => 'idd1']) ?>
                 </div>
             </div>
             <div class="col-xl-9 col-sm-12 d-flex flex-column flex-lg-row">

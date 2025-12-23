@@ -191,7 +191,7 @@ $modules = modules_access();
 
                         <!--category start-->
                         <div class="dropdown-menu border accordion-cat cat-drop-menu all-cat-menu btn-cat-show "  style="height: 402px; display: none;" id="catBox">
-                            <?= view('Theme/Theme_3/category_menu') ?>
+                            <?= view('Theme/Theme_3/category_menu', ['prefix' => 'idd2']) ?>
                         </div>
                         <!--category end-->
                     </div>
