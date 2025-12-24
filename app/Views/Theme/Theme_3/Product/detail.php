@@ -727,8 +727,10 @@
                 <button type="button" class="btn-close" onclick="video_close()"
                     style="float: right; font-size: 10px; margin-bottom: 10px;" data-bs-dismiss="modal"
                     aria-label="Close"></button>
+                <?php if (!empty($products->video)){ ?>
                 <iframe id="sample_video" height="350" src="<?php echo $products->video; ?>" title="Impossible Records In Football" style="border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen >
                 </iframe>
+                <?php } ?>
             </div>
 
         </div>
