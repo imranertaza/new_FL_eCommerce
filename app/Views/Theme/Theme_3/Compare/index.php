@@ -1,4 +1,6 @@
-<section class="main-container">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container">
     <div class="container">
         <h1 class="page-title mb-3">Compare Products</h1>
         <div class="card p-3 rounded-0">
@@ -12,7 +14,7 @@
                 <tr>
                     <th style="width: 40%;"></th>
                     <?php foreach ($products as $key => $pro){ ?>
-                    <td class="text-end" style="width: 30%;"><a href="javascript:void(0)" onclick="removeToCompare(<?php echo $key ?>)"><i class="fa-solid fa-close"></i></a></td>
+                    <td class="text-end" style="width: 30%;"><button type="button" class="border-0 bg-transparent" onclick="removeToCompare(<?php echo $key ?>)"><i class="fa-solid fa-close"></i></button></td>
                     <?php } ?>
 
                 </tr>
@@ -72,4 +74,5 @@
         </div>
 
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

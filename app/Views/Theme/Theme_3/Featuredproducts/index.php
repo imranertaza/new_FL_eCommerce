@@ -1,4 +1,6 @@
-<section class="main-container my-5">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container my-5">
     <div class="container">
         <div class="popular-category mb-5">
 
@@ -21,11 +23,11 @@
                                         <?php if (!isset(newSession()->isLoggedInCustomer)){ ?>
                                             <a href="<?php echo base_url('login');?>" class="btn-wishlist position-absolute start-0 top-0 mt-2 ms-2"><i class="fa-solid fa-heart"></i></a>
                                         <?php }else{ ?>
-                                            <a href="javascript:void(0)" class="btn-wishlist position-absolute start-0 top-0 mt-2 ms-2" onclick="addToWishlist(<?php echo $pro->product_id ?>)"><i class="fa-solid fa-heart"></i></a>
+                                            <button type="button" class="border-0 btn-wishlist position-absolute start-0 top-0 mt-2 ms-2" onclick="addToWishlist(<?php echo $pro->product_id ?>)"><i class="fa-solid fa-heart"></i></button>
                                         <?php } ?>
                                         <?php } ?>
                                         <?php if ($modules['compare'] == 1) { ?>
-                                        <a href="javascript:void(0)" onclick="addToCompare(<?php echo $pro->product_id ?>)" class="btn-compare position-absolute start-0 top-0 mt-5 ms-2"><i class="fa-solid fa-code-compare"></i></a>
+                                        <button type="button" onclick="addToCompare(<?php echo $pro->product_id ?>)" class="border-0 btn-compare position-absolute start-0 top-0 mt-5 ms-2"><i class="fa-solid fa-code-compare"></i></button>
                                         <?php } ?>
                                         <div class="product-top">
                                             <?php echo image_view('uploads/products',$pro->product_id,'191_'.$pro->image,'noimage.png','img-fluid w-100')?>
@@ -47,7 +49,7 @@
                                                     <small> <del><?php echo currency_symbol_with_symbol($pro->price,$symbol);?></del></small>/<?php echo currency_symbol_with_symbol($spPric,$symbol);?>
                                                 <?php } ?>
                                             </div>
-                                            <a href="javascript:void(0)" onclick="addToCart(<?php echo $pro->product_id ?>)" class="btn btn-cart w-100 rounded-0 mt-3">Add to Cart</a>
+                                            <button type="button" onclick="addToCart(<?php echo $pro->product_id ?>)" class="border-0 btn btn-cart w-100 rounded-0 mt-3">Add to Cart</button>
                                         </div>
                                     </div>
                                 </div>
@@ -63,4 +65,5 @@
 
         </div>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

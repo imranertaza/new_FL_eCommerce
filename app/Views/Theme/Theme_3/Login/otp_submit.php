@@ -1,6 +1,6 @@
-
-
-<section class="main-container">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 text-center mb-4 mb-lg-0">
@@ -8,6 +8,7 @@
             </div>
             <div class="col-lg-6 mb-4 mb-lg-0"><?php //echo newSession()->otp;?>
                 <form action="<?php echo base_url('otp_action')?>" method="post" class="sing-up" onsubmit="return otpValidetion()">
+                    <?= csrf_field() ?>
                     <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
                     <div class="form-group">
                         <div class="input-group d-flex align-items-center bg-white border px-3 rounded-2 in_err">
@@ -22,4 +23,5 @@
             </div>
         </div>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

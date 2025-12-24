@@ -1345,13 +1345,13 @@ function addToCartBtn($product_id)
     $btn = '';
     if (!empty($qtyCheck)) {
         if ($optionCheck == true) {
-            $btn = '<a href="javascript:void(0)" onclick="addToCart(' . $product_id . ')" class="btn btn-cart w-100 rounded-0 mt-auto">Add to Cart</a>';
+            $btn = '<button type="button" onclick="addToCart(' . $product_id . ')" class="border-0 btn btn-cart w-100 rounded-0 mt-auto">Add to Cart</button>';
         } else {
             $url = base_url('detail/' . $product_id);
             $btn = '<a href="' . $url . '"  class="btn btn-cart w-100 rounded-0 mt-auto">Add to Cart</a>';
         }
     } else {
-        $btn = '<a href="javascript:void(0)"  class="btn btn-cart w-100 rounded-0 mt-auto">Out of Stock</a>';
+        $btn = '<button type="button"  class="border-0 btn btn-cart w-100 rounded-0 mt-auto">Out of Stock</button>';
     }
     return $btn;
 }
@@ -1479,23 +1479,98 @@ function get_category_id_by_product_show_home_slide($category_id)
 }
 
 function getProductByScheduleIdShowHomeSlider($scheduleId){
-    $builder = DB()->table('cc_products p')
-        ->select('p.*, fp.featured_product_id, ptc.category_id')
-        ->join('cc_product_to_category ptc', 'ptc.product_id = p.product_id', 'left')
-        ->join('cc_featured_product fp',
-            '(fp.product_id = p.product_id 
-                    OR fp.brand_id = p.brand_id 
-                    OR fp.prod_cat_id = ptc.category_id)',
-            'left'
-        )
-        ->where('p.status', 'Active')
-        ->where('p.featured', '1')
-        ->where('fp.featured_schedule_id', $scheduleId)
-        ->groupBy('p.product_id')
-        ->orderBy('p.product_id', 'DESC')
-        ->limit(20);
+//    $builder = DB()->table('cc_products p')
+//        ->select('p.*, fp.featured_product_id, ptc.category_id')
+//        ->join('cc_product_to_category ptc', 'ptc.product_id = p.product_id', 'left')
+//        ->join('cc_featured_product fp',
+//            '(fp.product_id = p.product_id
+//                    OR fp.brand_id = p.brand_id
+//                    OR fp.prod_cat_id = ptc.category_id)',
+//            'left'
+//        )
+//        ->where('p.status', 'Active')
+//        ->where('p.featured', '1')
+//        ->where('fp.featured_schedule_id', $scheduleId)
+//        ->groupBy('p.product_id')
+//        ->orderBy('p.product_id', 'DESC')
+//        ->limit(20);
+//
+//    $result = $builder->get()->getResult();
 
-    $result = $builder->get()->getResult();
+
+    $db = DB();
+    $featured = $db->table('cc_featured_product')
+        ->where('featured_schedule_id', $scheduleId)
+        ->get()
+        ->getResult();
+
+    $result = [];
+
+    // No row found
+    if (empty($featured)) {
+        return sectionProductViewByProductArray([]);
+    }
+
+    // Detect type from first row
+    $type = null;
+    $first = $featured[0];
+
+    if (!empty($first->product_id)) {
+        $type = 'product';
+    } elseif (!empty($first->brand_id)) {
+        $type = 'brand';
+    } elseif (!empty($first->prod_cat_id)) {
+        $type = 'category';
+    }
+
+    // Handle by type
+    if ($type === 'product') {
+
+        foreach ($featured as $item) {
+            $product = $db->table('cc_products')
+                ->where('product_id', $item->product_id)
+                ->where('status', 'Active')
+                ->where('featured', '1')
+                ->get()
+                ->getRow();
+
+            if ($product) {
+                $result[] = $product;
+            }
+        }
+
+    } elseif ($type === 'brand') {
+
+        foreach ($featured as $item) {
+            $product = $db->table('cc_products')
+                ->where('brand_id', $item->brand_id)
+                ->where('status', 'Active')
+                ->where('featured', '1')
+                ->get()
+                ->getRow();
+
+            if ($product) {
+                $result[] = $product;
+            }
+        }
+
+    } elseif ($type === 'category') {
+
+        foreach ($featured as $item) {
+            $product = $db->table('cc_products p')
+                ->join('cc_product_to_category ptc', 'ptc.product_id = p.product_id')
+                ->where('ptc.category_id', $item->prod_cat_id)
+                ->where('p.status', 'Active')
+                ->where('p.featured', '1')
+                ->get()
+                ->getRow();
+
+            if ($product) {
+                $result[] = $product;
+            }
+        }
+
+    }
 
     return  sectionProductViewByProductArray($result);
 }
@@ -1514,21 +1589,21 @@ function sectionProductViewByProductArray($product){
                     <span class="btn-wishlist-text position-absolute  mt-5 ms-2">Favorite</span>
                     </a>';
             } else {
-                $view .= '<a href="javascript:void(0)" class="btn-wishlist position-absolute mt-2 ms-2" onclick="addToWishlist(' . $pro->product_id . ')"><i class="fa-solid fa-heart"></i>
+                $view .= '<button type="button" class="border-0 btn-wishlist position-absolute mt-2 ms-2" onclick="addToWishlist(' . $pro->product_id . ')"><i class="fa-solid fa-heart"></i>
                     <span class="btn-wishlist-text position-absolute  mt-5 ms-2">Favorite</span>
-                    </a>';
+                    </button>';
             }
 
         }
 
         if ($modules['compare'] == 1) {
-            $view .= '<a href="javascript:void(0)" onclick="addToCompare(' . $pro->product_id . ')" class="btn-compare position-absolute  mt-5 ms-2"><i class="fa-solid fa-code-compare"></i>
+            $view .= '<button type="button" onclick="addToCompare(' . $pro->product_id . ')" class="border-0 btn-compare position-absolute  mt-5 ms-2"><i class="fa-solid fa-code-compare"></i>
                     <span class="btn-compare-text position-absolute  mt-5 ms-2">Compare</span>
-                </a>';
+                </button>';
         }
 
         $view .= '<div class="product-top mb-2">
-                <img data-sizes="auto"  id="" src="' . product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', '132', '132') . '" alt="'.$pro->alt_name.'" class="img-fluid w-100" loading="lazy">                 
+                <img data-sizes="auto" src="' . product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', '132', '132') . '" alt="'.$pro->alt_name.'" class="img-fluid w-100" loading="lazy">                 
                 </div>
                 <div class="product-bottom mt-auto">
                     <div class="product-title product_title_area mb-2">
@@ -2070,4 +2145,13 @@ function getScheduleBySectionId($schedule,$sectionId)
         }
     }
     return null;
+}
+function scheduleLogo(){
+    $now = date('Y-m-d H:i:s');
+    return DB()->table('cc_logo_schedule')
+        ->where('start_date <=',$now)
+        ->where('end_date >=',$now)
+        ->orderBy('start_date', 'ASC')
+        ->get()
+        ->getRow();
 }

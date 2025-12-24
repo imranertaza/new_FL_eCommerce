@@ -1,6 +1,9 @@
-<section class="main-container my-3 my-md-5">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<?= $this->include('Theme/Theme_3/Customer/menu'); ?>
+<div class="main-container mb-3 my-md-5">
     <div class="container">
-        <div class="popular-category mb-5">
+        <div class="mb-5">
             <div class="card rounded-0 border">
                 <div class="card-body p-3 p-md-5">
                     <div class="row">
@@ -59,6 +62,7 @@
                         <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
                             <h4 class="ti-or-n">Change Password</h4>
                             <form action="<?php echo base_url('password_action_update')?>" method="post" onsubmit="return resetPassword()">
+                                <?= csrf_field() ?>
                             <div class="mb-3 mt-3">
                                 <input type="password" id="current_password" name="current_password" class="form-control con-or in_err fw-bolder" placeholder="Current Password*"  >
                                 <span class="text-danger d-inline-block err text-capitalize" id="password_err_mess"></span>
@@ -98,4 +102,5 @@
             </div>
         </div>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

@@ -1,4 +1,7 @@
-<section class="main-container my-5">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<?= $this->include('Theme/Theme_3/Customer/menu'); ?>
+<div class="main-container my-5">
     <div class="container">
 
         <div class="card border rounded-0">
@@ -14,6 +17,7 @@
                     </div>
                     <div class="col-md-6 px-5">
                         <form action="<?php echo base_url('add_funds_action')?>" method="post">
+                            <?= csrf_field() ?>
                             <div class="form-group mt-4">
                                 <label>Amount</label>
                                 <input type="text" name="amount" class="form-control" placeholder="Amount" required>
@@ -52,4 +56,5 @@
         </div>
 
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

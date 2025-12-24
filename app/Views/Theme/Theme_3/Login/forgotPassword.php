@@ -1,6 +1,6 @@
-
-
-<section class="main-container">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 text-center mb-4 mb-lg-0">
@@ -8,6 +8,7 @@
             </div>
             <div class="col-lg-6 mb-4 mb-lg-0">
                 <form action="<?php echo base_url('password_action')?>" method="post" class="sing-up" onsubmit="return emailValidtion()">
+                    <?= csrf_field() ?>
                     <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
                     <div class="form-group">
                         <div class="input-group d-flex align-items-center bg-white border px-3 rounded-2">
@@ -29,4 +30,5 @@
 
 
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

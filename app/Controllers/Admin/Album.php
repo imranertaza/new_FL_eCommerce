@@ -668,7 +668,8 @@ class Album extends BaseController
         $table2 = DB()->table('cc_album');
         $data['val'] = $table2->where('album_id', $album_id)->get()->getRow();
 
-        echo view('Admin/Album/row', $data);
+        $this->response->setHeader('X-CSRF-TOKEN', csrf_hash());
+        return $this->response->setBody(view('Admin/Album/row', $data));
     }
 
     public function album_download_action()

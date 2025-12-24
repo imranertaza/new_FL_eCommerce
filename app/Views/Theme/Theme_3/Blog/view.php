@@ -1,4 +1,6 @@
-<section class="main-container">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container">
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-sm-12">
@@ -92,23 +94,41 @@
             </div>
 
             <div class="col-md-12 mt-3" >
-                <form id="commentForm" action="<?php echo base_url('blog-comment-action');?>"  method="post">
+                <form id="commentForm" class="login_form" action="<?php echo base_url('blog-comment-action');?>"  method="post">
+                    <?= csrf_field() ?>
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="name" placeholder="Name" required >
+                                <input type="text" class="form-control" name="name" placeholder="Name"  >
+                                <span class="text-danger err d-inline-block text-capitalize" id="messageName"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <input type="email" class="form-control" name="email" placeholder="Email" required >
+                                <input type="email" class="form-control" name="email" placeholder="Email"  >
                                 <input type="hidden" name="blog_id" placeholder="blog_id" value="<?php echo $blog->blog_id; ?>" >
+                                <span class="text-danger err d-inline-block text-capitalize" id="messageEmail"></span>
                             </div>
                         </div>
                     </div>
                     <div class="form-group mt-3">
                         <textarea class="form-control" name="comment" id="exampleFormControlTextarea1" rows="10"
-                                  placeholder="Write a comment" required ></textarea>
+                                  placeholder="Write a comment"  ></textarea>
+                        <span class="text-danger err d-inline-block text-capitalize" id="messageComment"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <div id="captcha" class="form_div mt-3">
+                            <input type="hidden" id="genaretCapt" >
+                            <div class="preview"></div>
+                            <div class="captcha_form">
+                                <input type="text" id="captcha_form" class="form_input_captcha" placeholder="Enter Captcha ">
+                                <button type="button" class="captcha_refersh">
+                                    <i class="fa fa-refresh"></i>
+                                </button>
+                            </div>
+                            <span class="text-danger err d-inline-block text-capitalize" id="messageRecaptcha"></span>
+                        </div>
                     </div>
 
 
@@ -149,4 +169,200 @@
 
         </div>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>
+<?= $this->section('java_script') ?>
+<script>
+
+    $(document).ready(function () {
+        // Generate Captcha
+        function generateCaptcha() {
+            let captcha = Math.random().toString(36).substring(2, 8).toUpperCase();
+            document.getElementById("genaretCapt").value = captcha;
+            document.querySelector(".preview").innerHTML = captcha;
+        }
+
+        generateCaptcha();
+
+        document.querySelector(".captcha_refersh").addEventListener("click", function () {
+            generateCaptcha();
+        });
+
+        // On form submit
+        $('#commentForm').on('submit', function (event) {
+            event.preventDefault(); // STOP default submission
+
+            let isValid = true;
+
+            // Get values
+            let name = $("input[name='name']").val().trim();
+            let email = $("input[name='email']").val().trim();
+            let comment = $("textarea[name='comment']").val().trim();
+            let captcha_input = $("#captcha_form").val().trim();
+            let captcha_generated = $("#genaretCapt").val();
+
+            // ----- NAME VALIDATION -----
+            let namePattern = /^[A-Za-z\s]{2,20}$/;
+            if (!namePattern.test(name)) {
+                $("#messageName").html("Name must be 2–20 letters!");
+                isValid = false;
+            } else {
+                $("#messageName").html("");
+            }
+
+            // ----- EMAIL VALIDATION -----
+            let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                $("#messageEmail").html("Enter a valid email!");
+                isValid = false;
+            } else {
+                $("#messageEmail").html("");
+            }
+
+            // ----- COMMENT VALIDATION -----
+            let cleanComment = comment.trim();
+
+            // Allow: letters, numbers, spaces, basic punctuation .,!?-():;
+            let allowedPattern = /^[\p{L}\p{N}\s.,!?()\-:;]{3,500}$/u;
+
+            if (!allowedPattern.test(cleanComment)) {
+                $("#messageComment").html("Comment must be 3–500 characters and cannot contain special characters!");
+                isValid = false;
+            } else {
+                $("#messageComment").html("");
+            }
+
+            // ----- CAPTCHA VALIDATION -----
+            if (captcha_input !== captcha_generated) {
+                $("#messageRecaptcha").html("Captcha does not match!");
+                isValid = false;
+            } else {
+                $("#messageRecaptcha").html("");
+            }
+
+            // ---- IF NOT VALID → STOP ----
+            if (!isValid) {
+                return false;
+            }
+
+            // ---- IF VALID → RUN AJAX ----
+            var formData = new FormData(this);
+
+            // Add CSRF Token
+            formData.append(
+                $('meta[name="csrf-name"]').attr("content"),
+                $('meta[name="csrf-token"]').attr("content")
+            );
+
+            $.ajax({
+                url: $(this).attr("action"),
+                type: "POST",
+                data: formData,
+                contentType: false,
+                cache: false,
+                processData: false,
+
+                success: function (response) {
+                    // Reset form
+                    $('#commentForm')[0].reset();
+                    // Show response
+                    $('#mesVal').html(response);
+                    // Reload comment box
+                    $('#commentBoxReload').load(location.href + ' #commentBoxReload');
+
+                    $('.message_alert').show();
+                    setTimeout(function () {
+                        $("#messAlt").fadeOut(1500);
+                    }, 600);
+                    generateCaptcha(); // call captcha generator again
+                    $("#captcha_form").val(""); // clear input field
+                }
+            });
+
+        });
+
+    });
+
+    function commentReply(show,id){
+        var formID = "'commentReply_" + id+"'" ;
+        var html = '<form id="commentReply_'+id+'" action="<?php echo base_url('blog-comment-reply-action')?>" method="post"><div class="d-flex" > <input type="hidden" name="comment_id" class="comment_id" value="'+id+'" required> <input type="text" name="com_name" placeholder="Name" class="input-c" required> <input type="text" name="com_email" placeholder="Email" class="input-c"> </div> <div class="mt-1"> <input type="text" name="com_text" placeholder="Text" class="input-c input-te" required> <br><button type="button" class="btn btn-reply mt-1" onclick="commentReplyAction('+formID+')" >Reply  Comment</button> </div></form>';
+        $("#"+show).html(html);
+    }
+
+    function commentReplyAction(formID) {
+
+        var form = document.getElementById(formID);
+
+        // Get field values
+        let name = form.querySelector("input[name='com_name']").value.trim();
+        let email = form.querySelector("input[name='com_email']").value.trim();
+        let text = form.querySelector("input[name='com_text']").value.trim();
+
+        let isValid = true;
+
+        // -------- NAME VALIDATION (letters only, 2–20 chars) ----------
+        let namePattern = /^[A-Za-z\s]{2,20}$/;
+        if (!namePattern.test(name)) {
+            alert("Name must be 2–20 letters only!");
+            isValid = false;
+        }
+
+        // -------- EMAIL VALIDATION (optional but must be valid if entered) ----------
+        let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email !== "" && !emailPattern.test(email)) {
+            alert("Please enter a valid email address!");
+            isValid = false;
+        }
+
+        // -------- TEXT VALIDATION (3–500 chars + real letters) ----------
+        let cleanText = text.trim();
+        let textPattern = /\p{L}|\p{N}/u; // must contain real characters
+
+        if (cleanText.length < 3 || cleanText.length > 500 || !textPattern.test(cleanText)) {
+            alert("Reply text must be 3–500 valid characters!");
+            isValid = false;
+        }
+
+        // -------- STOP IF INVALID ----------
+        if (!isValid) {
+            return false;
+        }
+
+        // -------- AJAX SUBMIT ----------
+        var formData = new FormData(form);
+
+        // ADD CSRF
+        formData.append(
+            $('meta[name="csrf-name"]').attr("content"),
+            $('meta[name="csrf-token"]').attr("content")
+        );
+
+        $.ajax({
+            url: $(form).prop('action'),
+            type: "POST",
+            data: formData,
+            contentType: false,
+            cache: false,
+            processData: false,
+
+            success: function(response) {
+
+                // Reset + hide form
+                $('#' + formID)[0].reset();
+                $('#' + formID).hide();
+
+                // Reload comments
+                $('#commentBoxReload').load(document.URL + ' #commentBoxReload');
+
+                // Show message
+                $('#mesVal').html(response);
+                $('.message_alert').show();
+
+                setTimeout(function() {
+                    $("#messAlt").fadeOut(1500);
+                }, 600);
+            }
+        });
+    }
+</script>
+<?= $this->endSection() ?>

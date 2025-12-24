@@ -890,10 +890,19 @@ function optionBulkUpdateAction() {
     }else {
         var form = document.getElementById('optionForm');
         var upRow = $(form).attr('data-row');
+
+        var formData = new FormData(form);
+
+        // ADD CSRF TOKEN (important for CI4)
+        formData.append(
+            $('meta[name="csrf-name"]').attr("content"),
+            $('meta[name="csrf-token"]').attr("content")
+        );
+
         $.ajax({
             url: $(form).prop('action'),
             type: "POST",
-            data: new FormData(form),
+            data: formData,
             contentType: false,
             cache: false,
             processData: false,

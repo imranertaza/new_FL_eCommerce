@@ -1,4 +1,6 @@
-<section class="main-container" id="tableReload2">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container" id="tableReload2">
     <div class="container">
         <div class="cart">
             <div class="row">
@@ -26,16 +28,16 @@
                         foreach (Cart()->contents() as $val) { ?>
                             <tr>
                                 <td class="product-remove mo-text-center">
-                                    <a href="javascript:void(0)" onclick="removeCart('<?php echo $val['rowid']; ?>')"><i class="fa-solid fa-trash-can"></i></a>
+                                    <button type="button" class="border-0 bg-transparent" onclick="removeCart('<?php echo $val['rowid']; ?>')"><i class="fa-solid fa-trash-can"></i></button>
                                 </td>
                                 <td class="product-thumbnail mo-text-center">
-                                    <a href="#">
+                                    <button type="button" class="border-0 bg-transparent">
                                         <?php $img = get_all_row_data_by_id('cc_products', 'product_id', $val['id']); ?>
                                         <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $val['id'], $img->image, 'noimage.png',  '100', '100') ?>" alt="<?php echo $img->alt_name?>" class="img-fluid " loading="lazy">
-                                    </a>
+                                    </button>
                                 </td>
                                 <td class="product-name text-start mo-text-center">
-                                    <a href="#"><?php echo $val['name']; ?></a>
+                                    <?php echo $val['name']; ?>
                                 </td>
 
                                 <td class="product-price mo-text-center" width="100">
@@ -73,6 +75,7 @@
                             <td colspan="4" style="border-right:0">
                                 <?php if (modules_key_by_access('coupon') == '1') { ?>
                                 <form action="<?php echo base_url('checkout_coupon_action') ?>" method="post">
+                                    <?= csrf_field() ?>
                                     <div class="d-flex coupon">
                                         <input type="text" class="form-control w-auto rounded-0 me-1" name="coupon" placeholder="Coupon Code" required>
                                         <input class="btn bg-custom-color rounded-0 px-4 text-white" type="submit" name="submit" value="Apply Coupon">
@@ -130,4 +133,5 @@
             <?php } ?>
         </div>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

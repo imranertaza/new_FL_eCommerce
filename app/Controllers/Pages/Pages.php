@@ -32,18 +32,17 @@ class Pages extends BaseController {
         $data['description'] = !empty($page->meta_description)?$page->meta_description:$settings['meta_description'];
         $data['title'] = !empty($page->meta_title)?$page->meta_title:$page->page_title;
 
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
         if (!empty($page->temp)){
-            echo view('Theme/'.$settings['Theme'].'/Page/'.$page->temp);
+            echo view('Theme/'.$settings['Theme'].'/Page/'.$page->temp,$data);
         }else{
             echo view('Theme/'.$settings['Theme'].'/Page/default',$data);
         }
-        echo view('Theme/'.$settings['Theme'].'/footer');
+
     }
 
     /**
      * @description This method provides contact action
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function contact_action(){
 
@@ -66,7 +65,9 @@ class Pages extends BaseController {
             $message = 'Your message was successfully submitted';
             email_send($data['email'], $subject, $message);
 
-            print $message;
+            return $this->response
+                ->setHeader('X-CSRF-TOKEN', csrf_hash())
+                ->setBody($message);
         }
     }
 

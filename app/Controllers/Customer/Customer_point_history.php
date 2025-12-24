@@ -39,10 +39,9 @@ class Customer_point_history extends BaseController
             $data['title'] = 'Point History';
             $data['page_title'] = 'Point History';
             $data['menu_active'] = 'point_history';
-            echo view('Theme/'.$settings['Theme'].'/header',$data);
-            echo view('Theme/'.$settings['Theme'].'/Customer/menu');
-            echo view('Theme/'.$settings['Theme'].'/Customer/customer_point_history');
-            echo view('Theme/'.$settings['Theme'].'/footer');
+            
+            echo view('Theme/'.$settings['Theme'].'/Customer/customer_point_history',$data);
+
         }
     }
 

@@ -45,16 +45,15 @@ class Dashboard extends BaseController
 
             $data['page_title'] = 'Dashboard';
             $data['menu_active'] = 'dashboard';
-            echo view('Theme/'.$settings['Theme'].'/header',$data);
-            echo view('Theme/'.$settings['Theme'].'/Customer/menu');
-            echo view('Theme/'.$settings['Theme'].'/Customer/dashboard');
-            echo view('Theme/'.$settings['Theme'].'/footer');
+
+            echo view('Theme/'.$settings['Theme'].'/Customer/dashboard',$data);
+
         }
     }
 
     /**
      * @description This method provides add to wishlist
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function addtoWishlist(){
         $data['product_id'] = $this->request->getPost('product_id');
@@ -63,10 +62,13 @@ class Dashboard extends BaseController
         if ($check == true) {
             $table = DB()->table('cc_customer_wishlist');
             $table->insert($data);
-            print 'Successfully add to Wishlist';
+            $message = 'Successfully add to Wishlist';
         }else{
-            print 'Already exists';
+            $message = 'Already exists';
         }
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
     }
 
 }

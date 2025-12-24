@@ -272,6 +272,7 @@ $routes->get('/order_view/(:num)', 'Admin\Order::order_view/$1');
 $routes->post('/order_payment_status_action', 'Admin\Order::payment_status_action');
 $routes->post('order_point_action', 'Admin\Order::point_action');
 $routes->get('/order_delete/(:num)', 'Admin\Order::delete/$1');
+$routes->post('order_multi_delete_action', 'Admin\Order::orderMultiDeleteAction');
 
 //Theme Settings
 $routes->get('/theme_settings', 'Admin\Theme_settings::index');
@@ -376,6 +377,40 @@ $routes->get('/section_view/(:num)', 'Admin\FeaturedSection::sectionView/$1');
 $routes->post('section_view_action', 'Admin\FeaturedSection::sectionViewAction');
 $routes->post('section_view_update_action', 'Admin\FeaturedSection::sectionViewUpdateAction');
 $routes->get('section_view_delete/(:num)', 'Admin\FeaturedSection::delete/$1');
+
+//Slider section
+$routes->get('slider_section', 'Admin\SliderSection::index');
+$routes->get('slider_section_create', 'Admin\SliderSection::create');
+$routes->post('slider_section_create_action', 'Admin\SliderSection::sliderSectionCreateAction');
+$routes->get('slider_section_view/(:num)', 'Admin\SliderSection::sliderSectionView/$1');
+$routes->post('slider_section_update_action', 'Admin\SliderSection::sliderSectionUpdateAction');
+$routes->get('slider_section_delete/(:num)', 'Admin\SliderSection::delete/$1');
+
+
+//Slider Right Side Banner Section
+$routes->get('slider_right_section', 'Admin\SliderRightSection::index');
+$routes->get('slider_right_section_create', 'Admin\SliderRightSection::create');
+$routes->post('slider_right_section_create_action', 'Admin\SliderRightSection::sliderRightSectionCreateAction');
+$routes->get('slider_right_section_view/(:num)', 'Admin\SliderRightSection::sliderRightSectionView/$1');
+$routes->post('slider_right_section_update_action', 'Admin\SliderRightSection::sliderRightSectionUpdateAction');
+$routes->get('slider_right_section_delete/(:num)', 'Admin\SliderRightSection::delete/$1');
+
+//Logo section
+$routes->get('logo_section', 'Admin\LogoSection::index');
+$routes->get('logo_section_create', 'Admin\LogoSection::create');
+$routes->post('logo_section_create_action', 'Admin\LogoSection::logoSectionCreateAction');
+$routes->get('logo_section_view/(:num)', 'Admin\LogoSection::logoSectionView/$1');
+$routes->post('logo_section_update_action', 'Admin\LogoSection::logoSectionUpdateAction');
+$routes->get('logo_section_delete/(:num)', 'Admin\LogoSection::delete/$1');
+
+
+//Logo section
+$routes->get('banner_section', 'Admin\BannerSection::index');
+$routes->get('banner_section_create', 'Admin\BannerSection::create');
+$routes->post('banner_section_create_action', 'Admin\BannerSection::bannerSectionCreateAction');
+$routes->get('banner_section_view/(:num)', 'Admin\BannerSection::bannerSectionView/$1');
+$routes->post('banner_section_update_action', 'Admin\BannerSection::bannerSectionUpdateAction');
+$routes->get('banner_section_delete/(:num)', 'Admin\BannerSection::delete/$1');
 
 //login routes
 $routes->get('/register', 'Login::register');

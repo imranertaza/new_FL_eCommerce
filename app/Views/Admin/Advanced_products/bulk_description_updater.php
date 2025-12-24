@@ -41,6 +41,7 @@
 
 
                 <form action="<?php echo base_url('bulk_description_updater_action') ?>" method="post">
+                    <?= csrf_field() ?>
                     <div class="modal-header">
                         <h4 class="modal-title">Description</h4>
                     </div>

@@ -102,6 +102,7 @@
             method: "POST",
             url: "<?php echo base_url('reviews_status_update') ?>",
             data: {
+                '<?= csrf_token() ?>': '<?= csrf_hash() ?>',
                 feedback_id: feedback_id,
                 status: val
             },

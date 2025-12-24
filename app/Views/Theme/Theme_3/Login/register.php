@@ -1,4 +1,6 @@
-<section class="main-container">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-6 text-center mb-4 mb-md-0">
@@ -242,6 +244,7 @@
             </div>
             <div class="col-md-6">
                 <form action="<?php echo base_url('register_action')?>" method="post" class="sing-up" onsubmit="return onRegistration()">
+                    <?= csrf_field() ?>
                     <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>
                     <div class="form-group">
                         <div class="input-group d-flex align-items-center bg-white border rounded-2 px-3 in_err">
@@ -324,4 +327,5 @@
             <p><a href="<?php echo base_url('login') ?>" class="btn bg-custom-color rounded-0 px-5 py-2 fs-5 text-white fw-semibold">Sign In</a></p>
         </div>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

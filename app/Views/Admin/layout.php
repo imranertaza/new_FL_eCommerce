@@ -7,6 +7,10 @@
     <title><?php echo get_lebel_by_value_in_settings('store_name'); ?> | Admin Panel</title>
     <link rel="shortcut icon" href="<?php echo base_url() ?>/uploads/logo/<?php echo get_lebel_by_value_in_theme_settings('favicon')->value;?>">
 
+    <meta name="csrf-token" content="<?= csrf_hash() ?>">
+    <meta name="csrf-header" content="<?= csrf_header() ?>">
+    <meta name="csrf-name" content="<?= csrf_token() ?>">
+
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -606,6 +610,14 @@
         // $('#tableForm').submit();
     }
 
+    $(document).ajaxComplete(function(event, xhr) {
+        let headerName = $('meta[name="csrf-header"]').attr('content');
+        let newToken   = xhr.getResponseHeader(headerName);
+        if (newToken) {
+            $('meta[name="csrf-token"]').attr('content', newToken);
+            $('input[name="<?= csrf_token() ?>"]').val(newToken);
+        }
+    });
 
 </script>
 <?= $this->renderSection('java_script') ?>

@@ -993,7 +993,7 @@ class Products extends BaseController
 
     /**
      * @description This method provides product delete
-     * @return void
+     * @return ResponseInterface
      */
     public function delete()
     {
@@ -1053,7 +1053,11 @@ class Products extends BaseController
 
         DB()->transComplete();
 
-        print '<div class="alert alert-success alert-dismissible" role="alert">Products Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        $message = '<div class="alert alert-success alert-dismissible" role="alert">Products Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
     }
 
     /**
@@ -1093,7 +1097,7 @@ class Products extends BaseController
 
     /**
      * @description This method provides image delete
-     * @return void
+     * @return ResponseInterface
      */
     public function image_delete()
     {
@@ -1116,12 +1120,15 @@ class Products extends BaseController
         }
 
         $table->where('product_image_id', $product_image_id)->delete();
-        print '<div class="alert alert-success alert-dismissible" role="alert">Image Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        $message = '<div class="alert alert-success alert-dismissible" role="alert">Image Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
     }
 
     /**
      * @description This method provides product option search
-     * @return void
+     * @return ResponseInterface
      */
     public function product_option_search()
     {
@@ -1137,12 +1144,14 @@ class Products extends BaseController
         }
         $view .= '</ul>';
 
-        print $view;
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($view);
     }
 
     /**
      * @description This method provides product option value search
-     * @return void
+     * @return ResponseInterface
      */
     public function product_option_value_search()
     {
@@ -1153,7 +1162,10 @@ class Products extends BaseController
         foreach ($data as $item) {
             $view .= '<option value="' . $item->option_value_id . '">' . $item->name . '</option>';
         }
-        print $view;
+
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($view);
     }
 
     /**
@@ -1366,7 +1378,7 @@ class Products extends BaseController
 
     /**
      * @description This method provides product image sort action
-     * @return void
+     * @return ResponseInterface
      */
     public function product_image_sort_action()
     {
@@ -1375,11 +1387,13 @@ class Products extends BaseController
         $data['sort_order'] = $this->request->getPost('value');
         $table = DB()->table('cc_product_image');
         $table->where('product_image_id', $product_image_id)->update($data);
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash());
     }
 
     /**
      * @description This method provides product image alt name action
-     * @return void
+     * @return ResponseInterface
      */
     public function productImageAltNameAction()
     {
@@ -1388,6 +1402,8 @@ class Products extends BaseController
         $data['alt_name'] = $this->request->getPost('value');
         $table = DB()->table('cc_product_image');
         $table->where('product_image_id', $product_image_id)->update($data);
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash());
     }
 
     /**

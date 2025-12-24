@@ -7,6 +7,7 @@ use App\Libraries\Image_processing;
 use App\Libraries\Permission;
 use App\Models\ProductsModel;
 use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\HTTP\Response;
 
 class Advanced_products extends BaseController
 {
@@ -167,18 +168,19 @@ class Advanced_products extends BaseController
         $table2 = DB()->table('cc_products');
         $data['val'] = $table2->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id')->where('cc_products.product_id', $product_id)->get()->getRow();
 
-        if (!empty($name)) {
-            echo view('Admin/Advanced_products/name', $data);
-        }
+        $this->response->setHeader('X-CSRF-TOKEN', csrf_hash());
 
+        if (!empty($name)) {
+            return $this->response->setBody(view('Admin/Advanced_products/name', $data));
+        }
         if (!empty($model)) {
-            echo view('Admin/Advanced_products/model', $data);
+            return $this->response->setBody(view('Admin/Advanced_products/model', $data));
         }
         if (!empty($price)) {
-            echo view('Admin/Advanced_products/price', $data);
+            return $this->response->setBody(view('Admin/Advanced_products/price', $data));
         }
         if (!empty($quantity)) {
-            echo view('Admin/Advanced_products/quantity', $data);
+            return $this->response->setBody(view('Admin/Advanced_products/quantity', $data));
         }
 
     }
@@ -214,22 +216,22 @@ class Advanced_products extends BaseController
         $data['val'] = $table2->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id')->where('cc_products.product_id', $product_id)->get()->getRow();
 
 
-        if (isset($meta_title)) {
-            echo view('Admin/Advanced_products/metaTitle', $data);
-        }
+        $this->response->setHeader('X-CSRF-TOKEN', csrf_hash());
 
-        if (isset($meta_description)) {
-            echo view('Admin/Advanced_products/metaDescription', $data);
+        if (!empty($meta_title)) {
+            return $this->response->setBody(view('Admin/Advanced_products/metaTitle', $data));
         }
-
-        if (isset($meta_keyword)) {
-            echo view('Admin/Advanced_products/metaKeyword', $data);
+        if (!empty($meta_description)) {
+            return $this->response->setBody(view('Admin/Advanced_products/metaDescription', $data));
+        }
+        if (!empty($meta_keyword)) {
+            return $this->response->setBody(view('Admin/Advanced_products/metaKeyword', $data));
         }
     }
 
     /**
      * @description This method provides bulk all status update
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function bulk_all_status_update()
     {
@@ -245,18 +247,31 @@ class Advanced_products extends BaseController
         $table2 = DB()->table('cc_products');
         $data['val'] = $table2->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id')->where('cc_products.product_id', $product_id)->get()->getRow();
 
-        if($field == 'status'){
-            echo view('Admin/Advanced_products/status', $data);
+        // prepare new CSRF token in header
+        $this->response->setHeader('X-CSRF-TOKEN', csrf_hash());
+
+//        if($field == 'status'){
+//            echo view('Admin/Advanced_products/status', $data);
+//        }
+
+
+//        if($field == 'featured'){
+//            echo view('Admin/Advanced_products/featured', $data);
+//        }
+
+        if ($field == 'status') {
+            return $this->response->setBody(view('Admin/Advanced_products/status', $data));
         }
-        if($field == 'featured'){
-            echo view('Admin/Advanced_products/featured', $data);
+
+        if ($field == 'featured') {
+            return $this->response->setBody(view('Admin/Advanced_products/featured', $data));
         }
 
     }
 
     /**
      * @description This method provides bulk category view
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function bulk_category_view()
     {
@@ -269,7 +284,8 @@ class Advanced_products extends BaseController
 
         $data['product_id'] = $product_id;
 
-        echo view('Admin/Advanced_products/category', $data);
+        $this->response->setHeader('X-CSRF-TOKEN', csrf_hash());
+        return $this->response->setBody(view('Admin/Advanced_products/category', $data));
     }
 
     /**
@@ -303,7 +319,7 @@ class Advanced_products extends BaseController
 
     /**
      * @description This method provides bulk option view
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function bulk_option_view(){
         $product_id = $this->request->getPost('product_id');
@@ -311,12 +327,14 @@ class Advanced_products extends BaseController
 
         $table = DB()->table('cc_product_option');
         $data['prodOption'] = $table->where('product_id', $product_id)->groupBy('option_id')->get()->getResult();
-        echo view('Admin/Advanced_products/option', $data);
+
+        $this->response->setHeader('X-CSRF-TOKEN', csrf_hash());
+        return $this->response->setBody(view('Admin/Advanced_products/option', $data));
     }
 
     /**
      * @description This method provides bulk option update
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function bulk_option_update(){
         $product_id = $this->request->getPost('product_id');
@@ -349,7 +367,9 @@ class Advanced_products extends BaseController
         $table2 = DB()->table('cc_products');
         $data['val'] = $table2->join('cc_product_description', 'cc_product_description.product_id = cc_products.product_id')->where('cc_products.product_id', $product_id)->get()->getRow();
 
-        echo view('Admin/Advanced_products/row', $data);
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody(view('Admin/Advanced_products/row', $data));
     }
 
     /**

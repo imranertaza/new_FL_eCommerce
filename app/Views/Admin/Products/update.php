@@ -22,6 +22,7 @@
     <!-- Main content -->
     <section class="content">
         <form action="<?php echo base_url('product_update_action') ?>" method="post" enctype="multipart/form-data">
+            <?= csrf_field() ?>
             <!-- Default box -->
             <div class="card">
                 <div class="card-header">
@@ -481,10 +482,13 @@
 <?= $this->section('java_script') ?>
 <script>
     function searchOptionUp(key) {
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('product_option_search') ?>",
             data: {
+                [csrfName]: csrfHash,
                 key: key
             },
             beforeSend: function() {
@@ -520,11 +524,14 @@
     }
     //option
     function add_option_new_ajax(id, option_id) {
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         // var data = '';
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('product_option_value_search') ?>",
             data: {
+                [csrfName]: csrfHash,
                 option_id: option_id
             },
             success: function(val) {
@@ -576,10 +583,13 @@
     }
 
     function removeImg(product_image_id) {
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('product_image_delete') ?>",
             data: {
+                [csrfName]: csrfHash,
                 product_image_id: product_image_id
             },
             beforeSend: function() {
@@ -593,10 +603,12 @@
         });
     }
     function image_sort_update(product_image_id,val){
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('product_image_sort_action') ?>",
-            data: {product_image_id: product_image_id,value:val},
+            data: {[csrfName]: csrfHash,product_image_id: product_image_id,value:val},
             beforeSend: function () {
                 $("#loading-image").show();
             },
@@ -607,10 +619,12 @@
     }
 
     function image_alt_name_update(product_image_id,val){
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('product_image_alt_name_action') ?>",
-            data: {product_image_id: product_image_id,value:val},
+            data: {[csrfName]: csrfHash,product_image_id: product_image_id,value:val},
             beforeSend: function () {
                 $("#loading-image").show();
             },

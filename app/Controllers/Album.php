@@ -39,9 +39,8 @@ class Album extends BaseController {
         $data['description'] = $settings['meta_description'];
         $data['title'] = !empty($settings['meta_title'])?$settings['meta_title']:$settings['store_name'];
 
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
+
         echo view('Theme/'.$settings['Theme'].'/Album/index',$data);
-        echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
     public function qc_picture_view_category($album_id){
@@ -61,9 +60,7 @@ class Album extends BaseController {
         $data['description'] = $settings['meta_description'];
         $data['title'] = !empty($settings['meta_title'])?$settings['meta_title']:$settings['store_name'];
 
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
         echo view('Theme/'.$settings['Theme'].'/Album/index',$data);
-        echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
     /**
@@ -92,9 +89,7 @@ class Album extends BaseController {
         $data['description'] = $settings['meta_description'];
         $data['title'] = !empty($settings['meta_title'])?$settings['meta_title']:$settings['store_name'];
 
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
         echo view('Theme/'.$settings['Theme'].'/Album/view',$data);
-        echo view('Theme/'.$settings['Theme'].'/footer');
     }
     public function picture_not_found(){
         $settings = get_settings();
@@ -104,9 +99,7 @@ class Album extends BaseController {
         $data['description'] = $settings['meta_description'];
         $data['title'] = !empty($settings['meta_title'])?$settings['meta_title']:$settings['store_name'];
 
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
         echo view('Theme/'.$settings['Theme'].'/Album/not_found',$data);
-        echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
     public function qc_picture_query(){
@@ -130,7 +123,9 @@ class Album extends BaseController {
             $message = 'Something went wrong! Please try again.';
         }
 
-        print $message;
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
     }
     /**
      * @description This method provides album image download
@@ -168,16 +163,18 @@ class Album extends BaseController {
 
         $data['downloadUrl'] = $downloadUrl;
         $data['unlinkUrl'] = $unlinkUrl;
-
+        $data['csrfToken'] = csrf_hash();
         return json_encode($data);
     }
     /**
      * @description This method provides album image unlink
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function albumImageUnlink(){
         $url = $this->request->getPost('url');
         $this->image_processing->image_unlink($url);
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash());
     }
 
 }

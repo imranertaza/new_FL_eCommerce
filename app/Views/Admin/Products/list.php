@@ -31,6 +31,7 @@
                     </div>
                     <div class="col-md-8">
                         <form id="multisubmitform" action="<?php echo base_url('product_copy_action'); ?>" method="post">
+                            <?= csrf_field() ?>
                             <a href="<?php echo base_url('product_create') ?>" class=" mt-2 btn btn-primary btn-xs float-right"><i class="fas fa-plus"></i> Add</a>
                             <?php if(modules_key_by_access('bulk_edit_products') == '1' ){?>
                             <a href="<?php echo base_url('bulk_edit_products') ?>" onclick="bulk_datatable_reset()" class=" mt-2 btn btn-info btn-xs float-right mr-2"><i class="fas fa-plus"></i> Bulk Edit Products</a>
@@ -63,6 +64,7 @@
                     <?php echo $links; ?>
                 </div>
                 <form id="tableForm" action="<?php echo base_url('products')?>" method="GET" >
+                    <?= csrf_field() ?>
                     <div class="row mb-3 mt-3">
                         <div class="col-md-2 mx-auto">
 
@@ -155,10 +157,12 @@
 
     function product_delete(id){
         if (confirm('Do you want to delete it?')) {
+            let csrfName = $('meta[name="csrf-name"]').attr('content');
+            let csrfHash = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 method: "POST",
                 url: "<?php echo base_url('product_delete') ?>",
-                data: {product_id: id},
+                data: {[csrfName]: csrfHash,product_id: id},
                 beforeSend: function () {
                     $("#loading-image").show();
                 },

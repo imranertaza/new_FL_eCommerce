@@ -99,14 +99,13 @@ class Products extends BaseController {
         $data['title'] = $data['products']->meta_title;
 
         $data['page_title'] = 'Product Detail';
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
-        echo view('Theme/'.$settings['Theme'].'/Product/detail');
-        echo view('Theme/'.$settings['Theme'].'/footer');
+
+        echo view('Theme/'.$settings['Theme'].'/Product/detail',$data);
     }
 
     /**
      * @description This method provides option price calculate
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function optionPriceCalculate(){
 
@@ -135,7 +134,11 @@ class Products extends BaseController {
             $proPrice = $specialprice;
         }
 
-        print currency_symbol($proPrice + $totalOptionPrice);
+        $total = currency_symbol($proPrice + $totalOptionPrice);
+
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($total);
     }
 
     /**
@@ -155,7 +158,7 @@ class Products extends BaseController {
         ]);
 
         if ($this->validation->run($data) == FALSE) {
-            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">' . $this->validation->listErrors() .'</div>');
+            $this->session->setFlashdata('message', $this->validation->listErrors());
             return redirect()->to('detail/'. $data['product_id']);
         } else {
 
@@ -166,25 +169,31 @@ class Products extends BaseController {
             $tablePro = DB()->table('cc_products');
             $tablePro->where('product_id',$data['product_id'])->update($dataRet);
 
-            $this->session->setFlashdata('message', '<div class="alert-success-m alert-success alert-dismissible" role="alert">Successfully submitted review</div>');
+            $this->session->setFlashdata('message', 'Successfully submitted review');
             return redirect()->to('detail/'. $data['product_id']);
         }
     }
 
     /**
      * @description This method provides both product price
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function both_product_price(){
         $productId = $this->request->getPost('both_product[]');
         $total = 0;
-        foreach ($productId as $id){
-            $regPric = get_data_by_id('price','cc_products','product_id',$id);
-            $spPric = get_data_by_id('special_price','cc_product_special','product_id',$id);
-            $total += !empty($spPric)?$spPric:$regPric;
+        if (!empty($productId)) {
+            foreach ($productId as $id) {
+                $regPric = get_data_by_id('price', 'cc_products', 'product_id', $id);
+                $spPric = get_data_by_id('special_price', 'cc_product_special', 'product_id', $id);
+                $total += !empty($spPric) ? $spPric : $regPric;
+            }
         }
-        print currency_symbol($total);
+        $message = currency_symbol($total);
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
     }
+
 
     /**
      * @description This method provides option view
@@ -288,9 +297,8 @@ class Products extends BaseController {
         $data['title'] = !empty($settings['meta_title'])?$settings['meta_title']:$settings['store_name'];
 
         $data['page_title'] = 'Product Not Found';
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
-        echo view('Theme/'.$settings['Theme'].'/Product/not_found');
-        echo view('Theme/'.$settings['Theme'].'/footer');
+
+        echo view('Theme/'.$settings['Theme'].'/Product/not_found',$data);
     }
 
     /**
@@ -329,17 +337,20 @@ class Products extends BaseController {
 
         $data['downloadUrl'] = $downloadUrl;
         $data['unlinkUrl'] = $unlinkUrl;
+        $data['csrfToken'] = csrf_hash();
 
         return json_encode($data);
     }
 
     /**
      * @description This method provides product image unlink
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function productImageUnlink(){
         $url = $this->request->getPost('url');
         $this->image_processing->image_unlink($url);
+
+        return $this->response->setHeader('X-CSRF-TOKEN', csrf_hash());
     }
 
 }

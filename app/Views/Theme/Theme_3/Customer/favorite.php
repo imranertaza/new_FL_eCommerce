@@ -1,4 +1,7 @@
-<section class="main-container my-5" id="reloadDiv">
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<?= $this->include('Theme/Theme_3/Customer/menu'); ?>
+<div class="main-container my-5" id="reloadDiv">
     <div class="container">
         <div class="popular-category mb-5">
 
@@ -17,7 +20,7 @@
                                 foreach ($allProd as $pro){ ?>
                                 <div class="col border p-2">
                                     <div class="product-grid h-100 d-flex align-items-stretch flex-column position-relative">
-                                        <a href="javascript:void(0)" class="remove_wishlist_btn" onclick="removeToWishlist(<?php echo $pro['product_id'] ?>)"><i class="fa-solid fa-close"></i></a>
+                                        <button type="button"  class="border-0 remove_wishlist_btn" onclick="removeToWishlist(<?php echo $pro['product_id'] ?>)"><i class="fa-solid fa-close"></i></button>
 
                                         <?php if ($modules['wishlist'] == 1) { ?>
                                             <?php if (!isset(newSession()->isLoggedInCustomer)){ ?>
@@ -28,17 +31,17 @@
 
                                             <?php }else{ ?>
 
-                                                <a href="javascript:void(0)" class="btn-wishlist position-absolute mt-2 ms-2" onclick="addToWishlist(<?php echo $pro['product_id'] ?>)"><i class="fa-solid fa-heart"></i>
+                                                <button type="button" class="border-0 btn-wishlist position-absolute mt-2 ms-2" onclick="addToWishlist(<?php echo $pro['product_id'] ?>)"><i class="fa-solid fa-heart"></i>
                                                     <span class="btn-wishlist-text position-absolute  mt-5 ms-2">Favorite</span>
-                                                </a>
+                                                </button>
 
                                             <?php } ?>
                                         <?php } ?>
                                         <?php if ($modules['compare'] == 1) { ?>
 
-                                            <a href="javascript:void(0)" onclick="addToCompare(<?php echo $pro['product_id'] ?>)" class="btn-compare position-absolute  mt-5 ms-2"><i class="fa-solid fa-code-compare"></i>
+                                            <button type="button" onclick="addToCompare(<?php echo $pro['product_id'] ?>)" class="border-0 btn-compare position-absolute  mt-5 ms-2"><i class="fa-solid fa-code-compare"></i>
                                                 <span class="btn-compare-text position-absolute  mt-5 ms-2">Compare</span>
-                                            </a>
+                                            </button>
 
                                         <?php } ?>
                                         
@@ -78,4 +81,5 @@
 
         </div>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

@@ -59,9 +59,8 @@ class Checkout extends BaseController
             $data['title'] = 'Checkout';
 
             $data['page_title'] = 'Checkout';
-            echo view('Theme/' . $settings['Theme'] . '/header', $data);
+
             echo view('Theme/' . $settings['Theme'] . '/Checkout/index', $data);
-            echo view('Theme/' . $settings['Theme'] . '/footer');
         } else {
             return redirect()->to('cart');
         }
@@ -230,7 +229,7 @@ class Checkout extends BaseController
 
     /**
      * @description This method provides country zone
-     * @return void
+     * @return ResponseInterface
      */
     public function country_zoon()
     {
@@ -243,7 +242,10 @@ class Checkout extends BaseController
             $options .= '<option value="' . $value->zone_id . '" ';
             $options .= '>' . $value->name . '</option>';
         }
-        print $options;
+
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($options);
     }
 
     /**
@@ -360,6 +362,15 @@ class Checkout extends BaseController
                     }
                 }
 
+                if (count($this->cart->contents()) == 0) {
+                    $this->session->setFlashdata('message', 'Not enough balance ');
+                    return redirect()->to('checkout');
+                }
+
+                if ($this->request->getServer('HTTP_ORIGIN') !== base_url()) {
+                    $this->session->setFlashdata('message', 'Invalid request');
+                    return redirect()->to('checkout');
+                }
 
                 DB()->transStart();
                 $order_status_id = get_data_by_id('order_status_id', 'cc_order_status', 'name', 'Pending');
@@ -563,7 +574,7 @@ class Checkout extends BaseController
         }else{
             $data['discount'] = $data['charge'];
         }
-
+        $data['csrfToken'] = csrf_hash();
         return $this->response->setJSON($data);
     }
 
@@ -616,9 +627,8 @@ class Checkout extends BaseController
         $data['title'] = 'Order Success';
 
         $data['page_title'] = 'Checkout Success';
-        echo view('Theme/' . $settings['Theme'] . '/header', $data);
+
         echo view('Theme/' . $settings['Theme'] . '/Checkout/success', $data);
-        echo view('Theme/' . $settings['Theme'] . '/footer');
     }
 
     /**
@@ -633,9 +643,8 @@ class Checkout extends BaseController
         $data['title'] = 'Order Failed';
 
         $data['page_title'] = 'Checkout Failed';
-        echo view('Theme/' . $settings['Theme'] . '/header', $data);
+
         echo view('Theme/' . $settings['Theme'] . '/Checkout/failed', $data);
-        echo view('Theme/' . $settings['Theme'] . '/footer');
     }
 
     /**
@@ -650,14 +659,13 @@ class Checkout extends BaseController
         $data['title'] = 'Order Canceled';
 
         $data['page_title'] = 'Checkout Canceled';
-        echo view('Theme/' . $settings['Theme'] . '/header', $data);
+
         echo view('Theme/' . $settings['Theme'] . '/Checkout/canceled', $data);
-        echo view('Theme/' . $settings['Theme'] . '/footer');
     }
 
     /**
      * @description This method provides payment instruction view
-     * @return void
+     * @return ResponseInterface
      */
     public function payment_instruction()
     {
@@ -674,7 +682,10 @@ class Checkout extends BaseController
                            <p>' . $query->value . '</p>
                      </div>';
         }
-        print $view;
+
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($view);
     }
 
     /**

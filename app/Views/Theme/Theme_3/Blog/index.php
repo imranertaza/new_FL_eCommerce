@@ -1,4 +1,6 @@
-<section class="main-container" >
+<?= $this->extend('Theme/Theme_3/layout') ?>
+<?= $this->section('content') ?>
+<div class="main-container" >
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
@@ -60,4 +62,5 @@
             </div>
         </div>
     </div>
-</section>
+</div>
+<?= $this->endSection() ?>

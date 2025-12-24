@@ -34,9 +34,7 @@ class Offers extends BaseController {
         $data['description'] = $settings['meta_description'];
         $data['title'] = !empty($settings['meta_title'])?$settings['meta_title']:$settings['store_name'];
 
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
         echo view('Theme/'.$settings['Theme'].'/Offers/index',$data);
-        echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
     /**
@@ -63,9 +61,7 @@ class Offers extends BaseController {
         $data['description'] = $settings['meta_description'];
         $data['title'] = !empty($settings['meta_title'])?$settings['meta_title']:$settings['store_name'];
 
-        echo view('Theme/'.$settings['Theme'].'/header',$data);
         echo view('Theme/'.$settings['Theme'].'/Offers/view',$data);
-        echo view('Theme/'.$settings['Theme'].'/footer');
     }
 
 

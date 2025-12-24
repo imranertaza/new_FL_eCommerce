@@ -22,6 +22,7 @@
     <!-- Main content -->
     <section class="content">
         <form method="post" action="<?php echo base_url('settings_update_action')?>" enctype="multipart/form-data">
+            <?= csrf_field() ?>
         <!-- Default box -->
         <div class="card">
             <div class="card-header">
@@ -349,6 +350,7 @@
             method: "POST",
             url: "<?php echo base_url('get_state') ?>",
             data: {
+                '<?= csrf_token() ?>': '<?= csrf_hash() ?>',
                 country_id: country_id
             },
             beforeSend: function() {
