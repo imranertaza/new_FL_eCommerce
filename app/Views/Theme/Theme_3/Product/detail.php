@@ -64,7 +64,7 @@
                                                     <div id="dowBtn">
                                                         <button class="btn btn-dow position-absolute" onclick="download_btn_show()"  ><i class="fa-solid fa-download "></i></button>
                                                         <div class="dw-btn-group position-absolute"  >
-                                                            <button type="button" onclick="watermark_image_download('watermark')" download class=" btn-w-2nd border-0 bg-transparent">Watermark Image</button><br>
+                                                            <button type="button" onclick="watermark_image_download('watermark')" class=" btn-w-2nd border-0 bg-transparent">Watermark Image</button><br>
                                                             <?php if (isset($_COOKIE['download_image'])){ ?>
                                                                 <button type="button" class="border-0 bg-transparent" onclick="watermark_image_download('nowatermark')" class=" btn-w-2nd">Without Watermark Image</button>
                                                             <?php }else{?>
@@ -116,7 +116,7 @@
                                         </div>
                                         <input type="text" id="qty_input" name="qty"
                                             class="form-control text-center  form-control-sm item_count" value="1"
-                                            min="1" required>
+                                               pattern="[1-9][0-9]*" required>
                                         <div class="input-group-prepend">
                                             <button type="button" class="btn rounded-0 btn-sm h-100 btn-q"
                                                 onclick="plusItem('count')" id="plus-btn"><i
@@ -142,8 +142,7 @@
 
 
                                 <?php if (!empty($stock)) { ?>
-                                <input type="hidden" name="product_id" value="<?php echo $products->product_id ?>"
-                                    required>
+                                <input type="hidden" name="product_id" value="<?php echo $products->product_id ?>" >
                                 <button type="submit" class="btn btn-cart rounded-0 mt-2" >Add to Cart</button>
                                 <?php } ?>
                             </form>
@@ -160,7 +159,7 @@
                                     </svg>
                                     Add to Wishlist</a>
                                 <?php } else { ?>
-                                <button type="button" class="border-0 btn btn-wishlist-2 rounded-0 mt-2 me-1"
+                                <button type="button" class="btn btn-wishlist-2 rounded-0 mt-2 me-1"
                                     onclick="addToWishlist(<?php echo $products->product_id ?>)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="13" viewBox="0 0 14 13"
                                         fill="none">
@@ -173,7 +172,7 @@
                                 <?php } ?>
 
                                 <?php if ($modules['compare'] == 1) { ?>
-                                <button type="button" class="border-0 btn btn-wishlist-2 rounded-0 mt-2 ms-1"
+                                <button type="button" class="btn btn-wishlist-2 rounded-0 mt-2 ms-1"
                                     onclick="addToCompare(<?php echo $products->product_id ?>)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"
                                         fill="none">
@@ -346,15 +345,19 @@
                     <ul class="nav nav-tabs list-unstyled mb-5 border-0 border-bottom custom-tab-up  des " id="myTab"
                         role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active text-uppercase" id="about-tab" data-bs-toggle="tab"
-                                data-bs-target="#about-tab-pane" type="button" role="tab" aria-controls="about-tab-pane"
-                                aria-selected="true">About this item
+
+                            <button class="nav-link active text-uppercase" id="about-tab" data-bs-toggle="tab" data-bs-target="#about-tab-pane" type="button" role="tab" aria-controls="about-tab-pane" aria-selected="true">About this item
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link text-uppercase" id="sech-tab" data-bs-toggle="tab"
-                                data-bs-target="#information-tab-pane" type="button" role="tab"
-                                aria-controls="more-info-tab-pane" aria-selected="false">More Information
+                            <button class="nav-link text-uppercase"
+                                    id="sech-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#information-tab-pane"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="information-tab-pane"
+                                    aria-selected="false">More Information
                             </button>
                         </li>
                         <?php if($modules['review'] == '1' ){?>
@@ -368,13 +371,12 @@
                         <?php } ?>
                     </ul>
                     <div class="tab-content" id="myTabContent3">
-                        <div class="tab-pane fade show active" id="about-tab-pane" role="tabpanel"
-                            aria-labelledby="first-tab" tabindex="0">
+                        <div class="tab-pane fade show active" id="about-tab-pane" role="tabpanel"  tabindex="0">
                             <div class="pro-abo-text mt-3">
                                 <?php echo $products->description; ?>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="information-tab-pane" role="tabpanel" aria-labelledby="sech-tab"
+                        <div class="tab-pane fade" id="information-tab-pane" role="tabpanel"
                             tabindex="0">
                             <p class="mb-2 about-title"><?php echo $products->name; ?></p>
                             <table class="table table-hover table-borderless">
@@ -399,7 +401,7 @@
                             </table>
                         </div>
                         <?php if($modules['review'] == '1' ){?>
-                        <div class="tab-pane fade" id="review-tab-pane" role="tabpanel" aria-labelledby="review-tab"
+                        <div class="tab-pane fade" id="review-tab-pane" role="tabpanel"
                             tabindex="0">
                             <?php foreach ($review as $rev) { ?>
                             <div class="review text-capitalize mt-2"
@@ -464,7 +466,7 @@
                 </ul>
                 <div class="tab-content" id="myTabContent2">
                     <div class="tab-pane fade show active" id="first-tab-pane" role="tabpanel"
-                        aria-labelledby="first-tab" tabindex="0">
+                         tabindex="0">
                         <form id="both-product">
                             <div class="row">
                                 <div class="col-lg-8">
@@ -536,7 +538,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="tab-pane fade" id="sech-tab-pane" role="tabpanel" aria-labelledby="sech-tab"
+                    <div class="tab-pane fade" id="sech-tab-pane" role="tabpanel"
                         tabindex="0">
                         <p class="mb-5"></p>
 
@@ -718,17 +720,15 @@
     </div>
 </div>
 
-<div class="modal fade" id="videoeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="videoeModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="btn-close" onclick="video_close()"
                     style="float: right; font-size: 10px; margin-bottom: 10px;" data-bs-dismiss="modal"
                     aria-label="Close"></button>
-                <iframe width="100%" height="350" id="sample_video" src="<?php echo $products->video; ?>"
-                    title="Impossible Records In Football" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen></iframe>
+                <iframe id="sample_video" height="350" src="<?php echo $products->video; ?>" title="Impossible Records In Football" style="border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen >
+                </iframe>
             </div>
 
         </div>
