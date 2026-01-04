@@ -59,7 +59,7 @@ class Pages extends BaseController {
         } else {
             //message get admin
             $email = get_lebel_by_value_in_settings('email');
-            email_send($email, $subject, $data['message']);
+            email_send($email, $subject, $data['message'],$data['email']);
 
             //message get customer
             $message = 'Your message was successfully submitted';
