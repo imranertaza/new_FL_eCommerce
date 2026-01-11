@@ -1,6 +1,7 @@
 <?= $this->extend('Admin/layout') ?>
 
 <?= $this->section('content') ?>
+<?php $modules = modules_access();?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -30,10 +31,12 @@
                         <h3 class="card-title">Order List</h3>
                     </div>
                     <div class="col-md-4">
+                        <?php if ($modules['order_multi_delete'] == 1) {?>
                         <form id="multiSubmitForm" action="<?php echo base_url('order_multi_delete_action'); ?>" method="post">
                             <?= csrf_field() ?>
                             <button type="submit" class=" mt-2 btn btn-danger btn-xs float-right mr-2"><i class="fas fa-trash"></i> Multi Delete</button>
                         </form>
+                        <?php } ?>
                     </div>
                     <div class="col-md-12" style="margin-top: 10px">
                         <?php if (session()->getFlashdata('message') !== NULL) : echo session()->getFlashdata('message'); endif; ?>

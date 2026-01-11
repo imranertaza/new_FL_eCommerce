@@ -917,7 +917,7 @@ function get_lebel_by_value_in_theme_settings_with_theme($lable, $theme)
  * @param string $message
  * @return void
  */
-function email_send($to, $subject, $message)
+function email_send($to, $subject, $message,$replyEmail=null)
 {
 
     $email = \Config\Services::email();
@@ -937,6 +937,8 @@ function email_send($to, $subject, $message)
     $form = get_lebel_by_value_in_settings('mail_address');
 
     $email->setFrom($form, $titleStore);
+    $reply = !empty($replyEmail)?$replyEmail:$form;
+    $email->setReplyTo($reply, $titleStore);
     $email->setTo($to);
 
     $email->setSubject($subject);
