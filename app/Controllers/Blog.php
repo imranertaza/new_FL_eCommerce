@@ -25,13 +25,55 @@ class Blog extends BaseController
     {
         $settings = get_settings();
 
-        $data['blog'] = $this->blogModel->where('status', '1')->orderBy('blog_id', 'ASC')->paginate(12);
+
+
+//        $db = DB();
+//        $builder = $db->table('cc_blog_schedule_list l');
+//        $today = date('Y-m-d H:i:s');
+//        $builder = $this->blogModel;
+//        $builder->join('cc_blog_schedule_list l', 'l.blog_id = cc_blog.blog_id');
+//        $builder->join('cc_blog_schedule s', 's.blog_schedule_id = l.blog_schedule_id');
+//        $builder->where('s.start_date <=', $today);
+//        $builder->where('s.end_date >=', $today);
+//        $data['blog'] = $builder->where('cc_blog.status', '1')->orderBy('cc_blog.blog_id', 'ASC')->paginate(12);
+
+        $today = date('Y-m-d H:i:s');
+
+        $builder = $this->blogModel;
+        $builder->select('cc_blog.*');
+        $builder->join('cc_blog_schedule_details l','l.blog_id = cc_blog.blog_id','left');
+        $builder->join('cc_blog_schedule s','s.blog_schedule_id = l.blog_schedule_id','left' );
+        $builder->where('cc_blog.status', '1');
+        $builder->where('s.start_date <=', $today);
+        $builder->where('s.end_date >=', $today);
+        $builder->groupBy('cc_blog.blog_id');
+        $builder->orderBy('cc_blog.blog_id', 'ASC');
+        $data['blog'] = $builder->paginate(12);
+
+        if (empty($data['blog'])) {
+            $data['blog'] = $this->blogModel->where('status', '1')->orderBy('blog_id', 'ASC')->paginate(12);
+        }
+
         $data['pager'] = $this->blogModel->pager;
         $data['links'] = $data['pager']->links('default', 'custome_link');
 
-        $table = DB()->table('cc_blog');
-        $table->join('cc_category', 'cc_category.cat_id = cc_blog.cat_id')->where('cc_blog.status', '1');
-        $data['category'] = $table->groupBy('cc_category.cat_id')->get()->getResult();
+
+        //category search
+        $selectedCatIds = array_unique(array_column($data['blog'], 'cat_id'));
+        $table = DB()->table('cc_category');
+        if (!empty($selectedCatIds)) {
+            $table->whereIn('cat_id', $selectedCatIds);
+        }
+        $table->groupBy('cat_id');
+        $data['category'] = $table->get()->getResult();
+
+//        print_r($selectedCatIds);
+//        die();
+//        $selectedBlogs = array_column($data['blog'], 'cat_id');
+//        $table = DB()->table('cc_blog');
+//        $table->join('cc_category', 'cc_category.cat_id = cc_blog.cat_id')->where('cc_blog.status', '1');
+//        $data['category'] = $table->groupBy('cc_category.cat_id')->get()->getResult();
+
 
         $data['catBtn'] = 'All';
         $data['keywords'] = $settings['meta_keyword'];
@@ -49,9 +91,34 @@ class Blog extends BaseController
         $data['pager'] = $this->blogModel->pager;
         $data['links'] = $data['pager']->links('default', 'custome_link');
 
-        $table = DB()->table('cc_blog');
-        $table->join('cc_category', 'cc_category.cat_id = cc_blog.cat_id')->where('cc_blog.status', '1');
-        $data['category'] = $table->groupBy('cc_category.cat_id')->get()->getResult();
+
+        $today = date('Y-m-d H:i:s');
+        $builder = $this->blogModel;
+        $builder->select('cc_blog.*');
+        $builder->join('cc_blog_schedule_details l','l.blog_id = cc_blog.blog_id','left');
+        $builder->join('cc_blog_schedule s','s.blog_schedule_id = l.blog_schedule_id','left' );
+        $builder->where('cc_blog.status', '1');
+        $builder->where('s.start_date <=', $today);
+        $builder->where('s.end_date >=', $today);
+        $builder->groupBy('cc_blog.blog_id');
+        $builder->orderBy('cc_blog.blog_id', 'ASC');
+        $blog = $builder->paginate(12);
+
+        if (empty($data['blog'])) {
+            $blog = $this->blogModel->where('status', '1')->orderBy('blog_id', 'ASC')->paginate(12);
+        }
+
+        $selectedCatIds = array_unique(array_column($blog, 'cat_id'));
+        $table = DB()->table('cc_category');
+        if (!empty($selectedCatIds)) {
+            $table->whereIn('cat_id', $selectedCatIds);
+        }
+        $table->groupBy('cat_id');
+        $data['category'] = $table->get()->getResult();
+
+//        $table = DB()->table('cc_blog');
+//        $table->join('cc_category', 'cc_category.cat_id = cc_blog.cat_id')->where('cc_blog.status', '1');
+//        $data['category'] = $table->groupBy('cc_category.cat_id')->get()->getResult();
 
         $data['catBtn'] = $cat_id;
         $data['keywords'] = $settings['meta_keyword'];
