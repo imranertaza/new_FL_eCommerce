@@ -283,6 +283,18 @@
                     <?php
                 } ?>
 
+                <?php if ($menuAccessPur == true) { ?>
+                <li class="nav-item">
+                    <a href="<?php echo base_url('blog-schedule'); ?>" class="nav-link">
+                        <i class="nav-icon far fa-calendar-alt"></i>
+                        <p>
+                            Blog Schedule
+                        </p>
+                    </a>
+                </li>
+                <?php
+                } ?>
+
                 <li class="nav-header">System</li>
                 <?php
                 $modArrayPur = ['Settings'];

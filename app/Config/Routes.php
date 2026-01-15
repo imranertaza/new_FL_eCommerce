@@ -370,6 +370,13 @@ $routes->get('blog_update/(:num)', 'Admin\Blog::update/$1');
 $routes->get('blog_delete/(:num)', 'Admin\Blog::delete/$1');
 $routes->post('blog_image_remove_action', 'Admin\Blog::imageRemoveAction');
 $routes->post('blog_image_alt_name_action', 'Admin\Blog::imageAltNameAction');
+//Blog Schedule
+$routes->get('blog-schedule', 'Admin\BlogSchedule::index');
+$routes->get('blog-schedule-create', 'Admin\BlogSchedule::create');
+$routes->post('blog-schedule-create-action', 'Admin\BlogSchedule::createAction');
+$routes->get('blog-schedule-update/(:num)', 'Admin\BlogSchedule::update/$1');
+$routes->post('blog-schedule-update-action', 'Admin\BlogSchedule::updateAction');
+$routes->get('blog-schedule-delete/(:num)', 'Admin\BlogSchedule::delete/$1');
 
 //Featured Section
 $routes->get('featured_section', 'Admin\FeaturedSection::index');
