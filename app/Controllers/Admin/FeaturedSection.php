@@ -209,6 +209,9 @@ class FeaturedSection extends BaseController
                             'featured_schedule_id' => $featured_schedule_id,
                             'product_id'           => $prod_id,
                         ]);
+                        //product featured update
+                        $dataFeatured = ['featured' => 1];
+                        $db->table('cc_products')->where('product_id',$prod_id)->update($dataFeatured);
                     }
                 }
             }
@@ -333,6 +336,9 @@ class FeaturedSection extends BaseController
                         'featured_schedule_id' => $featured_schedule_id,
                         'product_id'           => $prod_id,
                     ]);
+                    //product featured update
+                    $dataFeatured = ['featured' => 1];
+                    $db->table('cc_products')->where('product_id',$prod_id)->update($dataFeatured);
                 }
             }
         }
