@@ -41,11 +41,11 @@ class Blog extends BaseController
 
         $builder = $this->blogModel;
         $builder->select('cc_blog.*');
-        $builder->join('cc_blog_schedule_details l','l.blog_id = cc_blog.blog_id','left');
-        $builder->join('cc_blog_schedule s','s.blog_schedule_id = l.blog_schedule_id','left' );
+        $builder->join('cc_blog_schedule_details details','details.blog_id = cc_blog.blog_id','left');
+        $builder->join('cc_blog_schedule schedule','schedule.blog_schedule_id = details.blog_schedule_id','left' );
         $builder->where('cc_blog.status', '1');
-        $builder->where('s.start_date <=', $today);
-        $builder->where('s.end_date >=', $today);
+        $builder->where('schedule.start_date <=', $today);
+        $builder->where('schedule.end_date >=', $today);
         $builder->groupBy('cc_blog.blog_id');
         $builder->orderBy('cc_blog.blog_id', 'ASC');
         $data['blog'] = $builder->paginate(12);
@@ -95,11 +95,11 @@ class Blog extends BaseController
         $today = date('Y-m-d H:i:s');
         $builder = $this->blogModel;
         $builder->select('cc_blog.*');
-        $builder->join('cc_blog_schedule_details l','l.blog_id = cc_blog.blog_id','left');
-        $builder->join('cc_blog_schedule s','s.blog_schedule_id = l.blog_schedule_id','left' );
+        $builder->join('cc_blog_schedule_details details','details.blog_id = cc_blog.blog_id','left');
+        $builder->join('cc_blog_schedule schedule','schedule.blog_schedule_id = details.blog_schedule_id','left' );
         $builder->where('cc_blog.status', '1');
-        $builder->where('s.start_date <=', $today);
-        $builder->where('s.end_date >=', $today);
+        $builder->where('schedule.start_date <=', $today);
+        $builder->where('schedule.end_date >=', $today);
         $builder->groupBy('cc_blog.blog_id');
         $builder->orderBy('cc_blog.blog_id', 'ASC');
         $blog = $builder->paginate(12);

@@ -422,12 +422,12 @@ $routes->get('banner_section_delete/(:num)', 'Admin\BannerSection::delete/$1');
 //login routes
 $routes->get('/register', 'Login::register');
 $routes->get('/login', 'Login::index');
-$routes->post('/login_action', 'Login::login_action');
-$routes->post('/register_action', 'Login::register_action');
+$routes->post('/login_action', 'Login::login_action', ['filter' => 'throttle:20,1']);
+$routes->post('/register_action', 'Login::register_action', ['filter' => 'throttle:20,1']);
 $routes->get('/logout', 'Login::logout');
 $routes->get('/forgotpassword', 'Login::forgotPassword');
 $routes->post('/password_action', 'Login::password_action');
-$routes->get('/otp_submit', 'Login::otp_submit');
+$routes->get('/otp_submit', 'Login::otp_submit', ['filter' => 'throttle:20,1']);
 $routes->post('/otp_action', 'Login::otp_action');
 $routes->get('/password_reset', 'Login::password_reset');
 $routes->post('/reset_action', 'Login::reset_action');
@@ -444,14 +444,14 @@ $routes->get('/my_order', 'Customer\Order::index');
 $routes->get('/invoice/(:num)', 'Customer\Order::invoice/$1');
 
 $routes->get('/profile', 'Customer\Profile::index');
-$routes->post('/profile_update_action', 'Customer\Profile::update_action');
-$routes->post('/password_action_update', 'Customer\Profile::password_action');
-$routes->post('/newsletter_action', 'Customer\Profile::newsletter_action');
+$routes->post('/profile_update_action', 'Customer\Profile::update_action', ['filter' => 'throttle:20,1']);
+$routes->post('/password_action_update', 'Customer\Profile::password_action', ['filter' => 'throttle:20,1']);
+$routes->post('/newsletter_action', 'Customer\Profile::newsletter_action', ['filter' => 'throttle:20,1']);
 
 
 $routes->get('/my_wallet', 'Customer\Wallet::index');
 $routes->get('/add_funds', 'Customer\Wallet::add_funds');
-$routes->post('/add_funds_action', 'Customer\Wallet::fund_action');
+$routes->post('/add_funds_action', 'Customer\Wallet::fund_action', ['filter' => 'throttle:20,1']);
 
 $routes->get('/ledger', 'Customer\Customer_ledger::index');
 $routes->get('/point_history', 'Customer\Customer_point_history::index');
@@ -469,8 +469,8 @@ $routes->get('/cart_empty_check', 'Cart\Cart::cart_empty_check');
 
 //Checkout
 $routes->get('/checkout', 'Checkout::index');
-$routes->post('/checkout_coupon_action', 'Checkout::coupon_action');
-$routes->post('/checkout_action', 'Checkout::checkout_action');
+$routes->post('/checkout_coupon_action', 'Checkout::coupon_action', ['filter' => 'throttle:20,1']);
+$routes->post('/checkout_action', 'Checkout::checkout_action', ['filter' => 'throttle:20,1']);
 $routes->post('/checkout_country_zoon', 'Checkout::country_zoon');
 $routes->post('/flat_shipping_rate', 'Checkout::flat_shipping_rate');
 $routes->post('/zone_shipping_rate', 'Checkout::zone_shipping_rate');
@@ -483,25 +483,25 @@ $routes->get('/checkout_canceled', 'Checkout::canceled');
 $routes->post('/payment_instruction', 'Checkout::payment_instruction');
 
 $routes->get('/payment_paypal', 'Paypal::index');
-$routes->get('/payment_paypal_checkout_action', 'Paypal::paypal_checkout_action');
+$routes->get('/payment_paypal_checkout_action', 'Paypal::paypal_checkout_action', ['filter' => 'throttle:20,1']);
 
 $routes->post('/payment_stripe', 'StripeController::payment_stripe');
 $routes->post('/payment_stripe_checkout_action', 'StripeController::stripe_create_charge');
-$routes->get('/stripe_action', 'StripeController::stripe_action');
+$routes->get('/stripe_action', 'StripeController::stripe_action', ['filter' => 'throttle:20,1']);
 
 $routes->post('/payment_oisbizcraft', 'OisbizcraftController::payment_oisbizcraft');
 $routes->get('/oisbizcraft-return-url', 'OisbizcraftController::return_url');
-$routes->get('/oisbizcraft_action', 'OisbizcraftController::oisbizcraft_action');
+$routes->get('/oisbizcraft_action', 'OisbizcraftController::oisbizcraft_action', ['filter' => 'throttle:20,1']);
 $routes->post('/oisbizcraft-notification', 'OisbizcraftController::notification_webhook');
 $routes->get('/oisbizcraft-success', 'OisbizcraftController::success');
 
 $routes->get('stripe/(:num)', 'Admin\Payment\Stripe::settings/$1');
-$routes->post('stripe_update_action', 'Admin\Payment\Stripe::update_action');
+$routes->post('stripe_update_action', 'Admin\Payment\Stripe::update_action', ['filter' => 'throttle:20,1']);
 
 //pages routes
 $routes->get('/about', 'Pages\Pages::about');
 $routes->get('/contact', 'Pages\Pages::contact');
-$routes->post('/contact_form_action', 'Pages\Pages::contact_action');
+$routes->post('/contact_form_action', 'Pages\Pages::contact_action', ['filter' => 'throttle:20,1']);
 $routes->get('/page/(:any)', 'Pages\Pages::page/$1');
 
 //products routes
