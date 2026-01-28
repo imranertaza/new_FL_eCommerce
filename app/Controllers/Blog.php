@@ -41,11 +41,11 @@ class Blog extends BaseController
 
         $builder = $this->blogModel;
         $builder->select('cc_blog.*');
-        $builder->join('cc_blog_schedule_details l','l.blog_id = cc_blog.blog_id','left');
-        $builder->join('cc_blog_schedule s','s.blog_schedule_id = l.blog_schedule_id','left' );
+        $builder->join('cc_blog_schedule_details details','details.blog_id = cc_blog.blog_id','left');
+        $builder->join('cc_blog_schedule schedule','schedule.blog_schedule_id = details.blog_schedule_id','left' );
         $builder->where('cc_blog.status', '1');
-        $builder->where('s.start_date <=', $today);
-        $builder->where('s.end_date >=', $today);
+        $builder->where('schedule.start_date <=', $today);
+        $builder->where('schedule.end_date >=', $today);
         $builder->groupBy('cc_blog.blog_id');
         $builder->orderBy('cc_blog.blog_id', 'ASC');
         $data['blog'] = $builder->paginate(12);
@@ -86,25 +86,32 @@ class Blog extends BaseController
     public function category($cat_id)
     {
         $settings = get_settings();
-
-        $data['blog'] = $this->blogModel->where('status', '1')->where('cat_id', $cat_id)->orderBy('blog_id', 'ASC')->paginate(12);
-        $data['pager'] = $this->blogModel->pager;
-        $data['links'] = $data['pager']->links('default', 'custome_link');
-
-
         $today = date('Y-m-d H:i:s');
         $builder = $this->blogModel;
         $builder->select('cc_blog.*');
-        $builder->join('cc_blog_schedule_details l','l.blog_id = cc_blog.blog_id','left');
-        $builder->join('cc_blog_schedule s','s.blog_schedule_id = l.blog_schedule_id','left' );
+        $builder->join('cc_blog_schedule_details details','details.blog_id = cc_blog.blog_id','left');
+        $builder->join('cc_blog_schedule schedule','schedule.blog_schedule_id = details.blog_schedule_id','left' );
         $builder->where('cc_blog.status', '1');
-        $builder->where('s.start_date <=', $today);
-        $builder->where('s.end_date >=', $today);
+        $builder->where('schedule.start_date <=', $today);
+        $builder->where('schedule.end_date >=', $today);
         $builder->groupBy('cc_blog.blog_id');
         $builder->orderBy('cc_blog.blog_id', 'ASC');
         $blog = $builder->paginate(12);
 
-        if (empty($data['blog'])) {
+        $selectedBlogIds = array_unique(array_column($blog, 'blog_id'));
+
+        $this->blogModel->where('status', '1')->where('cat_id', $cat_id);
+        if (!empty($selectedBlogIds)) {
+            $this->blogModel->whereIn('blog_id', $selectedBlogIds);
+        }
+        $data['blog'] = $this->blogModel->orderBy('blog_id', 'ASC')->paginate(12);
+
+
+        $data['pager'] = $this->blogModel->pager;
+        $data['links'] = $data['pager']->links('default', 'custome_link');
+
+
+        if (empty($blog)) {
             $blog = $this->blogModel->where('status', '1')->orderBy('blog_id', 'ASC')->paginate(12);
         }
 
@@ -116,6 +123,7 @@ class Blog extends BaseController
         $table->groupBy('cat_id');
         $data['category'] = $table->get()->getResult();
 
+//        DB()->getLastQuery()
 //        $table = DB()->table('cc_blog');
 //        $table->join('cc_category', 'cc_category.cat_id = cc_blog.cat_id')->where('cc_blog.status', '1');
 //        $data['category'] = $table->groupBy('cc_category.cat_id')->get()->getResult();
