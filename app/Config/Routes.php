@@ -40,6 +40,8 @@ $routes->get('/', 'Home::index');
 $routes->post('/user_subscribe', 'Home::user_subscribe');
 $routes->get('/user_subscribe_verify', 'Home::verify');
 
+$routes->get('section-view/(:num)', 'Section::view/$1');
+
 $routes->get('/admin', 'Admin\Login::index');
 $routes->post('/admin_login_action', 'Admin\Login::login_action');
 $routes->get('/admin_logout', 'Admin\Login::logout');
@@ -554,8 +556,8 @@ $routes->get('/image-resize/(:any)/(:any)/(:any)', 'Image::resize/$1/$2/$3');
 $routes->get('/blog', 'Blog::index');
 $routes->get('/blog-category/(:num)', 'Blog::category/$1');
 $routes->get('/blog-view/(:num)', 'Blog::view/$1');
-$routes->post('/blog-comment-action', 'Blog::commentAction');
-$routes->post('/blog-comment-reply-action', 'Blog::commentReplyAction');
+$routes->post('/blog-comment-action', 'Blog::commentAction', ['filter' => 'throttle:20,1']);
+$routes->post('/blog-comment-reply-action', 'Blog::commentReplyAction', ['filter' => 'throttle:20,1']);
 /*
  * --------------------------------------------------------------------
  * Additional Routing
