@@ -56,6 +56,7 @@
                                 <?= csrf_field() ?>
                                 <div class="row p-2">
                                 <div class="col-md-12">
+                                    <span class="float-left"><b>Url:</b> <?= base_url('section-view/'.$result->featured_schedule_id)?></span>
                                     <!-- Remove button -->
                                     <a href="<?= base_url('section_view_delete/'.$result->featured_schedule_id)?>" class="btn btn-danger float-right" onclick="return confirm('Are you sure you want to delete this section?');" >X</a>
                                 </div>
@@ -136,13 +137,26 @@
                                         <input type="text" name="url" class="form-control" placeholder="Url" value="<?= $result->url?>" required>
                                     </div>
                                     <div class="form-group">
-                                        <label>Alt Name <span class="requi">*</span></label>
-                                        <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?= $result->alt_name?>" required>
+                                        <label>Banner Image <span class="requi">*</span></label>
+                                        <input type="file" name="banner" class="form-control" >
+                                        <span>Recommended Size: 1140 x 211</span>
                                     </div>
+                                    <div class="form-group">
+                                        <label>Alt Name <span class="requi">*</span></label>
+                                        <input type="text" name="banner_alt_name" class="form-control" placeholder="Alt Name" value="<?= $result->banner_alt_name?>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <?= image_view('uploads/sections', '', $result->banner, 'noimageBn.png', 'w-100');?>
+                                    </div>
+                                    <div class="form-group"><hr></div>
                                     <div class="form-group">
                                         <label>Image</label>
                                         <input type="file" name="image" class="form-control" >
                                         <span>Recommended Size: 271 x 590</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Alt Name <span class="requi">*</span></label>
+                                        <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?= $result->alt_name?>" required>
                                     </div>
                                     <div class="form-group">
                                         <?= image_view('uploads/sections', '', $result->image, 'noimage.png', 'w-25');?>
@@ -228,14 +242,26 @@
                                                 <label>Url <span class="requi">*</span></label>
                                                 <input type="text" name="url[]" class="form-control" placeholder="Url" required>
                                             </div>
+
+                                            <div class="form-group">
+                                                <label>Banner Image <span class="requi">*</span></label>
+                                                <input type="file" name="banner[]" class="form-control" required>
+                                                <span>Recommended Size: 1140 x 211</span>
+                                            </div>
                                             <div class="form-group">
                                                 <label>Alt Name <span class="requi">*</span></label>
-                                                <input type="text" name="alt_name[]" class="form-control" placeholder="Alt Name" required>
+                                                <input type="text" name="banner_alt_name[]" class="form-control" placeholder="Alt Name" required>
                                             </div>
+                                            <div class="form-group"><hr></div>
+
                                             <div class="form-group">
                                                 <label>Image <span class="requi">*</span></label>
                                                 <input type="file" name="image[]" class="form-control" required>
                                                 <span>Recommended Size: 271 x 590</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Alt Name <span class="requi">*</span></label>
+                                                <input type="text" name="alt_name[]" class="form-control" placeholder="Alt Name" required>
                                             </div>
 
 

@@ -1021,6 +1021,7 @@ function order_email_template($orderId)
                 <b>Shipping Method:</b> $val->shipping_method
             </td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                <b>Name:</b> $val->payment_firstname.' '.$val->payment_lastname<br>
                 <b>Email:</b> <a href='mailto:$val->payment_email' target='_blank'>$val->payment_email</a><br>
                 <b>Telephone:</b> $val->payment_phone<br>
             </td>
