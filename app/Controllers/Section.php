@@ -26,7 +26,7 @@ class Section extends BaseController
     {
         $settings = get_settings();
         $theme = $settings['Theme'];
-        $data = $this->$theme();
+
         $db = DB();
         $now = date('Y-m-d H:i:s');
 
