@@ -5,6 +5,9 @@
             <div class="cart">
                 <div class="row">
                     <?php if (!empty($schedule)){ ?>
+                    <div class="col-md-12 text-center mb-4">
+                        <h2><?= $schedule->section_name?></h2>
+                    </div>
                     <div class="col-md-12 px-0">
                         <img data-sizes="auto"   src="<?= common_image_view('uploads/sections', '', $schedule->banner, 'noimageBn.png', '1140', '211');?>" alt="<?= $schedule->banner_alt_name?>" class="img-fluid" loading="lazy">
                     </div>
