@@ -58,6 +58,12 @@
                                    aria-controls="custom-tabs-four-messages" aria-selected="false">Home Page Settings</a>
                             </li>
 
+                            <li class="nav-item">
+                                <a class="nav-link <?php echo (isset($_GET['sel']) && $_GET['sel']=='others_settings')?'active':''; ?>" id="custom-tabs-five-others-tab" data-toggle="pill"
+                                   href="#custom-tabs-others-tab" role="tab"
+                                   aria-controls="custom-tabs-others-tab" aria-selected="false">Others Page Settings</a>
+                            </li>
+
                         </ul>
                     </div>
                     <div class="card-body">
@@ -249,6 +255,84 @@
                             <div class="tab-pane fade <?php echo (isset($_GET['sel']) && $_GET['sel']=='home_settings')?'active show':''; ?>" id="custom-tabs-four-messages" role="tabpanel"
                                  aria-labelledby="custom-tabs-four-messages-tab">
                                 <?php echo $theme_view;?>
+                            </div>
+                            <div class="tab-pane fade <?php echo (isset($_GET['sel']) && $_GET['sel']=='others_settings')?'active show':''; ?>" id="custom-tabs-others-tab" role="tabpanel"
+                                 aria-labelledby="custom-tabs-others-tab">
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        <h2>Contact Us Page </h2>
+                                    </div>
+                                    <?php
+                                    $themeSetting = get_theme_settings();
+                                    $themeSettingTitle = get_theme_title_settings();
+                                    ?>
+                                    <div class="col-md-6 mt-4">
+                                        <form action="<?php echo base_url('banner-top-contact') ?>" method="post"
+                                              enctype="multipart/form-data">
+                                            <?= csrf_field() ?>
+                                            <div class="form-group">
+                                                <?php
+                                                $head_side_baner_1 = $themeSetting['banner_top_contact']['value'];
+                                                echo image_view('uploads/banner_contact', '', $head_side_baner_1, 'noimage.png', 'w-100');
+                                                ?><br>
+                                                <label><?php echo $themeSettingTitle['banner_top_contact'];?></label>
+                                                <input type="file" class="form-control" name="banner_top_contact">
+                                                <span>Recommended Size: 1351 x 255</span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>ALT Name</label>
+                                                <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $themeSetting['banner_top_contact']['alt_name']; ?>" >
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </form>
+                                    </div>
+                                    <div class="col-md-6 mt-4">
+                                        <form action="<?php echo base_url('banner-right-contact') ?>" method="post"
+                                              enctype="multipart/form-data">
+                                            <?= csrf_field() ?>
+                                            <div class="form-group">
+                                                <?php
+                                                $head_side_baner_1 = $themeSetting['banner_right_contact']['value'];
+                                                echo image_view('uploads/banner_contact', '', $head_side_baner_1, 'noimage.png', 'w-100');
+                                                ?><br>
+                                                <label><?php echo $themeSettingTitle['banner_right_contact'];?></label>
+                                                <input type="file" class="form-control" name="banner_right_contact">
+                                                <span>Recommended Size: 1351 x 255</span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>ALT Name</label>
+                                                <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $themeSetting['banner_right_contact']['alt_name']; ?>" >
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </form>
+                                    </div>
+                                    <div class="col-md-6 mt-4">
+                                        <form action="<?php echo base_url('banner-bottom-contact') ?>" method="post"
+                                              enctype="multipart/form-data">
+                                            <?= csrf_field() ?>
+                                            <div class="form-group">
+                                                <?php
+                                                $head_side_baner_1 = $themeSetting['banner_bottom_contact']['value'];
+                                                echo image_view('uploads/banner_contact', '', $head_side_baner_1, 'noimage.png', 'w-100');
+                                                ?><br>
+                                                <label><?php echo $themeSettingTitle['banner_bottom_contact'];?></label>
+                                                <input type="file" class="form-control" name="banner_bottom_contact">
+                                                <span>Recommended Size: 1116x311</span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>ALT Name</label>
+                                                <input type="text" name="alt_name" class="form-control" placeholder="Alt Name" value="<?php echo $themeSetting['banner_bottom_contact']['alt_name']; ?>" >
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </form>
+                                    </div>
+                                    <div class="col-md-12 mt-4">
+                                        <hr>
+                                    </div>
+                                </div>
                             </div>
 
                             
