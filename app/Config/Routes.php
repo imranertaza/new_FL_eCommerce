@@ -294,6 +294,10 @@ $routes->post('/banner_bottom_update', 'Admin\Theme_settings_3::banner_bottom_up
 $routes->post('/banner_featured_category_update', 'Admin\Theme_settings_3::banner_featured_category_update');
 $routes->post('/banner_top_update', 'Admin\Theme_settings_3::banner_top_update');
 
+$routes->post('/banner-top-contact', 'Admin\ThemeOthersSettings::bannerTopContact');
+$routes->post('/banner-right-contact', 'Admin\ThemeOthersSettings::bannerRightContact');
+$routes->post('/banner-bottom-contact', 'Admin\ThemeOthersSettings::bannerBottomContact');
+
 //Localization
 $routes->get('/geo_zone', 'Admin\Geo_zone::index');
 $routes->get('/geo_zone_create', 'Admin\Geo_zone::create');

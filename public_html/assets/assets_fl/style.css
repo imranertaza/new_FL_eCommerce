@@ -3293,3 +3293,9 @@ ul > li:last-child {
         margin: unset!important;
     }
 }
+.contact-title{
+    position: absolute;
+    top: 50%;
+    font-size: 25px;
+    color: #000000;
+}
