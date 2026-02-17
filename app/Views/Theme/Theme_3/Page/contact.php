@@ -1,6 +1,17 @@
 <?= $this->extend('Theme/Theme_3/layout') ?>
 <?= $this->section('content') ?>
+<?php $theme_settings = get_theme_settings();?>
 <div class="main-container my-0">
+    <div class="container-fluid ">
+    <div class="row ">
+        <div class="col-md-12 position-relative">
+            <img src="<?php echo common_image_view('uploads/banner_contact', '', $theme_settings['banner_top_contact']['value'], 'noimage.png', '1351', '255');?>" alt="<?= $theme_settings['banner_top_contact']['alt_name']?>" class="w-100">
+            <div class="container">
+            <p class="contact-title">Contact Us</p>
+            </div>
+        </div>
+    </div>
+    </div>
     <div class="container">
         <div class="contact-info py-5">
             <div class="row align-items-center">
@@ -19,11 +30,10 @@
                         </svg>
                         <div>
                             <a href="tel:+8801851670403">+8618529237990</a><br>
-<!--                            <a href="tel:+8801928174380">+8801928174380</a>-->
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 mb-5 mb-lg-0">
+                <div class="col-md-4 mb-5 mb-lg-0">
                     <div class="d-flex align-items-center">
                         <svg class="me-3" width="42" height="34" viewBox="0 0 42 34" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M41.8337 4.50004C41.8337 2.20837 39.9587 0.333374 37.667 0.333374H4.33366C2.04199 0.333374 0.166992 2.20837 0.166992 4.50004V29.5C0.166992 31.7917 2.04199 33.6667 4.33366 33.6667H37.667C39.9587 33.6667 41.8337 31.7917 41.8337 29.5V4.50004ZM37.667 4.50004L21.0003 14.9167L4.33366 4.50004H37.667ZM37.667 29.5H4.33366V8.66671L21.0003 19.0834L37.667 8.66671V29.5Z" fill="#231F20"/>
@@ -33,22 +43,19 @@
                 </div>
             </div>
         </div>
-        <div class="contact-form bg-white border p-4 p-lg-5 mb-5">
+        <div class="contact-form bg-white ">
             <div class="row">
-                <div class="col-lg-6 offset-lg-3 login_form">
-                    <h3>Get in touch</h3>
-<!--                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>-->
-<!--                    <form action="#" method="post" class="contact-form" onsubmit="return contactForm()">-->
-                        <div class="mb-3">
+                <div class="col-md-6  login_form">
+                        <div class="">
                             <input class="form-control in_err" id="email" name="email" type="text" placeholder="Email">
                             <span class="text-danger err d-inline-block text-capitalize" id="emailError"></span>
                         </div>
-                        <div class="mb-3">
-                            <textarea name="message" class="form-control in_err" id="message" cols="30" rows="6" placeholder="Question"></textarea>
+                        <div class="">
+                            <textarea name="message" class="form-control in_err" id="message" cols="30" rows="4" placeholder="Question"></textarea>
                             <span class="text-danger err d-inline-block text-capitalize" id="messageERR"></span>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="">
                             <div id="captcha" class="form_div">
                                 <input type="hidden" id="genaretCapt" >
                                 <div class="preview"></div>
@@ -62,10 +69,15 @@
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <input type="submit" value="Get in touch" onclick="contactFormSubmit()" class="btn bg-custom-color text-white rounded-0">
+                        <div class="">
+                            <input type="submit" value="Get in touch" onclick="contactFormSubmit()" class="btn bg-custom-color text-white rounded-0 w-100">
                         </div>
-<!--                    </form>-->
+                </div>
+                <div class="col-md-6">
+                    <img src="<?php echo common_image_view('uploads/banner_contact', '', $theme_settings['banner_right_contact']['value'], 'noimage.png', '570', '410');?>" alt="<?= $theme_settings['banner_right_contact']['alt_name']?>" class="w-100">
+                </div>
+                <div class="col-md-12 mt-5">
+                    <img src="<?php echo common_image_view('uploads/banner_contact', '', $theme_settings['banner_bottom_contact']['value'], 'noimage.png', '1116', '311');?>" alt="<?= $theme_settings['banner_bottom_contact']['alt_name']?>" class="w-100">
                 </div>
             </div>
         </div>
