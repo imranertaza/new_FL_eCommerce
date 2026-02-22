@@ -158,6 +158,9 @@ class Shipping extends BaseController
      */
     public function zone_rate_update_action()
     {
+
+
+
         $shipping_method_id = $this->request->getPost('shipping_method_id');
 
         //shipping settings update
@@ -174,24 +177,41 @@ class Shipping extends BaseController
 
 
         //shipping rate add
+        $geo_zone_id = $this->request->getPost('geo_zone_id[]');
         $up_to_value = $this->request->getPost('up_to_value[]');
         $cost = $this->request->getPost('cost[]');
-        $geo_zone_id = $this->request->getPost('geo_zone_id[]');
         $cc_geo_zone_shipping_rate_id = $this->request->getPost('cc_geo_zone_shipping_rate_id[]');
-
         foreach ($up_to_value as $key => $v){
+            $rateData['geo_zone_id'] = $geo_zone_id[$key];
+            $rateData['up_to_value'] = $v;
+            $rateData['cost'] = $cost[$key];
+
             if (!empty($cc_geo_zone_shipping_rate_id[$key])){
-                $rateData['geo_zone_id'] = $geo_zone_id[$key];
-                $rateData['up_to_value'] = $v;
-                $rateData['cost'] = $cost[$key];
                 $tableRate = DB()->table('cc_geo_zone_shipping_rate');
                 $tableRate->where('cc_geo_zone_shipping_rate_id',$cc_geo_zone_shipping_rate_id[$key])->update($rateData);
             }else{
-                $rateData['geo_zone_id'] = $geo_zone_id[$key];
-                $rateData['up_to_value'] = $v;
-                $rateData['cost'] = $cost[$key];
                 $tableRate = DB()->table('cc_geo_zone_shipping_rate');
                 $tableRate->insert($rateData);
+            }
+        }
+
+        $zone_id = $this->request->getPost('zone_id[]');
+        $above = $this->request->getPost('above[]');
+        $costAbove = $this->request->getPost('costAbove[]');
+        $above_rate_id = $this->request->getPost('above_rate_id[]');
+
+        foreach ($above as $key => $v){
+            $rateData2['geo_zone_id'] = $zone_id[$key];
+            $rateData2['above'] = $v;
+            $rateData2['cost'] = $costAbove[$key];
+            if (!empty($above_rate_id[$key])){
+                $tableRate = DB()->table('cc_geo_zone_shipping_rate');
+                $tableRate->where('cc_geo_zone_shipping_rate_id',$above_rate_id[$key])->update($rateData2);
+            }else{
+                if(!empty($v)) {
+                    $tableRate = DB()->table('cc_geo_zone_shipping_rate');
+                    $tableRate->insert($rateData2);
+                }
             }
         }
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Zone Rate Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -209,7 +229,11 @@ class Shipping extends BaseController
         $table = DB()->table('cc_geo_zone_shipping_rate');
         $table->where('cc_geo_zone_shipping_rate_id', $cc_geo_zone_shipping_rate_id)->delete();
 
-        print '<div class="alert alert-success alert-dismissible" role="alert">Zone Rate Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        $message =  '<div class="alert alert-success alert-dismissible" role="alert">Zone Rate Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
+
     }
 
     /**

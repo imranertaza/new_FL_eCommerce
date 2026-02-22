@@ -88,9 +88,25 @@
 
                                             <div class="col-md-12">
                                                 <div id="new_rate_<?php echo $tabCon->geo_zone_id;?>" class="row">
-                                                    <?php foreach ($allRate as $rate){ ?>
+                                                    <?php foreach ($allRate as $rate){ if ($rate->up_to_value != null){ ?>
                                                     <div class='col-md-12 mt-2' ><input type='text' class='form-input' placeholder='Weight'  name='up_to_value[]' value="<?php echo $rate->up_to_value;?>" style='width: 40%; margin-right: 2px'><input type='text' class='form-input' value="<?php echo $rate->cost;?>"  name='cost[]' placeholder='Rate' style='width: 45%; margin-left: 3px;'><input type='hidden' value='<?php echo $tabCon->geo_zone_id;?>' name='geo_zone_id[]'><input type='hidden' value='<?php echo $rate->cc_geo_zone_shipping_rate_id;?>' name='cc_geo_zone_shipping_rate_id[]'> <a href='javascript:void(0)' onclick='remove_option(this),removeRate(<?php echo $rate->cc_geo_zone_shipping_rate_id;?>)' class='btn btn-danger' style='margin-top: -5px;width: 5%;'>X</a></div>
-                                                    <?php } ?>
+                                                    <?php } } ?>
+
+                                                </div>
+                                                <div class="row">
+                                                    <?php foreach ($allRate as $rate){ if ($rate->up_to_value == null){ ?>
+                                                    <div class="col-md-12 mt-2" >
+                                                        <input type="text" class="form-input" name="above[]" placeholder="Above to"  style='width: 40%; margin-right: 2px' value="<?php echo $rate->above;?>">
+                                                        <input type="text" class="form-input" name="costAbove[]" style='width: 45%; margin-right: 3px' value="<?php echo $rate->cost;?>">
+                                                        <input type="hidden" value="<?php echo $rate->cc_geo_zone_shipping_rate_id;?>" name="above_rate_id[]">
+                                                    </div>
+                                                    <?php }} if (empty($allRate)) {?>
+                                                        <div class="col-md-12 mt-2" >
+                                                            <input type="text" class="form-input" name="above[]" placeholder="Above to"  style='width: 40%; margin-right: 2px' value="">
+                                                            <input type="text" class="form-input" name="costAbove[]" style='width: 45%; margin-right: 3px' value="">
+                                                        </div>
+                                                    <?php }  ?>
+                                                    <input type='hidden' value='<?php echo $tabCon->geo_zone_id;?>' name='zone_id[]'>
                                                 </div>
                                                 <input type="hidden" value="1" id="total_item_<?php echo $tabCon->geo_zone_id;?>">
                                             </div>
@@ -109,7 +125,7 @@
                                             <div class="col-md-12">
                                                 <div id="new_rate_0" class="row">
                                                     <?php $allRateOt = get_array_data_by_id('cc_geo_zone_shipping_rate', 'geo_zone_id', '0'); foreach ($allRateOt as $rateOt){ ?>
-                                                        <div class='col-md-12 mt-2' ><input type='text' class='form-input' placeholder='Weight'  name='up_to_value[]' value="<?php echo $rateOt->up_to_value;?>" style='width: 40%;margin-right: 2px;'><input type='text' class='form-input' value="<?php echo $rateOt->cost;?>"  name='cost[]' placeholder='Rate' style='width: 45%; margin-left: 3px;'><input type='hidden' value='0' name='geo_zone_id[]'><input type='hidden' value='<?php echo $rateOt->cc_geo_zone_shipping_rate_id;?>' name='cc_geo_zone_shipping_rate_id[]'> <a href='javascript:void(0)' onclick='remove_option(this),removeRate(<?php echo $rateOt->cc_geo_zone_shipping_rate_id;?>)' class='btn btn-danger' style='margin-top: -5px;width: 5%;'>X</a></div>
+                                                        <div class='col-md-12 mt-2' ><input type='text' class='form-input' placeholder='Weight'  name='up_to_value[]' value="<?php echo $rateOt->up_to_value;?>" style='width: 40%;margin-right: 2px;'><input type='text' class='form-input' value="<?php echo $rateOt->cost;?>"  name='cost[]' placeholder='Rate' style='width: 45%; margin-left: 3px;'><input type='hidden' value='0' name='geo_zone_id[]'><input type='hidden' value='<?php echo $rateOt->cc_geo_zone_shipping_rate_id;?>' name='cc_geo_zone_shipping_rate_id[]'> <a href='javascript:void(0)' onclick='remove_option(this),removeRate(<?php echo $rateOt->cc_geo_zone_shipping_rate_id;?>),updateAbove(this);' class='btn btn-danger' style='margin-top: -5px;width: 5%;'>X</a></div>
                                                     <?php } ?>
                                                 </div>
                                                 <input type="hidden" value="1" id="total_item_0">
@@ -154,10 +170,13 @@
     }
 
     function removeRate(id){
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('zone_rate_delete') ?>",
             data: {
+                [csrfName]: csrfHash,
                 cc_geo_zone_shipping_rate_id: id
             },
             beforeSend: function() {
@@ -173,6 +192,38 @@
     function remove_option(data) {
         $(data).parent().remove();
     }
+
+    document.addEventListener('input', function(e) {
+
+        if (e.target.name === 'up_to_value[]') {
+
+            // Find correct tab container automatically
+            let container = e.target.closest('[id^="new_rate_"]');
+            if (!container) return;
+
+            // Get all values inside this tab only
+            let inputs = container.querySelectorAll('input[name="up_to_value[]"]');
+            let values = [];
+
+            inputs.forEach(input => {
+                let val = parseFloat(input.value);
+                if (!isNaN(val)) values.push(val);
+            });
+
+            let maxVal = values.length ? Math.max(...values) : 0;
+
+            // Find "Above To" field inside same tab
+            let tabPane = container.closest('.tab-pane');
+            if (!tabPane) return;
+
+            let aboveInput = tabPane.querySelector('input[name="above[]"]');
+            if (aboveInput) {
+                aboveInput.value = maxVal;
+            }
+        }
+
+    });
+
 
 </script>
 <?= $this->endSection() ?>
