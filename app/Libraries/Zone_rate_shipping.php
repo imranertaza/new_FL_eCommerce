@@ -108,6 +108,13 @@ class Zone_rate_shipping{
             if (!empty($allZoneRate)){
                 $charge = $allZoneRate->cost;
             }
+
+            $tableRate = DB()->table('cc_geo_zone_shipping_rate');
+            $allZoneRateAbove = $tableRate->where('geo_zone_id', $geo_zone_id)->where('above <',$totalWeight)->orderBy('above','ASC')->get()->getRow();
+
+            if (!empty($allZoneRateAbove)){
+                $charge = $allZoneRateAbove->cost;
+            }
         }
 
         return $charge;
@@ -139,6 +146,13 @@ class Zone_rate_shipping{
                 $charge = $allZoneRate->cost;
             }
 
+            $tableRate = DB()->table('cc_geo_zone_shipping_rate');
+            $allZoneRateAbove = $tableRate->where('geo_zone_id', $geo_zone_id)->where('above <', $totalItem)->orderBy('above', 'ASC')->get()->getRow();
+
+            if (!empty($allZoneRateAbove)) {
+                $charge = $allZoneRateAbove->cost;
+            }
+
         }
         return $charge;
 
@@ -168,6 +182,13 @@ class Zone_rate_shipping{
 
             if (!empty($allZoneRate)) {
                 $charge = $allZoneRate->cost;
+            }
+
+            $tableRate = DB()->table('cc_geo_zone_shipping_rate');
+            $allZoneRateAbove = $tableRate->where('geo_zone_id', $geo_zone_id)->where('above <', $totalPrice)->orderBy('above', 'ASC')->get()->getRow();
+
+            if (!empty($allZoneRateAbove)) {
+                $charge = $allZoneRateAbove->cost;
             }
 
         }

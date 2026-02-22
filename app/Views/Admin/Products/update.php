@@ -148,7 +148,7 @@
                                             <div class="form-group">
                                                 <label>Quantity <span class="requi">*</span></label>
                                                 <input type="number" name="quantity" class="form-control"
-                                                       placeholder="Quantity" value="<?php echo $prod->quantity;?>" required>
+                                                       placeholder="Quantity" min="1" step="1" value="<?php echo $prod->quantity;?>" required>
                                             </div>
                                             <div class="form-group">
                                                 <label>Wight</label>

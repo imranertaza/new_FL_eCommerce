@@ -121,7 +121,7 @@ class Products extends BaseController
             'model' => ['label' => 'Model', 'rules' => 'required'],
             'categorys' => ['label' => 'Category', 'rules' => 'required'],
             'price' => ['label' => 'Price', 'rules' => 'required'],
-            'quantity' => ['label' => 'Quantity', 'rules' => 'required'],
+            'quantity' => ['label' => 'Quantity', 'rules' => 'required|is_natural_no_zero'],
         ]);
 
         if ($this->validation->run($data) == FALSE) {
@@ -663,7 +663,7 @@ class Products extends BaseController
             'model' => ['label' => 'Model', 'rules' => 'required'],
             'categorys' => ['label' => 'Category', 'rules' => 'required'],
             'price' => ['label' => 'Price', 'rules' => 'required'],
-            'quantity' => ['label' => 'Quantity', 'rules' => 'required'],
+            'quantity' => ['label' => 'Quantity', 'rules' => 'required|is_natural_no_zero'],
         ]);
 
         if ($this->validation->run($data) == FALSE) {
