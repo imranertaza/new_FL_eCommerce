@@ -917,7 +917,7 @@ function get_lebel_by_value_in_theme_settings_with_theme($lable, $theme)
  * @param string $message
  * @return void
  */
-function email_send($to, $subject, $message,$replyEmail=null)
+function email_send($to, $subject, $message,$replyEmail=null,$title=null)
 {
 
     $email = \Config\Services::email();
@@ -938,7 +938,7 @@ function email_send($to, $subject, $message,$replyEmail=null)
 
     $email->setFrom($form, $titleStore);
     $reply = !empty($replyEmail)?$replyEmail:$form;
-    $email->setReplyTo($reply, $titleStore);
+    $email->setReplyTo($reply,$title);
     $email->setTo($to);
 
     $email->setSubject($subject);
@@ -949,7 +949,6 @@ function email_send($to, $subject, $message,$replyEmail=null)
         $result = true;
     } else {
         $email->printDebugger(['headers']);
-
         $result = false;
     }
 
@@ -1021,6 +1020,7 @@ function order_email_template($orderId)
                 <b>Shipping Method:</b> $val->shipping_method
             </td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                <b>Name:</b> $val->payment_firstname $val->payment_lastname<br>
                 <b>Email:</b> <a href='mailto:$val->payment_email' target='_blank'>$val->payment_email</a><br>
                 <b>Telephone:</b> $val->payment_phone<br>
             </td>

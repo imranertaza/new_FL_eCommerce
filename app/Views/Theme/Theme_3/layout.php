@@ -1144,9 +1144,12 @@ $modules = modules_access();
             url: "<?php echo base_url('addtocartgroup') ?>",
             data: formData,
             success: function(response) {
+                $('meta[name="csrf-token"]').attr('content', response.csrfToken);
+                $('input[name="<?= csrf_token() ?>"]').val(response.csrfToken);
+
                 $('#cartReload').load(location.href + " #cartReload");
                 $('#cartReload2').load(location.href + " #cartReload2");
-                $('#mesVal').html(response);
+                $('#mesVal').html(response.message);
                 $('.btn-count').load(location.href + " .btn-count");
                 $('.body-count').load(location.href + " .body-count");
                 $('#collapseExample').addClass('show');

@@ -91,6 +91,8 @@ class FeaturedSection extends BaseController
         $alt_name            = $this->request->getPost('alt_name');
         $url                 = $this->request->getPost('url');
         $images              = $this->request->getFileMultiple('image');
+        $bannerImages        = $this->request->getFileMultiple('banner');
+        $banner_alt_name     = $this->request->getPost('banner_alt_name');
 
         // Validate: must have section_name and at least one of product, brand, or category
         foreach ($section_name as $key => $val) {
@@ -152,7 +154,26 @@ class FeaturedSection extends BaseController
                 'end_date'            => $end_date[$key] ?? null,
                 'alt_name'            => $alt_name[$key] ?? null,
                 'url'                 => $url[$key] ?? null,
+                'banner_alt_name'     => $banner_alt_name[$key] ?? null,
             ];
+
+            // Handle image upload and crop
+            if (!empty($bannerImages[$key]) && $bannerImages[$key]->isValid() && !$bannerImages[$key]->hasMoved()) {
+                $newNameBan = $bannerImages[$key]->getRandomName();
+                $bannerImages[$key]->move($target_dir, $newNameBan);
+
+                $croppedName = 'category_banner_' . $newNameBan;
+
+                // Crop and save new image
+                $this->crop->withFile($target_dir . $newNameBan)
+                    ->fit(1140, 211, 'center')
+                    ->save($target_dir . $croppedName, 100);
+
+                // Remove the temporary original
+                unlink($target_dir . $newNameBan);
+
+                $data['banner'] = $croppedName;
+            }
 
             // Handle image upload and crop
             if (!empty($images[$key]) && $images[$key]->isValid() && !$images[$key]->hasMoved()) {
@@ -253,6 +274,9 @@ class FeaturedSection extends BaseController
         $url                 = $this->request->getPost('url');
         $images              = $this->request->getFile('image');
 
+        $bannerImages        = $this->request->getFile('banner');
+        $banner_alt_name     = $this->request->getPost('banner_alt_name');
+
         $radio               = $this->request->getPost('radio');
         $type                = $this->request->getPost($radio);
 
@@ -272,13 +296,14 @@ class FeaturedSection extends BaseController
             'end_date'            => $end_date,
             'alt_name'            => $alt_name,
             'url'                 => $url,
+            'banner_alt_name'     => $banner_alt_name,
         ];
 
         // Handle image upload and crop
         if (!empty($images) && $images->isValid() && !$images->hasMoved()) {
             //old image unlink
             $oldImage = get_data_by_id('image','cc_featured_schedule','featured_schedule_id',$featured_schedule_id);
-            if (file_exists($target_dir.$oldImage)) {
+            if (!empty($oldImage) && file_exists($target_dir.$oldImage)) {
                 unlink($target_dir . $oldImage);
             }
 
@@ -297,6 +322,31 @@ class FeaturedSection extends BaseController
 
             $data['image'] = $croppedName;
         }
+
+        // Handle image upload and crop
+        if (!empty($bannerImages) && $bannerImages->isValid() && !$bannerImages->hasMoved()) {
+            //old image unlink
+            $oldImageBn = get_data_by_id('banner','cc_featured_schedule','featured_schedule_id',$featured_schedule_id);
+            if ( !empty($oldImageBn) && file_exists($target_dir.$oldImageBn)) {
+                unlink($target_dir . $oldImageBn);
+            }
+
+            $newNameBan = $bannerImages->getRandomName();
+            $bannerImages->move($target_dir, $newNameBan);
+
+            $croppedName = 'category_banner_' . $newNameBan;
+
+            // Crop and save new image
+            $this->crop->withFile($target_dir . $newNameBan)
+                ->fit(1140, 211, 'center')
+                ->save($target_dir . $croppedName, 100);
+
+            // Remove the temporary original
+            unlink($target_dir . $newNameBan);
+
+            $data['banner'] = $croppedName;
+        }
+
         // Update into featured_schedule
         $db->table('cc_featured_schedule')->where('featured_schedule_id',$featured_schedule_id)->update($data);
 
@@ -376,6 +426,11 @@ class FeaturedSection extends BaseController
         $oldImage = get_data_by_id('image','cc_featured_schedule','featured_schedule_id',$id);
         if (file_exists($target_dir.$oldImage)) {
             unlink($target_dir . $oldImage);
+        }
+
+        $oldImageBn = get_data_by_id('banner','cc_featured_schedule','featured_schedule_id',$id);
+        if (file_exists($target_dir.$oldImageBn)) {
+            unlink($target_dir . $oldImageBn);
         }
         //data delete in cc_featured_product
         $db->table('cc_featured_product')->where('featured_schedule_id',$id)->delete();
