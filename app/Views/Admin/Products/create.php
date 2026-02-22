@@ -142,7 +142,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Quantity <span class="requi">*</span></label>
-                                                <input type="number" name="quantity" class="form-control"
+                                                <input type="number" name="quantity" min="1" step="1" value="1" class="form-control"
                                                        placeholder="Quantity" required>
                                             </div>
                                             <div class="form-group">
