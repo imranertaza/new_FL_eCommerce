@@ -560,6 +560,8 @@ class Album extends BaseController
         $data['sort_order'] = $this->request->getPost('value');
         $table = DB()->table('cc_album_details');
         $table->where('album_details_id', $album_details_id)->update($data);
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash());
     }
 
     /**
@@ -573,6 +575,8 @@ class Album extends BaseController
         $data['alt_name'] = $this->request->getPost('value');
         $table = DB()->table('cc_album_details');
         $table->where('album_details_id', $album_details_id)->update($data);
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash());
     }
 
     /**
@@ -601,7 +605,10 @@ class Album extends BaseController
 
 
         $table->where('album_details_id', $album_details_id)->delete();
-        print '<div class="alert alert-success alert-dismissible" role="alert">Album Image Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        $message = '<div class="alert alert-success alert-dismissible" role="alert">Album Image Delete Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        return $this->response
+            ->setHeader('X-CSRF-TOKEN', csrf_hash())
+            ->setBody($message);
     }
 
     public function album_category_delete($album_id)

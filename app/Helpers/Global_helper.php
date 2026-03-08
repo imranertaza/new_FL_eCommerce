@@ -1481,25 +1481,6 @@ function get_category_id_by_product_show_home_slide($category_id)
 }
 
 function getProductByScheduleIdShowHomeSlider($scheduleId){
-//    $builder = DB()->table('cc_products p')
-//        ->select('p.*, fp.featured_product_id, ptc.category_id')
-//        ->join('cc_product_to_category ptc', 'ptc.product_id = p.product_id', 'left')
-//        ->join('cc_featured_product fp',
-//            '(fp.product_id = p.product_id
-//                    OR fp.brand_id = p.brand_id
-//                    OR fp.prod_cat_id = ptc.category_id)',
-//            'left'
-//        )
-//        ->where('p.status', 'Active')
-//        ->where('p.featured', '1')
-//        ->where('fp.featured_schedule_id', $scheduleId)
-//        ->groupBy('p.product_id')
-//        ->orderBy('p.product_id', 'DESC')
-//        ->limit(20);
-//
-//    $result = $builder->get()->getResult();
-
-
     $db = DB();
     $featured = $db->table('cc_featured_product')
         ->where('featured_schedule_id', $scheduleId)
@@ -1507,7 +1488,7 @@ function getProductByScheduleIdShowHomeSlider($scheduleId){
         ->getResult();
 
     $result = [];
-
+    $resultAlbum = [];
     // No row found
     if (empty($featured)) {
         return sectionProductViewByProductArray([]);
@@ -1572,9 +1553,23 @@ function getProductByScheduleIdShowHomeSlider($scheduleId){
             }
         }
 
-    }
+    }else{
+        foreach ($featured as $item) {
+            $album = $db->table('cc_album')
+                ->where('album_id', $item->album_id)
+                ->get()
+                ->getRow();
 
-    return  sectionProductViewByProductArray($result);
+            if ($album) {
+                $resultAlbum[] = $album;
+            }
+        }
+    }
+    if (!empty($result)) {
+        return sectionProductViewByProductArray($result);
+    }else{
+        return sectionAlbumViewByAlbumArray($resultAlbum);
+    }
 }
 
 function sectionProductViewByProductArray($product){
@@ -1629,6 +1624,48 @@ function sectionProductViewByProductArray($product){
     return $view;
 }
 
+function sectionAlbumViewByAlbumArray($albumArray){
+    $view = '';
+    $count = 0;
+    foreach ($albumArray as $val){
+
+        // Open new slide every 3 items
+        if ($count % 3 == 0) {
+            $view .= '<div class="swiper-slide">' . "\n";
+        }
+
+        $view .= '<div class="border p-3 product-grid h-100 d-flex align-items-stretch flex-column position-relative">
+            <div class="product-grid position-relative">
+                <div class="product-top mb-2">';
+        if ($val->is_parent == 1){
+    $view .= '<a href="'. base_url('qc-picture-view-category/'.$val->album_id).'">';
+        }else{
+            $view .='<a href="'. base_url('qc-picture-view/'.$val->album_id).'">';
+         }
+        $view .= '<img data-sizes="auto"
+                src="' . product_image_view('uploads/album', $val->album_id, $val->thumb, 'noimage.png', '132', '132') . '"
+                alt="'.$val->alt_name.'"
+                class="img-fluid w-100"
+                loading="lazy">';
+        $view .= '<p class="product-title text-center text-black">'.$val->name.'</p>';
+        $view .= '</a></div>
+            </div>
+        </div>' . "\n";
+
+        // Close slide after 3 items
+        if ($count % 3 == 2) {
+            $view .= '</div>' . "\n";
+        }
+
+        $count++;
+    }
+
+    // Close unclosed slide (if items not multiple of 3)
+    if ($count % 3 != 0) {
+        $view .= '</div>';
+    }
+    return $view;
+}
 /**
  * @description This function provides get category name by id
  * @param int $cate_id
