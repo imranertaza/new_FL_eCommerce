@@ -226,13 +226,17 @@ class FeaturedSection extends BaseController
 
             // Insert multiple album if available
             if (!empty($album_id[$key])) {
+                $insertData = [];
                 foreach ($album_id[$key] as $albumId) {
                     if (!empty($albumId)) {
-                        $db->table('cc_featured_product')->insert([
+                        $insertData[] = [
                             'featured_schedule_id' => $featured_schedule_id,
                             'album_id' => $albumId,
-                        ]);
+                        ];
                     }
+                }
+                if (!empty($insertData)) {
+                    $db->table('cc_featured_product')->insertBatch($insertData);
                 }
             }
 
@@ -394,14 +398,18 @@ class FeaturedSection extends BaseController
         }
 
         // Insert category if available
-        if (!empty($type == 'option4')) {
+        if ($type == 'option4' && !empty($album_id)) {
+            $updateData = [];
             foreach ($album_id as $albumId) {
                 if (!empty($albumId)) {
-                    $db->table('cc_featured_product')->insert([
+                    $updateData[] = [
+                        'album_id' => $albumId, // match key
                         'featured_schedule_id' => $featured_schedule_id,
-                        'album_id' => $albumId,
-                    ]);
+                    ];
                 }
+            }
+            if (!empty($updateData)) {
+                $db->table('cc_featured_product')->updateBatch($updateData, 'album_id');
             }
         }
 
