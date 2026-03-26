@@ -112,7 +112,7 @@
                         <div class="col-lg-12">
                             <div class="form-group mb-4">
                                 <label class="w-100" for="email">Post code</label>
-                                <input class="form-control rounded-0 in_err" type="number" name="payment_postcode"
+                                <input class="form-control rounded-0 in_err" type="text" name="payment_postcode"
                                     id="payment_postcode" placeholder="Post code" value="<?php echo $post; ?>" required>
                                     <span class="text-danger err d-inline-block text-capitalize" id="paymentPostcodeError"></span>
                             </div>
@@ -221,7 +221,7 @@
                             <div class="col-lg-6">
                                 <div class="form-group mb-4">
                                     <label class="w-100" for="email">Postcode</label>
-                                    <input class="form-control rounded-0 in_err" type="number" name="shipping_postcode"
+                                    <input class="form-control rounded-0 in_err" type="text" name="shipping_postcode"
                                         id="shipping_postcode" placeholder="Shipping postcode">
                                     <span class="text-danger d-inline-block text-capitalize err" id="shipping_postcode_mess"></span>
                                 </div>

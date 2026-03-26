@@ -187,7 +187,7 @@ class Cart extends BaseController {
             }
             $data['message'] = 'Successfully add to cart';
         }else{
-            $data['message'] = 'Empty Products';
+            $data['message'] = 'No product selected. Please select any product.';
         }
         $data['csrfToken'] = csrf_hash();
         return $this->response->setJSON($data);
