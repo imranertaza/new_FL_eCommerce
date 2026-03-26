@@ -78,8 +78,25 @@
                                     </div>
                                 </div>
                             <?php }
-                        } else {
-                            echo 'No product available';
+                        } else { if (!empty($album)){ ?>
+
+                            <?php foreach ($album as $val){  ?>
+                                <div class="col-3 col-md-3 mt-4 text-center">
+                                    <?php if ($val->is_parent == 1){ ?>
+                                        <a href="<?= base_url('qc-picture-view-category/'.$val->album_id);?>">
+                                    <?php }else{ ?>
+                                        <a href="<?= base_url('qc-picture-view/'.$val->album_id);?>">
+                                    <?php }?>
+
+                                            <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/album', $val->album_id, $val->thumb, 'noimage.png', '261', '261') ?>" alt="<?php echo $val->alt_name?>" class="img-fluid" loading="lazy">
+                                            <p class="text-capitalize text-black mt-3"><b><?php echo $val->name; ?></b></p>
+                                        </a>
+                                </div>
+                            <?php }  ?>
+
+                        <?php }else {
+                                echo 'No product available';
+                            }
                         } ?>
                     </div>
 

@@ -86,6 +86,7 @@ class FeaturedSection extends BaseController
         $product             = $this->request->getPost('product_id'); // 2D array if multiple
         $brand_id            = $this->request->getPost('brand_id');
         $prod_cat_id         = $this->request->getPost('prod_cat_id');
+        $album_id            = $this->request->getPost('album_id');
         $start_date          = $this->request->getPost('start_date');
         $end_date            = $this->request->getPost('end_date');
         $alt_name            = $this->request->getPost('alt_name');
@@ -122,8 +123,9 @@ class FeaturedSection extends BaseController
             $hasProduct  = !empty($product[$key]) && is_array($product[$key]) && count(array_filter($product[$key])) > 0;
             $hasBrand    = !empty($brand_id[$key]);
             $hasCategory = !empty($prod_cat_id[$key]);
+            $hasAlbum    = !empty($album_id[$key]);
 
-            if (!$hasProduct && !$hasBrand && !$hasCategory) {
+            if (!$hasProduct && !$hasBrand && !$hasCategory && !$hasAlbum) {
                 $this->session->setFlashdata('message', '
                 <div class="alert alert-danger alert-dismissible" role="alert">
                     Section ' . ($key + 1) . ' must include at least one Product, Brand, or Category.
@@ -222,6 +224,22 @@ class FeaturedSection extends BaseController
                 }
             }
 
+            // Insert multiple album if available
+            if (!empty($album_id[$key])) {
+                $insertData = [];
+                foreach ($album_id[$key] as $albumId) {
+                    if (!empty($albumId)) {
+                        $insertData[] = [
+                            'featured_schedule_id' => $featured_schedule_id,
+                            'album_id' => $albumId,
+                        ];
+                    }
+                }
+                if (!empty($insertData)) {
+                    $db->table('cc_featured_product')->insertBatch($insertData);
+                }
+            }
+
             // Insert multiple products if available
             if (!empty($product[$key]) && is_array($product[$key])) {
                 foreach ($product[$key] as $prod_id) {
@@ -268,6 +286,7 @@ class FeaturedSection extends BaseController
         $product             = $this->request->getPost('product_id');
         $brand_id            = $this->request->getPost('brand_id');
         $prod_cat_id         = $this->request->getPost('prod_cat_id');
+        $album_id            = $this->request->getPost('album_id');
         $start_date          = $this->request->getPost('start_date');
         $end_date            = $this->request->getPost('end_date');
         $alt_name            = $this->request->getPost('alt_name');
@@ -375,6 +394,22 @@ class FeaturedSection extends BaseController
                         'prod_cat_id' => $cat_id,
                     ]);
                 }
+            }
+        }
+
+        // Insert category if available
+        if ($type == 'option4' && !empty($album_id)) {
+            $updateData = [];
+            foreach ($album_id as $albumId) {
+                if (!empty($albumId)) {
+                    $updateData[] = [
+                        'album_id' => $albumId, // match key
+                        'featured_schedule_id' => $featured_schedule_id,
+                    ];
+                }
+            }
+            if (!empty($updateData)) {
+                $db->table('cc_featured_product')->updateBatch($updateData, 'album_id');
             }
         }
 

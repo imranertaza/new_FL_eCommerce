@@ -37,6 +37,7 @@ class Section extends BaseController
             ->get()
             ->getRow();
         $result = [];
+        $resultAlbum = [];
          if (!empty($data['schedule'])) {
              $featured = $db->table('cc_featured_product')
                  ->where('featured_schedule_id', $id)
@@ -102,10 +103,21 @@ class Section extends BaseController
                      }
                  }
 
+             }else{
+                 foreach ($featured as $item){
+                     $album = $db->table('cc_album')
+                         ->where('album_id',$item->album_id)
+                         ->get()
+                         ->getRow();
+                     if (!empty($album)){
+                         $resultAlbum[] = $album;
+                     }
+                 }
              }
          }
 
         $data['result'] = $result;
+        $data['album'] = $resultAlbum;
         $data['home_menu'] = true;
         $data['theme'] = $theme;
 
