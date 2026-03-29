@@ -409,7 +409,7 @@ class FeaturedSection extends BaseController
                 }
             }
             if (!empty($updateData)) {
-                $db->table('cc_featured_product')->updateBatch($updateData, 'album_id');
+                $db->table('cc_featured_product')->insertBatch($updateData);
             }
         }
 
@@ -427,7 +427,6 @@ class FeaturedSection extends BaseController
                 }
             }
         }
-
 
         $db->transComplete(); // Commit transaction
 
