@@ -419,10 +419,6 @@ const onProfileForm = () => {
         payment_postcode.classList.add("border-danger");
         error("#paymentPostcodeError", "Your post code is too long");
         return false;
-    } else if (!Number(payment_postcode.value)) {
-        payment_postcode.classList.add("border-danger");
-        error("#paymentPostcodeError", "Invalid post code. Please enter a valid numeric value");
-        return false;
     } else if (payment_address_1.value === "") {
         payment_address_1.classList.add("border-danger");
         error("#paymentAddressError", "Please enter your address");
