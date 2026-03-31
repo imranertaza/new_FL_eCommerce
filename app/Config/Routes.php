@@ -40,7 +40,7 @@ $routes->get('/', 'Home::index');
 $routes->post('/user_subscribe', 'Home::user_subscribe');
 $routes->get('/user_subscribe_verify', 'Home::verify');
 
-$routes->get('section-view/(:num)', 'Section::view/$1');
+$routes->get('schedule-view/(:num)', 'Section::view/$1');
 
 $routes->get('/admin', 'Admin\Login::index');
 $routes->post('/admin_login_action', 'Admin\Login::login_action');

@@ -45,10 +45,12 @@
                             $hasProduct = false;
                             $hasBrand = false;
                             $hasCategory = false;
+                            $hasQcPic = false;
                             foreach ($products as $p) {
                                 if (!empty($p->product_id)) $hasProduct = true;
                                 if (!empty($p->brand_id)) $hasBrand = true;
                                 if (!empty($p->prod_cat_id)) $hasCategory = true;
+                                if (!empty($p->album_id)) $hasQcPic = true;
                             }
                         ?>
                         <div class="col-md-12 mt-4 card">
@@ -56,7 +58,7 @@
                                 <?= csrf_field() ?>
                                 <div class="row p-2">
                                 <div class="col-md-12">
-                                    <span class="float-left"><b>Url:</b> <?= base_url('section-view/'.$result->featured_schedule_id)?></span>
+                                    <span class="float-left"><b>Url:</b> <?= base_url('schedule-view/'.$result->featured_schedule_id)?></span>
                                     <!-- Remove button -->
                                     <a href="<?= base_url('section_view_delete/'.$result->featured_schedule_id)?>" class="btn btn-danger float-right" onclick="return confirm('Are you sure you want to delete this section?');" >X</a>
                                 </div>
@@ -81,6 +83,10 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" onclick="typeEventTwo(this)" name="type_<?= $key.'_1'?>" id="exampleRadios3_<?= $key.'_1'?>" value="option3" <?= $hasCategory ? 'checked' : '' ?>>
                                             <label class="form-check-label" for="exampleRadios3_<?= $key.'_1'?>">Category</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" onclick="typeEventTwo(this)" name="type_<?= $key.'_1'?>" id="exampleRadios4_<?= $key.'_1'?>" value="option4" <?= $hasQcPic ? 'checked' : '' ?>>
+                                            <label class="form-check-label" for="exampleRadios4_<?= $key.'_1'?>">Qc Picture</label>
                                         </div>
                                     </div>
 
@@ -111,6 +117,15 @@
                                             <?php foreach (get_array_data_by_id('cc_product_category', 'status', '1') as $cat) { ?>
                                                 <option value="<?php echo $cat->prod_cat_id; ?>" <?php foreach ($products as $val){ echo ($val->prod_cat_id == $cat->prod_cat_id)?'selected ':''; } ?>><?php echo display_category_with_parent($cat->prod_cat_id); ?></option>
                                             <?php } ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group " id="qcpicture_<?= $key.'_1'?>" <?= $hasQcPic ? 'style="display:block;"' : 'style="display:none;"' ?>>
+                                        <label>Qc Picture <span class="requi">*</span></label>
+                                        <select class="select2QcPicture" name="album_id[]" multiple="multiple" style="width: 100%;">
+                                            <?php foreach (get_array_data_by_id('cc_album', 'is_album_uploadable', '1') as $album) { ?>
+                                                <option value="<?= $album->album_id;?>" <?php foreach ($products as $val){ echo ($val->album_id == $album->album_id)?'selected ':''; } ?>><?= $album->name;?></option>
+                                            <?php }?>
                                         </select>
                                     </div>
 
@@ -199,6 +214,10 @@
                                                     <input class="form-check-input" type="radio" onclick="typeEvent(this)" name="type" id="exampleRadios3" value="option3">
                                                     <label class="form-check-label" for="exampleRadios3">Category</label>
                                                 </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" onclick="typeEvent(this)" name="type" id="exampleRadios4" value="option4">
+                                                    <label class="form-check-label" for="exampleRadios4">Qc Picture</label>
+                                                </div>
                                             </div>
 
 
@@ -222,6 +241,15 @@
                                                     <?php foreach (get_array_data_by_id('cc_product_category', 'status', '1') as $cat) { ?>
                                                         <option value="<?php echo $cat->prod_cat_id; ?>"><?php echo display_category_with_parent($cat->prod_cat_id); ?></option>
                                                     <?php } ?>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group " id="qcpicture" style="display:none;">
+                                                <label>Qc Picture <span class="requi">*</span></label>
+                                                <select class="select2QcPicture" name="album_id[0][]" multiple="multiple" style="width: 100%;">
+                                                    <?php foreach (get_array_data_by_id('cc_album', 'is_album_uploadable', '1') as $album) { ?>
+                                                        <option value="<?= $album->album_id;?>"><?= $album->name;?></option>
+                                                    <?php }?>
                                                 </select>
                                             </div>
 
@@ -337,11 +365,21 @@
             });
         }
 
+        function initSelect2Qc() {
+            $('.select2QcPicture').select2({
+                theme: 'bootstrap4',
+                sorter: data => data.sort((a, b) => a.text.localeCompare(b.text)),
+                placeholder: "Select Qc Picture",
+                allowClear: true
+            });
+        }
+
         $(document).ready(function () {
             // Initialize Select2 for the first row
             initSelect2('.select2_pro_new');
             initSelect2Category();
             initSelect2Brand();
+            initSelect2Qc();
 
 
             let rowIndex = 0;
@@ -371,6 +409,9 @@
                 newRow.find(".select2Brand").removeAttr("data-select2-id tabindex aria-hidden").show();
                 newRow.find(".select2Brand").attr("name", "brand_id[" + rowIndex + "][]");
 
+                newRow.find(".select2QcPicture").removeAttr("data-select2-id tabindex aria-hidden").show();
+                newRow.find(".select2QcPicture").attr("name", "qcpicture[" + rowIndex + "][]");
+
 
                 // Make radio buttons have unique name
                 newRow.find("input[type='radio']").each(function () {
@@ -399,6 +440,7 @@
                 newRow.find("#product").attr("id", "product_" + rowIndex).show();
                 newRow.find("#brand").attr("id", "brand_" + rowIndex).hide();
                 newRow.find("#category").attr("id", "category_" + rowIndex).hide();
+                newRow.find("#qcpicture").attr("id", "qcpicture_" + rowIndex).hide();
 
                 // Update typeEvent to use relative selectors
                 newRow.find("input[type='radio']").attr("onclick", "typeEvent(this)");
@@ -410,6 +452,7 @@
                 initSelect2(newRow.find(".select2_pro_new"));
                 initSelect2Category();
                 initSelect2Brand();
+                initSelect2Qc();
             });
 
             // Remove Row
@@ -427,12 +470,13 @@
             let formRow = $(el).closest('.formRow');
 
             // Hide all sections in this row
-            formRow.find('[id^=product],[id^=brand],[id^=category]').hide();
+            formRow.find('[id^=product],[id^=brand],[id^=category],[id^=qcpicture]').hide();
 
             // Show correct section
             if (value === 'option1') formRow.find('[id^=product]').show();
             else if (value === 'option2') formRow.find('[id^=brand]').show();
             else if (value === 'option3') formRow.find('[id^=category]').show();
+            else if (value === 'option4') formRow.find('[id^=qcpicture]').show();
         }
 
         function typeEventTwo(el) {
@@ -444,7 +488,7 @@
             if (!parentCard) return;
 
             // Hide all 3 sections first
-            parentCard.querySelectorAll('[id^="product_"], [id^="brand_"], [id^="category_"]').forEach(function(div) {
+            parentCard.querySelectorAll('[id^="product_"], [id^="brand_"], [id^="category_"], [id^="qcpicture_"]').forEach(function(div) {
                 div.style.display = 'none';
             });
 
@@ -455,6 +499,8 @@
                 parentCard.querySelector('[id^="brand_"]').style.display = 'block';
             } else if (value === 'option3') {
                 parentCard.querySelector('[id^="category_"]').style.display = 'block';
+            }else if (value === 'option4') {
+                parentCard.querySelector('[id^="qcpicture_"]').style.display = 'block';
             }
         }
 
