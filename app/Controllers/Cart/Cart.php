@@ -146,7 +146,8 @@ class Cart extends BaseController {
         );
 
         foreach(get_all_data_array('cc_option') as $v) {
-            $data['op_'.strtolower($v->name)] = $this->request->getPost(strtolower($v->name));
+            $name = str_replace(' ','',$v->name);
+            $data['op_'.strtolower($name)] = $this->request->getPost(strtolower($name));
         }
 
         $check = $this->check_qty($product_id , $qty);

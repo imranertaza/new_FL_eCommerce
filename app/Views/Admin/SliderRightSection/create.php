@@ -54,8 +54,8 @@
                                 <div class="col-md-12 p-3 row border">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Title Top <span class="requi">*</span></label>
-                                            <input type="text" name="title_top" class="form-control" placeholder="Title" required>
+                                            <label>Title Top </label>
+                                            <input type="text" name="title_top" class="form-control" placeholder="Title" >
                                         </div>
                                         <div class="form-group">
                                             <label>Banner Top <span class="requi">*</span></label>
@@ -99,8 +99,8 @@
                                 <div class="col-md-12 p-3  mt-3 row border">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Title Bottom <span class="requi">*</span></label>
-                                            <input type="text" name="title_bottom" class="form-control" placeholder="Title" required>
+                                            <label>Title Bottom </label>
+                                            <input type="text" name="title_bottom" class="form-control" placeholder="Title" >
                                         </div>
                                         <div class="form-group">
                                             <label>Banner Bottom <span class="requi">*</span></label>
