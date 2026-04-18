@@ -58,7 +58,7 @@
                                 <?= csrf_field() ?>
                                 <div class="row p-2">
                                 <div class="col-md-12">
-                                    <span class="float-left"><b>Url:</b> <?= base_url('schedule-view/'.$result->featured_schedule_id)?></span>
+                                    <span class="float-left"><b>Url:</b> <?= base_url('schedule-view/'.$result->featured_schedule_id)?><button type="button" onclick="copyUrl('<?= base_url('schedule-view/'.$result->featured_schedule_id)?>')" class="border-0"> <i class="nav-icon fas fa-copy"></i></button> </span>
                                     <!-- Remove button -->
                                     <a href="<?= base_url('section_view_delete/'.$result->featured_schedule_id)?>" class="btn btn-danger float-right" onclick="return confirm('Are you sure you want to delete this section?');" >X</a>
                                 </div>
@@ -502,6 +502,30 @@
             }else if (value === 'option4') {
                 parentCard.querySelector('[id^="qcpicture_"]').style.display = 'block';
             }
+        }
+
+        function copyUrl(urlText){
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                // Modern way
+                navigator.clipboard.writeText(urlText).then(function () {
+                    alert('URL copied!');
+                }).catch(function () {
+                    fallbackCopy(urlText);
+                });
+            } else {
+                // Fallback for old browsers / HTTP
+                fallbackCopy(urlText);
+            }
+        }
+        function fallbackCopy(text) {
+            let tempInput = document.createElement("input");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            alert('URL copied!');
         }
 
     </script>

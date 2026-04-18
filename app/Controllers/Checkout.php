@@ -467,11 +467,12 @@ class Checkout extends BaseController
                     $tablePro->where('product_id', $val['id'])->update($newqty);
 
                     foreach (get_all_data_array('cc_option') as $vl) {
-                        if (!empty($val['op_' . strtolower($vl->name)])) {
-                            $data[strtolower($vl->name)] = $val['op_' . strtolower($vl->name)];
+                        $name = str_replace(' ','',$vl->name);
+                        if (!empty($val['op_' . strtolower($name)])) {
+                            $data[strtolower($name)] = $val['op_' . strtolower($name)];
 
                             $table = DB()->table('cc_product_option');
-                            $option = $table->where('option_value_id', $data[strtolower($vl->name)])->where('product_id', $val['id'])->get()->getRow();
+                            $option = $table->where('option_value_id', $data[strtolower($name)])->where('product_id', $val['id'])->get()->getRow();
 
                             if (!empty($option)) {
                                 $dataOptino['order_id'] = $order_id;
@@ -487,7 +488,6 @@ class Checkout extends BaseController
                         }
                     }
                 }
-
 
 
                 DB()->transComplete();
