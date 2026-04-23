@@ -320,6 +320,7 @@ class Album extends BaseController
         $data['name'] = $this->request->getPost('name');
         $data['alt_name'] = $this->request->getPost('name');
         $data['parent_album_id'] = $this->request->getPost('parent_album_id');
+        $data['product_id'] = $this->request->getPost('product_id');
         $data['createdBy'] = $this->session->adUserId;
 
         $this->validation->setRules([
@@ -439,6 +440,7 @@ class Album extends BaseController
         $album_id = $this->request->getPost('album_id');
         $data['name'] = $this->request->getPost('name');
         $data['parent_album_id'] = $this->request->getPost('parent_album_id');
+        $data['product_id'] = $this->request->getPost('product_id');
         $data['sort_order'] = $this->request->getPost('sort_order_al');
         $data['alt_name'] = $this->request->getPost('alt_name');
 

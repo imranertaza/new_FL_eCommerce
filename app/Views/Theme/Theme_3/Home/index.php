@@ -9,40 +9,92 @@
                 </div>
             </div>
             <div class="col-xl-9 col-sm-12 d-flex flex-column flex-lg-row">
+                <?php
+                    $sli_1 = get_lebel_by_value_in_theme_settings('slider_1');
+                    $sli_2 = get_lebel_by_value_in_theme_settings('slider_2');
+                    $sli_3 = get_lebel_by_value_in_theme_settings('slider_3');
+                    $sli_4 = get_lebel_by_value_in_theme_settings('slider_4');
+                    $sli_5 = get_lebel_by_value_in_theme_settings('slider_5');
+                ?>
+
                 <?php if (empty($sliders)){ ?>
-                <div class="swiper bannerSlide me-1">
-                    <div class="swiper-wrapper">
-                        <?php $sli_1 = get_lebel_by_value_in_theme_settings('slider_1'); ?>
-                        <div class="swiper-slide">
-                            <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $sli_1->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_1->alt_name?>" class="img-fluid w-100" loading="lazy">
+                    <div class="swiper bannerSlide me-1">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $sli_1->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_1->alt_name?>" class="img-fluid w-100" loading="lazy">
+                            </div>
+                            <div class="swiper-slide">
+                                <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $sli_2->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_2->alt_name?>" class="img-fluid w-100" loading="lazy">
+                            </div>
+                            <div class="swiper-slide">
+                                <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $sli_3->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_3->alt_name?>" class="img-fluid w-100" loading="lazy">
+                            </div>
+                            <div class="swiper-slide">
+                                <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $sli_4->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_4->alt_name?>" class="img-fluid w-100" loading="lazy">
+                            </div>
+                            <div class="swiper-slide">
+                                <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $sli_5->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_5->alt_name?>" class="img-fluid w-100" loading="lazy">
+                            </div>
                         </div>
-                        <?php $sli_2 = get_lebel_by_value_in_theme_settings('slider_2'); ?>
-                        <div class="swiper-slide">
-                            <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $sli_2->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_2->alt_name?>" class="img-fluid w-100" loading="lazy">
-                        </div>
-                        <?php $sli_3 = get_lebel_by_value_in_theme_settings('slider_3'); ?>
-                        <div class="swiper-slide">
-                            <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $sli_3->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_3->alt_name?>" class="img-fluid w-100" loading="lazy">
-                        </div>
-                        <?php $sli_4 = get_lebel_by_value_in_theme_settings('slider_4'); ?>
-                        <div class="swiper-slide">
-                            <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $sli_4->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_4->alt_name?>" class="img-fluid w-100" loading="lazy">
-                        </div>
-                        <?php $sli_5 = get_lebel_by_value_in_theme_settings('slider_5'); ?>
-                        <div class="swiper-slide">
-                            <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $sli_5->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_5->alt_name?>" class="img-fluid w-100" loading="lazy">
-                        </div>
+                        <div class="swiper-pagination"></div>
                     </div>
-                    <div class="swiper-pagination"></div>
-                </div>
                 <?php }else{ ?>
                     <div class="swiper bannerSlide me-1">
                         <div class="swiper-wrapper">
-                            <?php foreach ($sliders as $slider){ ?>
-                            <div class="swiper-slide">
-                                <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $slider->image, 'noimage.png', '605', '401');?>" alt="<?php echo $slider->alt_name?>" class="img-fluid w-100" loading="lazy">
-                            </div>
-                            <?php } ?>
+                            <?php if (!empty($sliders[0]) && !empty($sliders[0]->image)) {
+                                $slider = $sliders[0]; ?>
+                                <div class="swiper-slide">
+                                    <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $slider->image, 'noimage.png', '605', '401');?>" alt="<?php echo $slider->alt_name?>" class="img-fluid w-100" loading="lazy">
+                                </div>
+                            <?php }else{ ?>
+                                <div class="swiper-slide">
+                                    <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $sli_1->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_1->alt_name?>" class="img-fluid w-100" loading="lazy">
+                                </div>
+                            <?php }?>
+
+                            <?php if (!empty($sliders[1]) && !empty($sliders[1]->image)) {
+                                $slider = $sliders[1]; ?>
+                                <div class="swiper-slide">
+                                    <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $slider->image, 'noimage.png', '605', '401');?>" alt="<?php echo $slider->alt_name?>" class="img-fluid w-100" loading="lazy">
+                                </div>
+                            <?php }else{?>
+                                <div class="swiper-slide">
+                                    <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $sli_2->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_2->alt_name?>" class="img-fluid w-100" loading="lazy">
+                                </div>
+                            <?php }?>
+
+                            <?php if (!empty($sliders[2]) && !empty($sliders[2]->image)) {
+                                $slider = $sliders[2]; ?>
+                                <div class="swiper-slide">
+                                    <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $slider->image, 'noimage.png', '605', '401');?>" alt="<?php echo $slider->alt_name?>" class="img-fluid w-100" loading="lazy">
+                                </div>
+                            <?php }else{?>
+                                <div class="swiper-slide">
+                                    <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $sli_3->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_3->alt_name?>" class="img-fluid w-100" loading="lazy">
+                                </div>
+                            <?php }?>
+
+                            <?php if (!empty($sliders[3]) && !empty($sliders[3]->image)) {
+                                $slider = $sliders[3]; ?>
+                                <div class="swiper-slide">
+                                    <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $slider->image, 'noimage.png', '605', '401');?>" alt="<?php echo $slider->alt_name?>" class="img-fluid w-100" loading="lazy">
+                                </div>
+                            <?php }else{?>
+                                <div class="swiper-slide">
+                                    <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $sli_4->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_4->alt_name?>" class="img-fluid w-100" loading="lazy">
+                                </div>
+                            <?php }?>
+
+                            <?php if (!empty($sliders[4]) && !empty($sliders[4]->image)) {
+                                $slider = $sliders[4]; ?>
+                                <div class="swiper-slide">
+                                    <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $slider->image, 'noimage.png', '605', '401');?>" alt="<?php echo $slider->alt_name?>" class="img-fluid w-100" loading="lazy">
+                                </div>
+                            <?php }else{?>
+                                <div class="swiper-slide">
+                                    <img data-sizes="auto"   src="<?php echo common_image_view('uploads/slider', '', $sli_5->value, 'noimage.png', '605', '401');?>" alt="<?php echo $sli_5->alt_name?>" class="img-fluid w-100" loading="lazy">
+                                </div>
+                            <?php }?>
 
                         </div>
                         <div class="swiper-pagination"></div>
@@ -111,13 +163,40 @@
         </div>
         </a>
         <?php }else{ ?>
-            <?php foreach ($categoryBanner as $key => $banner){ if ($key != 2){?>
+            <?php if (!empty($categoryBanner[0]) && !empty($categoryBanner[0]->image)) {
+                $banner = $categoryBanner[0]; ?>
                 <div class="featured-category mb-5">
                     <a href="<?= !empty($banner->url)?$banner->url:base_url('category/'.$banner->prod_cat_id); ?>">
                         <img data-sizes="auto"   src="<?= common_image_view('uploads/banner_bottom', '', $banner->image, 'noimage.png', '1116', '211');?>" alt="<?= $banner->alt_name ?>" class="w-100" loading="lazy">
                     </a>
                 </div>
-            <?php } } ?>
+            <?php }else{ ?>
+                <div class="featured-category mb-5">
+                    <a href="<?php echo !empty($theme_settings['banner_top_category_url']['value'])?$theme_settings['banner_top_category_url']['value']:base_url('category/'.$theme_settings['banner_top_category']['value']); ?>">
+
+                        <?php $banner_top = $theme_settings['banner_top']['value']; ?>
+                        <img data-sizes="auto"   src="<?php echo common_image_view('uploads/banner_top', '', $banner_top, 'noimage.png', '1116', '211');?>" alt="<?php echo $theme_settings['banner_top']['alt_name']?>" class="w-100" loading="lazy">
+
+                    </a>
+                </div>
+            <?php }?>
+
+
+            <?php if (!empty($categoryBanner[1]) && !empty($categoryBanner[1]->image)) {
+                $banner = $categoryBanner[1]; ?>
+                <div class="featured-category mb-5">
+                    <a href="<?= !empty($banner->url)?$banner->url:base_url('category/'.$banner->prod_cat_id); ?>">
+                        <img data-sizes="auto"   src="<?= common_image_view('uploads/banner_bottom', '', $banner->image, 'noimage.png', '1116', '211');?>" alt="<?= $banner->alt_name ?>" class="w-100" loading="lazy">
+                    </a>
+                </div>
+            <?php }else{ ?>
+                <a href="<?php echo !empty($theme_settings['banner_featured_category_url']['value'])?$theme_settings['banner_featured_category_url']['value']:base_url('category/'.$theme_settings['banner_featured_category_category']['value']); ?>">
+                    <div class="home-banner mb-5">
+                        <?php $banner_bottom = $theme_settings['banner_featured_category']['value'];  ?>
+                        <img data-sizes="auto"   src="<?php echo common_image_view('uploads/banner_featured_category', '', $banner_bottom, 'noimage.png', '1116', '211');?>" alt="<?php echo $theme_settings['banner_featured_category']['alt_name']?>" class="img-fluid w-100" loading="lazy">
+                    </div>
+                </a>
+            <?php }?>
         <?php }?>
 
         <div class="product-category mb-5 section-one">
@@ -398,11 +477,23 @@
                 <img data-sizes="auto"   src="<?php echo common_image_view('uploads/banner_bottom', '', $theme_settings['banner_bottom']['value'], 'noimage.png', '1116', '422');?>" alt="<?php echo $theme_settings['banner_bottom']['alt_name']?>" class="w-100" loading="lazy">
             </a>
             <?php }else{ ?>
-            <?php foreach ($categoryBanner as $index => $banner){ if ($index == 2){?>
-                <a href="<?php echo !empty($banner->url)?$banner->url:base_url('category/'.$banner->prod_cat_id); ?>">
-                    <img data-sizes="auto"   src="<?php echo common_image_view('uploads/banner_bottom', '', $banner->image, 'noimage.png', '1116', '211');?>" alt="<?= $banner->alt_name;?>" class="w-100" loading="lazy">
-                </a>
-            <?php } }?>
+
+                <?php if (!empty($categoryBanner[2]) && !empty($categoryBanner[2]->image)) {
+                    $banner = $categoryBanner[2]; ?>
+
+                    <a href="<?php echo !empty($banner->url) ? $banner->url : base_url('category/'.$banner->prod_cat_id); ?>">
+                        <img data-sizes="auto"
+                             src="<?php echo common_image_view('uploads/banner_bottom', '', $banner->image, 'noimage.png', '1116', '211');?>"
+                             alt="<?= $banner->alt_name;?>"
+                             class="w-100"
+                             loading="lazy">
+                    </a>
+
+                <?php }else{ ?>
+                    <a href="<?php echo !empty($theme_settings['banner_bottom_url']['value'])?$theme_settings['banner_bottom_url']['value']:base_url('category/'.$theme_settings['banner_bottom_category']['value']); ?>">
+                        <img data-sizes="auto"   src="<?php echo common_image_view('uploads/banner_bottom', '', $theme_settings['banner_bottom']['value'], 'noimage.png', '1116', '422');?>" alt="<?php echo $theme_settings['banner_bottom']['alt_name']?>" class="w-100" loading="lazy">
+                    </a>
+                <?php } ?>
             <?php }?>
         </div>
     </div>
