@@ -100,21 +100,21 @@
             <a href="<?php echo !empty($theme_settings['banner_top_category_url']['value'])?$theme_settings['banner_top_category_url']['value']:base_url('category/'.$theme_settings['banner_top_category']['value']); ?>">
 
             <?php $banner_top = $theme_settings['banner_top']['value']; ?>
-            <img data-sizes="auto"   src="<?php echo common_image_view('uploads/banner_top', '', $banner_top, 'noimage.png', '1116', '211');?>" alt="<?php echo $theme_settings['banner_top']['alt_name']?>" class="img-fluid " loading="lazy">
+            <img data-sizes="auto"   src="<?php echo common_image_view('uploads/banner_top', '', $banner_top, 'noimage.png', '1116', '211');?>" alt="<?php echo $theme_settings['banner_top']['alt_name']?>" class="w-100" loading="lazy">
 
             </a>
         </div>
         <a href="<?php echo !empty($theme_settings['banner_featured_category_url']['value'])?$theme_settings['banner_featured_category_url']['value']:base_url('category/'.$theme_settings['banner_featured_category_category']['value']); ?>">
         <div class="home-banner mb-5">
             <?php $banner_bottom = $theme_settings['banner_featured_category']['value'];  ?>
-            <img data-sizes="auto"   src="<?php echo common_image_view('uploads/banner_featured_category', '', $banner_bottom, 'noimage.png', '1116', '211');?>" alt="<?php echo $theme_settings['banner_featured_category']['alt_name']?>" class="img-fluid" loading="lazy">
+            <img data-sizes="auto"   src="<?php echo common_image_view('uploads/banner_featured_category', '', $banner_bottom, 'noimage.png', '1116', '211');?>" alt="<?php echo $theme_settings['banner_featured_category']['alt_name']?>" class="img-fluid w-100" loading="lazy">
         </div>
         </a>
         <?php }else{ ?>
             <?php foreach ($categoryBanner as $key => $banner){ if ($key != 2){?>
                 <div class="featured-category mb-5">
                     <a href="<?= !empty($banner->url)?$banner->url:base_url('category/'.$banner->prod_cat_id); ?>">
-                        <img data-sizes="auto"   src="<?= common_image_view('uploads/banner_bottom', '', $banner->image, 'noimage.png', '1116', '211');?>" alt="<?= $banner->alt_name ?>" class="img-fluid " loading="lazy">
+                        <img data-sizes="auto"   src="<?= common_image_view('uploads/banner_bottom', '', $banner->image, 'noimage.png', '1116', '211');?>" alt="<?= $banner->alt_name ?>" class="w-100" loading="lazy">
                     </a>
                 </div>
             <?php } } ?>
@@ -395,12 +395,12 @@
         <div class="home-banner mb-5">
             <?php if (empty($categoryBanner)){ ?>
             <a href="<?php echo !empty($theme_settings['banner_bottom_url']['value'])?$theme_settings['banner_bottom_url']['value']:base_url('category/'.$theme_settings['banner_bottom_category']['value']); ?>">
-                <img data-sizes="auto"   src="<?php echo common_image_view('uploads/banner_bottom', '', $theme_settings['banner_bottom']['value'], 'noimage.png', '1116', '422');?>" alt="<?php echo $theme_settings['banner_bottom']['alt_name']?>" class="" loading="lazy">
+                <img data-sizes="auto"   src="<?php echo common_image_view('uploads/banner_bottom', '', $theme_settings['banner_bottom']['value'], 'noimage.png', '1116', '422');?>" alt="<?php echo $theme_settings['banner_bottom']['alt_name']?>" class="w-100" loading="lazy">
             </a>
             <?php }else{ ?>
             <?php foreach ($categoryBanner as $index => $banner){ if ($index == 2){?>
                 <a href="<?php echo !empty($banner->url)?$banner->url:base_url('category/'.$banner->prod_cat_id); ?>">
-                    <img data-sizes="auto"   src="<?php echo common_image_view('uploads/banner_bottom', '', $banner->image, 'noimage.png', '1116', '211');?>" alt="<?= $banner->alt_name;?>" class="" loading="lazy">
+                    <img data-sizes="auto"   src="<?php echo common_image_view('uploads/banner_bottom', '', $banner->image, 'noimage.png', '1116', '211');?>" alt="<?= $banner->alt_name;?>" class="w-100" loading="lazy">
                 </a>
             <?php } }?>
             <?php }?>
