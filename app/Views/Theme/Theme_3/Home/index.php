@@ -10,11 +10,12 @@
             </div>
             <div class="col-xl-9 col-sm-12 d-flex flex-column flex-lg-row">
                 <?php
-                    $sli_1 = get_lebel_by_value_in_theme_settings('slider_1');
-                    $sli_2 = get_lebel_by_value_in_theme_settings('slider_2');
-                    $sli_3 = get_lebel_by_value_in_theme_settings('slider_3');
-                    $sli_4 = get_lebel_by_value_in_theme_settings('slider_4');
-                    $sli_5 = get_lebel_by_value_in_theme_settings('slider_5');
+                    $sliderData = sliderArray();
+                    $sli_1 = $sliderData['slider_1'];
+                    $sli_2 = $sliderData['slider_2'];
+                    $sli_3 = $sliderData['slider_3'];
+                    $sli_4 = $sliderData['slider_4'];
+                    $sli_5 = $sliderData['slider_5'];
                 ?>
 
                 <?php if (empty($sliders)){ ?>
