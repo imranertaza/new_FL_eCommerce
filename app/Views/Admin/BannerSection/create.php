@@ -44,7 +44,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Schedule Title <span class="requi">*</span></label>
-                                    <input type="text" name="schedule_title" placeholder="Schedule Title" class="form-control">
+                                    <input type="text" name="schedule_title" placeholder="Schedule Title" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-6" >
@@ -54,14 +54,14 @@
                         <div class="col-md-12 row mb-3 border p-3 rounded">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Banner Top <span class="requi">*</span></label>
-                                    <input type="file" name="banner_top" class="form-control" required>
+                                    <label>Banner Top </label>
+                                    <input type="file" name="banner_top" class="form-control" >
                                     <small>Recommended Size: 1116 x 211</small>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Alt Name <span class="requi">*</span></label>
-                                    <input type="text" name="alt_name_top" class="form-control" placeholder="Alt Name" required>
+                                    <label>Alt Name </label>
+                                    <input type="text" name="alt_name_top" class="form-control" placeholder="Alt Name" >
                                     <small>&nbsp;</small>
                                 </div>
                             </div>
@@ -78,12 +78,12 @@
                                     </div>
                                 </div>
                                 <div class="form-group" id="url1">
-                                    <label>Url <span class="requi">*</span></label>
+                                    <label>Url </label>
                                     <input type="text" name="url_top" class="form-control" placeholder="Url" >
                                 </div>
 
                                 <div class="form-group " id="category1" style="display: none;" >
-                                    <label>Category <span class="requi">*</span></label>
+                                    <label>Category </label>
                                     <select name="prod_cat_id_top" class="form-control" >
                                         <option value=""> Please Select</option>
                                         <?php foreach (get_array_data_by_id('cc_product_category', 'status', '1') as $cat) { ?>
@@ -97,13 +97,13 @@
                             <div class="col-md-6">
 
                                 <div class="form-group">
-                                    <label>Banner Featured Category <span class="requi">*</span></label>
-                                    <input type="file" name="banner_category" class="form-control" required>
+                                    <label>Banner Featured Category </label>
+                                    <input type="file" name="banner_category" class="form-control" >
                                     <small>Recommended Size: 1116 x 211</small>
                                 </div>
                                 <div class="form-group">
-                                    <label>Alt Name <span class="requi">*</span></label>
-                                    <input type="text" name="alt_name_category" class="form-control" placeholder="Alt Name" required>
+                                    <label>Alt Name </label>
+                                    <input type="text" name="alt_name_category" class="form-control" placeholder="Alt Name" >
                                     <small>&nbsp;</small>
                                 </div>
                             </div>
@@ -120,12 +120,12 @@
                                     </div>
                                 </div>
                                 <div class="form-group" id="url2">
-                                    <label>Url <span class="requi">*</span></label>
+                                    <label>Url </label>
                                     <input type="text" name="url_category" class="form-control" placeholder="Url" >
                                 </div>
 
                                 <div class="form-group " id="category2" style="display: none;" >
-                                    <label>Category <span class="requi">*</span></label>
+                                    <label>Category </label>
                                     <select name="prod_cat_id_category" class="form-control" >
                                         <option value=""> Please Select</option>
                                         <?php foreach (get_array_data_by_id('cc_product_category', 'status', '1') as $cat) { ?>
@@ -138,13 +138,13 @@
                         <div class="col-md-12 row mb-3 border p-3 rounded">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Banner Bottom <span class="requi">*</span></label>
-                                    <input type="file" name="banner_bottom" class="form-control" required>
+                                    <label>Banner Bottom </label>
+                                    <input type="file" name="banner_bottom" class="form-control" >
                                     <small>Recommended Size: 1116 x 422</small>
                                 </div>
                                 <div class="form-group">
-                                    <label>Alt Name <span class="requi">*</span></label>
-                                    <input type="text" name="alt_name_bottom" class="form-control" placeholder="Alt Name" required>
+                                    <label>Alt Name </label>
+                                    <input type="text" name="alt_name_bottom" class="form-control" placeholder="Alt Name" >
                                     <small>&nbsp;</small>
                                 </div>
 
@@ -162,12 +162,12 @@
                                     </div>
                                 </div>
                                 <div class="form-group" id="url3">
-                                    <label>Url <span class="requi">*</span></label>
+                                    <label>Url </label>
                                     <input type="text" name="url_bottom" class="form-control" placeholder="Url" >
                                 </div>
 
                                 <div class="form-group " id="category3" style="display: none;" >
-                                    <label>Category <span class="requi">*</span></label>
+                                    <label>Category </label>
                                     <select name="prod_cat_id_bottom" class="form-control" >
                                         <option value=""> Please Select</option>
                                         <?php foreach (get_array_data_by_id('cc_product_category', 'status', '1') as $cat) { ?>

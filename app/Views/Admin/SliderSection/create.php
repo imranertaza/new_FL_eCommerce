@@ -45,7 +45,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Schedule Title <span class="requi">*</span></label>
-                                        <input type="text" name="schedule_title" placeholder="Schedule Title" class="form-control">
+                                        <input type="text" name="schedule_title" placeholder="Schedule Title" class="form-control" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6" >
@@ -53,60 +53,60 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Slider 1 Image <span class="requi">*</span></label>
-                                        <input type="file" name="slider_image[]" class="form-control" required>
+                                        <label>Slider 1 Image </label>
+                                        <input type="file" name="slider_image[]" class="form-control" >
                                         <small>Recommended Size: <?= $theme_libraries->slider_width; ?> x <?= $theme_libraries->slider_height; ?></small>
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Slider 2 Image <span class="requi">*</span></label>
-                                        <input type="file" name="slider_image[]" class="form-control" required>
+                                        <label>Slider 2 Image </label>
+                                        <input type="file" name="slider_image[]" class="form-control" >
                                         <small>Recommended Size: <?= $theme_libraries->slider_width; ?> x <?= $theme_libraries->slider_height; ?></small>
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Slider 3 Image <span class="requi">*</span></label>
-                                        <input type="file" name="slider_image[]" class="form-control" required>
+                                        <label>Slider 3 Image </label>
+                                        <input type="file" name="slider_image[]" class="form-control" >
                                         <small>Recommended Size: <?= $theme_libraries->slider_width; ?> x <?= $theme_libraries->slider_height; ?></small>
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Slider 4 Image <span class="requi">*</span></label>
-                                        <input type="file" name="slider_image[]" class="form-control" required>
+                                        <label>Slider 4 Image </label>
+                                        <input type="file" name="slider_image[]" class="form-control" >
                                         <small>Recommended Size: <?= $theme_libraries->slider_width; ?> x <?= $theme_libraries->slider_height; ?></small>
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Slider 5 Image <span class="requi">*</span></label>
-                                        <input type="file" name="slider_image[]" class="form-control" required>
+                                        <label>Slider 5 Image </label>
+                                        <input type="file" name="slider_image[]" class="form-control" >
                                         <small>Recommended Size: <?= $theme_libraries->slider_width; ?> x <?= $theme_libraries->slider_height; ?></small>
                                     </div>
 
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Alt Name <span class="requi">*</span></label>
-                                        <input type="text" name="alt_name[]" class="form-control" placeholder="Alt Name" required>
+                                        <label>Alt Name </label>
+                                        <input type="text" name="alt_name[]" class="form-control" placeholder="Alt Name" >
                                         <small>&nbsp;</small>
                                     </div>
                                     <div class="form-group">
-                                        <label>Alt Name <span class="requi">*</span></label>
-                                        <input type="text" name="alt_name[]" class="form-control" placeholder="Alt Name" required>
+                                        <label>Alt Name </label>
+                                        <input type="text" name="alt_name[]" class="form-control" placeholder="Alt Name" >
                                         <small>&nbsp;</small>
                                     </div>
                                     <div class="form-group">
-                                        <label>Alt Name <span class="requi">*</span></label>
-                                        <input type="text" name="alt_name[]" class="form-control" placeholder="Alt Name" required>
+                                        <label>Alt Name </label>
+                                        <input type="text" name="alt_name[]" class="form-control" placeholder="Alt Name" >
                                         <small>&nbsp;</small>
                                     </div>
                                     <div class="form-group">
-                                        <label>Alt Name <span class="requi">*</span></label>
-                                        <input type="text" name="alt_name[]" class="form-control" placeholder="Alt Name" required>
+                                        <label>Alt Name </label>
+                                        <input type="text" name="alt_name[]" class="form-control" placeholder="Alt Name" >
                                         <small>&nbsp;</small>
                                     </div>
                                     <div class="form-group">
-                                        <label>Alt Name <span class="requi">*</span></label>
-                                        <input type="text" name="alt_name[]" class="form-control" placeholder="Alt Name" required>
+                                        <label>Alt Name </label>
+                                        <input type="text" name="alt_name[]" class="form-control" placeholder="Alt Name" >
                                         <small>&nbsp;</small>
                                     </div>
 

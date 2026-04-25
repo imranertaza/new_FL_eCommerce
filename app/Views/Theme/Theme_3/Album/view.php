@@ -7,10 +7,16 @@
                 <div class="col-lg-12 ">
                     <h3 class="text-capitalize mb-4"> <?= $album->name?></h3>
                     <a href="<?php echo $back_url;?>" class="btn btn-sm btn-secondary" ><i class="fa fa-long-arrow-left" aria-hidden="true"></i> Back</a>
+
+
                     <?php if (!isset(newSession()->isLoggedInCustomer)){ ?>
                     <button class="btn btn-sm btn-primary border-0 float-end" data-bs-toggle="modal" data-bs-target="#queryModal" style="background-color: #0594eb!important;">Enquiry Now!</button>
                     <?php }else{ ?>
                         <button class="btn btn-sm btn-primary border-0 float-end" onclick="submitQueryQcpictures('<?php echo newSession()->cusAll->email;?>','<?php echo $album->album_id;?>')" style="background-color: #0594eb!important;">Enquiry Now!</button>
+                    <?php } ?>
+
+                    <?php if (!empty($album->product_id)){ ?>
+                    <a href="<?= base_url('detail/'.$album->product_id)?>" target="_blank" class="btn btn-sm btn-info border-0 float-end me-2 text-white"  >Buy Now</a>
                     <?php } ?>
                 </div>
                 <div class="col-4 col-md-3 mt-4 text-center position-relative">
