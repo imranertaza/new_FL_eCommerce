@@ -2194,3 +2194,18 @@ function scheduleLogo(){
         ->get()
         ->getRow();
 }
+function sliderArray(){
+    $labels = ['slider_1', 'slider_2', 'slider_3', 'slider_4', 'slider_5'];
+
+    $sliders = DB()->table('cc_theme_settings')->whereIn('label', $labels)->get()->getResult();
+
+    // Initialize with default null values (avoids undefined index issues)
+    $slider_data = array_fill_keys($labels, null);
+
+    // Map results
+    foreach ($sliders as $row) {
+        $slider_data[$row->label] = $row;
+    }
+
+    return $slider_data;
+}

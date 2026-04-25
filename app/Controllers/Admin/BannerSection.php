@@ -135,9 +135,15 @@ class BannerSection extends BaseController
         $banner_schedule_id = $db->insertID();
 
         // PROCESS TOP & BOTTOM USING SAME FUNCTION
-        $this->sectionInsert('top', $banner_schedule_id, $targetDir);
-        $this->sectionInsert('category', $banner_schedule_id, $targetDir);
-        $this->sectionInsert('bottom', $banner_schedule_id, $targetDir);
+        if (!empty($this->request->getFile("banner_top"))) {
+            $this->sectionInsert('top', $banner_schedule_id, $targetDir);
+        }
+        if (!empty($this->request->getFile("banner_category"))) {
+            $this->sectionInsert('category', $banner_schedule_id, $targetDir);
+        }
+        if (!empty($this->request->getFile("banner_bottom"))) {
+            $this->sectionInsert('bottom', $banner_schedule_id, $targetDir);
+        }
 
         // END TRANSACTION
         $db->transComplete();
@@ -241,9 +247,15 @@ class BannerSection extends BaseController
 
 
         // PROCESS TOP & BOTTOM USING SAME FUNCTION
-        $this->sectionUpdate('top', $targetDir);
-        $this->sectionUpdate('category', $targetDir);
-        $this->sectionUpdate('bottom', $targetDir);
+        if (!empty($this->request->getFile("banner_top"))) {
+            $this->sectionUpdate('top', $targetDir);
+        }
+        if (!empty($this->request->getFile("banner_category"))) {
+            $this->sectionUpdate('category', $targetDir);
+        }
+        if (!empty($this->request->getFile("banner_bottom"))) {
+            $this->sectionUpdate('bottom', $targetDir);
+        }
 
         // END TRANSACTION
         $db->transComplete();

@@ -458,12 +458,12 @@ class FeaturedSection extends BaseController
         //image delete
         $target_dir = FCPATH . 'uploads/sections/';
         $oldImage = get_data_by_id('image','cc_featured_schedule','featured_schedule_id',$id);
-        if (file_exists($target_dir.$oldImage)) {
+        if (!empty($oldImage) && file_exists($target_dir . $oldImage) && is_file($target_dir . $oldImage)) {
             unlink($target_dir . $oldImage);
         }
 
         $oldImageBn = get_data_by_id('banner','cc_featured_schedule','featured_schedule_id',$id);
-        if (file_exists($target_dir.$oldImageBn)) {
+        if (!empty($oldImageBn) && file_exists($target_dir . $oldImageBn) && is_file($target_dir . $oldImageBn)) {
             unlink($target_dir . $oldImageBn);
         }
         //data delete in cc_featured_product
