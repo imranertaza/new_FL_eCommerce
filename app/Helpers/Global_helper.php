@@ -1919,12 +1919,23 @@ function common_image_view($url, $slug, $image, $no_image, $width = '', $height 
 
             if (file_exists($imgPath)) {
                 $image = explode('.', $imgMain);
-                $pathNew = 'cache/'.$url . '/' . $slug . '/'.$width.'x'.$height.'_'.$image[0].'.webp';
-                if(file_exists($pathNew)){
-                    $imgFinal = base_url($pathNew);
-                }else{
-                    $urlNew = base64_encode($url . '/' . $slug . '/');
-                    $imgFinal = base_url('image-resize/' . $urlNew . '/' . $width . 'x' . $height . '/' . $imgMain);
+
+                if ($image[1] == 'gif'){
+                    $pathNew = 'cache/' . $url . '/' . $slug . '/' . $width . 'x' . $height . '_' . $imgMain;
+                    if (file_exists($pathNew)) {
+                        $imgFinal = base_url($pathNew);
+                    } else {
+                        $urlNew = base64_encode($url . '/' . $slug . '/');
+                        $imgFinal = base_url('image-resize/' . $urlNew . '/' . $width . 'x' . $height . '/' . $imgMain);
+                    }
+                }else {
+                    $pathNew = 'cache/' . $url . '/' . $slug . '/' . $width . 'x' . $height . '_' . $image[0] . '.webp';
+                    if (file_exists($pathNew)) {
+                        $imgFinal = base_url($pathNew);
+                    } else {
+                        $urlNew = base64_encode($url . '/' . $slug . '/');
+                        $imgFinal = base_url('image-resize/' . $urlNew . '/' . $width . 'x' . $height . '/' . $imgMain);
+                    }
                 }
 
                 $result = $imgFinal;

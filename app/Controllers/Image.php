@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Libraries\Image_processing;
 use App\Models\AlbumModel;
 use Config\Services;
 
@@ -10,6 +11,7 @@ class Image extends BaseController {
     protected $validation;
     protected $session;
     protected $encrypter;
+    protected $image_processing;
     protected $albumModel;
 
     public function __construct()
@@ -18,6 +20,7 @@ class Image extends BaseController {
         $this->session = \Config\Services::session();
         $this->encrypter = \Config\Services::encrypter();
         $this->albumModel = new AlbumModel();
+        $this->image_processing = new Image_processing();
     }
 
     /**
@@ -40,16 +43,24 @@ class Image extends BaseController {
 
         $image = explode('.', $imageName);
 
-        // Image is not in cache, so generate it
-        $imagePath = 'cache/'.base64_decode($path). $width .'x'. $height.'_'.$image[0] .  '.webp'; // Cache path
+        if ($image[1] == 'gif'){
+            $imagePath = 'cache/' . base64_decode($path) . $width . 'x' . $height . '_' . $imageName; // Cache path
+        }else {
+            // Image is not in cache, so generate it
+            $imagePath = 'cache/' . base64_decode($path) . $width . 'x' . $height . '_' . $image[0] . '.webp'; // Cache path
+        }
 
         // Load the image library
         $img = \Config\Services::image();
 
         // Create a simple image (e.g., image with text) and save it to cache path
-        $img->withFile($imageUrl)
-            ->fit($width, $height, 'center')
-            ->save($imagePath);
+        if ($image[1] == 'gif'){
+            $this->image_processing->processGif(FCPATH.$imageUrl, FCPATH.$imagePath,$width,$height);
+        }else {
+            $img->withFile($imageUrl)
+                ->fit($width, $height, 'center')
+                ->save($imagePath);
+        }
 
         $this->serveImage($imagePath);
 
@@ -84,7 +95,5 @@ class Image extends BaseController {
 
         return $mimeTypes[$extension] ?? 'application/octet-stream';
     }
-
-
 
 }
