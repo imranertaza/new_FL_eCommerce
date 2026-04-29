@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Libraries\Image_processing;
 use App\Libraries\Permission;
 use CodeIgniter\HTTP\RedirectResponse;
 
@@ -13,6 +14,7 @@ class Theme_settings_3 extends BaseController
     protected $session;
     protected $crop;
     protected $permission;
+    protected $image_processing;
     private $module_name = 'Theme_settings';
 
     public function __construct()
@@ -21,6 +23,7 @@ class Theme_settings_3 extends BaseController
         $this->session = \Config\Services::session();
         $this->crop = \Config\Services::image();
         $this->permission = new Permission();
+        $this->image_processing = new Image_processing();
     }
 
     /**
@@ -152,12 +155,23 @@ class Theme_settings_3 extends BaseController
 
             //new image uplode
             $pic = $this->request->getFile('home_category_baner_'.$prefix);
+
+            $cropWidth = 271;
+            $cropHeight = 590;
+
             $namePic = $pic->getRandomName();
+            $extension = $pic->getExtension();
             $pic->move($target_dir, $namePic);
             $news_img = 'home_category_' . $pic->getName();
-            $this->crop->withFile($target_dir .  $namePic)->fit(271, 590, 'center')->save($target_dir . $news_img,100);
-            unlink($target_dir .  $namePic);
-            $data['home_category_baner_'.$prefix] = $news_img;
+
+            if (strtolower($extension) === 'gif') {
+                $this->image_processing->processGif($target_dir.$namePic, $target_dir.$news_img,$cropWidth,$cropHeight);
+            }else {
+                $this->crop->withFile($target_dir . $namePic)->fit($cropWidth, $cropHeight, 'center')->save($target_dir . $news_img, 100);
+            }
+
+            unlink($target_dir . $namePic);
+            $data['home_category_baner_' . $prefix] = $news_img;
         }
         
         foreach($data as $key => $val){
@@ -185,12 +199,21 @@ class Theme_settings_3 extends BaseController
                 mkdir($target_dir, 0777);
             }
 
-            //new image uplode
+            $cropWidth = 1116;
+            $cropHeight = 422;
+
+            //new image upload
             $pic = $this->request->getFile('banner_bottom');
+            $extension = $pic->getExtension();
             $namePic = $pic->getRandomName();
             $pic->move($target_dir, $namePic);
             $news_img = 'banner_bottom_' . $pic->getName();
-            $this->crop->withFile($target_dir . $namePic)->fit(1116, 422, 'center')->save($target_dir . $news_img);
+            if (strtolower($extension) === 'gif') {
+                $this->image_processing->processGif($target_dir.$namePic, $target_dir.$news_img,$cropWidth,$cropHeight);
+            }else{
+                $this->crop->withFile($target_dir . $namePic)->fit($cropWidth, $cropHeight, 'center')->save($target_dir . $news_img);
+            }
+
             unlink($target_dir . $namePic);
             $data['value'] = $news_img;
 
@@ -225,13 +248,21 @@ class Theme_settings_3 extends BaseController
             if (!file_exists($target_dir)) {
                 mkdir($target_dir, 0777);
             }
+            $cropWidth = 1116;
+            $cropHeight = 211;
 
             //new image uplode
             $pic = $this->request->getFile('banner_featured_category');
+            $extension = $pic->getExtension();
             $namePic = $pic->getRandomName();
             $pic->move($target_dir, $namePic);
             $news_img = 'banner_featured_category_' . $pic->getName();
-            $this->crop->withFile($target_dir . $namePic)->fit(1116, 211, 'center')->save($target_dir . $news_img);
+            if (strtolower($extension) === 'gif') {
+                $this->image_processing->processGif($target_dir.$namePic, $target_dir.$news_img,$cropWidth,$cropHeight);
+            }else{
+                $this->crop->withFile($target_dir . $namePic)->fit($cropWidth, $cropHeight, 'center')->save($target_dir . $news_img);
+            }
+
             unlink($target_dir . $namePic);
             $data['value'] = $news_img;
 
@@ -254,14 +285,54 @@ class Theme_settings_3 extends BaseController
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Featured Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('theme_settings?sel=home_settings');
 
-
-
-
     }
 
+    public function banner_top_update(){
+        if (!empty($_FILES['banner_top']['name'])) {
+            $target_dir = FCPATH . '/uploads/banner_top/';
+            if (!file_exists($target_dir)) {
+                mkdir($target_dir, 0777);
+            }
 
+            $cropWidth = 1116;
+            $cropHeight = 211;
 
+            //new image upload
+            $pic = $this->request->getFile('banner_top');
+            $extension = $pic->getExtension();
+            $namePic = $pic->getRandomName();
+            $pic->move($target_dir, $namePic);
+            $news_img = 'banner_top_' . $pic->getName();
 
+            if (strtolower($extension) === 'gif') {
+                $this->image_processing->processGif($target_dir.$namePic, $target_dir.$news_img,$cropWidth,$cropHeight);
+            }else {
+                $this->crop->withFile($target_dir . $namePic)->fit($cropWidth, $cropHeight, 'center')->save($target_dir . $news_img);
+            }
+
+            unlink($target_dir . $namePic);
+            $data['value'] = $news_img;
+
+            $table = DB()->table('cc_theme_settings');
+            $table->where('label', 'banner_top')->update($data);
+        }
+
+        $dataCat['banner_top_category'] = $this->request->getPost('banner_top_category');
+        $dataCat['banner_top_category_url'] = $this->request->getPost('banner_top_category_url');
+        foreach($dataCat as $key => $val){
+            $dataUpdate['value'] = $val;
+            $table = DB()->table('cc_theme_settings');
+            $table->where('label', $key)->update($dataUpdate);
+        }
+
+        $dataAltNameUpdate['alt_name'] = $this->request->getPost('alt_name');
+        $table = DB()->table('cc_theme_settings');
+        $table->where('label', 'banner_top')->update($dataAltNameUpdate);
+
+        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Top Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        return redirect()->to('theme_settings?sel=home_settings');
+
+    }
 
 
     // old code
@@ -464,43 +535,6 @@ class Theme_settings_3 extends BaseController
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Left Side Banner required <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('theme_settings?sel=home_settings');
         }
-    }
-
-    public function banner_top_update(){
-        if (!empty($_FILES['banner_top']['name'])) {
-            $target_dir = FCPATH . '/uploads/banner_top/';
-            if (!file_exists($target_dir)) {
-                mkdir($target_dir, 0777);
-            }
-
-            //new image uplode
-            $pic = $this->request->getFile('banner_top');
-            $namePic = $pic->getRandomName();
-            $pic->move($target_dir, $namePic);
-            $news_img = 'banner_top_' . $pic->getName();
-            $this->crop->withFile($target_dir . $namePic)->fit(1116, 211, 'center')->save($target_dir . $news_img);
-            unlink($target_dir . $namePic);
-            $data['value'] = $news_img;
-
-            $table = DB()->table('cc_theme_settings');
-            $table->where('label', 'banner_top')->update($data);
-        }
-
-        $dataCat['banner_top_category'] = $this->request->getPost('banner_top_category');
-        $dataCat['banner_top_category_url'] = $this->request->getPost('banner_top_category_url');
-        foreach($dataCat as $key => $val){
-            $dataUpdate['value'] = $val;
-            $table = DB()->table('cc_theme_settings');
-            $table->where('label', $key)->update($dataUpdate);
-        }
-
-        $dataAltNameUpdate['alt_name'] = $this->request->getPost('alt_name');
-        $table = DB()->table('cc_theme_settings');
-        $table->where('label', 'banner_top')->update($dataAltNameUpdate);
-
-        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Top Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-        return redirect()->to('theme_settings?sel=home_settings');
-
     }
 
 

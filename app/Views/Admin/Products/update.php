@@ -474,6 +474,37 @@
             </div>
             <!-- /.card -->
         </form>
+
+        <div class="modal" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Modal Heading</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="usr">Value:</label>
+                            <input type="text" class="form-control" name="value" id="value" required>
+                            <div class="invalid-feedback">Value is required</div>
+                            <input type="hidden" id="optionId">
+                            <input type="hidden" id="printId">
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="valueAdd()" >Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </section>
     <!-- /.content -->
 </div>
@@ -541,7 +572,7 @@
                 var new_input = "<div class='col-md-12 mt-3' id='new_" + new_chq_no +
                     "' ><input type='hidden' name='option[]' value='" + option_id +
                     "' ><select name='opValue[]' id='valId_" + new_chq_no +
-                    "' style='padding: 3px;' required><option value=''>Please select</option>" + data +
+                    "' style='padding: 3px;' onchange='valueCreate(this,"+option_id+","+new_chq_no+")' required><option value=''>Please select</option><option value='create'>Add Option</option>" + data +
                     "</select><select name='subtract[]' style='padding: 3px;'><option value='plus'>Plus</option><option value='minus'>Minus</option></select><input type='number' placeholder='Quantity' name='qty[]' required> <input type='number' placeholder='Price' name='price_op[]' required> <a href='javascript:void(0)' onclick='remove_option(this)' class='btn btn-sm btn-danger' style='margin-top: -5px;'>X</a></div>";
 
                 $('#' + id).append(new_input);
@@ -630,6 +661,71 @@
             },
             success: function (data) {
                 $("#success").show(0).delay(1000).fadeOut();
+            }
+        });
+    }
+
+    function valueCreate(el,id,printId){
+        if (el.value === 'create') {
+            $('#myModal').modal('show');
+            $('#printId').val(printId);
+            $('#optionId').val(id);
+            $('#value').val('');
+        }
+    }
+
+    function valueAdd(){
+
+        let value = $('#value').val().trim();
+        let option_id = $('#optionId').val();
+        let printId = $('#printId').val();
+
+        // validation
+        if (value === '') {
+            $('#value').addClass('is-invalid');
+            return;
+        } else {
+            $('#value').removeClass('is-invalid');
+        }
+
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
+
+        $.ajax({
+            method: "POST",
+            url: "<?php echo base_url('option_add_action') ?>",
+            dataType: "json", // ✅ IMPORTANT
+            data: {
+                [csrfName]: csrfHash,
+                option_id: option_id,
+                value: value
+            },
+            success: function(data) {
+
+                // ✅ update CSRF token
+                $('meta[name="csrf-token"]').attr('content', data.csrfHash);
+                $('input[name="<?= csrf_token()?>"]').val(data.csrfHash);
+
+
+                // error handling
+                if (data.status === 'error') {
+                    alert(data.message);
+                    return;
+                }
+
+                let selectId = '#valId_' + printId;
+
+                // append new option
+                $(selectId).append(
+                    `<option value="${data.id}" selected>${data.value}</option>`
+                );
+
+                // select it
+                $(selectId).val(data.id);
+
+                // close modal + reset
+                $('#myModal').modal('hide');
+                $('#value').val('');
             }
         });
     }
