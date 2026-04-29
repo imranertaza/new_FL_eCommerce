@@ -48,7 +48,7 @@
 
                             <div class="form-group category">
                                 <label>Product</label>
-                                <select class="select2_pro" id="keyword" name="product_id" style="width: 100%;" ></select>
+                                <select class="select2_album" id="keyword" name="product_id" style="width: 100%;" ></select>
                             </div>
                         </div>
                         <div class="col-md-6">

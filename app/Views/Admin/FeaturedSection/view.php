@@ -517,7 +517,7 @@
                 fallbackCopy(urlText,event);
             }
         }
-        
+
         function fallbackCopy(text, event) {
             let tempInput = document.createElement("input");
             tempInput.value = text;

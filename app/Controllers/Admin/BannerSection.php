@@ -200,15 +200,24 @@ class BannerSection extends BaseController
         // =====================
         if ($file && $file->isValid() && !$file->hasMoved()) {
 
-            $newName = $file->getRandomName();
-            $file->move($targetDir, $newName);
+            $cropWidth = 1116;
+            $cropHeight = 211;
 
-            $croppedName = "home_banner_" . $newName;
+            if (strtolower($file->getExtension()) === 'gif') {
+                $newName = $file->getRandomName();
+                $file->move($targetDir, $newName);
+                $croppedName = "home_banner_" . $newName;
+                $this->processGif($targetDir.$newName, $targetDir.$croppedName,$cropWidth,$cropHeight);
+            }else {
+                $newName = $file->getRandomName();
+                $file->move($targetDir, $newName);
+                $croppedName = "home_banner_" . $newName;
+                // Crop
+                $this->crop->withFile($targetDir . $newName)
+                    ->fit($cropWidth, $cropHeight, 'center')
+                    ->save($targetDir . $croppedName, 100);
+            }
 
-            // Crop
-            $this->crop->withFile($targetDir . $newName)
-                ->fit(1116, 211, 'center')
-                ->save($targetDir . $croppedName, 100);
 
             // Delete original
             unlink($targetDir . $newName);
@@ -318,15 +327,23 @@ class BannerSection extends BaseController
                 }
             }
 
-            $newName = $file->getRandomName();
-            $file->move($targetDir, $newName);
+            $cropWidth = 1116;
+            $cropHeight = 211;
 
-            $croppedName = "home_banner_" . $newName;
-
-            // Crop
-            $this->crop->withFile($targetDir . $newName)
-                ->fit(1116, 211, 'center')
-                ->save($targetDir . $croppedName, 100);
+            if (strtolower($file->getExtension()) === 'gif') {
+                $newName = $file->getRandomName();
+                $file->move($targetDir, $newName);
+                $croppedName = "home_banner_" . $newName;
+                $this->processGif($targetDir.$newName, $targetDir.$croppedName,$cropWidth,$cropHeight);
+            }else {
+                $newName = $file->getRandomName();
+                $file->move($targetDir, $newName);
+                $croppedName = "home_banner_" . $newName;
+                // Crop
+                $this->crop->withFile($targetDir . $newName)
+                    ->fit($cropWidth, $cropHeight, 'center')
+                    ->save($targetDir . $croppedName, 100);
+            }
 
             // Delete original
             unlink($targetDir . $newName);
@@ -400,7 +417,55 @@ class BannerSection extends BaseController
 
     }
 
+    private function processGif($input, $output, $cropWidth, $cropHeight)
+    {
+        $gif = new \Imagick($input);
+        // 1. Coalesce is mandatory to rebuild full frames from optimized diffs
+        $gif = $gif->coalesceImages();
 
+        foreach ($gif as $frame) {
+            // 2. Use Disposal Method 1 (None/Leave)
+            // Since we coalesced, every frame is now a full image.
+            // Method 1 prevents the "flashing" or "transparency bleed" common with Method 2.
+            $frame->setImageDispose(1);
+
+            $width  = $frame->getImageWidth();
+            $height = $frame->getImageHeight();
+
+            // Calculate Crop (Center Crop Logic)
+            $targetRatio = $cropWidth / $cropHeight;
+            $currentRatio = $width / $height;
+
+            if ($currentRatio > $targetRatio) {
+                $newWidth = $height * $targetRatio;
+                $newHeight = $height;
+                $x = ($width - $newWidth) / 2;
+                $y = 0;
+            } else {
+                $newWidth = $width;
+                $newHeight = $width / $targetRatio;
+                $x = 0;
+                $y = ($height - $newHeight) / 2;
+            }
+
+            // 3. The Sequence: Crop -> Resize -> Reset Page
+            $frame->cropImage($newWidth, $newHeight, $x, $y);
+            $frame->thumbnailImage($cropWidth, $cropHeight, true); // thumbnailImage is often faster/cleaner for GIFs
+
+            // 4. CRITICAL: Reset the virtual canvas (GIFs store "offsets" which ruins crops)
+            $frame->setImagePage(0, 0, 0, 0);
+        }
+
+        // 5. Re-optimize for file size
+        // optimizeImageLayers removes redundant pixels between frames
+        $gif = $gif->optimizeImageLayers();
+
+        // 6. Final Color Fix
+        // This prevents "color shifting" where the bird might change hue mid-animation
+        $gif->quantizeImages(256, \Imagick::COLORSPACE_RGB, 0, false, false);
+
+        $gif->writeImages($output, true);
+    }
 
 
 

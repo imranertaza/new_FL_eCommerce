@@ -47,7 +47,7 @@
                             </div>
                             <div class="form-group category">
                                 <label>Product</label>
-                                <select class="select2_pro" id="keyword" name="product_id" style="width: 100%;" >
+                                <select class="select2_album" id="keyword" name="product_id" style="width: 100%;" >
                                     <?php if(!empty($album->product_id)){ ?>
                                     <option value="<?= $album->product_id;?>" selected><?= get_data_by_id('name','cc_products','product_id',$album->product_id);?></option>
                                     <?php } ?>
