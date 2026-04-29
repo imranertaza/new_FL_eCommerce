@@ -159,17 +159,14 @@ class Theme_settings_3 extends BaseController
             $cropWidth = 271;
             $cropHeight = 590;
 
-            if (strtolower($pic->getExtension()) === 'gif') {
-                $namePic = $pic->getRandomName();
-                $pic->move($target_dir, $namePic);
-                $news_img = 'home_category_' . $pic->getName();
+            $namePic = $pic->getRandomName();
+            $extension = $pic->getExtension();
+            $pic->move($target_dir, $namePic);
+            $news_img = 'home_category_' . $pic->getName();
 
+            if (strtolower($extension) === 'gif') {
                 $this->image_processing->processGif($target_dir.$namePic, $target_dir.$news_img,$cropWidth,$cropHeight);
-
             }else {
-                $namePic = $pic->getRandomName();
-                $pic->move($target_dir, $namePic);
-                $news_img = 'home_category_' . $pic->getName();
                 $this->crop->withFile($target_dir . $namePic)->fit($cropWidth, $cropHeight, 'center')->save($target_dir . $news_img, 100);
             }
 
@@ -207,15 +204,13 @@ class Theme_settings_3 extends BaseController
 
             //new image upload
             $pic = $this->request->getFile('banner_bottom');
-            if (strtolower($pic->getExtension()) === 'gif') {
-                $namePic = $pic->getRandomName();
-                $pic->move($target_dir, $namePic);
-                $news_img = 'banner_bottom_' . $pic->getName();
+            $extension = $pic->getExtension();
+            $namePic = $pic->getRandomName();
+            $pic->move($target_dir, $namePic);
+            $news_img = 'banner_bottom_' . $pic->getName();
+            if (strtolower($extension) === 'gif') {
                 $this->image_processing->processGif($target_dir.$namePic, $target_dir.$news_img,$cropWidth,$cropHeight);
             }else{
-                $namePic = $pic->getRandomName();
-                $pic->move($target_dir, $namePic);
-                $news_img = 'banner_bottom_' . $pic->getName();
                 $this->crop->withFile($target_dir . $namePic)->fit($cropWidth, $cropHeight, 'center')->save($target_dir . $news_img);
             }
 
@@ -258,15 +253,13 @@ class Theme_settings_3 extends BaseController
 
             //new image uplode
             $pic = $this->request->getFile('banner_featured_category');
-            if (strtolower($pic->getExtension()) === 'gif') {
-                $namePic = $pic->getRandomName();
-                $pic->move($target_dir, $namePic);
-                $news_img = 'banner_featured_category_' . $pic->getName();
+            $extension = $pic->getExtension();
+            $namePic = $pic->getRandomName();
+            $pic->move($target_dir, $namePic);
+            $news_img = 'banner_featured_category_' . $pic->getName();
+            if (strtolower($extension) === 'gif') {
                 $this->image_processing->processGif($target_dir.$namePic, $target_dir.$news_img,$cropWidth,$cropHeight);
             }else{
-                $namePic = $pic->getRandomName();
-                $pic->move($target_dir, $namePic);
-                $news_img = 'banner_featured_category_' . $pic->getName();
                 $this->crop->withFile($target_dir . $namePic)->fit($cropWidth, $cropHeight, 'center')->save($target_dir . $news_img);
             }
 
@@ -306,16 +299,14 @@ class Theme_settings_3 extends BaseController
 
             //new image upload
             $pic = $this->request->getFile('banner_top');
+            $extension = $pic->getExtension();
+            $namePic = $pic->getRandomName();
+            $pic->move($target_dir, $namePic);
+            $news_img = 'banner_top_' . $pic->getName();
 
-            if (strtolower($pic->getExtension()) === 'gif') {
-                $namePic = $pic->getRandomName();
-                $pic->move($target_dir, $namePic);
-                $news_img = 'banner_top_' . $pic->getName();
+            if (strtolower($extension) === 'gif') {
                 $this->image_processing->processGif($target_dir.$namePic, $target_dir.$news_img,$cropWidth,$cropHeight);
             }else {
-                $namePic = $pic->getRandomName();
-                $pic->move($target_dir, $namePic);
-                $news_img = 'banner_top_' . $pic->getName();
                 $this->crop->withFile($target_dir . $namePic)->fit($cropWidth, $cropHeight, 'center')->save($target_dir . $news_img);
             }
 

@@ -168,15 +168,14 @@ class FeaturedSection extends BaseController
                 $cropWidth = 1140;
                 $cropHeight = 211;
 
-                if (strtolower($bannerImages[$key]->getClientExtension()) === 'gif') {
-                    $newNameBan = $bannerImages[$key]->getRandomName();
-                    $bannerImages[$key]->move($target_dir, $newNameBan);
-                    $croppedName = 'category_banner_' . $newNameBan;
+                $extension = $bannerImages[$key]->getExtension();
+                $newNameBan = $bannerImages[$key]->getRandomName();
+                $bannerImages[$key]->move($target_dir, $newNameBan);
+                $croppedName = 'category_banner_' . $newNameBan;
+
+                if (strtolower($extension) === 'gif') {
                     $this->image_processing->processGif($target_dir.$newNameBan, $target_dir.$croppedName,$cropWidth,$cropHeight);
                 }else {
-                    $newNameBan = $bannerImages[$key]->getRandomName();
-                    $bannerImages[$key]->move($target_dir, $newNameBan);
-                    $croppedName = 'category_banner_' . $newNameBan;
                     // Crop and save new image
                     $this->crop->withFile($target_dir . $newNameBan)
                         ->fit($cropWidth, $cropHeight, 'center')
@@ -195,15 +194,14 @@ class FeaturedSection extends BaseController
                 $cropWidth = 271;
                 $cropHeight = 590;
 
-                if (strtolower($bannerImages[$key]->getClientExtension()) === 'gif') {
-                    $newName = $images[$key]->getRandomName();
-                    $images[$key]->move($target_dir, $newName);
-                    $croppedName = 'category_' . $newName;
+                $extension = $images[$key]->getExtension();
+                $newName = $images[$key]->getRandomName();
+                $images[$key]->move($target_dir, $newName);
+                $croppedName = 'category_' . $newName;
+
+                if (strtolower($extension) === 'gif') {
                     $this->image_processing->processGif($target_dir.$newName, $target_dir.$croppedName,$cropWidth,$cropHeight);
                 }else {
-                    $newName = $images[$key]->getRandomName();
-                    $images[$key]->move($target_dir, $newName);
-                    $croppedName = 'category_' . $newName;
                     // Crop and save new image
                     $this->crop->withFile($target_dir . $newName)
                         ->fit($cropWidth, $cropHeight, 'center')
@@ -348,15 +346,15 @@ class FeaturedSection extends BaseController
             }
             $cropWidth = 271;
             $cropHeight = 590;
-            if (strtolower($images->getClientExtension()) === 'gif') {
-                $newName = $images->getRandomName();
-                $images->move($target_dir, $newName);
-                $croppedName = 'category_' . $newName;;
+
+            $extension = $images->getExtension();
+            $newName = $images->getRandomName();
+            $images->move($target_dir, $newName);
+            $croppedName = 'category_' . $newName;
+
+            if (strtolower($extension) === 'gif') {
                 $this->image_processing->processGif($target_dir.$newName, $target_dir.$croppedName,$cropWidth,$cropHeight);
             }else {
-                $newName = $images->getRandomName();
-                $images->move($target_dir, $newName);
-                $croppedName = 'category_' . $newName;
                 // Crop and save new image
                 $this->crop->withFile($target_dir . $newName)
                     ->fit($cropWidth, $cropHeight, 'center')
@@ -379,15 +377,15 @@ class FeaturedSection extends BaseController
 
             $cropWidth = 1140;
             $cropHeight = 211;
-            if (strtolower($bannerImages->getClientExtension()) === 'gif') {
-                $newNameBan = $bannerImages->getRandomName();
-                $bannerImages->move($target_dir, $newNameBan);
-                $croppedName = 'category_banner_' . $newNameBan;
+
+            $extension = $bannerImages->getExtension();
+            $newNameBan = $bannerImages->getRandomName();
+            $bannerImages->move($target_dir, $newNameBan);
+            $croppedName = 'category_banner_' . $newNameBan;
+
+            if (strtolower($extension) === 'gif') {
                 $this->image_processing->processGif($target_dir.$newNameBan, $target_dir.$croppedName,$cropWidth,$cropHeight);
             }else {
-                $newNameBan = $bannerImages->getRandomName();
-                $bannerImages->move($target_dir, $newNameBan);
-                $croppedName = 'category_banner_' . $newNameBan;
                 // Crop and save new image
                 $this->crop->withFile($target_dir . $newNameBan)
                     ->fit($cropWidth, $cropHeight, 'center')

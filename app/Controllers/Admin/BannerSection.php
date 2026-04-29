@@ -206,15 +206,14 @@ class BannerSection extends BaseController
             $cropWidth = 1116;
             $cropHeight = 211;
 
-            if (strtolower($file->getExtension()) === 'gif') {
-                $newName = $file->getRandomName();
-                $file->move($targetDir, $newName);
-                $croppedName = "home_banner_" . $newName;
+            $extension = $file->getExtension();
+            $newName = $file->getRandomName();
+            $file->move($targetDir, $newName);
+            $croppedName = "home_banner_" . $newName;
+
+            if (strtolower($extension) === 'gif') {
                 $this->image_processing->processGif($targetDir.$newName, $targetDir.$croppedName,$cropWidth,$cropHeight);
             }else {
-                $newName = $file->getRandomName();
-                $file->move($targetDir, $newName);
-                $croppedName = "home_banner_" . $newName;
                 // Crop
                 $this->crop->withFile($targetDir . $newName)
                     ->fit($cropWidth, $cropHeight, 'center')
@@ -332,16 +331,14 @@ class BannerSection extends BaseController
 
             $cropWidth = 1116;
             $cropHeight = 211;
+            $extension = $file->getExtension();
+            $newName = $file->getRandomName();
+            $file->move($targetDir, $newName);
+            $croppedName = "home_banner_" . $newName;
 
-            if (strtolower($file->getExtension()) === 'gif') {
-                $newName = $file->getRandomName();
-                $file->move($targetDir, $newName);
-                $croppedName = "home_banner_" . $newName;
+            if (strtolower($extension) === 'gif') {
                 $this->image_processing->processGif($targetDir.$newName, $targetDir.$croppedName,$cropWidth,$cropHeight);
             }else {
-                $newName = $file->getRandomName();
-                $file->move($targetDir, $newName);
-                $croppedName = "home_banner_" . $newName;
                 // Crop
                 $this->crop->withFile($targetDir . $newName)
                     ->fit($cropWidth, $cropHeight, 'center')
