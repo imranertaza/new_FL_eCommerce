@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Libraries\Image_processing;
 use App\Libraries\Permission;
 use CodeIgniter\HTTP\RedirectResponse;
 
@@ -13,6 +14,7 @@ class Theme_settings_3 extends BaseController
     protected $session;
     protected $crop;
     protected $permission;
+    protected $image_processing;
     private $module_name = 'Theme_settings';
 
     public function __construct()
@@ -21,6 +23,7 @@ class Theme_settings_3 extends BaseController
         $this->session = \Config\Services::session();
         $this->crop = \Config\Services::image();
         $this->permission = new Permission();
+        $this->image_processing = new Image_processing();
     }
 
     /**
@@ -161,7 +164,8 @@ class Theme_settings_3 extends BaseController
                 $pic->move($target_dir, $namePic);
                 $news_img = 'home_category_' . $pic->getName();
 
-                $this->processGif($target_dir.$namePic, $target_dir.$news_img,$cropWidth,$cropHeight);
+                $this->image_processing->processGif($target_dir.$namePic, $target_dir.$news_img,$cropWidth,$cropHeight);
+
             }else {
                 $namePic = $pic->getRandomName();
                 $pic->move($target_dir, $namePic);
@@ -207,7 +211,7 @@ class Theme_settings_3 extends BaseController
                 $namePic = $pic->getRandomName();
                 $pic->move($target_dir, $namePic);
                 $news_img = 'banner_bottom_' . $pic->getName();
-                $this->processGif($target_dir.$namePic, $target_dir.$news_img,$cropWidth,$cropHeight);
+                $this->image_processing->processGif($target_dir.$namePic, $target_dir.$news_img,$cropWidth,$cropHeight);
             }else{
                 $namePic = $pic->getRandomName();
                 $pic->move($target_dir, $namePic);
@@ -258,7 +262,7 @@ class Theme_settings_3 extends BaseController
                 $namePic = $pic->getRandomName();
                 $pic->move($target_dir, $namePic);
                 $news_img = 'banner_featured_category_' . $pic->getName();
-                $this->processGif($target_dir.$namePic, $target_dir.$news_img,$cropWidth,$cropHeight);
+                $this->image_processing->processGif($target_dir.$namePic, $target_dir.$news_img,$cropWidth,$cropHeight);
             }else{
                 $namePic = $pic->getRandomName();
                 $pic->move($target_dir, $namePic);
@@ -288,9 +292,6 @@ class Theme_settings_3 extends BaseController
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Featured Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('theme_settings?sel=home_settings');
 
-
-
-
     }
 
     public function banner_top_update(){
@@ -310,7 +311,7 @@ class Theme_settings_3 extends BaseController
                 $namePic = $pic->getRandomName();
                 $pic->move($target_dir, $namePic);
                 $news_img = 'banner_top_' . $pic->getName();
-                $this->processGif($target_dir.$namePic, $target_dir.$news_img,$cropWidth,$cropHeight);
+                $this->image_processing->processGif($target_dir.$namePic, $target_dir.$news_img,$cropWidth,$cropHeight);
             }else {
                 $namePic = $pic->getRandomName();
                 $pic->move($target_dir, $namePic);
@@ -340,56 +341,6 @@ class Theme_settings_3 extends BaseController
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Banner Top Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('theme_settings?sel=home_settings');
 
-    }
-
-    private function processGif($input, $output, $cropWidth, $cropHeight)
-    {
-        $gif = new \Imagick($input);
-        // 1. Coalesce is mandatory to rebuild full frames from optimized diffs
-        $gif = $gif->coalesceImages();
-
-        foreach ($gif as $frame) {
-            // 2. Use Disposal Method 1 (None/Leave)
-            // Since we coalesced, every frame is now a full image.
-            // Method 1 prevents the "flashing" or "transparency bleed" common with Method 2.
-            $frame->setImageDispose(1);
-
-            $width  = $frame->getImageWidth();
-            $height = $frame->getImageHeight();
-
-            // Calculate Crop (Center Crop Logic)
-            $targetRatio = $cropWidth / $cropHeight;
-            $currentRatio = $width / $height;
-
-            if ($currentRatio > $targetRatio) {
-                $newWidth = $height * $targetRatio;
-                $newHeight = $height;
-                $x = ($width - $newWidth) / 2;
-                $y = 0;
-            } else {
-                $newWidth = $width;
-                $newHeight = $width / $targetRatio;
-                $x = 0;
-                $y = ($height - $newHeight) / 2;
-            }
-
-            // 3. The Sequence: Crop -> Resize -> Reset Page
-            $frame->cropImage($newWidth, $newHeight, $x, $y);
-            $frame->thumbnailImage($cropWidth, $cropHeight, true); // thumbnailImage is often faster/cleaner for GIFs
-
-            // 4. CRITICAL: Reset the virtual canvas (GIFs store "offsets" which ruins crops)
-            $frame->setImagePage(0, 0, 0, 0);
-        }
-
-        // 5. Re-optimize for file size
-        // optimizeImageLayers removes redundant pixels between frames
-        $gif = $gif->optimizeImageLayers();
-
-        // 6. Final Color Fix
-        // This prevents "color shifting" where the bird might change hue mid-animation
-        $gif->quantizeImages(256, \Imagick::COLORSPACE_RGB, 0, false, false);
-
-        $gif->writeImages($output, true);
     }
 
 

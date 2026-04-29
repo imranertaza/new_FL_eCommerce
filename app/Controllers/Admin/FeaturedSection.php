@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Libraries\Image_processing;
 use App\Libraries\Permission;
 use CodeIgniter\HTTP\RedirectResponse;
 use FilesystemIterator;
@@ -16,6 +17,7 @@ class FeaturedSection extends BaseController
     protected $session;
     protected $crop;
     protected $permission;
+    protected $image_processing;
     private $module_name = 'Theme_settings';
 
     public function __construct()
@@ -24,6 +26,7 @@ class FeaturedSection extends BaseController
         $this->session = \Config\Services::session();
         $this->crop = \Config\Services::image();
         $this->permission = new Permission();
+        $this->image_processing = new Image_processing();
     }
 
     /**
@@ -169,7 +172,7 @@ class FeaturedSection extends BaseController
                     $newNameBan = $bannerImages[$key]->getRandomName();
                     $bannerImages[$key]->move($target_dir, $newNameBan);
                     $croppedName = 'category_banner_' . $newNameBan;
-                    $this->processGif($target_dir.$newNameBan, $target_dir.$croppedName,$cropWidth,$cropHeight);
+                    $this->image_processing->processGif($target_dir.$newNameBan, $target_dir.$croppedName,$cropWidth,$cropHeight);
                 }else {
                     $newNameBan = $bannerImages[$key]->getRandomName();
                     $bannerImages[$key]->move($target_dir, $newNameBan);
@@ -196,7 +199,7 @@ class FeaturedSection extends BaseController
                     $newName = $images[$key]->getRandomName();
                     $images[$key]->move($target_dir, $newName);
                     $croppedName = 'category_' . $newName;
-                    $this->processGif($target_dir.$newName, $target_dir.$croppedName,$cropWidth,$cropHeight);
+                    $this->image_processing->processGif($target_dir.$newName, $target_dir.$croppedName,$cropWidth,$cropHeight);
                 }else {
                     $newName = $images[$key]->getRandomName();
                     $images[$key]->move($target_dir, $newName);
@@ -349,7 +352,7 @@ class FeaturedSection extends BaseController
                 $newName = $images->getRandomName();
                 $images->move($target_dir, $newName);
                 $croppedName = 'category_' . $newName;;
-                $this->processGif($target_dir.$newName, $target_dir.$croppedName,$cropWidth,$cropHeight);
+                $this->image_processing->processGif($target_dir.$newName, $target_dir.$croppedName,$cropWidth,$cropHeight);
             }else {
                 $newName = $images->getRandomName();
                 $images->move($target_dir, $newName);
@@ -380,7 +383,7 @@ class FeaturedSection extends BaseController
                 $newNameBan = $bannerImages->getRandomName();
                 $bannerImages->move($target_dir, $newNameBan);
                 $croppedName = 'category_banner_' . $newNameBan;
-                $this->processGif($target_dir.$newNameBan, $target_dir.$croppedName,$cropWidth,$cropHeight);
+                $this->image_processing->processGif($target_dir.$newNameBan, $target_dir.$croppedName,$cropWidth,$cropHeight);
             }else {
                 $newNameBan = $bannerImages->getRandomName();
                 $bannerImages->move($target_dir, $newNameBan);
@@ -515,58 +518,6 @@ class FeaturedSection extends BaseController
         return redirect()->to('section_view/' . $featured_section_id);
 
     }
-
-    private function processGif($input, $output, $cropWidth, $cropHeight)
-    {
-        $gif = new \Imagick($input);
-        // 1. Coalesce is mandatory to rebuild full frames from optimized diffs
-        $gif = $gif->coalesceImages();
-
-        foreach ($gif as $frame) {
-            // 2. Use Disposal Method 1 (None/Leave)
-            // Since we coalesced, every frame is now a full image.
-            // Method 1 prevents the "flashing" or "transparency bleed" common with Method 2.
-            $frame->setImageDispose(1);
-
-            $width  = $frame->getImageWidth();
-            $height = $frame->getImageHeight();
-
-            // Calculate Crop (Center Crop Logic)
-            $targetRatio = $cropWidth / $cropHeight;
-            $currentRatio = $width / $height;
-
-            if ($currentRatio > $targetRatio) {
-                $newWidth = $height * $targetRatio;
-                $newHeight = $height;
-                $x = ($width - $newWidth) / 2;
-                $y = 0;
-            } else {
-                $newWidth = $width;
-                $newHeight = $width / $targetRatio;
-                $x = 0;
-                $y = ($height - $newHeight) / 2;
-            }
-
-            // 3. The Sequence: Crop -> Resize -> Reset Page
-            $frame->cropImage($newWidth, $newHeight, $x, $y);
-            $frame->thumbnailImage($cropWidth, $cropHeight, true); // thumbnailImage is often faster/cleaner for GIFs
-
-            // 4. CRITICAL: Reset the virtual canvas (GIFs store "offsets" which ruins crops)
-            $frame->setImagePage(0, 0, 0, 0);
-        }
-
-        // 5. Re-optimize for file size
-        // optimizeImageLayers removes redundant pixels between frames
-        $gif = $gif->optimizeImageLayers();
-
-        // 6. Final Color Fix
-        // This prevents "color shifting" where the bird might change hue mid-animation
-        $gif->quantizeImages(256, \Imagick::COLORSPACE_RGB, 0, false, false);
-
-        $gif->writeImages($output, true);
-    }
-
-
 
 
 }

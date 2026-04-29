@@ -233,4 +233,38 @@ class Option extends BaseController
         $tableValDel->where('option_value_id', $option_value_id)->delete();
     }
 
+    public function optionAddAction()
+    {
+        $option_id = $this->request->getPost('option_id');
+        $name      = trim($this->request->getPost('value'));
+
+        // ✅ Validation
+        if (empty($name)) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Value is required',
+                'csrfHash' => csrf_hash()
+            ]);
+        }
+
+
+        // ✅ Insert
+        $data = [
+            'option_id' => $option_id,
+            'name'      => $name
+        ];
+
+        $table = DB()->table('cc_option_value');
+        $table->insert($data);
+        $insert_id = DB()->insertID();
+
+        // ✅ Success response
+        return $this->response->setJSON([
+            'status'   => 'success',
+            'id'       => $insert_id,
+            'value'    => $name,
+            'csrfHash' => csrf_hash()
+        ]);
+    }
+
 }
