@@ -508,7 +508,7 @@
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 // Modern way
                 navigator.clipboard.writeText(urlText).then(function () {
-                    fallbackCopy(urlText,event);
+                    showTooltip("URL copied!", event);
                 }).catch(function () {
                     fallbackCopy(urlText,event);
                 });
