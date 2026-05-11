@@ -1919,12 +1919,23 @@ function common_image_view($url, $slug, $image, $no_image, $width = '', $height 
 
             if (file_exists($imgPath)) {
                 $image = explode('.', $imgMain);
-                $pathNew = 'cache/'.$url . '/' . $slug . '/'.$width.'x'.$height.'_'.$image[0].'.webp';
-                if(file_exists($pathNew)){
-                    $imgFinal = base_url($pathNew);
-                }else{
-                    $urlNew = base64_encode($url . '/' . $slug . '/');
-                    $imgFinal = base_url('image-resize/' . $urlNew . '/' . $width . 'x' . $height . '/' . $imgMain);
+
+                if ($image[1] == 'gif'){
+                    $pathNew = 'cache/' . $url . '/' . $slug . '/' . $width . 'x' . $height . '_' . $imgMain;
+                    if (file_exists($pathNew)) {
+                        $imgFinal = base_url($pathNew);
+                    } else {
+                        $urlNew = base64_encode($url . '/' . $slug . '/');
+                        $imgFinal = base_url('image-resize/' . $urlNew . '/' . $width . 'x' . $height . '/' . $imgMain);
+                    }
+                }else {
+                    $pathNew = 'cache/' . $url . '/' . $slug . '/' . $width . 'x' . $height . '_' . $image[0] . '.webp';
+                    if (file_exists($pathNew)) {
+                        $imgFinal = base_url($pathNew);
+                    } else {
+                        $urlNew = base64_encode($url . '/' . $slug . '/');
+                        $imgFinal = base_url('image-resize/' . $urlNew . '/' . $width . 'x' . $height . '/' . $imgMain);
+                    }
                 }
 
                 $result = $imgFinal;
@@ -2193,4 +2204,19 @@ function scheduleLogo(){
         ->orderBy('start_date', 'ASC')
         ->get()
         ->getRow();
+}
+function sliderArray(){
+    $labels = ['slider_1', 'slider_2', 'slider_3', 'slider_4', 'slider_5'];
+
+    $sliders = DB()->table('cc_theme_settings')->whereIn('label', $labels)->get()->getResult();
+
+    // Initialize with default null values (avoids undefined index issues)
+    $slider_data = array_fill_keys($labels, null);
+
+    // Map results
+    foreach ($sliders as $row) {
+        $slider_data[$row->label] = $row;
+    }
+
+    return $slider_data;
 }

@@ -508,16 +508,17 @@
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 // Modern way
                 navigator.clipboard.writeText(urlText).then(function () {
-                    alert('URL copied!');
+                    showTooltip("URL copied!", event);
                 }).catch(function () {
-                    fallbackCopy(urlText);
+                    fallbackCopy(urlText,event);
                 });
             } else {
                 // Fallback for old browsers / HTTP
-                fallbackCopy(urlText);
+                fallbackCopy(urlText,event);
             }
         }
-        function fallbackCopy(text) {
+
+        function fallbackCopy(text, event) {
             let tempInput = document.createElement("input");
             tempInput.value = text;
             document.body.appendChild(tempInput);
@@ -525,7 +526,30 @@
             document.execCommand("copy");
             document.body.removeChild(tempInput);
 
-            alert('URL copied!');
+            showTooltip("URL copied!", event);
+        }
+
+        function showTooltip(message, event) {
+            let tooltip = document.createElement("div");
+            tooltip.innerText = message;
+
+            tooltip.style.position = "fixed";
+            tooltip.style.left = event.clientX + "px";
+            tooltip.style.top = event.clientY + "px";
+            tooltip.style.background = "#28a745";
+            tooltip.style.color = "#fff";
+            tooltip.style.padding = "6px 10px";
+            tooltip.style.borderRadius = "5px";
+            tooltip.style.fontSize = "12px";
+            tooltip.style.zIndex = "9999";
+            tooltip.style.opacity = "0.9";
+
+            document.body.appendChild(tooltip);
+
+            // Remove after 1.5 sec
+            setTimeout(() => {
+                tooltip.remove();
+            }, 1500);
         }
 
     </script>

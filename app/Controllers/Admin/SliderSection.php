@@ -204,18 +204,14 @@ class SliderSection extends BaseController
 
         // ---- UPDATE IMAGES ----
         $updateBatch = [];
+        $insertBatch = [];
         if ($images) {
             foreach ($images as $index => $img) {
 
                 if ($img->isValid() && !$img->hasMoved()) {
 
                     // get old image
-                    $oldImage = get_data_by_id(
-                        'image',
-                        'cc_slider_schedule_image',
-                        'slider_schedule_image_id',
-                        $slider_schedule_image_id[$index]
-                    );
+                    $oldImage = get_data_by_id( 'image', 'cc_slider_schedule_image', 'slider_schedule_image_id', $slider_schedule_image_id[$index] );
 
                     // delete old image
                     if (!empty($oldImage)) {
@@ -227,7 +223,6 @@ class SliderSection extends BaseController
                     // upload new image
                     $tempName = $img->getRandomName();
                     $img->move($target_dir, $tempName);
-
                     $finalName = 'slider_' . $img->getName();
 
                     // crop
@@ -237,12 +232,21 @@ class SliderSection extends BaseController
 
                     unlink($target_dir . $tempName);
 
-                    // Add row to batch array
-                    $updateBatch[] = [
-                        'slider_schedule_image_id' => $slider_schedule_image_id[$index], // REQUIRED
-                        'image'                    => $finalName,
-                        'alt_name'                 => $alt_names[$index] ?? null,
-                    ];
+                    if (!empty($slider_schedule_image_id[$index])) {
+                        // Add row to batch array
+                        $updateBatch[] = [
+                            'slider_schedule_image_id' => $slider_schedule_image_id[$index], // REQUIRED
+                            'image' => $finalName,
+                            'alt_name' => $alt_names[$index] ?? null,
+                        ];
+                    }else{
+                        // Add row to batch array
+                        $insertBatch[] = [
+                            'slider_schedule_id' => $slider_schedule_id,
+                            'image' => $finalName,
+                            'alt_name' => $alt_names[$index] ?? null,
+                        ];
+                    }
                 }
             }
 
@@ -251,7 +255,13 @@ class SliderSection extends BaseController
                 DB()->table('cc_slider_schedule_image')
                     ->updateBatch($updateBatch, 'slider_schedule_image_id');
             }
+            // ---- INSERT WITH ONE QUERY ----
+            if (!empty($insertBatch)) {
+                DB()->table('cc_slider_schedule_image')
+                    ->insertBatch($insertBatch);
+            }
         }
+
 
         DB()->transComplete();
 

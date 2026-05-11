@@ -381,6 +381,31 @@
             }
         });
 
+        $('.select2_album').select2({
+            multiple: false,
+            theme: 'bootstrap4',
+            ajax: {
+                url: "<?php echo base_url('related_product') ?>",
+                dataType: 'json',
+                delay: 250,
+                processResults: function(data) {
+                    return {
+                        results: $.map(data, function(item) {
+                            var img = '<img src="<?php echo base_url('uploads/products')?>/'+item.product_id+'/100_'+item.image+'" class="" loading="lazy" />' + item.name;
+                            // var img = "<span ><img src='<?php echo base_url('uploads/products')?>/"+item.product_id+"/100_"+item.image+"' c/>" + item.name+"</span >";
+                            return {
+                                text: item.name,
+                                id: item.product_id,
+
+                            }
+
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+
         $('.bought_together_pro').select2({
             multiple: true,
             theme: 'bootstrap4',

@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Libraries\Image_processing;
 use App\Libraries\Permission;
 use App\Libraries\Theme_3;
 use CodeIgniter\HTTP\RedirectResponse;
@@ -18,6 +19,7 @@ class BannerSection extends BaseController
     protected $crop;
     protected $permission;
     protected $theme_3;
+    protected $image_processing;
     private $module_name = 'Theme_settings';
 
     public function __construct()
@@ -27,6 +29,7 @@ class BannerSection extends BaseController
         $this->crop = \Config\Services::image();
         $this->permission = new Permission();
         $this->theme_3 = new Theme_3();
+        $this->image_processing = new Image_processing();
     }
 
     /**
@@ -135,9 +138,15 @@ class BannerSection extends BaseController
         $banner_schedule_id = $db->insertID();
 
         // PROCESS TOP & BOTTOM USING SAME FUNCTION
-        $this->sectionInsert('top', $banner_schedule_id, $targetDir);
-        $this->sectionInsert('category', $banner_schedule_id, $targetDir);
-        $this->sectionInsert('bottom', $banner_schedule_id, $targetDir);
+        if (!empty($this->request->getFile("banner_top"))) {
+            $this->sectionInsert('top', $banner_schedule_id, $targetDir);
+        }
+        if (!empty($this->request->getFile("banner_category"))) {
+            $this->sectionInsert('category', $banner_schedule_id, $targetDir);
+        }
+        if (!empty($this->request->getFile("banner_bottom"))) {
+            $this->sectionInsert('bottom', $banner_schedule_id, $targetDir);
+        }
 
         // END TRANSACTION
         $db->transComplete();
@@ -194,15 +203,23 @@ class BannerSection extends BaseController
         // =====================
         if ($file && $file->isValid() && !$file->hasMoved()) {
 
+            $cropWidth = 1116;
+            $cropHeight = 211;
+
+            $extension = $file->getExtension();
             $newName = $file->getRandomName();
             $file->move($targetDir, $newName);
-
             $croppedName = "home_banner_" . $newName;
 
-            // Crop
-            $this->crop->withFile($targetDir . $newName)
-                ->fit(1116, 211, 'center')
-                ->save($targetDir . $croppedName, 100);
+            if (strtolower($extension) === 'gif') {
+                $this->image_processing->processGif($targetDir.$newName, $targetDir.$croppedName,$cropWidth,$cropHeight);
+            }else {
+                // Crop
+                $this->crop->withFile($targetDir . $newName)
+                    ->fit($cropWidth, $cropHeight, 'center')
+                    ->save($targetDir . $croppedName, 100);
+            }
+
 
             // Delete original
             unlink($targetDir . $newName);
@@ -241,9 +258,15 @@ class BannerSection extends BaseController
 
 
         // PROCESS TOP & BOTTOM USING SAME FUNCTION
-        $this->sectionUpdate('top', $targetDir);
-        $this->sectionUpdate('category', $targetDir);
-        $this->sectionUpdate('bottom', $targetDir);
+        if (!empty($this->request->getFile("banner_top"))) {
+            $this->sectionUpdate('top', $targetDir);
+        }
+        if (!empty($this->request->getFile("banner_category"))) {
+            $this->sectionUpdate('category', $targetDir);
+        }
+        if (!empty($this->request->getFile("banner_bottom"))) {
+            $this->sectionUpdate('bottom', $targetDir);
+        }
 
         // END TRANSACTION
         $db->transComplete();
@@ -306,15 +329,21 @@ class BannerSection extends BaseController
                 }
             }
 
+            $cropWidth = 1116;
+            $cropHeight = 211;
+            $extension = $file->getExtension();
             $newName = $file->getRandomName();
             $file->move($targetDir, $newName);
-
             $croppedName = "home_banner_" . $newName;
 
-            // Crop
-            $this->crop->withFile($targetDir . $newName)
-                ->fit(1116, 211, 'center')
-                ->save($targetDir . $croppedName, 100);
+            if (strtolower($extension) === 'gif') {
+                $this->image_processing->processGif($targetDir.$newName, $targetDir.$croppedName,$cropWidth,$cropHeight);
+            }else {
+                // Crop
+                $this->crop->withFile($targetDir . $newName)
+                    ->fit($cropWidth, $cropHeight, 'center')
+                    ->save($targetDir . $croppedName, 100);
+            }
 
             // Delete original
             unlink($targetDir . $newName);

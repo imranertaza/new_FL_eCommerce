@@ -266,6 +266,7 @@ $routes->post('/option_update_action', 'Admin\Option::update_action');
 $routes->get('/option_update/(:num)', 'Admin\Option::update/$1');
 $routes->get('/option_delete/(:num)', 'Admin\Option::delete/$1');
 $routes->post('/option_remove_action', 'Admin\Option::option_remove_action');
+$routes->post('/option_add_action', 'Admin\Option::optionAddAction');
 
 //Coupon
 $routes->get('/order_list', 'Admin\Order::index');

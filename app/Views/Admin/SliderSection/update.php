@@ -51,28 +51,38 @@
                                 <div class="col-md-6" >
 
                                 </div>
-                                <?php $i=1; foreach ($scheduleImage as $key => $ima){ ?>
+
+                                <?php for ($i = 0; $i < 5; $i++):
+                                    $ima = $scheduleImage[$i] ?? null; // fallback if not exists
+                                    ?>
                                     <div class="col-md-12 row border">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Slider <?= $i++ ?> Image <span class="requi">*</span></label>
-                                                <input type="file" name="slider_image[]" class="form-control" >
-                                                <small>Recommended Size: <?= $theme_libraries->slider_width; ?> x <?= $theme_libraries->slider_height; ?></small>
+                                                <label>Slider <?= $i + 1 ?> Image </label>
+                                                <input type="file" name="slider_image[]" class="form-control">
+                                                <small>
+                                                    Recommended Size: <?= $theme_libraries->slider_width; ?> x <?= $theme_libraries->slider_height; ?>
+                                                </small>
                                             </div>
+
                                             <div class="form-group">
-                                            <label>Alt Name <span class="requi">*</span></label>
-                                            <input type="text" name="alt_name[]" class="form-control" value="<?= $ima->alt_name;?>" placeholder="Alt Name" >
-                                            <input type="hidden" name="slider_schedule_image_id[]" value="<?= $ima->slider_schedule_image_id;?>">
-                                            <small>&nbsp;</small>
+                                                <label>Alt Name </label>
+                                                <input type="text" name="alt_name[]" class="form-control"
+                                                       value="<?= $ima->alt_name ?? ''; ?>" placeholder="Alt Name">
+
+                                                <input type="hidden" name="slider_schedule_image_id[]"
+                                                       value="<?= $ima->slider_schedule_image_id ?? ''; ?>">
+                                                <small>&nbsp;</small>
+                                            </div>
                                         </div>
-                                        </div>
+
                                         <div class="col-md-6 p-3">
                                             <div class="form-group">
-                                                <?= image_view('uploads/slider', '', $ima->image, 'noimage.png', 'w-50');?>
+                                                <?= image_view( 'uploads/slider', '', $ima->image ?? '', 'noimage.png', 'w-50' ); ?>
                                             </div>
                                         </div>
                                     </div>
-                                <?php } ?>
+                                <?php endfor; ?>
 
                                 <div class="col-md-6">
                                     <div class="form-group">

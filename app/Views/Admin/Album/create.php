@@ -45,6 +45,11 @@
                                 <label>Name</label>
                                 <input type="text" name="name" class="form-control" placeholder="Name" required>
                             </div>
+
+                            <div class="form-group category">
+                                <label>Product</label>
+                                <select class="select2_album" id="keyword" name="product_id" style="width: 100%;" ></select>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">

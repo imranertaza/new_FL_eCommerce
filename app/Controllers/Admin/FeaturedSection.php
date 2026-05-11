@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Libraries\Image_processing;
 use App\Libraries\Permission;
 use CodeIgniter\HTTP\RedirectResponse;
 use FilesystemIterator;
@@ -16,6 +17,7 @@ class FeaturedSection extends BaseController
     protected $session;
     protected $crop;
     protected $permission;
+    protected $image_processing;
     private $module_name = 'Theme_settings';
 
     public function __construct()
@@ -24,6 +26,7 @@ class FeaturedSection extends BaseController
         $this->session = \Config\Services::session();
         $this->crop = \Config\Services::image();
         $this->permission = new Permission();
+        $this->image_processing = new Image_processing();
     }
 
     /**
@@ -161,15 +164,23 @@ class FeaturedSection extends BaseController
 
             // Handle image upload and crop
             if (!empty($bannerImages[$key]) && $bannerImages[$key]->isValid() && !$bannerImages[$key]->hasMoved()) {
+
+                $cropWidth = 1140;
+                $cropHeight = 211;
+
+                $extension = $bannerImages[$key]->getExtension();
                 $newNameBan = $bannerImages[$key]->getRandomName();
                 $bannerImages[$key]->move($target_dir, $newNameBan);
-
                 $croppedName = 'category_banner_' . $newNameBan;
 
-                // Crop and save new image
-                $this->crop->withFile($target_dir . $newNameBan)
-                    ->fit(1140, 211, 'center')
-                    ->save($target_dir . $croppedName, 100);
+                if (strtolower($extension) === 'gif') {
+                    $this->image_processing->processGif($target_dir.$newNameBan, $target_dir.$croppedName,$cropWidth,$cropHeight);
+                }else {
+                    // Crop and save new image
+                    $this->crop->withFile($target_dir . $newNameBan)
+                        ->fit($cropWidth, $cropHeight, 'center')
+                        ->save($target_dir . $croppedName, 100);
+                }
 
                 // Remove the temporary original
                 unlink($target_dir . $newNameBan);
@@ -179,15 +190,23 @@ class FeaturedSection extends BaseController
 
             // Handle image upload and crop
             if (!empty($images[$key]) && $images[$key]->isValid() && !$images[$key]->hasMoved()) {
+
+                $cropWidth = 271;
+                $cropHeight = 590;
+
+                $extension = $images[$key]->getExtension();
                 $newName = $images[$key]->getRandomName();
                 $images[$key]->move($target_dir, $newName);
-
                 $croppedName = 'category_' . $newName;
 
-                // Crop and save new image
-                $this->crop->withFile($target_dir . $newName)
-                    ->fit(271, 590, 'center')
-                    ->save($target_dir . $croppedName, 100);
+                if (strtolower($extension) === 'gif') {
+                    $this->image_processing->processGif($target_dir.$newName, $target_dir.$croppedName,$cropWidth,$cropHeight);
+                }else {
+                    // Crop and save new image
+                    $this->crop->withFile($target_dir . $newName)
+                        ->fit($cropWidth, $cropHeight, 'center')
+                        ->save($target_dir . $croppedName, 100);
+                }
 
                 // Remove the temporary original
                 unlink($target_dir . $newName);
@@ -325,16 +344,22 @@ class FeaturedSection extends BaseController
             if (!empty($oldImage) && file_exists($target_dir.$oldImage)) {
                 unlink($target_dir . $oldImage);
             }
+            $cropWidth = 271;
+            $cropHeight = 590;
 
+            $extension = $images->getExtension();
             $newName = $images->getRandomName();
             $images->move($target_dir, $newName);
-
             $croppedName = 'category_' . $newName;
 
-            // Crop and save new image
-            $this->crop->withFile($target_dir . $newName)
-                ->fit(271, 590, 'center')
-                ->save($target_dir . $croppedName, 100);
+            if (strtolower($extension) === 'gif') {
+                $this->image_processing->processGif($target_dir.$newName, $target_dir.$croppedName,$cropWidth,$cropHeight);
+            }else {
+                // Crop and save new image
+                $this->crop->withFile($target_dir . $newName)
+                    ->fit($cropWidth, $cropHeight, 'center')
+                    ->save($target_dir . $croppedName, 100);
+            }
 
             // Remove the temporary original
             unlink($target_dir . $newName);
@@ -350,15 +375,22 @@ class FeaturedSection extends BaseController
                 unlink($target_dir . $oldImageBn);
             }
 
+            $cropWidth = 1140;
+            $cropHeight = 211;
+
+            $extension = $bannerImages->getExtension();
             $newNameBan = $bannerImages->getRandomName();
             $bannerImages->move($target_dir, $newNameBan);
-
             $croppedName = 'category_banner_' . $newNameBan;
 
-            // Crop and save new image
-            $this->crop->withFile($target_dir . $newNameBan)
-                ->fit(1140, 211, 'center')
-                ->save($target_dir . $croppedName, 100);
+            if (strtolower($extension) === 'gif') {
+                $this->image_processing->processGif($target_dir.$newNameBan, $target_dir.$croppedName,$cropWidth,$cropHeight);
+            }else {
+                // Crop and save new image
+                $this->crop->withFile($target_dir . $newNameBan)
+                    ->fit($cropWidth, $cropHeight, 'center')
+                    ->save($target_dir . $croppedName, 100);
+            }
 
             // Remove the temporary original
             unlink($target_dir . $newNameBan);
@@ -458,12 +490,12 @@ class FeaturedSection extends BaseController
         //image delete
         $target_dir = FCPATH . 'uploads/sections/';
         $oldImage = get_data_by_id('image','cc_featured_schedule','featured_schedule_id',$id);
-        if (file_exists($target_dir.$oldImage)) {
+        if (!empty($oldImage) && file_exists($target_dir . $oldImage) && is_file($target_dir . $oldImage)) {
             unlink($target_dir . $oldImage);
         }
 
         $oldImageBn = get_data_by_id('banner','cc_featured_schedule','featured_schedule_id',$id);
-        if (file_exists($target_dir.$oldImageBn)) {
+        if (!empty($oldImageBn) && file_exists($target_dir . $oldImageBn) && is_file($target_dir . $oldImageBn)) {
             unlink($target_dir . $oldImageBn);
         }
         //data delete in cc_featured_product
@@ -484,9 +516,6 @@ class FeaturedSection extends BaseController
         return redirect()->to('section_view/' . $featured_section_id);
 
     }
-
-
-
 
 
 }

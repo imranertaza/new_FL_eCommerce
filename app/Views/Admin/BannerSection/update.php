@@ -44,7 +44,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Schedule Title <span class="requi">*</span></label>
-                                    <input type="text" name="schedule_title" placeholder="Schedule Title" value="<?= $schedule->schedule_title;?>" class="form-control">
+                                    <input type="text" name="schedule_title" placeholder="Schedule Title" value="<?= $schedule->schedule_title;?>" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-6" >
@@ -62,21 +62,21 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Banner <?= $suk;?> <span class="requi">*</span></label>
+                                    <label>Banner <?= $suk;?> </label>
                                     <input type="file" name="banner_<?= $suk;?>" class="form-control" >
                                     <small>Recommended Size: 1116 x 211</small>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Alt Name <span class="requi">*</span></label>
-                                    <input type="text" name="alt_name_<?= $suk;?>" class="form-control" value="<?= $item->alt_name;?>" placeholder="Alt Name" required>
+                                    <label>Alt Name </label>
+                                    <input type="text" name="alt_name_<?= $suk;?>" class="form-control" value="<?= $item->alt_name;?>" placeholder="Alt Name" >
                                     <small>&nbsp;</small>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" onclick="typeEvent(this,'<?=$key?>')"  name="type_<?= $suk;?>" id="exampleRadios4-<?=$key?>" value="url" <?= !empty($item->url)?'checked':'';?>>
+                                        <input class="form-check-input" type="radio" onclick="typeEvent(this,'<?=$key?>')"  name="type_<?= $suk;?>" id="exampleRadios4-<?=$key?>" value="url" <?= !empty($item->url)?'checked':'';?> <?= (empty($item->url) && empty($item->prod_cat_id))?'checked':'';?>>
                                         <label class="form-check-label" for="exampleRadios4-<?=$key?>">Url</label>
                                     </div>
 
@@ -85,13 +85,13 @@
                                         <label class="form-check-label" for="exampleRadios5-<?=$key?>">Category</label>
                                     </div>
                                 </div>
-                                <div class="form-group" id="url<?=$key?>" style="<?= empty($item->url)?'display: none':'';?>">
-                                    <label>Url <span class="requi">*</span></label>
+                                <div class="form-group" id="url<?=$key?>" style="<?= empty($item->url)?'display: none':'';?>; <?= (empty($item->url) && empty($item->prod_cat_id))?'display: block':'';?>">
+                                    <label>Url </label>
                                     <input type="text" name="url_<?= $suk;?>" class="form-control" placeholder="Url" value="<?= $item->url;?>">
                                 </div>
 
                                 <div class="form-group " id="category<?=$key?>" style="<?= empty($item->prod_cat_id)?'display: none':'';?>" >
-                                    <label>Category <span class="requi">*</span></label>
+                                    <label>Category </label>
                                     <select name="prod_cat_id_<?= $suk;?>" class="form-control" >
                                         <option value=""> Please Select</option>
                                         <?php foreach (get_array_data_by_id('cc_product_category', 'status', '1') as $cat) { ?>
