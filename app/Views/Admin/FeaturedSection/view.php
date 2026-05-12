@@ -58,7 +58,7 @@
                                 <?= csrf_field() ?>
                                 <div class="row p-2">
                                 <div class="col-md-12">
-                                    <span class="float-left"><b>Url:</b> <?= base_url('schedule-view/'.$result->featured_schedule_id)?><button type="button" onclick="copyUrl('<?= base_url('schedule-view/'.$result->featured_schedule_id)?>')" class="border-0"> <i class="nav-icon fas fa-copy"></i></button> </span>
+                                    <span class="float-left"><b>Url:</b> <?= base_url('schedule-view/'.$result->featured_schedule_id)?><button type="button" onclick="copyUrl('<?= base_url('schedule-view/'.$result->featured_schedule_id)?>',event)" class="border-0"> <i class="nav-icon fas fa-copy"></i></button> </span>
                                     <!-- Remove button -->
                                     <a href="<?= base_url('section_view_delete/'.$result->featured_schedule_id)?>" class="btn btn-danger float-right" onclick="return confirm('Are you sure you want to delete this section?');" >X</a>
                                 </div>
@@ -504,7 +504,7 @@
             }
         }
 
-        function copyUrl(urlText){
+        function copyUrl(urlText,event){
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 // Modern way
                 navigator.clipboard.writeText(urlText).then(function () {
@@ -515,6 +515,22 @@
             } else {
                 // Fallback for old browsers / HTTP
                 fallbackCopy(urlText,event);
+            }
+        }
+
+        function copyUrl(urlText, event) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(urlText)
+                    .then(() => {
+                        showTooltip("URL copied!", event);
+                    })
+                    .catch((err) => {
+                        console.error("Clipboard Error:", err.name, err.message);
+                        // Fallback if permission is denied or gesture expired
+                        fallbackCopy(urlText, event);
+                    });
+            } else {
+                fallbackCopy(urlText, event);
             }
         }
 

@@ -938,7 +938,7 @@ function email_send($to, $subject, $message,$replyEmail=null,$title=null)
 
     $email->setFrom($form, $titleStore);
     $reply = !empty($replyEmail)?$replyEmail:$form;
-    $email->setReplyTo($reply,$title);
+    $email->setReplyTo($reply,$title??'');
     $email->setTo($to);
 
     $email->setSubject($subject);
@@ -1898,7 +1898,7 @@ function parent_qc_picture(){
 function common_image_view($url, $slug, $image, $no_image, $width = '', $height = '')
 {
 
-    $imgMain = str_replace("pro_", "", $image);
+    $imgMain = str_replace("pro_", "", $image?? '');
 
     $dir = FCPATH . '/' . $url . '/' . $slug;
 
@@ -1952,7 +1952,7 @@ function common_image_view($url, $slug, $image, $no_image, $width = '', $height 
 function product_image_view($url, $slug, $image, $no_image, $width = '', $height = '')
 {
     $modules = modules_access();
-    $im  = str_replace("pro_", "", $image);
+    $im  = str_replace("pro_", "", $image?? '');
     $imgMain = ($modules['watermark'] == '1')?'600_wm_'.$im:$im;
 
     $dir = FCPATH . '/' . $url . '/' . $slug;
@@ -1995,7 +1995,7 @@ function product_image_view($url, $slug, $image, $no_image, $width = '', $height
 function product_multi_image_view($url, $slug, $slug2, $image, $no_image, $width = '', $height = '')
 {
     $modules = modules_access();
-    $im  = str_replace("pro_", "", $image);
+    $im  = str_replace("pro_", "", $image?? '');
     $imgMain = ($modules['watermark'] == '1')?'600_wm_'.$im:$im;
 
     $dir = FCPATH . '/' . $url . '/' . $slug . '/' . $slug2;

@@ -413,7 +413,7 @@ class Image_processing {
             }
 
             // 3. The Sequence: Crop -> Resize -> Reset Page
-            $frame->cropImage($newWidth, $newHeight, $x, $y);
+            $frame->cropImage((int)$newWidth, (int)$newHeight, (int)$x, (int)$y);
             $frame->thumbnailImage($cropWidth, $cropHeight, true); // thumbnailImage is often faster/cleaner for GIFs
 
             // 4. CRITICAL: Reset the virtual canvas (GIFs store "offsets" which ruins crops)
