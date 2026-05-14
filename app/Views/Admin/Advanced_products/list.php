@@ -224,7 +224,7 @@
                             </thead>
                             <!-- row_hide -->
                             <tbody id="tbody">
-                                <?php foreach ($product as $key => $val) { $img = str_replace("pro_", "", $val->image); $url = (!empty($val->image)) ? base_url('uploads/products/' . $val->product_id . '/' . $img):base_url('uploads/products/noimage.png' ); ?>
+                                <?php foreach ($product as $key => $val) { $img = str_replace("pro_", "", $val->image??''); $url = (!empty($val->image)) ? base_url('uploads/products/' . $val->product_id . '/' . $img):base_url('uploads/products/noimage.png' ); ?>
                                 <tr id="update_<?php echo $val->product_id?>">
                                     <td width="10">
                                         <input type="checkbox" name="productId[]" value="<?php echo $val->product_id;?>" form="multiActionForm" >
