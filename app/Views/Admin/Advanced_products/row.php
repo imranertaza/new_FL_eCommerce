@@ -1,4 +1,4 @@
-<?php $img = str_replace("pro_", "", $val->image); $url = (!empty($val->image)) ? base_url('uploads/products/' . $val->product_id . '/' . $img):base_url('uploads/products/noimage.png' );?>
+<?php $img = str_replace("pro_", "", $val->image??''); $url = (!empty($val->image)) ? base_url('uploads/products/' . $val->product_id . '/' . $img):base_url('uploads/products/noimage.png' );?>
 <td width="10">
     <input type="checkbox" name="productId[]" value="<?php echo $val->product_id;?>" form="multiActionForm" >
 </td>

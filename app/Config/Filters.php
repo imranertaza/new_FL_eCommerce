@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Filters\Throttle;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
@@ -23,7 +24,7 @@ class Filters extends BaseConfig
         'honeypot'      => Honeypot::class,
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
-        'throttle' => \App\Filters\Throttle::class,
+        'throttle'      => Throttle::class
     ];
 
     /**
