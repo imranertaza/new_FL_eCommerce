@@ -174,6 +174,7 @@
             },
             dataType: 'json',
             success: function(response) {
+                updateCsrfToken(response.csrfToken);
                 var a = $("<a>").attr("href", response.downloadUrl).attr("download", "download_album_img.jpg").appendTo("body");
                 a[0].click();
                 a.remove();
@@ -195,6 +196,12 @@
             data: {
                 [csrfName]: csrfHash,
                 url: unlinkUrl
+            },
+            success: function (response) {
+                // Update csrf again
+                if (response.csrfToken) {
+                    updateCsrfToken(response.csrfToken);
+                }
             }
         });
     }

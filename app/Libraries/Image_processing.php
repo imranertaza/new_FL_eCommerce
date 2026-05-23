@@ -108,15 +108,16 @@ class Image_processing {
             $watermarkNewWidth = $mainImageWidth * 0.25;
             $watermarkNewHeight = ($watermarkNewWidth / $watermarkWidth) * $watermarkHeight;
 
-            $watermarkResized = imagecreatetruecolor($watermarkNewWidth, $watermarkNewHeight);
+            $watermarkResized = imagecreatetruecolor((int)$watermarkNewWidth, (int)$watermarkNewHeight);
             imagealphablending($watermarkResized, false);
             imagesavealpha($watermarkResized, true);
-            imagecopyresampled($watermarkResized, $this->wm, 0, 0, 0, 0, $watermarkNewWidth, $watermarkNewHeight, $watermarkWidth, $watermarkHeight);
+            imagecopyresampled($watermarkResized, $this->wm, 0, 0, 0, 0, (int)$watermarkNewWidth, (int)$watermarkNewHeight, (int)$watermarkWidth, (int)$watermarkHeight);
 
             $watermarkX = $mainImageWidth - $watermarkNewWidth - $this->marge_right;
             $watermarkY = $mainImageHeight - $watermarkNewHeight - $this->marge_bottom;
 
-            imagecopy($mainImg, $watermarkResized, $watermarkX, $watermarkY, 0, 0, $watermarkNewWidth, $watermarkNewHeight);
+            // imagecopy($mainImg, $watermarkResized, $watermarkX, $watermarkY, 0, 0, $watermarkNewWidth, $watermarkNewHeight);
+            imagecopy( $mainImg, $watermarkResized, (int) round($watermarkX), (int) round($watermarkY), 0, 0, (int) round($watermarkNewWidth), (int) round($watermarkNewHeight) );
 
             // Save compressed image based on format
             $outputFile = $dir . 'wm_' . $image;
@@ -413,7 +414,7 @@ class Image_processing {
             }
 
             // 3. The Sequence: Crop -> Resize -> Reset Page
-            $frame->cropImage($newWidth, $newHeight, $x, $y);
+            $frame->cropImage((int)$newWidth, (int)$newHeight, (int)$x, (int)$y);
             $frame->thumbnailImage($cropWidth, $cropHeight, true); // thumbnailImage is often faster/cleaner for GIFs
 
             // 4. CRITICAL: Reset the virtual canvas (GIFs store "offsets" which ruins crops)

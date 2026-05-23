@@ -51,10 +51,10 @@ class Products extends BaseController {
         $categoryWhere = !empty($this->request->getGetPost('category'))? 'category_id = '.$this->request->getGetPost('category'): 'category_id = '.$cat_id;
 
 
-        $brand = explode(',', $this->request->getGetPost('manufacturer'));
-        $options = explode(',', $this->request->getGetPost('option'));
-        $price = explode(',', $this->request->getGetPost('price'));
-        $rating = explode(',', $this->request->getGetPost('rating'));
+        $brand = explode(',', $this->request->getGetPost('manufacturer')?? '');
+        $options = explode(',', $this->request->getGetPost('option')?? '');
+        $price = explode(',', $this->request->getGetPost('price')?? '');
+        $rating = explode(',', $this->request->getGetPost('rating')?? '');
 
         $data['optionval'] = array();
         if(empty($this->request->getGetPost('option'))) {

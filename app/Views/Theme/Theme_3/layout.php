@@ -1265,6 +1265,11 @@ $modules = modules_access();
         });
     }
 
+    function updateCsrfToken(token) {
+        $('meta[name="csrf-token"]').attr('content', token);
+        $('input[name="<?= csrf_token() ?>"]').val(token);
+    }
+
     $(document).ajaxComplete(function(event, xhr) {
         let headerName = $('meta[name="csrf-header"]').attr('content');
         let newToken   = xhr.getResponseHeader(headerName);
