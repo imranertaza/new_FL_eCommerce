@@ -137,52 +137,118 @@ class Products extends BaseController
         }
     }
 
+    public function product_ai_analyze_image_gemini()
+    {
+        // 1. Fetching config dynamically using your global function
+        $apiKey  = get_lebel_by_value_in_settings('gemini_api_key');
+        $baseUrl = get_lebel_by_value_in_settings('gemini_api_url');
+        $model   = get_lebel_by_value_in_settings('gemini_model');
+
+        // 2. Build the full URL
+        $fullUrl = rtrim($baseUrl, '/') . '/' . $model . ':generateContent?key=' . $apiKey;
+
+        // 3. Handle File Upload
+        $file = $this->request->getFile('image');
+        if (!$file || !$file->isValid()) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid image']);
+        }
+
+        // --- NEW: Fetch Categories from Database ---
+        $db = \Config\Database::connect();
+        // Adjust table and column names as per your database structure
+        $categories = $db->table('cc_product_category')->select('prod_cat_id, category_name')->get()->getResult();
+
+        $categoryList = [];
+        foreach ($categories as $cat) {
+            $categoryList[] = "ID {$cat->prod_cat_id}: {$cat->category_name}";
+        }
+        $availableCategories = implode(', ', $categoryList);
+        // -----------------------------------------
+
+        // 4. Prepare Payload for Gemini
+        $imageData = base64_encode(file_get_contents($file->getTempName()));
+
+        // --- NEW: Updated Prompt with Category Instructions ---
+        $promptText = "Analyze this product image and return ONLY a valid JSON object. 
+Use these exact keys: name, description, price, weight, model, tags, meta_title, meta_description, meta_keyword, category_ids. 
+For 'category_ids', return an array of integers representing the most relevant category IDs from this list: [ {$availableCategories} ]. 
+If multiple categories match, include all of them in the array. If none match perfectly, choose the closest ones.";
+
+
+        $payload = [
+            "contents" => [[
+                "parts" => [
+                    ["text" => $promptText],
+                    ["inline_data" => ["mime_type" => $file->getMimeType(), "data" => $imageData]]
+                ]
+            ]]
+        ];
+        // ----------------------------------------------------
+
+        // 5. cURL Execution
+        $ch = curl_init($fullUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        // 6. Parsing the Response
+        $result = json_decode($response, true);
+        $aiText = $result['candidates'][0]['content']['parts'][0]['text'] ?? '{}';
+
+        // Clean up potential markdown formatting from Gemini
+        $cleanJson = trim(str_replace(['```json', '```'], '', $aiText));
+
+        return $this->response->setJSON([
+            'status' => 'success',
+            'data' => json_decode($cleanJson, true)
+        ]);
+    }
+
     public function product_ai_analyze_batch()
     {
-        $apiKey = get_lebel_by_value_in_settings('gemini_api_key');
-        if (empty($apiKey)) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'API Key is missing']);
-        }
-        $apiUrl = getenv('GEMINI_API_URL');
-        $url = $apiUrl . "?key=" . $apiKey;
+        $apiKey  = get_lebel_by_value_in_settings('gemini_api_key');
+        $baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' . $apiKey;
+
+        $fullUrl = rtrim($baseUrl, '/');
 
         $metadataInput = $this->request->getPost('metadata');
         $metadata = json_decode($metadataInput, true);
+
         $images = $this->request->getFiles();
 
-        if (empty($metadata)) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Metadata is missing']);
-        }
-
-        if (empty($images['images'])) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'No images were uploaded or files exceed server limits (post_max_size/upload_max_filesize)']);
+        if (empty($images['images']) || empty($metadata)) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'No images or metadata provided'
+            ]);
         }
 
         $availableCategories = $this->request->getPost('available_categories');
+        $metadata = json_decode($metadataInput, true);
         $parts = [
             ["text" => $this->getBatchPrompt($availableCategories, $metadata)]
         ];
 
         foreach ($images['images'] as $index => $file) {
             if ($file->isValid() && !$file->hasMoved()) {
+                $mime = $metadata[$index]['image_type'] ?? $file->getMimeType();
                 $parts[] = [
                     "inline_data" => [
-                        "mime_type" => $file->getMimeType(),
+                        "mime_type" => $mime,
                         "data" => base64_encode(file_get_contents($file->getTempName()))
                     ]
                 ];
-            } else {
-                return $this->response->setJSON([
-                    'status' => 'error',
-                    'message' => 'Invalid file upload for image #' . ($index + 1) . ': ' . $file->getErrorString() . ' (' . $file->getError() . ')'
-                ]);
             }
         }
 
         $payload = [
             "contents" => [["parts" => $parts]],
             "generationConfig" => [
-                "temperature" => 0.4,
+                "temperature" => 0.3,
                 "response_mime_type" => "application/json",
                 "response_schema" => [
                     "type" => "OBJECT",
@@ -192,56 +258,86 @@ class Products extends BaseController
                             "items" => [
                                 "type" => "OBJECT",
                                 "properties" => [
-                                    "unique_id" => ["type" => "STRING"],
-                                    "name" => ["type" => "STRING"],
-                                    "description" => ["type" => "STRING"],
-                                    "price" => ["type" => "NUMBER"],
-                                    "weight" => ["type" => "STRING"],
-                                    "model" => ["type" => "STRING"],
-                                    "tags" => ["type" => "STRING"],
-                                    "meta_title" => ["type" => "STRING"],
+                                    "unique_id"        => ["type" => "STRING"], //expected to match metadata unique_id
+                                    "name"             => ["type" => "STRING"],
+                                    "description"      => ["type" => "STRING"],
+                                    "price"            => ["type" => "NUMBER"],
+                                    "weight"           => ["type" => "STRING"],
+                                    "model"            => ["type" => "STRING"],
+                                    "tags"             => ["type" => "STRING"],
+                                    "meta_title"       => ["type" => "STRING"],
                                     "meta_description" => ["type" => "STRING"],
-                                    "meta_keyword" => ["type" => "STRING"],
-                                    "category_ids" => ["type" => "ARRAY", "items" => ["type" => "INTEGER"]]
+                                    "meta_keyword"     => ["type" => "STRING"],
+                                    "category_ids"     => [
+                                        "type" => "ARRAY",
+                                        "items" => ["type" => "INTEGER"]
+                                    ]
                                 ],
-                                "required" => ["unique_id", "name", "description", "price"]
+                                "required" => ["name", "description", "price", "category_ids"]
                             ]
                         ]
-                    ]
+                    ],
+                    "required" => ["products"]
                 ]
             ]
         ];
 
-        $client = \Config\Services::curlrequest();
-        try {
-            $response = $client->setBody(json_encode($payload))
-                ->setHeader('Content-Type', 'application/json')->request('POST', $url, ['timeout' => 2000]);
+        $ch = curl_init($fullUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 300);
 
-            $result = json_decode($response->getBody(), true);
+        $response = curl_exec($ch);
+        curl_close($ch);
 
-            if (isset($result['error'])) {
-                return $this->response->setJSON([
-                    'status' => 'error',
-                    'message' => 'Gemini API Error: ' . ($result['error']['message'] ?? 'Unknown API error')
-                ]);
+        $result = json_decode($response, true);
+
+        // Extract the structured response
+        $products = $result['candidates'][0]['content']['parts'][0]['text'] ?? null;
+
+        if (!$products) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'No response from AI'
+            ]);
+        }
+
+        $cleanJson = preg_replace('/^```json\s*|\s*```$/', '', trim($products));
+        $decoded = json_decode($cleanJson, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE || !isset($decoded['products'])) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'AI Parse Error: Invalid structure'
+            ]);
+        }
+
+        // Re-order products based on unique_id to match original upload order
+        if (isset($decoded['products']) && is_array($metadata)) {
+            $productMap = [];
+            foreach ($decoded['products'] as $p) {
+                if (!empty($p['unique_id'])) {
+                    $productMap[$p['unique_id']] = $p;
+                }
             }
 
-            $responseText = $result['candidates'][0]['content']['parts'][0]['text'] ?? null;
-
-            if (!$responseText) {
-                return $this->response->setJSON(['status' => 'error', 'message' => 'Empty response from AI']);
-            }
-
-            $decoded = json_decode($responseText, true);
-            if (json_last_error() !== JSON_ERROR_NONE || !isset($decoded['products'])) {
-                return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid AI JSON structure']);
-            }
-
-            // Re-order based on metadata unique_id
-            $productMap = array_column($decoded['products'], null, 'unique_id');
             $orderedProducts = [];
             foreach ($metadata as $meta) {
-                $orderedProducts[] = $productMap[$meta['unique_id']] ?? $this->getErrorProduct($meta);
+                $orderedProducts[] = $productMap[$meta['unique_id']] ?? [
+                    'unique_id'    => $meta['unique_id'],
+                    'name'         => 'Analysis Failed - ' . ($meta['file_name'] ?? 'Unknown'),
+                    'description'  => 'AI could not analyze this image properly.',
+                    'price'        => 0,
+                    'weight'       => '',
+                    'model'        => '',
+                    'tags'         => '',
+                    'meta_title'   => '',
+                    'meta_description' => '',
+                    'meta_keyword' => '',
+                    'category_ids' => []
+                ];
             }
 
             return $this->response->setJSON([
@@ -249,26 +345,7 @@ class Products extends BaseController
                 'products' => $orderedProducts,
                 'csrfHash' => csrf_hash()
             ]);
-        } catch (\Exception $e) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'API Connection failed: ' . $e->getMessage()]);
         }
-    }
-
-    private function getErrorProduct($meta)
-    {
-        return [
-            'unique_id' => $meta['unique_id'],
-            'name' => 'Analysis Failed - ' . ($meta['file_name'] ?? 'Unknown'),
-            'description' => 'AI could not analyze this image properly.',
-            'price' => 0,
-            'weight' => '',
-            'model' => '',
-            'tags' => '',
-            'meta_title' => '',
-            'meta_description' => '',
-            'meta_keyword' => '',
-            'category_ids' => []
-        ];
     }
 
     private function getBatchPrompt($availableCategories, $metadata)
@@ -304,83 +381,86 @@ class Products extends BaseController
     {
         $adUserId = $this->session->adUserId;
         $batch = $this->request->getPost('batch');
-        $files = $this->request->getFiles();
+        $files = $this->request->getFiles('product_images');
         if (empty($batch)) {
             $this->session->setFlashdata('message', '<div class="alert alert-danger">No products to save.</div>');
-            return redirect()->to('product_create_gemini');
-        }
-
-        $this->validation->setRules([
-            'batch.*.name' => ['label' => 'Name', 'rules' => 'required'],
-            'batch.*.model' => ['label' => 'Model', 'rules' => 'required'],
-            'batch.*.category_ids.*' => ['label' => 'Category', 'rules' => 'required'],
-            'batch.*.price' => ['label' => 'Price', 'rules' => 'required'],
-            'batch.*.quantity' => ['label' => 'Quantity', 'rules' => 'required|is_natural_no_zero'],
-        ]);
-
-
-        if ($this->validation->withRequest($this->request)->run() == FALSE) {
-            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">' . $this->validation->listErrors() . ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            return redirect()->to('product_create_gemini');
+            return redirect()->back();
         }
 
         try {
             DB()->transStart();
+
             foreach ($batch as $i => $p) {
                 // 1. Insert Product
                 $proData = [
-                    'store_id' => get_data_by_id('store_id', 'cc_stores', 'is_default', '1'),
-                    'name' => $p['name'],
-                    'alt_name' => $p['name'],
-                    'price' => $p['price'],
-                    'quantity' => $p['quantity'],
-                    'weight' => $p['weight'] ?? '',
-                    'status' => 1,
+                    'store_id'  => get_data_by_id('store_id', 'cc_stores', 'is_default', '1'),
+                    'name'      => $p['name'],
+                    'alt_name'  => $p['name'],
+                    'price'     => $p['price'],
+                    'quantity'  => $p['quantity'],
+                    'weight'    => $p['weight'] ?? '',
+                    'status'    => 1,
                     'createdBy' => $adUserId
                 ];
-                DB()->table('cc_products')->insert($proData);
+                $proTable = DB()->table('cc_products');
+                $proTable->insert($proData);
                 $productId = DB()->insertID();
 
-                // 2. Handle Image
-                $pic = $files['batch'][$i]['image'];
+                // 2. Handle Image Upload (files are separate from $batch)
+                // dd($files);
+                // print $files['product_images'][$i];
+                // die();
+                if (isset($files['product_images'][$i])) {
+                    $pic = $files['product_images'][$i]; // UploadedFile object
+                    if ($pic->isValid() && !$pic->hasMoved()) {
+                        $target_dir = FCPATH . 'uploads/products/' . $productId . '/';
+                        $this->imageProcessing->directory_create($target_dir);
 
-                if ($pic && $pic->isValid() && !$pic->hasMoved()) {
-                    $target_dir = FCPATH . 'uploads/products/' . $productId . '/';
-                    $this->imageProcessing->directory_create($target_dir);
-                    $news_img = $this->imageProcessing->product_image_upload_and_crop_all_size($pic, $target_dir);
-                    DB()->table('cc_products')->where('product_id', $productId)->update(['image' => $news_img]);
+                        $news_img = $this->imageProcessing->product_image_upload_and_crop_all_size($pic, $target_dir);
+
+                        DB()->table('cc_products')
+                            ->where('product_id', $productId)
+                            ->update(['image' => $news_img]);
+                    }
                 }
+                // die();
 
-                // 3. Description
-                DB()->table('cc_product_description')->insert([
-                    'product_id' => $productId,
-                    'description' => $p['description'] ?? '',
-                    'meta_title' => $p['meta_title'] ?? '',
+                // 3. Insert Description
+                $proDescData = [
+                    'product_id'       => $productId,
+                    'description'      => $p['description'] ?? '',
+                    'meta_title'       => $p['meta_title'] ?? '',
                     'meta_description' => $p['meta_description'] ?? '',
-                    'meta_keyword' => $p['meta_keyword'] ?? '',
-                    'tag' => $p['tags'] ?? '',
-                    'createdBy' => $adUserId
-                ]);
+                    'meta_keyword'     => $p['meta_keyword'] ?? '',
+                    'tag'              => $p['tags'] ?? '',
+                    'createdBy'        => $adUserId
+                ];
+                DB()->table('cc_product_description')->insert($proDescData);
 
-                // 4. Categories
-                $catData = array_map(fn($catId) => [
-                    'product_id' => $productId,
-                    'category_id' => $catId
-                ], $p['category_ids']);
-                DB()->table('cc_product_to_category')->insertBatch($catData);
+                // 4. Insert Categories
+                if (!empty($p['category_ids'])) {
+                    $catData = [];
+                    foreach ($p['category_ids'] as $catId) {
+                        $catData[] = ['product_id' => $productId, 'category_id' => $catId];
+                    }
+                    DB()->table('cc_product_to_category')->insertBatch($catData);
+                }
             }
+            // die();
             DB()->transComplete();
 
             if (DB()->transStatus() === false) {
-                throw new \Exception("Transaction failed");
+
+                $this->session->setFlashdata('message', '<div class="alert alert-danger">Database error occurred. Batch not saved.</div>');
+                return redirect()->back();
             }
 
             $this->session->setFlashdata('message', '<div class="alert alert-success">Batch products created successfully!</div>');
-            return redirect()->to('product_create_gemini');
+            return redirect()->to('product_create');
         } catch (\Throwable $e) {
-            DB()->transRollback();
+            die();
             $this->session->setFlashdata('message', '<div class="alert alert-danger">Error: ' . $e->getMessage() . '</div>');
-            return redirect()->to('product_create_gemini');
+            return redirect()->back();
         }
     }
 
