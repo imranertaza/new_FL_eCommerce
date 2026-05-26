@@ -173,8 +173,7 @@ class Album extends BaseController {
     public function albumImageUnlink(){
         $url = $this->request->getPost('url');
         $this->image_processing->image_unlink($url);
-        return $this->response
-            ->setHeader('X-CSRF-TOKEN', csrf_hash());
+        return $this->response->setJSON(['status' => true,'csrfToken' => csrf_hash()]);
     }
 
 }
