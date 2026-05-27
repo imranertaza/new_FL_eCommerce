@@ -333,6 +333,7 @@ class Products extends BaseController
                     'name' => $p['name'],
                     'alt_name' => $p['name'],
                     'price' => $p['price'],
+                    'model' => $p['model'],
                     'quantity' => $p['quantity'],
                     'weight' => $p['weight'] ?? '',
                     'status' => 1,

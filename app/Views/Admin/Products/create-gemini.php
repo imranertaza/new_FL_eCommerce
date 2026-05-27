@@ -86,7 +86,7 @@
         <div class="card card-primary card-outline shadow-sm">
             <div class="card-header bg-white">
                 <h3 class="card-title text-primary font-weight-bold">
-                    <i class="fas fa-magic mr-2"></i> Bulk AI Product Generator
+                    <i class="fas fa-magic mr-2"></i> Bulk AI Product Generator 
                 </h3>
             </div>
             <div class="card-body">
@@ -147,7 +147,6 @@
 
 
 <script>
-
     function previewQueue(input) {
         let container = $('#imageQueue').empty();
         Array.from(input.files).forEach(file => {
@@ -184,7 +183,7 @@
 
         // === FIXED: Store as objects instead of strings ===
         let categoryOptions = [];
-        $('.select2bs4 option').each(function () {
+        $('.select2bs4 option').each(function() {
             let id = $(this).val();
             let name = $(this).text().trim();
             if (id) {
@@ -215,13 +214,13 @@
             processData: false,
             contentType: false,
             dataType: 'json',
-            success: function (res) {
+            success: function(res) {
                 if (res.status === 'success') {
                     $('meta[name="csrf-token"]').attr('content', res.csrfHash);
                     $('input[name="<?= csrf_token() ?>"]').val(res.csrfHash);
                     let productsWithPreview = res.products.map((p, i) => ({
                         ...p,
-                        unique_id: metadata[i].unique_id,     // Attach identifier
+                        unique_id: metadata[i].unique_id, // Attach identifier
                         file_name: metadata[i].file_name,
                         image: URL.createObjectURL(input.files[i])
                     }));
@@ -230,16 +229,38 @@
                     alert(res.message || 'Something went wrong');
                 }
             },
-            error: function () {
-                alert('Request failed. Please try again.');
+            error: function(res) {
+                console.log(
+                    res,
+                    'Error',
+                    res?.status,
+                    res?.statusText,
+                    res?.responseJSON,
+                    res?.responseText,
+                    res?.request
+                );
+
+                // Try to extract a meaningful message
+                let message = 'Request failed. Please try again.';
+
+                if (res?.responseJSON?.message) {
+                    message = res.responseJSON.message; // API returned JSON with "message"
+                } else if (res?.responseText) {
+                    message = res.responseText; // fallback to raw text
+                } else if (res?.statusText) {
+                    message = res.statusText; // fallback to HTTP status text
+                }
+
+                alert(message);
             }
+
         });
     }
 
     function previewBatchImage(input, index) {
         if (input.files && input.files[0]) {
             let reader = new FileReader();
-            reader.onload = function (e) {
+            reader.onload = function(e) {
                 $(`.img-preview-${index}`).attr('src', e.target.result);
             }
             reader.readAsDataURL(input.files[0]);
@@ -340,7 +361,8 @@
                             <div class="seo-settings border-top mt-3 pt-2">
                                 <h6 class="small font-weight-bold text-muted mb-2"><i class="fas fa-search mr-1 text-info"></i> SEO Settings</h6>
                                 <input type="text" name="batch[${i}][meta_title]" class="form-control form-control-sm mb-2" placeholder="Meta Title" value="${p.meta_title || ''}">
-                                <textarea name="batch[${i}][meta_description]" class="form-control form-control-sm" placeholder="Meta Description" rows="2">${p.meta_description || ''}</textarea>
+                                <textarea name="batch[${i}][meta_description]" class="form-control form-control-sm mb-2" placeholder="Meta Description" rows="2">${p.meta_description || ''}</textarea>
+                                <input type="text" name="batch[${i}][meta_keyword]" class="form-control form-control-sm mb-2" placeholder="Meta Keywords" value="${p.meta_keyword || ''}">
                             </div>
                         </div>
                     </div>
