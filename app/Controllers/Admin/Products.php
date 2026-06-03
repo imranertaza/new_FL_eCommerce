@@ -94,13 +94,7 @@ class Products extends BaseController
                 $data[$key] = $this->permission->have_access($adRoleId, $this->module_name, $key);
             }
             if (isset($data['create']) and $data['create'] == 1) {
-                $isEnabled = (bool) (int) get_lebel_by_value_in_settings('gemini_enabled');
-
-                if ($isEnabled) {
-                    echo view('Admin/Products/create-gemini', $data);
-                } else {
-                    echo view('Admin/Products/create', $data);
-                }
+                echo view('Admin/Products/create', $data);
             } else {
                 echo view('Admin/no_permission');
             }
@@ -162,6 +156,7 @@ class Products extends BaseController
         $parts = [
             ["text" => $this->getBatchPrompt($availableCategories, $metadata)]
         ];
+
 
         foreach ($images['images'] as $index => $file) {
             if ($file->isValid() && !$file->hasMoved()) {
@@ -324,6 +319,7 @@ class Products extends BaseController
             return redirect()->to('product_create_gemini');
         }
 
+        $createdDirs = [];
         try {
             DB()->transStart();
             foreach ($batch as $i => $p) {
@@ -347,6 +343,7 @@ class Products extends BaseController
 
                 if ($pic && $pic->isValid() && !$pic->hasMoved()) {
                     $target_dir = FCPATH . 'uploads/products/' . $productId . '/';
+                    $createdDirs[] = $target_dir;
                     $this->imageProcessing->directory_create($target_dir);
                     $news_img = $this->imageProcessing->product_image_upload_and_crop_all_size($pic, $target_dir);
                     DB()->table('cc_products')->where('product_id', $productId)->update(['image' => $news_img]);
@@ -380,11 +377,24 @@ class Products extends BaseController
             return redirect()->to('product_create_gemini');
         } catch (\Throwable $e) {
             DB()->transRollback();
+            foreach ($createdDirs as $dir) {
+                if (is_dir($dir)) {
+                    $this->deleteDirectory($dir);
+                }
+            }
             $this->session->setFlashdata('message', '<div class="alert alert-danger">Error: ' . $e->getMessage() . '</div>');
             return redirect()->to('product_create_gemini');
         }
     }
-
+    private function deleteDirectory($dir)
+    {
+        $files = array_diff(scandir($dir), ['.', '..']);
+        foreach ($files as $file) {
+            $path = $dir . DIRECTORY_SEPARATOR . $file;
+            is_dir($path) ? $this->deleteDirectory($path) : unlink($path);
+        }
+        return rmdir($dir);
+    }
 
     public function create_action()
     {

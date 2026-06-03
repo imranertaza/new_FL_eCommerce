@@ -4,11 +4,6 @@
   "description": "A complete eCommerce website solution",
   "homepage": "https://dnationsoft.com",
   "license": "MIT",
-  "config": {
-    "audit": {
-      "block-insecure": false
-    }
-  },
   "require": {
     "php": "^7.4 || ^8.0",
     "codeigniter4/framework": "4.2.11",
