@@ -29,11 +29,8 @@
         }
 
         body {
-            background: radial-gradient(1200px 800px at 50% 20%, rgba(255, 255, 255, 0.03), transparent 10%),
-            var(--bg);
-
+            background: radial-gradient(1200px 800px at 50% 20%, rgba(255, 255, 255, 0.03), transparent 10%), #ffffff;
             color: #fff;
-
             display: flex;
             justify-content: center;
             align-items: center;
@@ -58,7 +55,7 @@
         }
 
         .headline {
-            color: var(--gold);
+            color: #000000;
             font-size: 34px;
             line-height: 1.4;
             letter-spacing: 2px;
@@ -67,7 +64,7 @@
         }
 
         .sub {
-            color: #ffffff;
+            color: #000000;
             font-size: 18px;
             font-weight: 500;
             margin-bottom: 30px;
@@ -90,7 +87,7 @@
         .section-title {
             font-size: 28px;
             margin-bottom: 25px;
-            color: #fff;
+            color: #000000;
             font-weight: 700;
         }
 
@@ -128,7 +125,7 @@
 
         .qr-text {
             margin-top: 28px;
-            color: var(--muted);
+            color: #484848;
             font-size: 16px;
         }
 
@@ -159,13 +156,13 @@
 
         .footer {
             margin-top: 45px;
-            color: var(--muted);
+            color: #444444;
             font-size: 14px;
             line-height: 1.8;
         }
 
         .footer span {
-            color: #fff;
+            color: #1c70db;
             word-break: break-word;
         }
 
