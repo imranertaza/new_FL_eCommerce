@@ -1,6 +1,12 @@
 <?= $this->extend('Admin/layout') ?>
 
 <?= $this->section('content') ?>
+<style>
+    .logo-admin img{
+        max-width: 300px;
+    }
+</style>
+
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -211,7 +217,7 @@
                                         <form action="<?php echo base_url('logo_update') ?>" method="post"
                                               enctype="multipart/form-data">
                                             <?= csrf_field() ?>
-                                            <div class="form-group mt-5">
+                                            <div class="form-group mt-5 logo-admin">
                                                 <?php
                                                 $side_logo = get_lebel_by_value_in_theme_settings('side_logo');
                                                 echo image_view('uploads/logo', '', $side_logo->value, 'noimage.png', '');
