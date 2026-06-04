@@ -38,7 +38,7 @@
             justify-content: center;
             align-items: center;
 
-            padding: 30px 15px;
+            padding: 80px 15px;
         }
 
         .card {
