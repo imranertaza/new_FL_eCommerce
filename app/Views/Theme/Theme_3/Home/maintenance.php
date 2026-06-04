@@ -312,7 +312,7 @@
 
     <div class="footer">
         Official Domain:
-        <span>https://finerlabels.io/</span>
+        <span>www.finerlabels.io</span>
         <br>
         © Finerlabels. All Rights Reserved.
     </div>
