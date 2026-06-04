@@ -246,17 +246,32 @@ class Home extends BaseController
 
     public function index_maintenance()
     {
-        print "<!DOCTYPE html>
-                <title>Site Maintenance</title>
-                <style>
-                                  body { text-align: center; padding: 150px; }
-                                  h1 { font-size: 50px; }
-                                  body { font: 20px Helvetica, sans-serif; color: #333; }
-                </style>
-                <body>
-                <h1>We’ll be back soon!</h1>
-                <div><p>Sorry for the inconvenience, but we’re performing some maintenance.</p></div>
-                </body>";
+//        print "<!DOCTYPE html>
+//                <title>Site Maintenance</title>
+//                <style>
+//                                  body { text-align: center; padding: 150px; }
+//                                  h1 { font-size: 50px; }
+//                                  body { font: 20px Helvetica, sans-serif; color: #333; }
+//                </style>
+//                <body>
+//                <h1>We’ll be back soon!</h1>
+//                <div><p>Sorry for the inconvenience, but we’re performing some maintenance.</p></div>
+//                </body>";
+
+        $settings = get_settings();
+        $theme = $settings['Theme'];
+        $data = $this->$theme();
+
+        $data['home_menu'] = true;
+        $data['theme'] = $theme;
+
+        $data['keywords'] = $settings['meta_keyword'];
+        $data['description'] = $settings['meta_description'];
+        $data['title'] = !empty($settings['meta_title']) ? $settings['meta_title'] : $settings['store_name'];
+
+
+        echo view('Theme/' . $settings['Theme'] . '/Home/maintenance', $data);
+
     }
 
 
