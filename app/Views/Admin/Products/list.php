@@ -32,7 +32,8 @@
                     <div class="col-md-8">
                         <form id="multisubmitform" action="<?php echo base_url('product_copy_action'); ?>" method="post">
                             <?= csrf_field() ?>
-                            <a href="<?php echo base_url('product_create') ?>" class=" mt-2 btn btn-primary btn-xs float-right"><i class="fas fa-plus"></i> Add</a>
+                            <a href="<?php echo base_url('product_create') ?>" class="mr-2 mt-2 btn btn-primary btn-xs float-right"><i class="fas fa-plus"></i> Add</a>
+                            <a href="<?php echo base_url('product_create_gemini') ?>" class="mr-2 mt-2 btn btn-primary btn-xs float-right"><i class="fas fa-plus"></i> Add with Gemini ✦ </a>
                             <?php if(modules_key_by_access('bulk_edit_products') == '1' ){?>
                             <a href="<?php echo base_url('bulk_edit_products') ?>" onclick="bulk_datatable_reset()" class=" mt-2 btn btn-info btn-xs float-right mr-2"><i class="fas fa-plus"></i> Bulk Edit Products</a>
                             <?php } ?>
