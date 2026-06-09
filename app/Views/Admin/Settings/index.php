@@ -331,7 +331,7 @@
                                                 <!-- Gemini API Key -->
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Gemini API Key</label>
+                                                        <label><?php echo $settingsTitle['gemini_api_key']; ?></label>
                                                         <input type="text" name="gemini_api_key" class="form-control" value="<?php echo $settings['gemini_api_key'] ?? ''; ?>"
                                                             placeholder="Enter Gemini API Key">
                                                     </div>
