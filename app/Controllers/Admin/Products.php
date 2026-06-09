@@ -189,6 +189,7 @@ class Products extends BaseController
                                 "properties" => [
                                     "unique_id" => ["type" => "STRING"],
                                     "name" => ["type" => "STRING"],
+                                    "alt_name" => ["type" => "STRING"],
                                     "description" => ["type" => "STRING"],
                                     "price" => ["type" => "NUMBER"],
                                     "weight" => ["type" => "STRING"],
@@ -248,6 +249,96 @@ class Products extends BaseController
             return $this->response->setJSON(['status' => 'error', 'message' => 'API Connection failed: ' . $e->getMessage()]);
         }
     }
+    public function product_ai_analyze_single()
+    {
+        $apiKey = get_lebel_by_value_in_settings('gemini_api_key');
+        if (empty($apiKey)) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'API Key is missing']);
+        }
+        $apiUrl = getenv('GEMINI_API_URL');
+        $url = $apiUrl . "?key=" . $apiKey;
+
+        $request = service('request');
+        $product_id = $request->getPost('product_id');
+        $original_image = $request->getPost('original_image');
+
+        if (empty($product_id) || empty($original_image)) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Product ID and Image are required']);
+        }
+
+        $image_path = get_product_original_image_path('uploads/products', $product_id, $original_image);
+
+        if (!$image_path || !file_exists($image_path)) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Image file not found']);
+        }
+
+        $mime_type = mime_content_type($image_path);
+        $availableCategories = $this->request->getPost('available_categories');
+
+        $parts = [
+            ["text" => $this->getBatchPrompt($availableCategories) . " Please analyze this single product."]
+        ];
+
+        $parts[] = [
+            "inline_data" => [
+                "mime_type" => $mime_type,
+                "data" => base64_encode(file_get_contents($image_path))
+            ]
+        ];
+
+        // UPDATED SCHEMA: Returning a single object instead of an array
+        $payload = [
+            "contents" => [["parts" => $parts]],
+            "generationConfig" => [
+                "temperature" => 0.4,
+                "response_mime_type" => "application/json",
+                "response_schema" => [
+                    "type" => "OBJECT",
+                    "properties" => [
+                        "name" => ["type" => "STRING"],
+                        "description" => ["type" => "STRING", "format" => "html"],
+                        "price" => ["type" => "NUMBER"],
+                        "weight" => ["type" => "STRING"],
+                        "model" => ["type" => "STRING"],
+                        "tags" => ["type" => "STRING"],
+                        "meta_title" => ["type" => "STRING"],
+                        "meta_description" => ["type" => "STRING"],
+                        "meta_keyword" => ["type" => "STRING"],
+                        "category_ids" => ["type" => "ARRAY", "items" => ["type" => "INTEGER"]]
+                    ],
+                    "required" => ["name", "description", "price"]
+                ]
+            ]
+        ];
+
+        $client = \Config\Services::curlrequest();
+        try {
+            $response = $client->setBody(json_encode($payload))
+                ->setHeader('Content-Type', 'application/json')->request('POST', $url, ['timeout' => 30]);
+
+            $result = json_decode($response->getBody(), true);
+
+            if (isset($result['error'])) {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'Gemini Error: ' . $result['error']['message']]);
+            }
+
+            $responseText = $result['candidates'][0]['content']['parts'][0]['text'] ?? null;
+            $productData = json_decode($responseText, true);
+
+            if (!$productData) {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to parse AI response']);
+            }
+
+            // Return single product object directly
+            return $this->response->setJSON([
+                'status' => 'success',
+                'product' => $productData,
+                'csrfHash' => csrf_hash()
+            ]);
+        } catch (\Exception $e) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Connection failed: ' . $e->getMessage()]);
+        }
+    }
 
     private function getErrorProduct($meta)
     {
@@ -266,7 +357,7 @@ class Products extends BaseController
         ];
     }
 
-    private function getBatchPrompt($availableCategories, $metadata)
+    private function getBatchPrompt($availableCategories, $metadata = [])
     {
         $metaInfo = '';
         if ($metadata) {
@@ -284,7 +375,6 @@ class Products extends BaseController
             - Meta Description should be persuasive and contain main keywords.
             - For category_ids: ONLY use IDs from the available categories list below. Choose the most relevant one or more (maximum 3).
             - If unsure about a category, choose the closest match.
-
             Available Categories (JSON):
             {$availableCategories}
 
@@ -327,7 +417,7 @@ class Products extends BaseController
                 $proData = [
                     'store_id' => get_data_by_id('store_id', 'cc_stores', 'is_default', '1'),
                     'name' => $p['name'],
-                    'alt_name' => $p['name'],
+                    'alt_name' => $p['alt_name'] ?? '',
                     'price' => $p['price'],
                     'model' => $p['model'],
                     'quantity' => $p['quantity'],
@@ -379,21 +469,142 @@ class Products extends BaseController
             DB()->transRollback();
             foreach ($createdDirs as $dir) {
                 if (is_dir($dir)) {
-                    $this->deleteDirectory($dir);
+                    $this->imageProcessing->deleteDirectory($dir);
                 }
             }
             $this->session->setFlashdata('message', '<div class="alert alert-danger">Error: ' . $e->getMessage() . '</div>');
             return redirect()->to('product_create_gemini');
         }
     }
-    private function deleteDirectory($dir)
+    public function product_create_gemini_action()
     {
-        $files = array_diff(scandir($dir), ['.', '..']);
-        foreach ($files as $file) {
-            $path = $dir . DIRECTORY_SEPARATOR . $file;
-            is_dir($path) ? $this->deleteDirectory($path) : unlink($path);
+        // Restrict access strictly to AJAX POST interactions
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(403)->setJSON([
+                'status'  => 'error',
+                'message' => 'Direct script access is not allowed.'
+            ]);
         }
-        return rmdir($dir);
+
+        $adUserId = $this->session->adUserId;
+        $files    = $this->request->getFiles();
+
+        // 1. Capture individual flat POST parameters from form submission
+        $name            = $this->request->getPost('name');
+        $alt_name        = $this->request->getPost('alt_name') ?? '';
+        $model           = $this->request->getPost('model') ?? '';
+        $price           = $this->request->getPost('price');
+        $quantity        = $this->request->getPost('quantity');
+        $weight          = $this->request->getPost('weight') ?? '';
+        $description     = $this->request->getPost('description') ?? '';
+        $category_ids    = $this->request->getPost('categorys') ?? []; // mapped to 'categorys[]' in HTML
+        $tags            = $this->request->getPost('tags') ?? '';
+        $meta_title      = $this->request->getPost('meta_title') ?? '';
+        $meta_description = $this->request->getPost('meta_description') ?? '';
+        $meta_keyword    = $this->request->getPost('meta_keyword') ?? '';
+
+        // 2. Validate single incoming product model values
+        $this->validation->setRules([
+            'name'         => ['label' => 'Name', 'rules' => 'required'],
+            'alt_name'     => ['label' => 'Alt Name', 'rules' => 'required'],
+            'price'        => ['label' => 'Price', 'rules' => 'required|numeric'],
+            'quantity'     => ['label' => 'Quantity', 'rules' => 'required|is_natural_no_zero'],
+            'categorys'    => ['label' => 'Category', 'rules' => 'required'],
+            'description'  => ['label' => 'Description', 'rules' => 'required'],
+        ]);
+
+        // Construct validation matching data array signatures
+        $validationData = [
+            'name'         => $name,
+            'alt_name'     => $alt_name,
+            'price'        => $price,
+            'quantity'     => $quantity,
+            'categorys'    => $category_ids,
+            'description'  => $description
+        ];
+
+        if ($this->validation->run($validationData) === false) {
+            return $this->response->setJSON([
+                'status'    => 'validation_error',
+                'message'   => $this->validation->listErrors(),
+                'csrf_hash' => csrf_hash() // Send back fresh token regeneration string
+            ]);
+        }
+
+        $target_dir = '';
+        try {
+            DB()->transStart();
+
+            // 3. Insert Database Entry into Core Product Table
+            $proData = [
+                'store_id'  => get_data_by_id('store_id', 'cc_stores', 'is_default', '1'),
+                'name'      => $name,
+                'alt_name'  => $alt_name,
+                'price'     => $price,
+                'model'     => $model,
+                'quantity'  => $quantity,
+                'weight'    => $weight,
+                'status'    => 1,
+                'createdBy' => $adUserId
+            ];
+            DB()->table('cc_products')->insert($proData);
+            $productId = DB()->insertID();
+
+            // 4. Extract single file uploaded pointer
+            $pic = $files['image'] ?? null; // maps to <input type="file" name="image">
+
+            if ($pic && $pic->isValid() && !$pic->hasMoved()) {
+                $target_dir = FCPATH . 'uploads/products/' . $productId . '/';
+                $this->imageProcessing->directory_create($target_dir);
+                $news_img = $this->imageProcessing->product_image_upload_and_crop_all_size($pic, $target_dir);
+                DB()->table('cc_products')->where('product_id', $productId)->update(['image' => $news_img]);
+            }
+
+            // 5. Insert Details to Text Descriptions Table
+            DB()->table('cc_product_description')->insert([
+                'product_id'       => $productId,
+                'description'      => $description,
+                'meta_title'       => $meta_title,
+                'meta_description' => $meta_description,
+                'meta_keyword'     => $meta_keyword,
+                'tag'              => $tags,
+                'createdBy'        => $adUserId
+            ]);
+
+            // 6. Bind Product Categories Links
+            if (!empty($category_ids)) {
+                $catData = array_map(fn($catId) => [
+                    'product_id'  => $productId,
+                    'category_id' => $catId
+                ], $category_ids);
+                DB()->table('cc_product_to_category')->insertBatch($catData);
+            }
+
+            DB()->transComplete();
+
+            if (DB()->transStatus() === false) {
+                throw new \Exception("Database transaction failure processing record.");
+            }
+
+            return $this->response->setJSON([
+                'status'    => 'success',
+                'message'   => 'Product <strong>' . esc($name) . '</strong> created successfully.',
+                'csrf_hash' => csrf_hash()
+            ]);
+        } catch (\Throwable $e) {
+            DB()->transRollback();
+
+            // Clean out garbage files system directory structure pathing allocations on exceptions
+            if (!empty($target_dir) && is_dir($target_dir)) {
+                $this->imageProcessing->deleteDirectory($target_dir);
+            }
+
+            return $this->response->setJSON([
+                'status'    => 'error',
+                'message'   => 'Creation breakdown: ' . $e->getMessage(),
+                'csrf_hash' => csrf_hash()
+            ]);
+        }
     }
 
     public function create_action()
@@ -1544,7 +1755,6 @@ class Products extends BaseController
               </script>";
             flush(); // Ensure the redirect script is sent
 
-
         } else {
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please select any product <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->back();
@@ -1585,6 +1795,262 @@ class Products extends BaseController
      * @description This method provides multi delete action
      * @return RedirectResponse
      */
+    public function multi_update_with_gemini()
+    {
+        $apiKey = get_lebel_by_value_in_settings('gemini_api_key');
+        if (empty($apiKey)) {
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">API Key is missing <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('products');
+        }
+        $apiUrl = getenv('GEMINI_API_URL');
+        $url = $apiUrl . "?key=" . $apiKey;
+
+        $allProductId = $this->request->getGet('productId');
+        $allImage     = $this->request->getGet('productImage');
+        $allPrice     = $this->request->getGet('productPrice');
+        $allQuantity  = $this->request->getGet('productQuantity');
+
+
+        if (empty($allProductId)) {
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">No products selected <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('products');
+        }
+
+        // Build metadata array (unique_id etc.)
+        $metadata = [];
+        $parts    = [];
+        foreach ($allProductId as $productId) {
+            if (isset($allImage[$productId])) {
+                $metadata[] = ['unique_id' => (string)$productId, 'image' => $allImage[$productId], 'price' => $allPrice[$productId], 'quantity' => $allQuantity[$productId]];
+
+                $image_path = get_product_original_image_path(
+                    'uploads/products',
+                    $productId,
+                    $allImage[$productId]
+                );
+
+                if (is_file($image_path)) {
+                    $parts[] = [
+                        "inline_data" => [
+                            "mime_type" => mime_content_type($image_path),
+                            "data"      => base64_encode(file_get_contents($image_path))
+                        ]
+                    ];
+                }
+            }
+        }
+
+        if (empty($parts)) {
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">No valid images found <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('products');
+        }
+
+
+        // Add prompt text
+        // Fetch all active categories
+        $table = DB()->table('cc_product_category');
+        $categories = $table->where('status', '1')->get()->getResultArray();
+
+        $availableCategories = array_column($categories, 'prod_cat_id', 'category_name');
+        $availableCategoriesJson = json_encode($availableCategories, JSON_PRETTY_PRINT);
+        $parts = array_merge([["text" => $this->getBatchPrompt($availableCategoriesJson, $metadata)]], $parts);
+
+        // Payload schema
+        $payload = [
+            "contents" => [["parts" => $parts]],
+            "generationConfig" => [
+                "temperature" => 0.4,
+                "response_mime_type" => "application/json",
+                "response_schema" => [
+                    "type" => "OBJECT",
+                    "properties" => [
+                        "products" => [
+                            "type" => "ARRAY",
+                            "items" => [
+                                "type" => "OBJECT",
+                                "properties" => [
+                                    "unique_id"       => ["type" => "STRING"],
+                                    "image"           => ["type" => "STRING"],
+                                    "name"            => ["type" => "STRING"],
+                                    "alt_name"        => ["type" => "STRING"],
+                                    // 👇 description as HTML
+                                    "description"     => ["type" => "STRING", "format" => "html"],
+                                    "price"           => ["type" => "NUMBER"],
+                                    "weight"          => ["type" => "STRING"],
+                                    "model"           => ["type" => "STRING"],
+                                    "tags"            => ["type" => "STRING"],
+                                    "meta_title"      => ["type" => "STRING"],
+                                    "meta_description" => ["type" => "STRING"],
+                                    "meta_keyword"    => ["type" => "STRING"],
+                                    "category_ids"    => ["type" => "ARRAY", "items" => ["type" => "INTEGER"]]
+                                ],
+                                "required" => ["unique_id", "name", "description", "price"]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $client = \Config\Services::curlrequest();
+        try {
+            $response = $client->setBody(json_encode($payload))
+                ->setHeader('Content-Type', 'application/json')
+                ->request('POST', $url, ['timeout' => 2000]);
+
+            $result = json_decode($response->getBody(), true);
+
+            if (isset($result['error'])) {
+                $this->session->setFlashdata(
+                    'message',
+                    '<div class="alert alert-danger alert-dismissible" role="alert">' .
+                        'Gemini API Error: ' . ($result['error']['message'] ?? 'Unknown API error')
+                );
+                return redirect()->to('products');
+            }
+
+            $responseText = $result['candidates'][0]['content']['parts'][0]['text'] ?? null;
+            if (!$responseText) {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'Empty response from AI']);
+            }
+
+            $decoded = json_decode($responseText, true);
+            if (json_last_error() !== JSON_ERROR_NONE || !isset($decoded['products'])) {
+                $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Invalid AI JSON structure <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                return redirect()->to('products');
+            }
+
+            // Re-order based on metadata unique_id
+            $productMap = array_column($decoded['products'], null, 'unique_id');
+            $orderedProducts = [];
+            foreach ($metadata as $meta) {
+                $orderedProducts[] = $productMap[$meta['unique_id']] ?? $this->getErrorProduct($meta);
+            }
+            // dd
+
+            echo view(
+                'Admin/Products/update-gemini',
+                [
+                    'products' => $orderedProducts,
+                    'categories' => $categories,
+                    'csrfHash' => csrf_hash(),
+                ]
+            );
+        } catch (\Exception $e) {
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">API Connection failed: ' . $e->getMessage() . '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('products');
+        }
+    }
+
+    public function product_gemini_update_action()
+    {
+        // Restrict access strictly to AJAX POST interactions
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(403)->setJSON([
+                'status'  => 'error',
+                'message' => 'Direct script access is not allowed.'
+            ]);
+        }
+
+        $adUserId   = $this->session->adUserId;
+        $product_id = $this->request->getPost('product_id');
+
+        if (empty($product_id)) {
+            return $this->response->setJSON([
+                'status'    => 'error',
+                'message'   => 'Missing target Product Identifier.',
+                'csrf_hash' => csrf_hash()
+            ]);
+        }
+
+        // Capture direct keys (no longer nested inside batch loops)
+        $data = [
+            'pro_name'          => $this->request->getPost('name') ?? '',
+            'alt_name'          => $this->request->getPost('alt_name') ?? '',
+            'model'             => $this->request->getPost('model') ?? '',
+            'categorys'         => $this->request->getPost('categorys') ?? [],
+            'description'       => $this->request->getPost('description') ?? '',
+            'price'             => $this->request->getPost('price') ?? '',
+            'quantity'          => $this->request->getPost('quantity') ?? '',
+            'weight'            => $this->request->getPost('weight') ?? null,
+            'tag'               => $this->request->getPost('tags') ?? null,
+            'meta_title'        => $this->request->getPost('meta_title') ?? null,
+            'meta_description'  => $this->request->getPost('meta_description') ?? null,
+            'meta_keyword'      => $this->request->getPost('meta_keyword') ?? null,
+        ];
+
+        // Validation setup using the incoming flat data signature
+        $this->validation->setRules([
+            'pro_name'    => ['label' => 'Name', 'rules' => 'required'],
+            'alt_name'    => ['label' => 'Alt Name', 'rules' => 'required'],
+            'categorys'   => ['label' => 'Category', 'rules' => 'required'],
+            'description' => ['label' => 'Description', 'rules' => 'required'],
+            'price'       => ['label' => 'Price', 'rules' => 'required|numeric'],
+            'quantity'    => ['label' => 'Quantity', 'rules' => 'required|is_natural_no_zero'],
+        ]);
+
+        if ($this->validation->run($data) === false) {
+            return $this->response->setJSON([
+                'status'    => 'validation_error',
+                'message'   => $this->validation->listErrors(),
+                'csrf_hash' => csrf_hash() // Always return hash to avoid mismatching subsequent requests
+            ]);
+        }
+
+        // Begin Database transaction block
+        DB()->transStart();
+
+        // 1. Update Core Product attributes
+        $proData = [
+            'name'      => $data['pro_name'],
+            'alt_name'  => $data['alt_name'],
+            'model'     => $data['model'],
+            'price'     => $data['price'],
+            'weight'    => $data['weight'],
+            'quantity'  => $data['quantity'],
+            'updatedBy' => $adUserId,
+        ];
+        DB()->table('cc_products')->where('product_id', $product_id)->update($proData);
+
+        // 2. Refresh Category relationships
+        DB()->table('cc_product_to_category')->where('product_id', $product_id)->delete();
+        if (!empty($data['categorys'])) {
+            $catData = array_map(fn($catId) => [
+                'product_id'  => $product_id,
+                'category_id' => $catId,
+            ], $data['categorys']);
+            DB()->table('cc_product_to_category')->insertBatch($catData);
+        }
+
+        // 3. Update Text Content Descriptions and Meta Tags
+        $proDescData = [
+            'description'      => $data['description'],
+            'tag'              => $data['tag'],
+            'meta_title'       => $data['meta_title'],
+            'meta_description' => $data['meta_description'],
+            'meta_keyword'     => $data['meta_keyword'],
+        ];
+        DB()->table('cc_product_description')->where('product_id', $product_id)->update($proDescData);
+
+        // Complete Transaction
+        DB()->transComplete();
+
+        if (DB()->transStatus() === false) {
+            DB()->transRollback();
+            return $this->response->setJSON([
+                'status'    => 'error',
+                'message'   => 'Database execution breakdown. Changes rolled back.',
+                'csrf_hash' => csrf_hash()
+            ]);
+        }
+
+        // Return successful async response state
+        return $this->response->setJSON([
+            'status'    => 'success',
+            'message'   => '<strong>' . esc($data['pro_name']) . '</strong> updated successfully.',
+            'csrf_hash' => csrf_hash()
+        ]);
+    }
     public function multi_delete_action()
     {
         $allProductId = $this->request->getPost('productId[]');
