@@ -1,30 +1,36 @@
-.width-80{
+.width-80 {
     width: 80px !important;
 }
-.width-full-100{
+
+.width-full-100 {
     width: 100% !important;
 }
-.size-50x50{
+
+.size-50x50 {
     width: 50px !important;
     height: 50px !important;
 }
-.size-20x20{
+
+.size-20x20 {
     width: 20px !important;
     height: 20px !important;
 }
-.requi{
-    color:#ff0000;
+
+.requi {
+    color: #ff0000;
 }
-.img_view{
+
+.img_view {
     border: 1px solid #d0d0d0;
     padding: 10px;
     text-align: center;
 }
-.del-btn{
-    color:red;
+
+.del-btn {
+    color: red;
 }
 
-.select2-container--bootstrap4 .select2-selection--multiple .select2-selection__rendered{
+.select2-container--bootstrap4 .select2-selection--multiple .select2-selection__rendered {
     padding: 0 0.575rem !important;
     white-space: initial !important;
 }
@@ -32,14 +38,16 @@
 .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice {
     padding: 0px 5px !important;
 }
-.list-op-aj{
+
+.list-op-aj {
     float: left;
 }
 
-.row_show{
+.row_show {
     display: revert !important;
 }
-.row_hide{
+
+.row_hide {
     display: none !important;
 }
 
@@ -55,7 +63,7 @@
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
     box-shadow: inset 0 0 0 transparent;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
 /*tab*/
@@ -64,22 +72,25 @@
 /*    background-color: unset;*/
 /*    border-right: unset;*/
 /*}*/
-#tab_zone .nav-pills .nav-link{
+#tab_zone .nav-pills .nav-link {
     margin-top: 5px;
     border: 1px solid #ced4da;
 }
-.img-w-h-100{
+
+.img-w-h-100 {
     width: 100px !important;
     height: 100px !important;
 }
 
-.dataTables_length{
+.dataTables_length {
     /*font-size: 20px !important;*/
 }
-.dataTables_length select{
+
+.dataTables_length select {
     min-width: 100px !important;
 }
-.img-100-100{
+
+.img-100-100 {
     width: 100px !important;
     height: 100px !important;
 }
@@ -88,13 +99,127 @@
 table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc,
 table.dataTable thead .sorting_desc {
-    background : none;
+    background: none;
 }
-.remove_btn{
+
+.remove_btn {
     position: absolute;
     right: 19px;
     top: 8px;
 }
-.bulkUpDes .note-editable{
+
+.bulkUpDes .note-editable {
     height: 300px !important;
+}
+
+.gemini-upload-zone {
+    border: 2px dashed #007bff;
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.gemini-upload-zone:hover {
+    background: #e9ecef;
+    border-color: #0056b3;
+}
+
+.batch-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.batch-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175) !important;
+}
+
+.ai-analyzing {
+    animation: pulse-blue 2s infinite;
+}
+
+@keyframes pulse-blue {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.03);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.status-badge {
+    font-size: 0.8rem;
+    padding: 0.4em 0.8em;
+}
+
+/* Custom alignment helper for the compact pricing layout */
+.img-price-notice {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-top: -4px;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.gemini-upload-zone {
+    border: 2px dashed #007bff;
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.gemini-upload-zone:hover {
+    background: #e9ecef;
+    border-color: #0056b3;
+}
+
+.gemini-upload-zone i {
+    font-size: 3rem;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+.batch-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.batch-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175) !important;
+}
+
+.ai-analyzing {
+    animation: pulse-blue 2s infinite;
+}
+
+@keyframes pulse-blue {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.status-badge {
+    font-size: 0.8rem;
+    padding: 0.4em 0.8em;
 }
