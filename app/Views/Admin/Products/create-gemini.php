@@ -432,7 +432,7 @@
                 }
             }
         });
-        // container.append('<div class="text-center mt-4"><button type="button" id="btnSaveAll" class="btn btn-success btn-lg px-5 shadow-sm" onclick="saveAllProducts()"><i class="fas fa-save mr-2"></i> Save All Products</button></div>');
+        container.append('<div class="text-center mt-4"><button type="button" id="btnSaveAll" class="btn btn-success btn-lg px-5 shadow-sm" onclick="saveAllProducts()"><i class="fas fa-save mr-2"></i> Save All Products</button></div>');
 
         $('.select2bs4').select2({
             theme: 'bootstrap4'
