@@ -194,7 +194,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Brand</label>
-                                                <select name="brand_id" class="form-control">
+                                                <select name="brand_id" class="form-control select2bs4">
                                                     <option value="">Please select</option>
                                                     <?php foreach ($brands as $brand){ ?>
                                                     <option value="<?php echo $brand->brand_id;?>"><?php echo $brand->name;?></option>

@@ -22,7 +22,7 @@
 
     <div class="col-md-12 mt-3">
         <div id="ajax-alert-container"></div>
-        
+
         <?php if (session()->getFlashdata('message') !== NULL): ?>
             <?= session()->getFlashdata('message') ?>
         <?php endif; ?>
@@ -36,14 +36,14 @@
                 </h3>
             </div>
             <div class="card-body">
-                
+
                 <input type="hidden" id="global-csrf" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
 
                 <div id="productFormsContainer">
                     <?php foreach ($products as $i => $p): ?>
                         <form class="product-ajax-form" data-index="<?= $i ?>">
                             <div class="card card-outline card-info shadow-sm mb-5 batch-card" id="product-card-<?= $i ?>">
-                                
+
                                 <div class="card-header border-0 bg-light">
                                     <h3 class="card-title font-weight-bold text-info">
                                         <span class="badge badge-info mr-2">Product #<?= $i + 1 ?></span>
@@ -51,7 +51,7 @@
                                     </h3>
                                     <div class="card-tools">
                                         <span class="status-msg mr-2 font-weight-bold" style="display:none;"></span>
-                                        
+
                                         <button type="button" class="btn btn-tool text-danger" onclick="removeProductCard(<?= $i ?>)">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -63,14 +63,14 @@
 
                                 <div class="card-body pt-3">
                                     <div class="row">
-                                        
+
                                         <div class="col-md-3 border-right">
                                             <div class="form-group mb-2">
                                                 <label class="small text-muted text-uppercase font-weight-bold mb-1">Product Image</label>
                                                 <div class="p-2 border rounded bg-white text-center" style="height: 180px; display:flex; align-items:center; justify-content:center;">
                                                     <?php if (!empty($p['image'])): ?>
                                                         <img src="<?= product_image_view('uploads/products', $p['unique_id'], $p['image'], 'noimage.png', '100', '100') ?>"
-                                                             class="img-fluid rounded" style="max-height: 160px; object-fit: contain;">
+                                                            class="img-fluid rounded" style="max-height: 160px; object-fit: contain;">
                                                     <?php else: ?>
                                                         <div class="text-muted">
                                                             <i class="fas fa-image fa-3x mb-1"></i><br>
@@ -79,25 +79,31 @@
                                                     <?php endif; ?>
                                                 </div>
                                             </div>
-                                            
-                                            <span class="img-price-notice text-center font-italic">
-                                                <i class="fas fa-tag mr-1"></i> Recommended: <strong><?= esc($p['price'] ?? '0.00') ?></strong>
-                                            </span>
+
                                             <input type="hidden" name="product_id" value="<?= esc($p['unique_id'] ?? '') ?>">
 
                                             <div class="p-2 bg-light rounded border">
-                                                <div class="form-group mb-2">
-                                                    <label class="small font-weight-bold mb-1">Qty</label>
-                                                    <input type="number" name="quantity" class="form-control form-control-sm" value="18" min="0">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="small font-weight-bold">Model</label>
+                                                        <input type="text" name="model" class="form-control" value="<?= esc($p['model'] ?? '') ?>">
+                                                    </div>
+                                                    <div class="form-group mb-2">
+                                                        <label class="small font-weight-bold mb-1">Price</label>
+                                                        <input type="number" step="0.01" name="price" class="form-control form-control-sm" value="" min="0">
+                                                        <small><i class="fas fa-tag mr-1"></i> Previous: $<?= esc($p['current_price'] ?? '0.00') ?></small> </br
+                                                        <small><i class="fas fa-tag mr-1"></i> Recommended: $<?= esc($p['price'] ?? '0.00') ?></small>
+                                                    </div>
+                                                    <div class="form-group mb-2">
+                                                        <label class="small font-weight-bold mb-1">Weight</label>
+                                                        <input type="text" name="weight" class="form-control form-control-sm" value="<?= esc($p['weight'] ?? '') ?>">
+                                                    </div>
+                                                    <div class="form-group mb-2">
+                                                        <label class="small font-weight-bold mb-1">Qty</label>
+                                                        <input type="number" name="quantity" class="form-control form-control-sm" value="18" min="0">
+                                                    </div>
                                                 </div>
-                                                <div class="form-group mb-2">
-                                                    <label class="small font-weight-bold mb-1">Price</label>
-                                                    <input type="number" step="0.01" name="price" class="form-control form-control-sm" value="<?= esc($p['price'] ?? '') ?>" min="0">
-                                                </div>
-                                                <div class="form-group mb-0">
-                                                    <label class="small font-weight-bold mb-1">Weight</label>
-                                                    <input type="text" name="weight" class="form-control form-control-sm" value="<?= esc($p['weight'] ?? '') ?>">
-                                                </div>
+
                                             </div>
                                         </div>
 
@@ -111,16 +117,11 @@
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label class="small font-weight-bold">Alt Name <span class="text-danger">*</span></label>
+                                                        <label class="small font-weight-bold">Image Alt Name <span class="text-danger">*</span></label>
                                                         <input type="text" name="alt_name" class="form-control" value="<?= esc($p['alt_name'] ?? '') ?>" required>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label class="small font-weight-bold">Model</label>
-                                                        <input type="text" name="model" class="form-control" value="<?= esc($p['model'] ?? '') ?>">
-                                                    </div>
-                                                </div>
+
                                             </div>
 
                                             <div class="row">
@@ -154,12 +155,18 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group mb-2">
+                                                            <label class="small font-weight-bold mb-1">Meta Title</label>
                                                             <input type="text" name="meta_title" class="form-control form-control-sm mb-2" value="<?= esc($p['meta_title'] ?? '') ?>" placeholder="Meta Title">
+                                                           
+                                                        </div>
+                                                        <div class="form-group mb-2">
+                                                             <label class="small font-weight-bold mb-1">Meta Keywords</label>
                                                             <input type="text" name="meta_keyword" class="form-control form-control-sm" value="<?= esc($p['meta_keyword'] ?? '') ?>" placeholder="Meta Keywords">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12">
                                                         <div class="form-group mb-0">
+                                                            <label class="small font-weight-bold mb-1">Meta Description</label>
                                                             <textarea name="meta_description" class="form-control form-control-sm" rows="2" placeholder="Meta Description"><?= esc($p['meta_description'] ?? '') ?></textarea>
                                                         </div>
                                                     </div>
@@ -168,7 +175,7 @@
                                         </div>
 
                                     </div>
-                                    
+
                                     <div class="text-right border-top mt-3 pt-2">
                                         <button type="submit" class="btn btn-info btn-sm update-single-btn px-4">
                                             <i class="fas fa-save mr-1"></i> Save Changes
@@ -205,9 +212,9 @@
             const $form = $(this);
             const $btn = $form.find('.update-single-btn');
             const $statusMsg = $form.find('.status-msg');
-            
+
             let formData = new FormData(this);
-            
+
             const csrfName = $('#global-csrf').attr('name');
             const csrfHash = $('#global-csrf').val();
             formData.append(csrfName, csrfHash);
@@ -216,7 +223,7 @@
             $statusMsg.removeClass('text-success text-danger').css('display', 'inline-block').html('<span class="text-muted">Saving...</span>');
 
             $.ajax({
-                url: "<?= base_url('product-gemini-update') ?>", 
+                url: "<?= base_url('product-gemini-update') ?>",
                 type: "POST",
                 data: formData,
                 processData: false,
@@ -230,14 +237,13 @@
                     if (response.status === 'success' || response.success === true) {
                         $statusMsg.html('<span class="text-success"><i class="fas fa-check-circle"></i> Saved!</span>');
                         showAlert('success', response.message || 'Product updated successfully!');
-                        
+
                         // Smoothly animate and eliminate the active card component from viewport
                         $form.delay(800).fadeOut(600, function() {
                             $(this).remove();
-                            if($('.batch-card').length === 0) {
+                            if ($('.batch-card').length === 0) {
                                 location.href = '<?= base_url('products') ?>';
                             }
-
                         });
                     } else {
                         $statusMsg.html('<span class="text-danger"><i class="fas fa-exclamation-circle"></i> Failed</span>');
@@ -254,7 +260,9 @@
                     $btn.prop('disabled', false).html('<i class="fas fa-save mr-1"></i> Save Changes');
                 },
                 complete: function() {
-                    setTimeout(() => { $statusMsg.fadeOut(); }, 4000);
+                    setTimeout(() => {
+                        $statusMsg.fadeOut();
+                    }, 4000);
                 }
             });
         });
@@ -279,7 +287,9 @@
             </div>
         `;
         $('#ajax-alert-container').html(alertHtml);
-        setTimeout(() => { $(".alert").alert('close'); }, 5000);
+        setTimeout(() => {
+            $(".alert").alert('close');
+        }, 5000);
     }
 </script>
 <?= $this->endSection() ?>

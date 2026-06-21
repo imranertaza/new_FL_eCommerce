@@ -1,6 +1,52 @@
 <?= $this->extend('Admin/layout') ?>
 
 <?= $this->section('content') ?>
+<style>
+    /* Monochrome, minimalist aesthetic updates */
+
+    .btn,
+    .form-control,
+    .card,
+    .badge,
+    .alert {
+        border-radius: 0px !important;
+    }
+
+    /* Queue management styles */
+    .queue-item {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .queue-item img {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        border: 1px solid #000000;
+    }
+
+    .remove-queue-btn {
+        position: absolute;
+        top: 2px;
+        right: 10px;
+        background: #000000;
+        color: #ffffff;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        line-height: 22px;
+        text-align: center;
+        font-size: 12px;
+        cursor: pointer;
+        font-weight: bold;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .remove-queue-btn:hover {
+        background: #dc3545;
+    }
+</style>
 
 <div class="content-wrapper">
     <section class="content-header">
@@ -27,7 +73,7 @@
     </div>
 
     <section class="content">
-        <div class="card card-primary card-outline shadow-sm">
+        <div class="card card-primary card-outline shadow-sm" style="border-top: 3px solid #007bff;">
             <div class="card-header bg-white">
                 <h3 class="card-title text-primary font-weight-bold">
                     <i class="fas fa-magic mr-2"></i> Bulk AI Product Generator
@@ -39,13 +85,17 @@
 
                 <div class="gemini-upload-zone mb-4" onclick="document.getElementById('product_images').click()">
                     <i class="fas fa-cloud-upload-alt"></i>
-                    <h5>Drop multiple images here or click to upload</h5>
-                    <p class="text-muted">Gemini AI will automatically extract product details from your images.</p>
-                    <input type="file" name="product_images[]" id="product_images" multiple class="d-none" onchange="previewQueue(this)">
+                    <h5>Select multiple images here</h5>
+                    <p class="text-muted">Gemini AI will automatically extract product details from your remaining images.</p>
+                    <input type="file" id="product_images" multiple class="d-none" onchange="handleFileSelection(this)">
                 </div>
 
                 <div id="imageQueue" class="row mb-4"></div>
 
+                <div class="form-group">
+                    <label for="analyzePrompt" class="font-weight-bold small text-uppercase">AI Prompt</label>
+                    <textarea id="analyzePrompt" name="analyzePrompt" class="form-control" rows="4" placeholder="Enter your analyze prompt here..."><?= get_product_image_analyze_prompt(); ?></textarea>
+                </div>
                 <div class="text-center">
                     <button type="button" id="btnAnalyze" class="btn btn-primary btn-lg px-5 shadow-sm" onclick="analyzeAllImages()">
                         <i class="fas fa-robot mr-2"></i> Start AI Analysis
@@ -58,6 +108,10 @@
             </div>
         </div>
     </section>
+
+    <script id="brands-data" type="application/json">
+        <?= json_encode($brands ?? []); ?>
+    </script>
 
     <div class="form-group category d-none">
         <label>Category <span class="requi">*</span></label>
@@ -74,35 +128,82 @@
 
 <?= $this->section('java_script') ?>
 <script>
-    function previewQueue(input) {
-        let container = $('#imageQueue').empty();
+    // In-memory array holding your selected files so we can add/remove items freely
+    let selectedFilesQueue = [];
+
+    function handleFileSelection(input) {
+        if (!input.files) return;
+
+        // Convert FileList to Array and merge it into our tracking queue
         Array.from(input.files).forEach(file => {
+            // Assign a temporary unique timestamp reference to target it for removal later
+            file.queueId = 'q_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            selectedFilesQueue.push(file);
+        });
+
+        // Re-render the visual list layout
+        renderQueuePreviews();
+
+        // Reset the raw input element so selecting the exact same file layout updates cleanly
+        input.value = '';
+    }
+
+    function renderQueuePreviews() {
+        let container = $('#imageQueue').empty();
+
+        selectedFilesQueue.forEach((file, index) => {
             let reader = new FileReader();
             reader.onload = (e) => {
-                container.append('<div class="col-md-2"><img src="' + e.target.result + '" class="img-thumbnail mb-2"></div>');
+                let col = $(`
+                    <div class="col-md-2 col-sm-4 queue-item" id="${file.queueId}">
+                        <button type="button" class="remove-queue-btn" title="Remove image">&times;</button>
+                        <img src="${e.target.result}" class="img-thumbnail">
+                        <div class="small text-muted text-truncate mt-1">${file.name}</div>
+                    </div>
+                `);
+
+                // Event listener to wipe item out of queue dynamically
+                col.find('.remove-queue-btn').on('click', function() {
+                    removeFileFromQueue(file.queueId);
+                });
+
+                container.append(col);
             };
             reader.readAsDataURL(file);
         });
     }
 
-    function analyzeAllImages() {
-        let input = document.getElementById('product_images');
-        if (!input.files || input.files.length === 0) return;
+    function removeFileFromQueue(queueId) {
+        // Filter array memory record down to unselected assets
+        selectedFilesQueue = selectedFilesQueue.filter(file => file.queueId !== queueId);
+        // Fade out element smoothly, then wipe structural node from DOM layout
+        $('#' + queueId).fadeOut(200, function() {
+            $(this).remove();
+        });
+    }
 
+    function analyzeAllImages() {
+        if (selectedFilesQueue.length === 0) {
+            alert('Please select at least one image to process.');
+            return;
+        }
+
+        let analyzePrompt = $('#analyzePrompt').val();
         let formData = new FormData();
+        formData.append('analyzePrompt', analyzePrompt);
         let metadata = [];
 
-        for (let i = 0; i < input.files.length; i++) {
-            let file = input.files[i];
+        // Build FormData payload strictly using our managed tracking queue array
+        selectedFilesQueue.forEach((file, i) => {
             let uniqueId = 'img_' + Date.now() + '_' + i;
-            formData.append('images[]', file);
+            formData.append('images[]', file); // Maps directly to CodeIgniter 4 Multiple File Upload array structure
             metadata.push({
                 unique_id: uniqueId,
                 original_index: i,
                 file_name: file.name,
                 image_type: file.type
             });
-        }
+        });
 
         formData.append('metadata', JSON.stringify(metadata));
         formData.append($('#global-csrf').attr('name'), $('#global-csrf').val());
@@ -118,7 +219,6 @@
                 });
             }
         });
-
         formData.append('available_categories', JSON.stringify(categoryOptions));
 
         $('#productFormsContainer').html(`
@@ -131,7 +231,8 @@
                 </div>
             </div>
         `);
-
+        btnAnalyze = $('#btnAnalyze');
+        btnAnalyze.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Analyzing...');
         $.ajax({
             url: "<?= base_url('product-ai-analyze-batch') ?>",
             type: "POST",
@@ -142,23 +243,24 @@
             success: function(res) {
                 if (res.status === 'success') {
                     $('#global-csrf').val(res.csrfHash);
-
+                    btnAnalyze.prop('disabled', false).html(' Analyzed successfully');
                     let productsWithPreview = res.products.map((p, i) => ({
                         ...p,
                         unique_id: metadata[i].unique_id,
                         file_name: metadata[i].file_name,
-                        image: URL.createObjectURL(input.files[i])
+                        image: URL.createObjectURL(selectedFilesQueue[i])
                     }));
-                    renderBatchForms(productsWithPreview, categoryOptions, input.files);
+                    renderBatchForms(productsWithPreview, categoryOptions,selectedFilesQueue);
                 } else {
                     alert(res.message || 'Something went wrong');
+                    $('#productFormsContainer').empty();
                 }
             },
             error: function(res) {
                 let message = 'Request failed. Please try again.';
                 if (res?.responseJSON?.message) message = res.responseJSON.message;
-                else if (res?.responseText) message = res.responseText;
                 alert(message);
+                $('#productFormsContainer').empty();
             }
         });
     }
@@ -217,20 +319,36 @@
                 '<div class="p-2 border rounded bg-white text-center" style="height: 180px; display: flex; align-items: center; justify-content: center;">' +
                 (pImage ? '<img src="' + pImage + '" class="img-fluid img-preview-' + i + '" style="max-height:160px;">' : '<div class="text-muted small"><i class="fas fa-image fa-3x mb-2 d-block"></i> No image</div>') +
                 '</div>' +
-                '</div>'+
+                '</div>' +
+
                 '<input type="file" name="image" class="d-none" onchange="previewBatchImage(this, ' + i + ')">' +
                 '<div class="p-2 bg-light rounded border">' +
+                '<div class="form-group">' +
+                '<label class="small font-weight-bold">Model</label>' +
+                '<input type="text" name="model" class="form-control" value="' + productModel + '" placeholder="Model...">' +
+                '</div>' +
+                '<div class="form-group mb-2">' +
+                '<label>Brand</label>' +
+                '<select name="brand_id" class="form-control select2bs4">' +
+                '<option value="">Please select</option>' +
+                '<?php foreach ($brands as $brand) { ?>' +
+                '<option value="<?php echo $brand->brand_id; ?>"><?php echo $brand->name; ?></option>' +
+                '<?php } ?>' +
+                '</select>' +
+                '</div>' +
+
+                '<div class="form-group mb-2">' +
+                '<label class="small font-weight-bold mb-1">Price <span class="text-danger">*</span></label>' +
+                '<input type="number" name="price" min="0" step="0.01" class="form-control form-control-sm" value="" required>' +
+                '<small>Recommended Price $' + productPrice + '</small>' +
+                '</div>' +
+                '<div class="form-group mb-2">' +
+                '<label class="small font-weight-bold mb-1">Weight (kg)</label>' +
+                '<input type="text" name="weight" class="form-control form-control-sm" value="' + productWeight + '">' +
+                '</div>' +
                 '<div class="form-group mb-2">' +
                 '<label class="small font-weight-bold mb-1">Qty <span class="text-danger">*</span></label>' +
                 '<input type="number" name="quantity" class="form-control form-control-sm" value="18" min="0" required>' +
-                '</div>' +
-                '<div class="form-group mb-2">' +
-                '<label class="small font-weight-bold mb-1">Price <span class="text-danger">*</span></label>' +
-                '<input type="number" name="price" min="0" step="0.01" class="form-control form-control-sm" value="' + productPrice + '" required>' +
-                '</div>' +
-                '<div class="form-group mb-0">' +
-                '<label class="small font-weight-bold mb-1">Weight (kg)</label>' +
-                '<input type="text" name="weight" class="form-control form-control-sm" value="' + productWeight + '">' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -244,14 +362,8 @@
                 '</div>' +
                 '<div class="col-md-12">' +
                 '<div class="form-group">' +
-                '<label class="small font-weight-bold">Alt Name <span class="text-danger">*</span></label>' +
-                '<input type="text" name="alt_name" class="form-control" value="' + productAlt + '" placeholder="Alt Name..." required>' +
-                '</div>' +
-                '</div>' +
-                '<div class="col-md-12">' +
-                '<div class="form-group">' +
-                '<label class="small font-weight-bold">Model</label>' +
-                '<input type="text" name="model" class="form-control" value="' + productModel + '" placeholder="Model...">' +
+                '<label class="small font-weight-bold">Image Alt Name <span class="text-danger">*</span></label>' +
+                '<input type="text" name="alt_name" class="form-control" value="' + productAlt + '" placeholder="Image Alt Name..." required>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -269,28 +381,29 @@
                 categoryHtml +
                 '</select>' +
                 '</div>' +
+                '</div>' +
+                '</div>' +
                 '<div class="form-group mb-2">' +
                 '<label class="small font-weight-bold">Tags <small>(comma separated)</small></label>' +
                 '<input type="text" name="tags" class="form-control" value="' + productTags + '" placeholder="tags...">' +
-                '</div>' +
-                '</div>' +
                 '</div>' +
                 '<div class="seo-settings border-top mt-2 pt-2">' +
                 '<h6 class="small font-weight-bold text-muted mb-2"><i class="fas fa-search mr-1 text-info"></i> SEO Settings</h6>' +
                 '<div class="row">' +
                 '<div class="col-md-12">' +
                 '<div class="form-group mb-2">' +
+                '<label class="small font-weight-bold">Meta Title</label>' +
                 '<input type="text" name="meta_title" class="form-control form-control-sm" placeholder="Meta Title" value="' + metaTitle + '">' +
                 '</div>' +
                 '<div class="form-group mb-2">' +
+                '<label class="small font-weight-bold">Meta Keywords</label>' +
                 '<input type="text" name="meta_keyword" class="form-control form-control-sm" placeholder="Meta Keywords" value="' + metaKeyword + '">' +
                 '</div>' +
                 '</div>' +
                 '<div class="col-md-12">' +
                 '<div class="form-group mb-0">' +
+                '<label class="small font-weight-bold">Meta Description</label>' +
                 '<textarea name="meta_description" class="form-control form-control-sm" placeholder="Meta Description" rows="2">' + metaDesc + '</textarea>' +
-                '</div>' +
-                '</div>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -299,6 +412,10 @@
                 '<button type="submit" class="btn btn-info btn-sm update-single-btn px-4">' +
                 '<i class="fas fa-save mr-1"></i> Save This Product' +
                 '</button>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -315,6 +432,7 @@
                 }
             }
         });
+        // container.append('<div class="text-center mt-4"><button type="button" id="btnSaveAll" class="btn btn-success btn-lg px-5 shadow-sm" onclick="saveAllProducts()"><i class="fas fa-save mr-2"></i> Save All Products</button></div>');
 
         $('.select2bs4').select2({
             theme: 'bootstrap4'
@@ -323,7 +441,6 @@
             height: 180
         });
     }
-
     $(document).on('submit', '.product-individual-save-form', function(e) {
         e.preventDefault();
 
@@ -332,10 +449,7 @@
         const $statusMsg = $form.find('.status-msg');
 
         let formData = new FormData(this);
-
-        const csrfName = $('#global-csrf').attr('name');
-        const csrfHash = $('#global-csrf').val();
-        formData.append(csrfName, csrfHash);
+        formData.append($('#global-csrf').attr('name'), $('#global-csrf').val());
 
         $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i> Saving...');
         $statusMsg.removeClass('text-success text-danger').css('display', 'inline-block').html('<span class="text-muted">Saving...</span>');
@@ -361,7 +475,7 @@
                         if ($('.product-individual-save-form').length === 0) {
                             location.href = '<?= base_url('products') ?>';
                         }
-                    });p
+                    });
                 } else {
                     $statusMsg.html('<span class="text-danger"><i class="fas fa-exclamation-circle"></i> Failed</span>');
                     showAlert('danger', response.message || 'An error occurred during verification.');
@@ -370,9 +484,8 @@
             },
             error: function(xhr) {
                 $statusMsg.html('<span class="text-danger"><i class="fas fa-times"></i> Error</span>');
-                showAlert('danger', 'Server communication failure. Please check logs.');
+                showAlert('danger', 'Server communication failure.');
                 $btn.prop('disabled', false).html('<i class="fas fa-save mr-1"></i> Save This Product');
-                console.error(xhr.responseText);
             }
         });
     });
@@ -384,7 +497,6 @@
         }
     });
 
-    // Helper notification renderer
     function showAlert(type, message) {
         const alertHtml = `
             <div class="alert alert-${type} alert-dismissible fade show" role="alert">
@@ -399,5 +511,104 @@
             $(".alert").alert('close');
         }, 5000);
     }
+
+   // save all products
+function saveAllProducts() {
+    const forms = $('.product-individual-save-form');
+    if (forms.length === 0) {
+        alert('There are no product forms available to save.');
+        return;
+    }
+
+    // Basic HTML5 validation check across all fields
+    let isValid = true;
+    forms.each(function() {
+        if (!this.checkValidity()) {
+            this.reportValidity();
+            isValid = false;
+            return false; // break loop
+        }
+    });
+    if (!isValid) return;
+
+    const $btn = $('#btnSaveAll');
+    const globalCsrfName = $('#global-csrf').attr('name');
+    const globalCsrfHash = $('#global-csrf').val();
+
+    // 1. Create a transient master form element invisible to the user
+    const masterForm = document.createElement('form');
+    masterForm.method = 'POST';
+    masterForm.action = "<?= base_url('product-create-gemini-all') ?>";
+    masterForm.enctype = 'multipart/form-data';
+    masterForm.style.display = 'none';
+
+    // 2. Inject your global security CSRF token
+    const csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = globalCsrfName;
+    csrfInput.value = globalCsrfHash;
+    masterForm.appendChild(csrfInput);
+
+    // 3. Process each individual product form card
+    forms.each(function(index, formEl) {
+        // Collect all standard input elements except files
+        $(formEl).find('input, select, textarea').each(function() {
+            const input = this;
+            
+            if (input.type === 'file') {
+                // Skip files here; handled separately via deep clone next
+                return;
+            }
+
+            if ((input.type === 'checkbox' || input.type === 'radio') && !input.checked) {
+                return;
+            }
+
+            // Correct mapping naming structures for batch processing matching your controller
+            let inputName = input.name;
+            if (inputName.endsWith('[]')) {
+                inputName = `batch[${index}][category_ids][]`;
+            } else {
+                inputName = `batch[${index}][${inputName}]`;
+            }
+
+            // Handle multi-select inputs cleanly
+            if (input.tagName === 'SELECT' && input.multiple) {
+                $(input).val().forEach(function(val) {
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = inputName;
+                    hiddenInput.value = val;
+                    masterForm.appendChild(hiddenInput);
+                });
+            } else {
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = inputName;
+                hiddenInput.value = input.value;
+                masterForm.appendChild(hiddenInput);
+            }
+        });
+
+        // 4. Safely migrate file data by cloning the file nodes
+        $(formEl).find('input[type="file"]').each(function() {
+            if (this.files && this.files.length > 0) {
+                const clonedFileInput = this.cloneNode();
+                clonedFileInput.name = `batch[${index}][image]`;
+                // Data Transfer link ensures file streams match properly
+                clonedFileInput.files = this.files; 
+                masterForm.appendChild(clonedFileInput);
+            }
+        });
+    });
+
+    // 5. Freeze UI interactions to show loading state before redirection happens
+    $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i> Saving All Products...');
+    $('.update-single-btn').prop('disabled', true);
+
+    // 6. Bind form to document framework and execute submission pipeline
+    document.body.appendChild(masterForm);
+    masterForm.submit();
+}
 </script>
 <?= $this->endSection() ?>

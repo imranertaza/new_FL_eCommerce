@@ -39,6 +39,9 @@
                             <?php } ?>
                             <?php if (modules_key_by_access('bulk_edit_products') == '1') { ?>
                                 <button type="button" id="btnGeminiMultiEdit" class=" mt-2 btn btn-info btn-xs float-right mr-2"><i class="fas fa-edit"></i> Multi Edit with Gemini ✦</button> <?php } ?>
+
+                            <!-- <button type="button" id="btnGeminiMultiEdit" class=" mt-2 btn btn-info btn-xs float-right mr-2"><i class="fas fa-edit"></i> Multi Edit with Gemini ✦</button> //<?php //} 
+                                                                                                                                                                                                    ?> -->
                             <button type="submit" class=" mt-2 btn btn-secondary btn-xs float-right mr-2"><i class="nav-icon fas fa-copy"></i> Copy</button>
                             <?php if (modules_key_by_access('image_crop') == '1') { ?>
                                 <button type="submit" formaction="<?php echo base_url('product_image_crop_action'); ?>" class=" mt-2 btn btn-info btn-xs float-right mr-2"><i class="fas fa-file"></i> Crop image</button>
@@ -97,7 +100,7 @@
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th><input type="checkbox"  onclick="allchecked(this)"></th>
+                                <th><input type="checkbox" onclick="allchecked(this)"></th>
                                 <th>Sl</th>
                                 <th>Image</th>
                                 <th>Name</th>
@@ -146,7 +149,27 @@
         </div>
         <!-- /.card -->
 
-
+        <div class="modal fade" id="geminiPromptModal" tabindex="-1" aria-labelledby="geminiPromptModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="border-radius: 0px;">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="geminiPromptModalLabel">Gemini Multi Update Prompt</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group"> <label for="geminiInstructions">AI Prompt:</label>
+                            <textarea class="form-control" id="geminiInstructions" rows="4" placeholder="e.g., Reduce price by 10%..." style="border-radius: 0px;"> <?= get_product_image_analyze_prompt() ?> </textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="border-radius: 0px;">Cancel</button>
+                        <button type="button" id="btnSubmitGeminiGet" class="btn btn-dark" style="border-radius: 0px;">Submit Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
     <!-- /.content -->
 </div>
@@ -155,11 +178,38 @@
 <?= $this->section('java_script') ?>
 <script>
     function allchecked(source) {
-        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        for (var i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i] != source)
-                checkboxes[i].checked = source.checked;
-        }
+        const isChecked = source.checked;
+
+        // Target only the row checkboxes to avoid targeting layout control nodes
+        $('.product-select-checkbox').each(function() {
+            const cb = this; // Raw DOM element
+            const $cb = $(cb);
+
+            // Only change status and trigger update if the row state needs synchronization
+            if ($cb.prop('checked') !== isChecked) {
+                $cb.prop('checked', isChecked);
+
+                // Directly read the custom metadata args right from your HTML layout definition string
+                // and pass them explicitly to your toggle engine without forcing DOM click cascades
+                const onclickAttr = $cb.attr('onclick');
+                if (onclickAttr) {
+                    // Parse out the clean variable arguments defined inside the toggleImageInput() string
+                    const match = onclickAttr.match(/toggleImageInput\s*\(([^)]+)\)/);
+                    if (match && match[1]) {
+                        // Split arguments by comma, map clean trims, and evaluate safe value states
+                        const args = match[1].split(',').map(arg => {
+                            let cleanArg = arg.trim();
+                            if (cleanArg === 'this') return cb;
+                            // Strip wrapping quotes to sanitize raw parameters
+                            return cleanArg.replace(/^['"]|['"]$/g, '');
+                        });
+
+                        // Execute data array bindings seamlessly
+                        toggleImageInput(args[0], args[1], args[2], args[3], args[4]);
+                    }
+                }
+            }
+        });
     }
 
     function product_delete(id) {
@@ -184,7 +234,7 @@
         }
     }
 
-  function toggleImageInput(checkbox, productId, imageName, priceValue, quantityValue) {
+    function toggleImageInput(checkbox, productId, imageName, priceValue, quantityValue) {
         const form = document.getElementById('multisubmitform');
         if (!form) return;
 
@@ -235,36 +285,59 @@
         }
     }
     $(document).ready(function() {
+        // Array to temporarily hold your key-value query string fragments
+        let urlParams = [];
+
+        // 1. Initial Click: Validate selection and open modal
         $('#btnGeminiMultiEdit').on('click', function(e) {
             e.preventDefault();
-            
-            // Gather all selected checked box targets
+
             let checkedBoxes = $('.product-select-checkbox:checked');
-            
+
             if (checkedBoxes.length === 0) {
                 alert('No products selected. Please check at least one product row.');
                 return;
             }
 
+            // Reset the parameters array on every click
+            urlParams = [];
+
             // Build standard QueryString arguments safely
-            let params = [];
-            
             checkedBoxes.each(function() {
                 let prodId = $(this).val();
-                params.push('productId[]=' + encodeURIComponent(prodId));
-                
-                // Fetch dynamic complementary hidden inputs context generated by toggleImageInput
+                urlParams.push('productId[]=' + encodeURIComponent(prodId));
+
                 let imgVal = $('#imgInput_' + prodId).val() || '';
                 let priceVal = $('#price_' + prodId).val() || '';
                 let qtyVal = $('#quantity_' + prodId).val() || '';
-                
-                params.push('productImage[' + prodId + ']=' + encodeURIComponent(imgVal));
-                params.push('productPrice[' + prodId + ']=' + encodeURIComponent(priceVal));
-                params.push('productQuantity[' + prodId + ']=' + encodeURIComponent(qtyVal));
+                console.log(imgVal, priceVal, qtyVal);
+                urlParams.push('productImage[' + prodId + ']=' + encodeURIComponent(imgVal));
+                urlParams.push('productPrice[' + prodId + ']=' + encodeURIComponent(priceVal));
+                urlParams.push('productQuantity[' + prodId + ']=' + encodeURIComponent(qtyVal));
             });
 
-            // Redirect context window location using standard GET format string parameters
-            window.location.href = "<?php echo base_url('product-multi-update-with-gemini'); ?>?" + params.join('&');
+            // Clear previous input text and display the modal (BS4 Syntax)
+            $('#geminiPromptModal').modal('show');
+        });
+
+        // 2. Modal Submission: Append prompt and execute standard GET redirect
+        $('#btnSubmitGeminiGet').on('click', function() {
+            let promptText = $('#geminiInstructions').val().trim();
+
+            if (promptText === '') {
+                alert('Please enter a prompt instruction before submitting.');
+                return;
+            }
+
+            // Add the custom user prompt to the query string parameter array
+            urlParams.push('gemini_prompt=' + encodeURIComponent(promptText));
+
+            // Disable button to reflect submission state
+            $(this).prop('disabled', true).text('Redirecting...');
+
+            // Perform the standard window redirection using GET format
+            let targetUrl = "<?php echo base_url('product-multi-update-with-gemini'); ?>?" + urlParams.join('&');
+            window.location.href = targetUrl;
         });
     });
 </script>

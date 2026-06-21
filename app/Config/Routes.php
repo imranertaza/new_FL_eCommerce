@@ -89,6 +89,7 @@ $routes->post('/product_category_sort_update_action', 'Admin\Product_category::s
 $routes->get('/products', 'Admin\Products::index');
 $routes->get('/product_create', 'Admin\Products::create');
 $routes->get('/product_create_gemini', 'Admin\Products::create_gemini');
+$routes->post('/product-create-gemini-all', 'Admin\Products::create_batch_gemini_action');
 $routes->post('/product-ai-analyze-batch', 'Admin\Products::product_ai_analyze_batch');
 $routes->post('/product_ai_analyze_single', 'Admin\Products::product_ai_analyze_single');
 $routes->post('/product-create-gemini', 'Admin\Products::product_create_gemini_action');

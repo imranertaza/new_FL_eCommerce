@@ -136,6 +136,11 @@ table.dataTable thead .sorting_desc {
     box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175) !important;
 }
 
+div#productFormsContainer.w-80 {
+    width: 80%;
+    margin: 0 auto;
+}
+
 .ai-analyzing {
     animation: pulse-blue 2s infinite;
 }

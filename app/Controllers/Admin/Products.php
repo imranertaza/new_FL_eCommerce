@@ -137,28 +137,28 @@ class Products extends BaseController
         if (empty($apiKey)) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'API Key is missing']);
         }
+
         $apiUrl = getenv('GEMINI_API_URL');
         $url = $apiUrl . "?key=" . $apiKey;
 
         $metadataInput = $this->request->getPost('metadata');
         $metadata = json_decode($metadataInput, true);
-        $images = $this->request->getFiles();
-
+        $images = $this->request->getFileMultiple('images');
+        $analyzePrompt = $this->request->getPost('analyzePrompt');
         if (empty($metadata)) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Metadata is missing']);
         }
 
-        if (empty($images['images'])) {
+        if (empty($images)) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'No images were uploaded or files exceed server limits (post_max_size/upload_max_filesize)']);
         }
 
         $availableCategories = $this->request->getPost('available_categories');
         $parts = [
-            ["text" => $this->getBatchPrompt($availableCategories, $metadata)]
+            ["text" => $this->getBatchPromptCreate($availableCategories, $analyzePrompt, $metadata)]
         ];
 
-
-        foreach ($images['images'] as $index => $file) {
+        foreach ($images as $index => $file) {
             if ($file->isValid() && !$file->hasMoved()) {
                 $parts[] = [
                     "inline_data" => [
@@ -173,6 +173,7 @@ class Products extends BaseController
                 ]);
             }
         }
+        $allowedIds = array_column($metadata, 'unique_id');
 
         $payload = [
             "contents" => [["parts" => $parts]],
@@ -187,7 +188,10 @@ class Products extends BaseController
                             "items" => [
                                 "type" => "OBJECT",
                                 "properties" => [
-                                    "unique_id" => ["type" => "STRING"],
+                                    "unique_id" => [
+                                        "type" => "STRING",
+                                        "enum" => $allowedIds
+                                    ],
                                     "name" => ["type" => "STRING"],
                                     "alt_name" => ["type" => "STRING"],
                                     "description" => ["type" => "STRING"],
@@ -232,7 +236,6 @@ class Products extends BaseController
             if (json_last_error() !== JSON_ERROR_NONE || !isset($decoded['products'])) {
                 return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid AI JSON structure']);
             }
-
             // Re-order based on metadata unique_id
             $productMap = array_column($decoded['products'], null, 'unique_id');
             $orderedProducts = [];
@@ -296,7 +299,7 @@ class Products extends BaseController
                     "type" => "OBJECT",
                     "properties" => [
                         "name" => ["type" => "STRING"],
-                        "description" => ["type" => "STRING", "format" => "html"],
+                        "description" => ["type" => "HTML", "format" => "html"],
                         "price" => ["type" => "NUMBER"],
                         "weight" => ["type" => "STRING"],
                         "model" => ["type" => "STRING"],
@@ -356,6 +359,39 @@ class Products extends BaseController
             'category_ids' => []
         ];
     }
+    private function getBatchPromptCreate($availableCategories, $analyzePrompt = null, $metadata = [])
+    {
+        $metaInfo = '';
+        if ($metadata) {
+            $metaInfo = "\n\nImage return exact Metadata (use these exact unique_id):\n" .
+                json_encode($metadata, JSON_PRETTY_PRINT);
+        }
+        return $analyzePrompt ? $analyzePrompt . "\n\n" : get_product_image_analyze_prompt() . "\n\n" . "
+            Available Categories (JSON):
+            {$availableCategories}
+
+            Return ONLY the JSON. Do not add any extra text, return the same unique_id from the metadata. explanation, or markdown." . $metaInfo;
+    }
+
+    private function getBatchPromptUpdate($availableCategories, $analyzePrompt = null, $metadata = [])
+    {
+        $metaInfo = '';
+        if (!empty($metadata)) {
+            $metaInfo = "\n\n[IMAGE ARRAY TO DATABASE ID MAP]:\n";
+            $metaInfo .= "You are being passed an array of images. Map them sequentially to these objects:\n";
+            foreach ($metadata as $index => $meta) {
+                // Added original image filename reference to help the model match contextually
+                $metaInfo .= "- Image index {$index} filename is \"{$meta['image']}\" matches Database ID: \"{$meta['unique_id']}\" (Current Price Reference: {$meta['current_price']})\n";
+            }
+            $metaInfo .= "\nCRITICAL RULE: For every processed product, set 'unique_id' EXACTLY to its matching Database ID string from the list above. Do NOT generate alphanumeric text slugs.";
+        }
+
+        return $analyzePrompt . "\n\n" . "{$metaInfo}
+    Available Categories (JSON map: category_name => prod_cat_id):
+    {$availableCategories}
+    Response Instruction: Return ONLY the JSON adhering to your schema. Do not add markdown wrapping like ```json or trailing explanations. description should be HTML format not &lt;p&gt; user < >.";
+    }
+
 
     private function getBatchPrompt($availableCategories, $metadata = [])
     {
@@ -380,7 +416,6 @@ class Products extends BaseController
 
             Return ONLY the JSON. Do not add any extra text, explanation, or markdown." . $metaInfo;
     }
-
     /**
      * @description This method provides product create action
      * @return RedirectResponse
@@ -390,6 +425,7 @@ class Products extends BaseController
         $adUserId = $this->session->adUserId;
         $batch = $this->request->getPost('batch');
         $files = $this->request->getFiles();
+
         if (empty($batch)) {
             $this->session->setFlashdata('message', '<div class="alert alert-danger">No products to save.</div>');
             return redirect()->to('product_create_gemini');
@@ -422,6 +458,7 @@ class Products extends BaseController
                     'model' => $p['model'],
                     'quantity' => $p['quantity'],
                     'weight' => $p['weight'] ?? '',
+                    'brand_id' => $p['brand_id'] ?? '',
                     'status' => 1,
                     'createdBy' => $adUserId
                 ];
@@ -429,6 +466,7 @@ class Products extends BaseController
                 $productId = DB()->insertID();
 
                 // 2. Handle Image
+
                 $pic = $files['batch'][$i]['image'];
 
                 if ($pic && $pic->isValid() && !$pic->hasMoved()) {
@@ -495,6 +533,7 @@ class Products extends BaseController
         $model           = $this->request->getPost('model') ?? '';
         $price           = $this->request->getPost('price');
         $quantity        = $this->request->getPost('quantity');
+        $brand_id         = $this->request->getPost('brand_id') ?? '';
         $weight          = $this->request->getPost('weight') ?? '';
         $description     = $this->request->getPost('description') ?? '';
         $category_ids    = $this->request->getPost('categorys') ?? []; // mapped to 'categorys[]' in HTML
@@ -541,6 +580,7 @@ class Products extends BaseController
                 'name'      => $name,
                 'alt_name'  => $alt_name,
                 'price'     => $price,
+                'brand_id'  => $brand_id,
                 'model'     => $model,
                 'quantity'  => $quantity,
                 'weight'    => $weight,
@@ -1809,7 +1849,7 @@ class Products extends BaseController
         $allImage     = $this->request->getGet('productImage');
         $allPrice     = $this->request->getGet('productPrice');
         $allQuantity  = $this->request->getGet('productQuantity');
-
+        $prompt       = $this->request->getGet('gemini_prompt');
 
         if (empty($allProductId)) {
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">No products selected <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -1821,13 +1861,9 @@ class Products extends BaseController
         $parts    = [];
         foreach ($allProductId as $productId) {
             if (isset($allImage[$productId])) {
-                $metadata[] = ['unique_id' => (string)$productId, 'image' => $allImage[$productId], 'price' => $allPrice[$productId], 'quantity' => $allQuantity[$productId]];
+                $metadata[] = ['unique_id' => (string)$productId, 'image' => $allImage[$productId], 'current_price' => $allPrice[$productId], 'quantity' => $allQuantity[$productId]];
 
-                $image_path = get_product_original_image_path(
-                    'uploads/products',
-                    $productId,
-                    $allImage[$productId]
-                );
+                $image_path = get_product_original_image_path('uploads/products', $productId, $allImage[$productId]);
 
                 if (is_file($image_path)) {
                     $parts[] = [
@@ -1853,7 +1889,7 @@ class Products extends BaseController
 
         $availableCategories = array_column($categories, 'prod_cat_id', 'category_name');
         $availableCategoriesJson = json_encode($availableCategories, JSON_PRETTY_PRINT);
-        $parts = array_merge([["text" => $this->getBatchPrompt($availableCategoriesJson, $metadata)]], $parts);
+        $parts = array_merge([["text" => $this->getBatchPromptUpdate($availableCategoriesJson, $prompt ?? null, $metadata)]], $parts);
 
         // Payload schema
         $payload = [
@@ -1875,6 +1911,7 @@ class Products extends BaseController
                                     "alt_name"        => ["type" => "STRING"],
                                     // 👇 description as HTML
                                     "description"     => ["type" => "STRING", "format" => "html"],
+                                    "current_price"       => ["type" => "NUMBER"],
                                     "price"           => ["type" => "NUMBER"],
                                     "weight"          => ["type" => "STRING"],
                                     "model"           => ["type" => "STRING"],
@@ -1922,11 +1959,14 @@ class Products extends BaseController
 
             // Re-order based on metadata unique_id
             $productMap = array_column($decoded['products'], null, 'unique_id');
+
             $orderedProducts = [];
             foreach ($metadata as $meta) {
                 $orderedProducts[] = $productMap[$meta['unique_id']] ?? $this->getErrorProduct($meta);
             }
-            // dd
+            // dd($metadata, $parts, $decoded, $productMap, $orderedProducts);
+            $tableBrand = DB()->table('cc_brand');
+            $brands = $tableBrand->where('status', 'Active')->orderBy('name', 'ASC')->get()->getResult();
 
             echo view(
                 'Admin/Products/update-gemini',
@@ -1934,6 +1974,7 @@ class Products extends BaseController
                     'products' => $orderedProducts,
                     'categories' => $categories,
                     'csrfHash' => csrf_hash(),
+                    'brands' => $brands,
                 ]
             );
         } catch (\Exception $e) {
@@ -1972,6 +2013,7 @@ class Products extends BaseController
             'description'       => $this->request->getPost('description') ?? '',
             'price'             => $this->request->getPost('price') ?? '',
             'quantity'          => $this->request->getPost('quantity') ?? '',
+            'brand_id'          => $this->request->getPost('brand_id') ?? '',
             'weight'            => $this->request->getPost('weight') ?? null,
             'tag'               => $this->request->getPost('tags') ?? null,
             'meta_title'        => $this->request->getPost('meta_title') ?? null,
