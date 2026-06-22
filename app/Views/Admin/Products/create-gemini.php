@@ -1,52 +1,6 @@
 <?= $this->extend('Admin/layout') ?>
 
 <?= $this->section('content') ?>
-<style>
-    /* Monochrome, minimalist aesthetic updates */
-
-    .btn,
-    .form-control,
-    .card,
-    .badge,
-    .alert {
-        border-radius: 0px !important;
-    }
-
-    /* Queue management styles */
-    .queue-item {
-        position: relative;
-        margin-bottom: 20px;
-    }
-
-    .queue-item img {
-        width: 100%;
-        height: 140px;
-        object-fit: cover;
-        border: 1px solid #000000;
-    }
-
-    .remove-queue-btn {
-        position: absolute;
-        top: 2px;
-        right: 10px;
-        background: #000000;
-        color: #ffffff;
-        border: none;
-        border-radius: 50%;
-        width: 24px;
-        height: 24px;
-        line-height: 22px;
-        text-align: center;
-        font-size: 12px;
-        cursor: pointer;
-        font-weight: bold;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    .remove-queue-btn:hover {
-        background: #dc3545;
-    }
-</style>
 
 <div class="content-wrapper">
     <section class="content-header">
@@ -120,6 +74,15 @@
                 <option value="<?php echo $cat->prod_cat_id; ?>">
                     <?php echo display_category_with_parent($cat->prod_cat_id); ?>
                 </option>
+            <?php } ?>
+        </select>
+    </div>
+    <div class="form-group mb-2 brand d-none">
+        <label>Brand</label>
+        <select name="brand_id" class="form-control select2bs4">
+            <option value="">Please select</option>
+            <?php foreach ($brands as $brand) { ?>
+                <option value="<?php echo $brand->brand_id; ?>"><?php echo $brand->name; ?></option>
             <?php } ?>
         </select>
     </div>
@@ -219,6 +182,19 @@
                 });
             }
         });
+        let brandOptions = [];
+        $('.brand .select2bs4 option').each(function() {
+            let id = $(this).val();
+            let name = $(this).text().trim();
+            if (id) {
+                brandOptions.push({
+                    id: id,
+                    name: name
+                });
+            }
+        });
+
+        formData.append('available_brands', JSON.stringify(brandOptions));
         formData.append('available_categories', JSON.stringify(categoryOptions));
 
         $('#productFormsContainer').html(`
@@ -250,7 +226,7 @@
                         file_name: metadata[i].file_name,
                         image: URL.createObjectURL(selectedFilesQueue[i])
                     }));
-                    renderBatchForms(productsWithPreview, categoryOptions,selectedFilesQueue);
+                    renderBatchForms(productsWithPreview, categoryOptions, selectedFilesQueue);
                 } else {
                     alert(res.message || 'Something went wrong');
                     $('#productFormsContainer').empty();
@@ -289,6 +265,7 @@
             let productAlt = p.alt_name ? p.alt_name : '';
             let productModel = p.model ? p.model : '';
             let productDesc = p.description ? p.description : '';
+            let productBrand = p.brand_id ? p.brand_id : '';
             let productPrice = p.price ? p.price : '';
             let productWeight = p.weight ? p.weight : '';
             let productTags = p.tags ? p.tags : '';
@@ -332,8 +309,7 @@
                 '<select name="brand_id" class="form-control select2bs4">' +
                 '<option value="">Please select</option>' +
                 '<?php foreach ($brands as $brand) { ?>' +
-                '<option value="<?php echo $brand->brand_id; ?>"><?php echo $brand->name; ?></option>' +
-                '<?php } ?>' +
+'<option value="<?php echo $brand->brand_id; ?>" ' + (productBrand == "<?php echo $brand->brand_id; ?>" ? "selected" : "") + '><?php echo $brand->name; ?></option>' +                '<?php } ?>' +
                 '</select>' +
                 '</div>' +
 
@@ -512,103 +488,103 @@
         }, 5000);
     }
 
-   // save all products
-function saveAllProducts() {
-    const forms = $('.product-individual-save-form');
-    if (forms.length === 0) {
-        alert('There are no product forms available to save.');
-        return;
-    }
-
-    // Basic HTML5 validation check across all fields
-    let isValid = true;
-    forms.each(function() {
-        if (!this.checkValidity()) {
-            this.reportValidity();
-            isValid = false;
-            return false; // break loop
+    // save all products
+    function saveAllProducts() {
+        const forms = $('.product-individual-save-form');
+        if (forms.length === 0) {
+            alert('There are no product forms available to save.');
+            return;
         }
-    });
-    if (!isValid) return;
 
-    const $btn = $('#btnSaveAll');
-    const globalCsrfName = $('#global-csrf').attr('name');
-    const globalCsrfHash = $('#global-csrf').val();
-
-    // 1. Create a transient master form element invisible to the user
-    const masterForm = document.createElement('form');
-    masterForm.method = 'POST';
-    masterForm.action = "<?= base_url('product-create-gemini-all') ?>";
-    masterForm.enctype = 'multipart/form-data';
-    masterForm.style.display = 'none';
-
-    // 2. Inject your global security CSRF token
-    const csrfInput = document.createElement('input');
-    csrfInput.type = 'hidden';
-    csrfInput.name = globalCsrfName;
-    csrfInput.value = globalCsrfHash;
-    masterForm.appendChild(csrfInput);
-
-    // 3. Process each individual product form card
-    forms.each(function(index, formEl) {
-        // Collect all standard input elements except files
-        $(formEl).find('input, select, textarea').each(function() {
-            const input = this;
-            
-            if (input.type === 'file') {
-                // Skip files here; handled separately via deep clone next
-                return;
+        // Basic HTML5 validation check across all fields
+        let isValid = true;
+        forms.each(function() {
+            if (!this.checkValidity()) {
+                this.reportValidity();
+                isValid = false;
+                return false; // break loop
             }
+        });
+        if (!isValid) return;
 
-            if ((input.type === 'checkbox' || input.type === 'radio') && !input.checked) {
-                return;
-            }
+        const $btn = $('#btnSaveAll');
+        const globalCsrfName = $('#global-csrf').attr('name');
+        const globalCsrfHash = $('#global-csrf').val();
 
-            // Correct mapping naming structures for batch processing matching your controller
-            let inputName = input.name;
-            if (inputName.endsWith('[]')) {
-                inputName = `batch[${index}][category_ids][]`;
-            } else {
-                inputName = `batch[${index}][${inputName}]`;
-            }
+        // 1. Create a transient master form element invisible to the user
+        const masterForm = document.createElement('form');
+        masterForm.method = 'POST';
+        masterForm.action = "<?= base_url('product-create-gemini-all') ?>";
+        masterForm.enctype = 'multipart/form-data';
+        masterForm.style.display = 'none';
 
-            // Handle multi-select inputs cleanly
-            if (input.tagName === 'SELECT' && input.multiple) {
-                $(input).val().forEach(function(val) {
+        // 2. Inject your global security CSRF token
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = globalCsrfName;
+        csrfInput.value = globalCsrfHash;
+        masterForm.appendChild(csrfInput);
+
+        // 3. Process each individual product form card
+        forms.each(function(index, formEl) {
+            // Collect all standard input elements except files
+            $(formEl).find('input, select, textarea').each(function() {
+                const input = this;
+
+                if (input.type === 'file') {
+                    // Skip files here; handled separately via deep clone next
+                    return;
+                }
+
+                if ((input.type === 'checkbox' || input.type === 'radio') && !input.checked) {
+                    return;
+                }
+
+                // Correct mapping naming structures for batch processing matching your controller
+                let inputName = input.name;
+                if (inputName.endsWith('[]')) {
+                    inputName = `batch[${index}][category_ids][]`;
+                } else {
+                    inputName = `batch[${index}][${inputName}]`;
+                }
+
+                // Handle multi-select inputs cleanly
+                if (input.tagName === 'SELECT' && input.multiple) {
+                    $(input).val().forEach(function(val) {
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = inputName;
+                        hiddenInput.value = val;
+                        masterForm.appendChild(hiddenInput);
+                    });
+                } else {
                     const hiddenInput = document.createElement('input');
                     hiddenInput.type = 'hidden';
                     hiddenInput.name = inputName;
-                    hiddenInput.value = val;
+                    hiddenInput.value = input.value;
                     masterForm.appendChild(hiddenInput);
-                });
-            } else {
-                const hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = inputName;
-                hiddenInput.value = input.value;
-                masterForm.appendChild(hiddenInput);
-            }
+                }
+            });
+
+            // 4. Safely migrate file data by cloning the file nodes
+            $(formEl).find('input[type="file"]').each(function() {
+                if (this.files && this.files.length > 0) {
+                    const clonedFileInput = this.cloneNode();
+                    clonedFileInput.name = `batch[${index}][image]`;
+                    // Data Transfer link ensures file streams match properly
+                    clonedFileInput.files = this.files;
+                    masterForm.appendChild(clonedFileInput);
+                }
+            });
         });
 
-        // 4. Safely migrate file data by cloning the file nodes
-        $(formEl).find('input[type="file"]').each(function() {
-            if (this.files && this.files.length > 0) {
-                const clonedFileInput = this.cloneNode();
-                clonedFileInput.name = `batch[${index}][image]`;
-                // Data Transfer link ensures file streams match properly
-                clonedFileInput.files = this.files; 
-                masterForm.appendChild(clonedFileInput);
-            }
-        });
-    });
+        // 5. Freeze UI interactions to show loading state before redirection happens
+        $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i> Saving All Products...');
+        $('.update-single-btn').prop('disabled', true);
 
-    // 5. Freeze UI interactions to show loading state before redirection happens
-    $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i> Saving All Products...');
-    $('.update-single-btn').prop('disabled', true);
-
-    // 6. Bind form to document framework and execute submission pipeline
-    document.body.appendChild(masterForm);
-    masterForm.submit();
-}
+        // 6. Bind form to document framework and execute submission pipeline
+        document.body.appendChild(masterForm);
+        masterForm.submit();
+    }
 </script>
 <?= $this->endSection() ?>

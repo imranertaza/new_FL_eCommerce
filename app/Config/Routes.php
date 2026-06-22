@@ -100,6 +100,7 @@ $routes->post('/product_image_delete', 'Admin\Products::image_delete');
 $routes->get('/product_update/(:num)', 'Admin\Products::update/$1');
 $routes->get('/product-multi-update-with-gemini', 'Admin\Products::multi_update_with_gemini');
 $routes->post('/product-gemini-update', 'Admin\Products::product_gemini_update_action');
+$routes->post('/product-gemini-update-batch', 'Admin\Products::product_gemini_update_batch_action');
 $routes->post('/product_delete', 'Admin\Products::delete');
 $routes->get('/related_product', 'Admin\Products::related_product');
 $routes->post('/product_option_search', 'Admin\Products::product_option_search');

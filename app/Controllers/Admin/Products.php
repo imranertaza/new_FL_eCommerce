@@ -154,8 +154,10 @@ class Products extends BaseController
         }
 
         $availableCategories = $this->request->getPost('available_categories');
+        $availableBrands = $this->request->getPost('available_brands');
+        $availableBrandsIds = array_column(json_decode($availableBrands, true), 'id');
         $parts = [
-            ["text" => $this->getBatchPromptCreate($availableCategories, $analyzePrompt, $metadata)]
+            ["text" => $this->getBatchPromptCreate($availableCategories, $availableBrands, $analyzePrompt, $metadata)]
         ];
 
         foreach ($images as $index => $file) {
@@ -202,9 +204,10 @@ class Products extends BaseController
                                     "meta_title" => ["type" => "STRING"],
                                     "meta_description" => ["type" => "STRING"],
                                     "meta_keyword" => ["type" => "STRING"],
-                                    "category_ids" => ["type" => "ARRAY", "items" => ["type" => "INTEGER"]]
+                                    "category_ids" => ["type" => "ARRAY", "items" => ["type" => "INTEGER"]],
+                                    "brand_id" => ["type" => "INTEGER", "enum" => $availableBrandsIds]
                                 ],
-                                "required" => ["unique_id", "name", "description", "price"]
+                                "required" => ["unique_id", "name", "alt_name", "description", "price", "weight", "model", "tags", "meta_title", "meta_description", "meta_keyword", "category_ids", "brand_id"]
                             ]
                         ]
                     ]
@@ -359,7 +362,7 @@ class Products extends BaseController
             'category_ids' => []
         ];
     }
-    private function getBatchPromptCreate($availableCategories, $analyzePrompt = null, $metadata = [])
+    private function getBatchPromptCreate($availableCategories, $availableBrands, $analyzePrompt = null, $metadata = [])
     {
         $metaInfo = '';
         if ($metadata) {
@@ -367,13 +370,20 @@ class Products extends BaseController
                 json_encode($metadata, JSON_PRETTY_PRINT);
         }
         return $analyzePrompt ? $analyzePrompt . "\n\n" : get_product_image_analyze_prompt() . "\n\n" . "
-            Available Categories (JSON):
+            Available Categories (JSON map: category_name => prod_cat_id):
             {$availableCategories}
+            Available Brands (JSON map: brand_name => brand_id):
+            {$availableBrands}
+
+            - Match the brand name visible in the image/logo as closely as possible.
+            - If the brand is not in the list, use the brand name that appears most similar (fuzzy match).
+            - Prefer the official brand name over generic terms. Brand Selection Guidelines (Very Important):
+            - If no brand is clearly visible, use the most logical brand based on product type or set `brand_id` to null.
 
             Return ONLY the JSON. Do not add any extra text, return the same unique_id from the metadata. explanation, or markdown." . $metaInfo;
     }
 
-    private function getBatchPromptUpdate($availableCategories, $analyzePrompt = null, $metadata = [])
+    private function getBatchPromptUpdate($availableCategories, $availableBrands, $analyzePrompt = null, $metadata = [])
     {
         $metaInfo = '';
         if (!empty($metadata)) {
@@ -381,14 +391,19 @@ class Products extends BaseController
             $metaInfo .= "You are being passed an array of images. Map them sequentially to these objects:\n";
             foreach ($metadata as $index => $meta) {
                 // Added original image filename reference to help the model match contextually
-                $metaInfo .= "- Image index {$index} filename is \"{$meta['image']}\" matches Database ID: \"{$meta['unique_id']}\" (Current Price Reference: {$meta['current_price']})\n";
+                $metaInfo .= "- Image index {$index} filename is \"{$meta['image']}\" matches Database ID: \"{$meta['unique_id']}\" (Current Price Reference: {$meta['current_price']}, Current Brand Name Reference: {$meta['current_brand_name']} if N/A return 'N/A' instead)\n";
             }
-            $metaInfo .= "\nCRITICAL RULE: For every processed product, set 'unique_id' EXACTLY to its matching Database ID string from the list above. Do NOT generate alphanumeric text slugs.";
+            $metaInfo .= "\nCRITICAL RULE: For every processed product, set 'unique_id' EXACTLY to its matching Database ID string from the list above. Do NOT generate alphanumeric text slugs.
+            ";
         }
 
         return $analyzePrompt . "\n\n" . "{$metaInfo}
     Available Categories (JSON map: category_name => prod_cat_id):
     {$availableCategories}
+    
+    Available Brands (JSON map: brand_name => brand_id):
+    {$availableBrands}
+   
     Response Instruction: Return ONLY the JSON adhering to your schema. Do not add markdown wrapping like ```json or trailing explanations. description should be HTML format not &lt;p&gt; user < >.";
     }
 
@@ -1842,6 +1857,7 @@ class Products extends BaseController
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">API Key is missing <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('products');
         }
+
         $apiUrl = getenv('GEMINI_API_URL');
         $url = $apiUrl . "?key=" . $apiKey;
 
@@ -1849,6 +1865,7 @@ class Products extends BaseController
         $allImage     = $this->request->getGet('productImage');
         $allPrice     = $this->request->getGet('productPrice');
         $allQuantity  = $this->request->getGet('productQuantity');
+        $allBrand     = $this->request->getGet('brand_id'); // Assuming this array holds current brand names or IDs
         $prompt       = $this->request->getGet('gemini_prompt');
 
         if (empty($allProductId)) {
@@ -1856,12 +1873,27 @@ class Products extends BaseController
             return redirect()->to('products');
         }
 
+        // Fetch Brands for Prompt mapping
+        $tableBrand = DB()->table('cc_brand');
+        $brands = $tableBrand->where('status', 'Active')->orderBy('name', 'ASC')->get()->getResult();
+        $availableBrands = array_column($brands, 'brand_id', 'name'); // Map Name => ID for the AI to understand
+        $availableBrandsJson = json_encode($availableBrands, JSON_PRETTY_PRINT);
+
         // Build metadata array (unique_id etc.)
         $metadata = [];
         $parts    = [];
+
         foreach ($allProductId as $productId) {
             if (isset($allImage[$productId])) {
-                $metadata[] = ['unique_id' => (string)$productId, 'image' => $allImage[$productId], 'current_price' => $allPrice[$productId], 'quantity' => $allQuantity[$productId]];
+                $currentBrandName = !empty($allBrand[$productId]) ? $allBrand[$productId] : 'N/A';
+
+                $metadata[] = [
+                    'unique_id'          => (string)$productId,
+                    'image'              => $allImage[$productId],
+                    'current_price'      => $allPrice[$productId],
+                    'quantity'           => $allQuantity[$productId],
+                    'current_brand_name' => (string)$currentBrandName
+                ];
 
                 $image_path = get_product_original_image_path('uploads/products', $productId, $allImage[$productId]);
 
@@ -1881,15 +1913,13 @@ class Products extends BaseController
             return redirect()->to('products');
         }
 
-
-        // Add prompt text
-        // Fetch all active categories
+        // Fetch Categories
         $table = DB()->table('cc_product_category');
         $categories = $table->where('status', '1')->get()->getResultArray();
-
         $availableCategories = array_column($categories, 'prod_cat_id', 'category_name');
         $availableCategoriesJson = json_encode($availableCategories, JSON_PRETTY_PRINT);
-        $parts = array_merge([["text" => $this->getBatchPromptUpdate($availableCategoriesJson, $prompt ?? null, $metadata)]], $parts);
+
+        $parts = array_merge([["text" => $this->getBatchPromptUpdate($availableCategoriesJson, $availableBrandsJson, $prompt ?? null, $metadata)]], $parts);
 
         // Payload schema
         $payload = [
@@ -1905,23 +1935,41 @@ class Products extends BaseController
                             "items" => [
                                 "type" => "OBJECT",
                                 "properties" => [
-                                    "unique_id"       => ["type" => "STRING"],
-                                    "image"           => ["type" => "STRING"],
-                                    "name"            => ["type" => "STRING"],
-                                    "alt_name"        => ["type" => "STRING"],
-                                    // 👇 description as HTML
-                                    "description"     => ["type" => "STRING", "format" => "html"],
-                                    "current_price"       => ["type" => "NUMBER"],
-                                    "price"           => ["type" => "NUMBER"],
-                                    "weight"          => ["type" => "STRING"],
-                                    "model"           => ["type" => "STRING"],
-                                    "tags"            => ["type" => "STRING"],
-                                    "meta_title"      => ["type" => "STRING"],
-                                    "meta_description" => ["type" => "STRING"],
-                                    "meta_keyword"    => ["type" => "STRING"],
-                                    "category_ids"    => ["type" => "ARRAY", "items" => ["type" => "INTEGER"]]
+                                    "unique_id"          => ["type" => "STRING"],
+                                    "image"              => ["type" => "STRING"],
+                                    "name"               => ["type" => "STRING"],
+                                    "alt_name"           => ["type" => "STRING"],
+                                    "description"        => ["type" => "STRING", "format" => "html"],
+                                    "current_price"      => ["type" => "NUMBER"],
+                                    "price"              => ["type" => "NUMBER"],
+                                    "weight"             => ["type" => "STRING"],
+                                    "model"              => ["type" => "STRING"],
+                                    "tags"               => ["type" => "STRING"],
+                                    "meta_title"         => ["type" => "STRING"],
+                                    "meta_description"   => ["type" => "STRING"],
+                                    "meta_keyword"       => ["type" => "STRING"],
+                                    "current_brand_name" => ["type" => "STRING"], // Fixed typo here
+                                    "brand_id"           => ["type" => "INTEGER"],
+                                    "category_ids"       => ["type" => "ARRAY", "items" => ["type" => "INTEGER"]]
                                 ],
-                                "required" => ["unique_id", "name", "description", "price"]
+                                "required" => [
+                                    "unique_id",
+                                    "image",
+                                    "name",
+                                    "alt_name",
+                                    "description",
+                                    "current_price",
+                                    "price",
+                                    "weight",
+                                    "model",
+                                    "tags",
+                                    "meta_title",
+                                    "meta_description",
+                                    "meta_keyword",
+                                    "current_brand_name", // Fixed typo here
+                                    "brand_id",
+                                    "category_ids"
+                                ]
                             ]
                         ]
                     ]
@@ -1930,31 +1978,53 @@ class Products extends BaseController
         ];
 
         $client = \Config\Services::curlrequest();
+
+        // API Retry Backoff logic
+        $maxRetries = 3;
+        $retryDelay = 3;
+        $result = null;
+
         try {
-            $response = $client->setBody(json_encode($payload))
-                ->setHeader('Content-Type', 'application/json')
-                ->request('POST', $url, ['timeout' => 2000]);
+            for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
+                // Added 'http_errors' => false to prevent CI4 from throwing exception on 429
+                $response = $client->setBody(json_encode($payload))
+                    ->setHeader('Content-Type', 'application/json')
+                    ->request('POST', $url, [
+                        'timeout' => 2000,
+                        'http_errors' => false
+                    ]);
 
-            $result = json_decode($response->getBody(), true);
+                $statusCode = $response->getStatusCode();
+                $result = json_decode($response->getBody(), true);
 
-            if (isset($result['error'])) {
-                $this->session->setFlashdata(
-                    'message',
-                    '<div class="alert alert-danger alert-dismissible" role="alert">' .
-                        'Gemini API Error: ' . ($result['error']['message'] ?? 'Unknown API error')
-                );
-                return redirect()->to('products');
+                // Handle Rate Limits (429) gracefully
+                if ($statusCode === 429) {
+                    if ($attempt === $maxRetries) {
+                        throw new \Exception('Gemini API Rate Limit exceeded after multiple retries. Try a smaller batch.');
+                    }
+                    sleep($retryDelay);
+                    $retryDelay *= 2; // 3s, then 6s delay
+                    continue;
+                }
+
+                // Handle generic API Errors
+                if ($statusCode >= 400 || isset($result['error'])) {
+                    $errorMessage = $result['error']['message'] ?? "HTTP Error $statusCode";
+                    throw new \Exception('Gemini API Error: ' . $errorMessage);
+                }
+
+                // Success, break the retry loop
+                break;
             }
 
             $responseText = $result['candidates'][0]['content']['parts'][0]['text'] ?? null;
             if (!$responseText) {
-                return $this->response->setJSON(['status' => 'error', 'message' => 'Empty response from AI']);
+                throw new \Exception('Empty response from AI.');
             }
 
             $decoded = json_decode($responseText, true);
             if (json_last_error() !== JSON_ERROR_NONE || !isset($decoded['products'])) {
-                $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Invalid AI JSON structure <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-                return redirect()->to('products');
+                throw new \Exception('Invalid AI JSON structure returned.');
             }
 
             // Re-order based on metadata unique_id
@@ -1964,21 +2034,21 @@ class Products extends BaseController
             foreach ($metadata as $meta) {
                 $orderedProducts[] = $productMap[$meta['unique_id']] ?? $this->getErrorProduct($meta);
             }
-            // dd($metadata, $parts, $decoded, $productMap, $orderedProducts);
-            $tableBrand = DB()->table('cc_brand');
-            $brands = $tableBrand->where('status', 'Active')->orderBy('name', 'ASC')->get()->getResult();
 
             echo view(
                 'Admin/Products/update-gemini',
                 [
-                    'products' => $orderedProducts,
+                    'products'   => $orderedProducts,
                     'categories' => $categories,
-                    'csrfHash' => csrf_hash(),
-                    'brands' => $brands,
+                    'csrfHash'   => csrf_hash(),
+                    'brands'     => $brands,
                 ]
             );
         } catch (\Exception $e) {
-            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">API Connection failed: ' . $e->getMessage() . '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata(
+                'message',
+                '<div class="alert alert-danger alert-dismissible" role="alert">API Update failed: ' . $e->getMessage() . '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
+            );
             return redirect()->to('products');
         }
     }
@@ -2048,6 +2118,7 @@ class Products extends BaseController
             'alt_name'  => $data['alt_name'],
             'model'     => $data['model'],
             'price'     => $data['price'],
+            'brand_id'  => $data['brand_id'],
             'weight'    => $data['weight'],
             'quantity'  => $data['quantity'],
             'updatedBy' => $adUserId,
@@ -2092,6 +2163,153 @@ class Products extends BaseController
             'message'   => '<strong>' . esc($data['pro_name']) . '</strong> updated successfully.',
             'csrf_hash' => csrf_hash()
         ]);
+    }
+
+    public function product_gemini_update_batch_action()
+    {
+        // Restrict access strictly to AJAX POST interactions
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(403)->setJSON([
+                'status'  => 'error',
+                'message' => 'Direct script access is not allowed.'
+            ]);
+        }
+
+        $adUserId = $this->session->adUserId;
+        $products = $this->request->getPost('products');
+
+        if (empty($products) || !is_array($products)) {
+            return $this->response->setJSON([
+                'status'    => 'error',
+                'message'   => 'No valid product batch data received.',
+                'csrf_hash' => csrf_hash()
+            ]);
+        }
+
+        // 1. First-pass Validation: Validate ALL items before running any SQL queries
+        foreach ($products as $index => $p) {
+            $displayIndex = $index + 1;
+
+            // Structure data matching your exact original key validation expectations
+            $validationData = [
+                'pro_name'    => $p['name'] ?? '',
+                'alt_name'    => $p['alt_name'] ?? '',
+                'categorys'   => $p['categorys'] ?? [],
+                'description' => $p['description'] ?? '',
+                'brand_id'    => $p['brand_id'] ?? '',
+                'price'       => $p['price'] ?? '',
+                'quantity'    => $p['quantity'] ?? '',
+            ];
+
+            $this->validation->setRules([
+                'pro_name'    => ['label' => "Product #{$displayIndex} Name", 'rules' => 'required'],
+                'alt_name'    => ['label' => "Product #{$displayIndex} Alt Name", 'rules' => 'required'],
+                'categorys'   => ['label' => "Product #{$displayIndex} Category", 'rules' => 'required'],
+                'description' => ['label' => "Product #{$displayIndex} Description", 'rules' => 'required'],
+                'price'       => ['label' => "Product #{$displayIndex} Price", 'rules' => 'required|numeric'],
+                'quantity'    => ['label' => "Product #{$displayIndex} Quantity", 'rules' => 'required|is_natural_no_zero'],
+                'brand_id'    => ['label' => "Product #{$displayIndex} Brand", 'rules' => 'required'],
+            ]);
+
+            if ($this->validation->run($validationData) === false) {
+                return $this->response->setJSON([
+                    'status'    => 'validation_error',
+                    'message'   => $this->validation->listErrors(),
+                    'csrf_hash' => csrf_hash()
+                ]);
+            }
+
+            // Double check identifier presence
+            if (empty($p['product_id'])) {
+                return $this->response->setJSON([
+                    'status'    => 'error',
+                    'message'   => "Missing target Product Identifier at position #{$displayIndex}.",
+                    'csrf_hash' => csrf_hash()
+                ]);
+            }
+        }
+
+        // 2. Database transaction processing block
+        DB()->transStart();
+
+        try {
+            foreach ($products as $p) {
+                $productId = $p['product_id'];
+
+                // Map standard keys precisely like your original single action
+                $proName     = $p['name'] ?? '';
+                $altName     = $p['alt_name'] ?? '';
+                $model       = $p['model'] ?? '';
+                $categories  = $p['categorys'] ?? [];
+                $description = $p['description'] ?? '';
+                $brandId     = $p['brand_id'] ?? '';
+                $price       = $p['price'] ?? '';
+                $quantity    = $p['quantity'] ?? '';
+                $weight      = !empty($p['weight']) ? $p['weight'] : null;
+                $tag         = !empty($p['tags']) ? $p['tags'] : null;
+                $metaTitle   = !empty($p['meta_title']) ? $p['meta_title'] : null;
+                $metaDesc    = !empty($p['meta_description']) ? $p['meta_description'] : null;
+                $metaKeyword = !empty($p['meta_keyword']) ? $p['meta_keyword'] : null;
+
+                // Update Table: cc_products
+                $proData = [
+                    'name'      => $proName,
+                    'alt_name'  => $altName,
+                    'model'     => $model,
+                    'price'     => $price,
+                    'weight'    => $weight,
+                    'quantity'  => $quantity,
+                    'brand_id'  => $brandId,
+                    'updatedBy' => $adUserId,
+                ];
+                DB()->table('cc_products')->where('product_id', $productId)->update($proData);
+
+                // Update Table: cc_product_to_category
+                DB()->table('cc_product_to_category')->where('product_id', $productId)->delete();
+                if (!empty($categories)) {
+                    $catData = array_map(fn($catId) => [
+                        'product_id'  => $productId,
+                        'category_id' => $catId,
+                    ], $categories);
+                    DB()->table('cc_product_to_category')->insertBatch($catData);
+                }
+
+                // Update Table: cc_product_description
+                $proDescData = [
+                    'description'      => $description,
+                    'tag'              => $tag,
+                    'meta_title'       => $metaTitle,
+                    'meta_description' => $metaDesc,
+                    'meta_keyword'     => $metaKeyword,
+                ];
+                DB()->table('cc_product_description')->where('product_id', $productId)->update($proDescData);
+            }
+
+            // Complete Transaction execution
+            DB()->transComplete();
+
+            if (DB()->transStatus() === false) {
+                DB()->transRollback();
+                return $this->response->setJSON([
+                    'status'    => 'error',
+                    'message'   => 'Database execution breakdown during batch processing. All changes rolled back.',
+                    'csrf_hash' => csrf_hash()
+                ]);
+            }
+
+            return $this->response->setJSON([
+                'status'    => 'success',
+                'message'   => 'Successfully batch updated <strong>' . count($products) . '</strong> products.',
+                'csrf_hash' => csrf_hash()
+            ]);
+        } catch (\Exception $e) {
+            DB()->transRollback();
+            return $this->response->setJSON([
+                'status'    => 'error',
+                'message'   => 'Critical application failure: ' . $e->getMessage(),
+                'csrf_hash' => csrf_hash()
+            ]);
+        }
     }
     public function multi_delete_action()
     {

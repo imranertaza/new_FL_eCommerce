@@ -115,7 +115,7 @@
                             foreach ($product as $key => $val) { ?>
                                 <tr id="hide_<?php echo $val->product_id; ?>">
                                     <td width="10">
-                                        <input type="checkbox" class="product-select-checkbox" name="productId[]" value="<?php echo $val->product_id; ?>" form="multisubmitform" onclick="toggleImageInput(this, '<?php echo $val->product_id; ?>', '<?php echo $val->image; ?>','<?php echo $val->price; ?>','<?php echo $val->quantity; ?>')">
+                                        <input type="checkbox" class="product-select-checkbox" name="productId[]" value="<?php echo $val->product_id; ?>" form="multisubmitform" onclick="toggleImageInput(this, '<?php echo $val->product_id; ?>', '<?php echo $val->image; ?>','<?php echo $val->price; ?>','<?php echo $val->quantity; ?>','<?php echo $val->brand_id; ?>')">
                                     </td>
                                     <td><?php echo $i++; ?></td>
                                     <td width="50"><img data-sizes="auto" id="" src="<?php echo product_image_view('uploads/products', $val->product_id, $val->image, 'noimage.png',  '50', '50') ?>" alt="<?php echo $val->alt_name ?>" class="img-fluid" loading="lazy"></td>
@@ -205,7 +205,7 @@
                         });
 
                         // Execute data array bindings seamlessly
-                        toggleImageInput(args[0], args[1], args[2], args[3], args[4]);
+                        toggleImageInput(args[0], args[1], args[2], args[3], args[4], args[5]);
                     }
                 }
             }
@@ -234,13 +234,14 @@
         }
     }
 
-    function toggleImageInput(checkbox, productId, imageName, priceValue, quantityValue) {
+    function toggleImageInput(checkbox, productId, imageName, priceValue, quantityValue, brandValue) {
         const form = document.getElementById('multisubmitform');
         if (!form) return;
 
         const imgId = 'imgInput_' + productId;
         const priceId = 'price_' + productId;
         const qtyId = 'quantity_' + productId;
+        const brandId = 'brand_id_' + productId;
 
         if (checkbox.checked) {
             let imgInput = document.getElementById(imgId);
@@ -276,8 +277,19 @@
             }
             qtyInput.value = quantityValue;
 
+            let brandInput = document.getElementById(brandId);
+            if (!brandInput) {
+                brandInput = document.createElement('input');
+                brandInput.type = 'hidden';
+                brandInput.className = 'gemini-temp-input';
+                brandInput.name = 'brand_id[' + productId + ']';
+                brandInput.id = brandId;
+                form.appendChild(brandInput);
+            }
+            brandInput.value = brandValue;
+
         } else {
-            const idsToRemove = [imgId, priceId, qtyId];
+            const idsToRemove = [imgId, priceId, qtyId, brandId];
             idsToRemove.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.remove();
@@ -314,6 +326,8 @@
                 urlParams.push('productImage[' + prodId + ']=' + encodeURIComponent(imgVal));
                 urlParams.push('productPrice[' + prodId + ']=' + encodeURIComponent(priceVal));
                 urlParams.push('productQuantity[' + prodId + ']=' + encodeURIComponent(qtyVal));
+                let brandVal = $('#brand_id_' + prodId).val() || '';
+                urlParams.push('brand_id[' + prodId + ']=' + encodeURIComponent(brandVal));
             });
 
             // Clear previous input text and display the modal (BS4 Syntax)

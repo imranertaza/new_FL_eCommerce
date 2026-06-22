@@ -84,14 +84,25 @@
 
                                             <div class="p-2 bg-light rounded border">
                                                 <div class="col-md-12">
+                                                    <div class="form-group mb-2">
+                                                        <label>Brand</label>
+                                                        <select name="brand_id" class="form-control brand-select2">
+                                                            <option value="">Please select</option>
+                                                            <?php foreach ($brands as $brand) { ?>
+                                                                <option value="<?php echo $brand->brand_id; ?>" <?php echo (isset($p['brand_id']) && $p['brand_id'] == $brand->brand_id) ? 'selected' : ''; ?>>
+                                                                    <?php echo $brand->name; ?>
+                                                                </option>
+                                                            <?php } ?>
+                                                        </select>
+                                                        <small><i class="fas fa-tag mr-1"></i> Current: <?= esc($p['current_brand_name'] ?? 'N/A') ?></small>
+                                                    </div>
                                                     <div class="form-group">
                                                         <label class="small font-weight-bold">Model</label>
                                                         <input type="text" name="model" class="form-control" value="<?= esc($p['model'] ?? '') ?>">
                                                     </div>
                                                     <div class="form-group mb-2">
                                                         <label class="small font-weight-bold mb-1">Price</label>
-                                                        <input type="number" step="0.01" name="price" class="form-control form-control-sm" value="" min="0">
-                                                        <small><i class="fas fa-tag mr-1"></i> Previous: $<?= esc($p['current_price'] ?? '0.00') ?></small> </br
+                                                        <input type="number" step="0.01" name="price" class="form-control form-control-sm" value="<?= esc($p['current_price'] ?? '0.00') ?>" min="0">
                                                         <small><i class="fas fa-tag mr-1"></i> Recommended: $<?= esc($p['price'] ?? '0.00') ?></small>
                                                     </div>
                                                     <div class="form-group mb-2">
@@ -157,10 +168,10 @@
                                                         <div class="form-group mb-2">
                                                             <label class="small font-weight-bold mb-1">Meta Title</label>
                                                             <input type="text" name="meta_title" class="form-control form-control-sm mb-2" value="<?= esc($p['meta_title'] ?? '') ?>" placeholder="Meta Title">
-                                                           
+
                                                         </div>
                                                         <div class="form-group mb-2">
-                                                             <label class="small font-weight-bold mb-1">Meta Keywords</label>
+                                                            <label class="small font-weight-bold mb-1">Meta Keywords</label>
                                                             <input type="text" name="meta_keyword" class="form-control form-control-sm" value="<?= esc($p['meta_keyword'] ?? '') ?>" placeholder="Meta Keywords">
                                                         </div>
                                                     </div>
@@ -187,7 +198,11 @@
                         </form>
                     <?php endforeach; ?>
                 </div>
-
+                <div class="text-center mt-4 mb-4">
+                    <button type="button" id="btnSaveAll" class="btn btn-success btn-lg px-5 shadow-sm">
+                        <i class="fas fa-layer-group mr-2"></i> Save All Products
+                    </button>
+                </div>
             </div>
         </div>
     </section>
@@ -202,6 +217,11 @@
         $('.select2bs4').select2({
             theme: 'bootstrap4',
             placeholder: "Select categories",
+            allowClear: true
+        });
+        $('.brand-select2').select2({
+            theme: 'bootstrap4',
+            placeholder: "Select brand",
             allowClear: true
         });
 
@@ -263,6 +283,88 @@
                     setTimeout(() => {
                         $statusMsg.fadeOut();
                     }, 4000);
+                }
+            });
+        });
+
+        // Handle the "Save All" Batch Button
+        $('#btnSaveAll').on('click', function() {
+            const $forms = $('.product-ajax-form');
+
+            if ($forms.length === 0) {
+                showAlert('info', 'No products left to save.');
+                return;
+            }
+
+            const $btn = $(this);
+            $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i> Saving All in One Batch...');
+
+            // 1. Create a master FormData object
+            let batchFormData = new FormData();
+
+            // 2. Append the single global CSRF token
+            const csrfName = $('#global-csrf').attr('name');
+            const csrfHash = $('#global-csrf').val();
+            batchFormData.append(csrfName, csrfHash);
+
+            // 3. Loop through every form and inject its data into the master payload
+            $forms.each(function(index) {
+                let singleFormData = new FormData(this);
+
+                for (let [key, value] of singleFormData.entries()) {
+                    // Skip individual CSRF tokens if they exist in the sub-forms
+                    if (key !== csrfName) {
+                        // Reformat the name attribute so PHP reads it as a multidimensional array.
+                        // Example: 'name' becomes 'products[0][name]'
+                        // Example array: 'categorys[]' becomes 'products[0][categorys][]'
+                        let formattedKey = key.includes('[]') ?
+                            `products[${index}][${key.replace('[]', '')}][]` :
+                            `products[${index}][${key}]`;
+
+                        batchFormData.append(formattedKey, value);
+                    }
+                }
+            });
+
+            // 4. Send the massive single request
+            $.ajax({
+                url: "<?= base_url('product-gemini-update-batch') ?>", // Configured Route
+                type: "POST",
+                data: batchFormData,
+                processData: false,
+                contentType: false,
+                dataType: "json",
+                success: function(response) {
+                    // Always update CSRF hash for future actions
+                    if (response.csrf_hash) {
+                        $('#global-csrf').val(response.csrf_hash);
+                    }
+
+                    if (response.status === 'success' || response.success === true) {
+                        showAlert('success', response.message || 'All products updated successfully in bulk!');
+
+                        // Fade out all forms to indicate success
+                        $forms.fadeOut(600, function() {
+                            $(this).remove();
+                        });
+
+                        // Redirect back to the main products page after a short delay
+                        setTimeout(() => {
+                            location.href = '<?= base_url('products') ?>';
+                        }, 1200);
+
+                    } else {
+                        // Handle validation or database errors returned from the server
+                        let errorMsg = response.message || 'An error occurred during batch update.';
+                        showAlert('danger', errorMsg);
+                        $btn.prop('disabled', false).html('<i class="fas fa-layer-group mr-2"></i> Save All Products');
+                    }
+                },
+                error: function(xhr) {
+                    // Handle complete server/network crash
+                    showAlert('danger', 'Server error. Please check the console for details.');
+                    console.error(xhr.responseText);
+                    $btn.prop('disabled', false).html('<i class="fas fa-layer-group mr-2"></i> Save All Products');
                 }
             });
         });
