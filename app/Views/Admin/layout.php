@@ -538,6 +538,7 @@
     $(function () {
         // Summernote
         $('#editor').summernote();
+        $('.editor').summernote();
     })
 
     $(document).ready(function(){
