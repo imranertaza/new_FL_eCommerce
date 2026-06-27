@@ -36,9 +36,9 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-//$routes->get('/', 'Home::index');
-$routes->get('/', 'Home::index_maintenance');
-$routes->get('/maintenance', 'Home::index');
+$routes->get('/', 'Home::index');
+//$routes->get('/', 'Home::index_maintenance');
+//$routes->get('/maintenance', 'Home::index');
 
 $routes->post('/user_subscribe', 'Home::user_subscribe');
 $routes->get('/user_subscribe_verify', 'Home::verify');
@@ -88,11 +88,17 @@ $routes->post('/product_category_sort_update_action', 'Admin\Product_category::s
 //Products
 $routes->get('/products', 'Admin\Products::index');
 $routes->get('/product_create', 'Admin\Products::create');
+$routes->get('/product_create_gemini', 'Admin\Products::create_gemini');
+$routes->post('/product-ai-analyze-batch', 'Admin\Products::product_ai_analyze_batch');
+$routes->post('/product_ai_analyze_single', 'Admin\Products::product_ai_analyze_single');
+$routes->post('/product-create-gemini', 'Admin\Products::product_create_gemini_action');
 $routes->post('/product_create_action', 'Admin\Products::create_action');
 $routes->post('/product_copy_action', 'Admin\Products::copy_action');
 $routes->post('/product_update_action', 'Admin\Products::update_action');
 $routes->post('/product_image_delete', 'Admin\Products::image_delete');
 $routes->get('/product_update/(:num)', 'Admin\Products::update/$1');
+$routes->get('/product-multi-update-with-gemini', 'Admin\Products::multi_update_with_gemini');
+$routes->post('/product-gemini-update', 'Admin\Products::product_gemini_update_action');
 $routes->post('/product_delete', 'Admin\Products::delete');
 $routes->get('/related_product', 'Admin\Products::related_product');
 $routes->post('/product_option_search', 'Admin\Products::product_option_search');

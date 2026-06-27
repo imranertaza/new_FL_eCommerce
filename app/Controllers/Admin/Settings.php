@@ -77,6 +77,8 @@ class Settings extends BaseController
         $data['currency_symbol'] = $this->request->getPost('currency_symbol');
         $data['invoice_prefix'] = $this->request->getPost('invoice_prefix');
 
+        $data['gemini_api_key'] = $this->request->getPost('gemini_api_key');
+
         $data['new_account_alert_mail'] = $this->request->getPost('new_account_alert_mail');
         $data['new_order_alert_mail'] = $this->request->getPost('new_order_alert_mail');
 
@@ -101,23 +103,23 @@ class Settings extends BaseController
         $data['meta_keyword'] = $this->request->getPost('meta_keyword');
         $data['meta_description'] = $this->request->getPost('meta_description');
 
-//        if (!empty($_FILES['store_logo']['name'])) {
-//            $target_dir = FCPATH . '/uploads/store/';
-//            if (!file_exists($target_dir)) {
-//                mkdir($target_dir, 0777);
-//            }
-//
-//            //new image upload
-//            $pic = $this->request->getFile('store_logo');
-//            $namePic = $pic->getRandomName();
-//            $pic->move($target_dir, $namePic);
-//            $news_img = 'logo_' . $pic->getName();
-//            $this->crop->withFile($target_dir . '' . $namePic)->fit(200, 100, 'center')->save($target_dir . $news_img);
-//            unlink($target_dir . '' . $namePic);
-//            $data['store_logo'] = $news_img;
-//        }
+        //        if (!empty($_FILES['store_logo']['name'])) {
+        //            $target_dir = FCPATH . '/uploads/store/';
+        //            if (!file_exists($target_dir)) {
+        //                mkdir($target_dir, 0777);
+        //            }
+        //
+        //            //new image upload
+        //            $pic = $this->request->getFile('store_logo');
+        //            $namePic = $pic->getRandomName();
+        //            $pic->move($target_dir, $namePic);
+        //            $news_img = 'logo_' . $pic->getName();
+        //            $this->crop->withFile($target_dir . '' . $namePic)->fit(200, 100, 'center')->save($target_dir . $news_img);
+        //            unlink($target_dir . '' . $namePic);
+        //            $data['store_logo'] = $news_img;
+        //        }
 
-        foreach($data as $key=>$val){
+        foreach ($data as $key => $val) {
             $table = DB()->table('cc_settings');
             $table->set('value', $val)->where('label', $key)->update();
         }
@@ -125,10 +127,9 @@ class Settings extends BaseController
 
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Settings Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('settings');
-
-
     }
-    public function cacheImageRemove(){
+    public function cacheImageRemove()
+    {
         $directory = FCPATH . 'cache/uploads';
         $days = 30;
         $now = time();
@@ -154,7 +155,4 @@ class Settings extends BaseController
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Cache Image Remove Successfully <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('settings');
     }
-
-
-
 }

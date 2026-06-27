@@ -331,7 +331,7 @@ function image_view($url, $slug, $image, $no_image, $class = '', $id = '')
  * @param int|string $class
  * @return string
  */
-function multi_image_view($url, $slug, $slug2, $image, $no_image, $class = '',$id='')
+function multi_image_view($url, $slug, $slug2, $image, $no_image, $class = '', $id = '')
 {
     $bas_url = base_url();
 
@@ -342,17 +342,17 @@ function multi_image_view($url, $slug, $slug2, $image, $no_image, $class = '',$i
     $no_img = $bas_url . '/' . $url . '/' . $no_image;
     if (!empty($image)) {
         if (!file_exists($dir)) {
-            $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" id="'.$id.'" loading="lazy">';
+            $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" id="' . $id . '" loading="lazy">';
         } else {
             $imgPath = $dir . '/' . $image;
             if (file_exists($imgPath)) {
-                $result = '<img data-sizes="auto" src="' . $img . '" class="' . $class . '" id="'.$id.'" loading="lazy">';
+                $result = '<img data-sizes="auto" src="' . $img . '" class="' . $class . '" id="' . $id . '" loading="lazy">';
             } else {
-                $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" id="'.$id.'" loading="lazy">';
+                $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" id="' . $id . '" loading="lazy">';
             }
         }
     } else {
-        $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" id="'.$id.'" loading="lazy">';
+        $result = '<img data-sizes="auto" src="' . $no_img . '" class="' . $class . '" id="' . $id . '" loading="lazy">';
     }
     return $result;
 }
@@ -488,14 +488,15 @@ function admin_user_name()
  * @description This function provides all settings
  * @return array
  */
-function get_settings(){
+function get_settings()
+{
     $table = DB()->table('cc_settings');
     $data = $table->get()->getResult();
 
     $settings = array();
-    foreach ($data as $key=>$val){
-        foreach($val as $k=>$v) {
-            if ($k == 'label'){
+    foreach ($data as $key => $val) {
+        foreach ($val as $k => $v) {
+            if ($k == 'label') {
                 $settings[$v] = $data[$key]->value;
             }
         }
@@ -571,10 +572,10 @@ function getParentCategoryArray()
  * @param int $cat_id
  * @return array
  */
-function getCategoryBySubArray($cat_id,$orderBy,$type)
+function getCategoryBySubArray($cat_id, $orderBy, $type)
 {
     $table = DB()->table('cc_product_category');
-    $query = $table->where('parent_id', $cat_id)->where('status','1')->orderBy($orderBy, $type)->get()->getResult();
+    $query = $table->where('parent_id', $cat_id)->where('status', '1')->orderBy($orderBy, $type)->get()->getResult();
     return $query;
 }
 
@@ -715,7 +716,7 @@ function get_array_data_by_id($table, $whereInfo, $whereId)
 function category_id_by_product_count($category_id)
 {
     $table = DB()->table('cc_product_to_category');
-    $count = $table->join('cc_products', 'cc_products.product_id = cc_product_to_category.product_id')->where('cc_product_to_category.category_id', $category_id)->where('cc_products.status','Active')->countAllResults();
+    $count = $table->join('cc_products', 'cc_products.product_id = cc_product_to_category.product_id')->where('cc_product_to_category.category_id', $category_id)->where('cc_products.status', 'Active')->countAllResults();
     return $count;
 }
 
@@ -917,7 +918,7 @@ function get_lebel_by_value_in_theme_settings_with_theme($lable, $theme)
  * @param string $message
  * @return void
  */
-function email_send($to, $subject, $message,$replyEmail=null,$title=null)
+function email_send($to, $subject, $message, $replyEmail = null, $title = null)
 {
 
     $email = \Config\Services::email();
@@ -937,8 +938,8 @@ function email_send($to, $subject, $message,$replyEmail=null,$title=null)
     $form = get_lebel_by_value_in_settings('mail_address');
 
     $email->setFrom($form, $titleStore);
-    $reply = !empty($replyEmail)?$replyEmail:$form;
-    $email->setReplyTo($reply,$title??'');
+    $reply = !empty($replyEmail) ? $replyEmail : $form;
+    $email->setReplyTo($reply, $title ?? '');
     $email->setTo($to);
 
     $email->setSubject($subject);
@@ -988,7 +989,7 @@ function order_email_template($orderId)
 
     $titleStore = get_lebel_by_value_in_settings('store_name');
 
-    $paymentMet = get_data_by_id('name','cc_payment_method','payment_method_id',$val->payment_method);
+    $paymentMet = get_data_by_id('name', 'cc_payment_method', 'payment_method_id', $val->payment_method);
     $state = get_data_by_id('name', 'cc_zone', 'zone_id', $val->shipping_city);
     $country = get_data_by_id('name', 'cc_country', 'country_id', $val->shipping_country_id);
     $view = '';
@@ -1080,13 +1081,13 @@ function order_email_template($orderId)
         $proName = get_data_by_id('name', 'cc_products', 'product_id', $row->product_id);
         $model = get_data_by_id('model', 'cc_products', 'product_id', $row->product_id);
         $image = get_data_by_id('image', 'cc_products', 'product_id', $row->product_id);
-        $imgView = '<img data-sizes="auto"  id="" src="'.product_image_view('uploads/products', $row->product_id, $image, 'noimage.png',  '100', '100').'" >';
+        $imgView = '<img data-sizes="auto"  id="" src="' . product_image_view('uploads/products', $row->product_id, $image, 'noimage.png',  '100', '100') . '" >';
         $url = base_url('detail/' . $row->product_id);
         $price = currency_symbol($row->total_price);
         $total = currency_symbol($row->final_price);
         $view .= "<tr>
             <td style='border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
-            <a href='$url' target='_blank' title='".$proName."' style='padding:1px;border:1px solid #dddddd' >
+            <a href='$url' target='_blank' title='" . $proName . "' style='padding:1px;border:1px solid #dddddd' >
                     $imgView
             </a>
             </td>
@@ -1168,7 +1169,7 @@ function order_email_template_card($orderId)
 
     $titleStore = get_lebel_by_value_in_settings('store_name');
 
-    $paymentMet = get_data_by_id('name','cc_payment_method','payment_method_id',$val->payment_method);
+    $paymentMet = get_data_by_id('name', 'cc_payment_method', 'payment_method_id', $val->payment_method);
 
     $view = '';
     $view .= "<div style='width:680px'><style> .logo-css{ margin-bottom:20px;border:none; } </style>
@@ -1221,7 +1222,7 @@ function order_email_template_card($orderId)
                 Card Name:
             </td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
-                ".$cardDetail->card_name."
+                " . $cardDetail->card_name . "
             </td>
         </tr>
         <tr>
@@ -1229,7 +1230,7 @@ function order_email_template_card($orderId)
                 Card Number:
             </td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
-                ".$cardDetail->card_number."
+                " . $cardDetail->card_number . "
             </td>
         </tr>
         <tr>
@@ -1237,7 +1238,7 @@ function order_email_template_card($orderId)
                 Expiration:
             </td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
-                ".$cardDetail->card_expiration."
+                " . $cardDetail->card_expiration . "
             </td>
         </tr>
         <tr>
@@ -1245,7 +1246,7 @@ function order_email_template_card($orderId)
                 CVC:
             </td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
-                ".$cardDetail->card_cvc."
+                " . $cardDetail->card_cvc . "
             </td>
         </tr>
         </tbody>
@@ -1275,9 +1276,9 @@ function success_email_template($title, $message, $url)
     $telUrl = get_lebel_by_value_in_settings('telegram_url');
     $pinUrl = get_lebel_by_value_in_settings('pinterest_url');
 
-    $ins = '<img src="'.base_url("icon/instagram.png").'" width="30" height="30" alt="Instagram" >';
-    $tel = '<img src="'.base_url("icon/telegram.png").'" width="30" height="30" alt="Telegram" >';
-    $pin = '<img src="'.base_url("icon/pinterest.png").'" width="30" height="30" alt="Pinterest" >';
+    $ins = '<img src="' . base_url("icon/instagram.png") . '" width="30" height="30" alt="Instagram" >';
+    $tel = '<img src="' . base_url("icon/telegram.png") . '" width="30" height="30" alt="Telegram" >';
+    $pin = '<img src="' . base_url("icon/pinterest.png") . '" width="30" height="30" alt="Pinterest" >';
     $view = '';
     $view .= "<div style='width:680px'>
             <style> .logo-css{ margin-top:20px;border:none; } </style>
@@ -1331,7 +1332,7 @@ function order_id_by_status($order_id)
 function getSideMenuArray()
 {
     $table = DB()->table('cc_product_category');
-    $query = $table->where('side_menu', 1)->where('status','1')->orderBy('sort_order', 'ASC')->get()->getResult();
+    $query = $table->where('side_menu', 1)->where('status', '1')->orderBy('sort_order', 'ASC')->get()->getResult();
     return $query;
 }
 
@@ -1475,12 +1476,13 @@ function get_category_id_by_product_show_home_slide($category_id)
 {
     $table = DB()->table('cc_products');
     $table->join('cc_product_to_category', 'cc_product_to_category.product_id = cc_products.product_id')->where('cc_products.status', 'Active')->where('cc_products.featured', '1');
-    $result = $table->where('cc_product_to_category.category_id', $category_id)->orderBy('cc_products.product_id','DESC')->limit(20)->get()->getResult();
+    $result = $table->where('cc_product_to_category.category_id', $category_id)->orderBy('cc_products.product_id', 'DESC')->limit(20)->get()->getResult();
 
     return  sectionProductViewByProductArray($result);
 }
 
-function getProductByScheduleIdShowHomeSlider($scheduleId){
+function getProductByScheduleIdShowHomeSlider($scheduleId)
+{
     $db = DB();
     $featured = $db->table('cc_featured_product')
         ->where('featured_schedule_id', $scheduleId)
@@ -1521,7 +1523,6 @@ function getProductByScheduleIdShowHomeSlider($scheduleId){
                 $result[] = $product;
             }
         }
-
     } elseif ($type === 'brand') {
 
         foreach ($featured as $item) {
@@ -1536,7 +1537,6 @@ function getProductByScheduleIdShowHomeSlider($scheduleId){
                 $result[] = $product;
             }
         }
-
     } elseif ($type === 'category') {
 
         foreach ($featured as $item) {
@@ -1552,8 +1552,7 @@ function getProductByScheduleIdShowHomeSlider($scheduleId){
                 $result[] = $product;
             }
         }
-
-    }else{
+    } else {
         foreach ($featured as $item) {
             $album = $db->table('cc_album')
                 ->where('album_id', $item->album_id)
@@ -1567,12 +1566,13 @@ function getProductByScheduleIdShowHomeSlider($scheduleId){
     }
     if (!empty($result)) {
         return sectionProductViewByProductArray($result);
-    }else{
+    } else {
         return sectionAlbumViewByAlbumArray($resultAlbum);
     }
 }
 
-function sectionProductViewByProductArray($product){
+function sectionProductViewByProductArray($product)
+{
     $modules = modules_access();
     $view = '';
     $count = 0;
@@ -1590,7 +1590,6 @@ function sectionProductViewByProductArray($product){
                     <span class="btn-wishlist-text position-absolute  mt-5 ms-2">Favorite</span>
                     </button>';
             }
-
         }
 
         if ($modules['compare'] == 1) {
@@ -1600,7 +1599,7 @@ function sectionProductViewByProductArray($product){
         }
 
         $view .= '<div class="product-top mb-2">
-                <img data-sizes="auto" src="' . product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', '132', '132') . '" alt="'.$pro->alt_name.'" class="img-fluid w-100" loading="lazy">                 
+                <img data-sizes="auto" src="' . product_image_view('uploads/products', $pro->product_id, $pro->image, 'noimage.png', '132', '132') . '" alt="' . $pro->alt_name . '" class="img-fluid w-100" loading="lazy">                 
                 </div>
                 <div class="product-bottom mt-auto">
                     <div class="product-title product_title_area mb-2">
@@ -1624,10 +1623,11 @@ function sectionProductViewByProductArray($product){
     return $view;
 }
 
-function sectionAlbumViewByAlbumArray($albumArray){
+function sectionAlbumViewByAlbumArray($albumArray)
+{
     $view = '';
     $count = 0;
-    foreach ($albumArray as $val){
+    foreach ($albumArray as $val) {
 
         // Open new slide every 3 items
         if ($count % 3 == 0) {
@@ -1637,17 +1637,17 @@ function sectionAlbumViewByAlbumArray($albumArray){
         $view .= '<div class="border p-3 product-grid h-100 d-flex align-items-stretch flex-column position-relative">
             <div class="product-grid position-relative">
                 <div class="product-top mb-2">';
-        if ($val->is_parent == 1){
-    $view .= '<a href="'. base_url('qc-picture-view-category/'.$val->album_id).'">';
-        }else{
-            $view .='<a href="'. base_url('qc-picture-view/'.$val->album_id).'">';
-         }
+        if ($val->is_parent == 1) {
+            $view .= '<a href="' . base_url('qc-picture-view-category/' . $val->album_id) . '">';
+        } else {
+            $view .= '<a href="' . base_url('qc-picture-view/' . $val->album_id) . '">';
+        }
         $view .= '<img data-sizes="auto"
                 src="' . product_image_view('uploads/album', $val->album_id, $val->thumb, 'noimage.png', '132', '132') . '"
-                alt="'.$val->alt_name.'"
+                alt="' . $val->alt_name . '"
                 class="img-fluid w-100"
                 loading="lazy">';
-        $view .= '<p class="product-title text-center text-black">'.$val->name.'</p>';
+        $view .= '<p class="product-title text-center text-black">' . $val->name . '</p>';
         $view .= '</a></div>
             </div>
         </div>' . "\n";
@@ -1671,7 +1671,8 @@ function sectionAlbumViewByAlbumArray($albumArray){
  * @param int $cate_id
  * @return mixed
  */
-function get_category_name_by_id($cate_id){
+function get_category_name_by_id($cate_id)
+{
     $table = DB()->table('cc_product_category');
     $cat = $table->where('prod_cat_id', $cate_id)->get()->getRow();
     return $cat->category_name;
@@ -1682,7 +1683,8 @@ function get_category_name_by_id($cate_id){
  * @param int $cate_id
  * @return int|void|null
  */
-function category_parent_count($cate_id){
+function category_parent_count($cate_id)
+{
     $table = DB()->table('cc_product_category');
     $cat = $table->where('prod_cat_id', $cate_id)->get()->getRow();
     if ($cat->parent_id) {
@@ -1700,7 +1702,7 @@ function display_category_with_parent($cate_id)
     $catName = array();
     if (!empty($cate_id)) {
         $totalParent = category_parent_count($cate_id);
-        for ($i=0; $i<=$totalParent; $i++) {
+        for ($i = 0; $i <= $totalParent; $i++) {
             $catName[] = get_category_name_by_id($cate_id);
             $table = DB()->table('cc_product_category');
             $cat = $table->where('prod_cat_id', $cate_id)->get()->getRow();
@@ -1710,22 +1712,21 @@ function display_category_with_parent($cate_id)
 
     krsort($catName);
 
-    foreach ($catName as $key => $val){
+    foreach ($catName as $key => $val) {
         if ($key == 0) {
             print $val;
-        }else {
-            print $val." > ";
+        } else {
+            print $val . " > ";
         }
     }
-
-
 }
 
 /**
  * @description This function provides zone rate type
  * @return string[]
  */
-function zone_rate_type(){
+function zone_rate_type()
+{
     $status = [
         '1' => 'Weight',
         '2' => 'Item',
@@ -1738,17 +1739,18 @@ function zone_rate_type(){
  * @description This function provides get theme settings
  * @return array
  */
-function get_theme_settings(){
+function get_theme_settings()
+{
 
     $settings = get_settings();
     $theme = $settings['Theme'];
     $table = DB()->table('cc_theme_settings');
     $data = $table->where('theme', $theme)->get()->getResult();
     $settings = array();
-    foreach ($data as $key => $val){
-        foreach($val as $k=>$v) {
+    foreach ($data as $key => $val) {
+        foreach ($val as $k => $v) {
             if ($k == 'label') {
-                $settings[$v] = ['value' => $data[$key]->value,'alt_name' => $data[$key]->alt_name];
+                $settings[$v] = ['value' => $data[$key]->value, 'alt_name' => $data[$key]->alt_name];
             }
         }
     }
@@ -1759,15 +1761,16 @@ function get_theme_settings(){
  * @description This function provides get theme title settings
  * @return array
  */
-function get_theme_title_settings(){
+function get_theme_title_settings()
+{
 
     $settings = get_settings();
     $theme = $settings['Theme'];
     $table = DB()->table('cc_theme_settings');
     $data = $table->where('theme', $theme)->get()->getResult();
     $settings = array();
-    foreach ($data as $key => $val){
-        foreach($val as $k=>$v) {
+    foreach ($data as $key => $val) {
+        foreach ($val as $k => $v) {
             if ($k == 'label') {
                 $settings[$v] = $data[$key]->title;
             }
@@ -1782,8 +1785,9 @@ function get_theme_title_settings(){
  * @param string $symbol
  * @return string
  */
-function currency_symbol_with_symbol($amount,$symbol) {
-    $cur = !empty($amount) ? number_format($amount,2) : 0;
+function currency_symbol_with_symbol($amount, $symbol)
+{
+    $cur = !empty($amount) ? number_format($amount, 2) : 0;
     $split = explode('.', $cur);
     $flot = empty($split[1]) ? '00' : $split[1];
     $result = $symbol . '' . $split[0] . '<sup>' . $flot . '</sup>';
@@ -1800,8 +1804,8 @@ function modules_access()
     $table = DB()->table('cc_modules');
     $data = $table->get()->getResult();
     $settings = array();
-    foreach ($data as $key => $val){
-        foreach($val as $k=>$v) {
+    foreach ($data as $key => $val) {
+        foreach ($val as $k => $v) {
             if ($k == 'module_key') {
                 $settings[$v] = $data[$key]->status;
             }
@@ -1814,14 +1818,15 @@ function modules_access()
  * @description This function provides get settings title
  * @return array
  */
-function get_settings_title(){
+function get_settings_title()
+{
     $table = DB()->table('cc_settings');
     $data = $table->get()->getResult();
 
     $settings = array();
-    foreach ($data as $key=>$val){
-        foreach($val as $k=>$v) {
-            if ($k == 'label'){
+    foreach ($data as $key => $val) {
+        foreach ($val as $k => $v) {
+            if ($k == 'label') {
                 $settings[$v] = $data[$key]->title;
             }
         }
@@ -1835,10 +1840,11 @@ function get_settings_title(){
  * @param array $products
  * @return int
  */
-function product_count_by_brand_id($brand_id,$products){
+function product_count_by_brand_id($brand_id, $products)
+{
     $count = 0;
-    foreach ($products as $v){
-        if($v->brand_id == $brand_id){
+    foreach ($products as $v) {
+        if ($v->brand_id == $brand_id) {
             $count++;
         }
     }
@@ -1855,7 +1861,7 @@ function display_category_parent_with_parent($album_id)
     $albumName = array();
     if (!empty($album_id)) {
         $totalParent = album_category_parent_count($album_id);
-        for ($i=0; $i<=$totalParent; $i++) {
+        for ($i = 0; $i <= $totalParent; $i++) {
             $albumName[] = get_album_name_by_id($album_id);
             $table = DB()->table('cc_album');
             $cat = $table->where('album_id', $album_id)->get()->getRow();
@@ -1865,17 +1871,17 @@ function display_category_parent_with_parent($album_id)
 
     krsort($albumName);
 
-    foreach ($albumName as $key => $val){
+    foreach ($albumName as $key => $val) {
         if ($key == 0) {
             print $val;
-        }else {
-            print $val." > ";
+        } else {
+            print $val . " > ";
         }
     }
-
 }
 
-function album_category_parent_count($album_id){
+function album_category_parent_count($album_id)
+{
     $table = DB()->table('cc_album');
     $album = $table->where('album_id', $album_id)->get()->getRow();
     if ($album->parent_album_id) {
@@ -1883,30 +1889,32 @@ function album_category_parent_count($album_id){
     }
 }
 
-function get_album_name_by_id($album_id){
+function get_album_name_by_id($album_id)
+{
     $table = DB()->table('cc_album');
     $album = $table->where('album_id', $album_id)->get()->getRow();
     return $album->name;
 }
 
-function parent_qc_picture(){
+function parent_qc_picture()
+{
     $table = DB()->table('cc_album');
-    $album = $table->where('parent_album_id', '0')->orderBy('name','ASC')->get()->getResult();
+    $album = $table->where('parent_album_id', '0')->orderBy('name', 'ASC')->get()->getResult();
     return $album;
 }
 
 function common_image_view($url, $slug, $image, $no_image, $width = '', $height = '')
 {
 
-    $imgMain = str_replace("pro_", "", $image?? '');
+    $imgMain = str_replace("pro_", "", $image ?? '');
 
     $dir = FCPATH . '/' . $url . '/' . $slug;
 
     $imageNo = explode('.', $no_image);
-    $pathNewNo = 'cache/'.$url . '/' .$width.'x'.$height.'_'.$imageNo[0].'.webp';
-    if(file_exists($pathNewNo)){
+    $pathNewNo = 'cache/' . $url . '/' . $width . 'x' . $height . '_' . $imageNo[0] . '.webp';
+    if (file_exists($pathNewNo)) {
         $no_img = base_url($pathNewNo);
-    }else{
+    } else {
         $urlNewNo = base64_encode($url . '/');
         $no_img = base_url('image-resize/' . $urlNewNo . '/' . $width . 'x' . $height . '/' . $no_image);
     }
@@ -1920,7 +1928,7 @@ function common_image_view($url, $slug, $image, $no_image, $width = '', $height 
             if (file_exists($imgPath)) {
                 $image = explode('.', $imgMain);
 
-                if ($image[1] == 'gif'){
+                if ($image[1] == 'gif') {
                     $pathNew = 'cache/' . $url . '/' . $slug . '/' . $width . 'x' . $height . '_' . $imgMain;
                     if (file_exists($pathNew)) {
                         $imgFinal = base_url($pathNew);
@@ -1928,7 +1936,7 @@ function common_image_view($url, $slug, $image, $no_image, $width = '', $height 
                         $urlNew = base64_encode($url . '/' . $slug . '/');
                         $imgFinal = base_url('image-resize/' . $urlNew . '/' . $width . 'x' . $height . '/' . $imgMain);
                     }
-                }else {
+                } else {
                     $pathNew = 'cache/' . $url . '/' . $slug . '/' . $width . 'x' . $height . '_' . $image[0] . '.webp';
                     if (file_exists($pathNew)) {
                         $imgFinal = base_url($pathNew);
@@ -1949,19 +1957,54 @@ function common_image_view($url, $slug, $image, $no_image, $width = '', $height 
 
     return $result;
 }
+/**
+ * Get the full server path of the original product image
+ * 
+ * @param string $url       Folder like 'uploads/products'
+ * @param int    $slug      Product ID (folder name)
+ * @param string $image     Original image name (e.g., pro_1780208312_xxxx.png)
+ * @return string|null      Full path or null if not found
+ */
+function get_product_original_image_path($url, $slug, $image)
+{
+    if (empty($image) || empty($slug)) {
+        return null;
+    }
+
+    $dir = FCPATH . '/' . $url . '/' . $slug;
+
+    // Original image path
+    $original_path = $dir . '/' . $image;
+
+    // If original image exists, return it
+    if (file_exists($original_path)) {
+        return $original_path;
+    }
+
+    // Fallback: Try with watermark version if original not found
+    $im  = str_replace("pro_", "", $image ?? '');
+    $imgMain = ($modules['watermark'] ?? 0 == '1') ? '600_wm_' . $im : $im;
+    $watermark_path = $dir . '/' . $imgMain;
+
+    if (file_exists($watermark_path)) {
+        return $watermark_path;
+    }
+
+    return null; // Image not found
+}
 function product_image_view($url, $slug, $image, $no_image, $width = '', $height = '')
 {
     $modules = modules_access();
-    $im  = str_replace("pro_", "", $image?? '');
-    $imgMain = ($modules['watermark'] == '1')?'600_wm_'.$im:$im;
+    $im  = str_replace("pro_", "", $image ?? '');
+    $imgMain = ($modules['watermark'] == '1') ? '600_wm_' . $im : $im;
 
     $dir = FCPATH . '/' . $url . '/' . $slug;
 
     $imageNo = explode('.', $no_image);
-    $pathNewNo = 'cache/'.$url . '/' .$width.'x'.$height.'_'.$imageNo[0].'.webp';
-    if(file_exists($pathNewNo)){
+    $pathNewNo = 'cache/' . $url . '/' . $width . 'x' . $height . '_' . $imageNo[0] . '.webp';
+    if (file_exists($pathNewNo)) {
         $no_img = base_url($pathNewNo);
-    }else{
+    } else {
         $urlNewNo = base64_encode($url . '/');
         $no_img = base_url('image-resize/' . $urlNewNo . '/' . $width . 'x' . $height . '/' . $no_image);
     }
@@ -1974,10 +2017,10 @@ function product_image_view($url, $slug, $image, $no_image, $width = '', $height
 
             if (file_exists($imgPath)) {
                 $image = explode('.', $imgMain);
-                $pathNew = 'cache/'.$url . '/' . $slug . '/'.$width.'x'.$height.'_'.$image[0].'.webp';
-                if(file_exists($pathNew)){
+                $pathNew = 'cache/' . $url . '/' . $slug . '/' . $width . 'x' . $height . '_' . $image[0] . '.webp';
+                if (file_exists($pathNew)) {
                     $imgFinal = base_url($pathNew);
-                }else{
+                } else {
                     $urlNew = base64_encode($url . '/' . $slug . '/');
                     $imgFinal = base_url('image-resize/' . $urlNew . '/' . $width . 'x' . $height . '/' . $imgMain);
                 }
@@ -1995,18 +2038,18 @@ function product_image_view($url, $slug, $image, $no_image, $width = '', $height
 function product_multi_image_view($url, $slug, $slug2, $image, $no_image, $width = '', $height = '')
 {
     $modules = modules_access();
-    $im  = str_replace("pro_", "", $image?? '');
-    $imgMain = ($modules['watermark'] == '1')?'600_wm_'.$im:$im;
+    $im  = str_replace("pro_", "", $image ?? '');
+    $imgMain = ($modules['watermark'] == '1') ? '600_wm_' . $im : $im;
 
     $dir = FCPATH . '/' . $url . '/' . $slug . '/' . $slug2;
 
 
 
     $imageNo = explode('.', $no_image);
-    $pathNewNo = 'cache/'.$url . '/' .$width.'x'.$height.'_'.$imageNo[0].'.webp';
-    if(file_exists($pathNewNo)){
+    $pathNewNo = 'cache/' . $url . '/' . $width . 'x' . $height . '_' . $imageNo[0] . '.webp';
+    if (file_exists($pathNewNo)) {
         $no_img = base_url($pathNewNo);
-    }else{
+    } else {
         $urlNewNo = base64_encode($url . '/');
         $no_img = base_url('image-resize/' . $urlNewNo . '/' . $width . 'x' . $height . '/' . $no_image);
     }
@@ -2019,11 +2062,11 @@ function product_multi_image_view($url, $slug, $slug2, $image, $no_image, $width
 
             if (file_exists($imgPath)) {
                 $image = explode('.', $imgMain);
-                $pathNew = 'cache/'.$url . '/' . $slug . '/'. $slug2 . '/'.$width.'x'.$height.'_'.$image[0].'.webp';
-                if(file_exists($pathNew)){
+                $pathNew = 'cache/' . $url . '/' . $slug . '/' . $slug2 . '/' . $width . 'x' . $height . '_' . $image[0] . '.webp';
+                if (file_exists($pathNew)) {
                     $imgFinal = base_url($pathNew);
-                }else{
-                    $urlNew = base64_encode($url . '/' . $slug . '/'. $slug2 . '/');
+                } else {
+                    $urlNew = base64_encode($url . '/' . $slug . '/' . $slug2 . '/');
                     $imgFinal = base_url('image-resize/' . $urlNew . '/' . $width . 'x' . $height . '/' . $imgMain);
                 }
                 $result   = $imgFinal;
@@ -2065,7 +2108,7 @@ function image_cache($path, $imageName, $width, $height)
     }
 
     // Serve the image
-//    return $this->response->setHeader('Content-Type', 'image/png')->setBody($cache->get($cacheKey));
+    //    return $this->response->setHeader('Content-Type', 'image/png')->setBody($cache->get($cacheKey));
 
     $base64Image = base64_encode($cache->get($cacheKey));
 
@@ -2136,7 +2179,8 @@ function get_blog_category_name_by_id($cate_id)
  * @param int $blog_id
  * @return int|string
  */
-function count_comment_by_blog_id($blog_id){
+function count_comment_by_blog_id($blog_id)
+{
     $table = DB()->table('cc_blog_comments');
     return $table->where('blog_id', $blog_id)->countAllResults();
 }
@@ -2146,12 +2190,14 @@ function count_comment_by_blog_id($blog_id){
  * @param int $comment_id
  * @return array
  */
-function comment_id_by_reply_comment($comment_id){
+function comment_id_by_reply_comment($comment_id)
+{
     $table = DB()->table('cc_blog_comments');
     return $table->where('	comment_parent_id', $comment_id)->get()->getResult();
 }
 
-function idByShowPermission($parentId){
+function idByShowPermission($parentId)
+{
     $table = DB()->table('cc_album');
     $albums = $table->get()->getResult();
 
@@ -2168,7 +2214,8 @@ function idByShowPermission($parentId){
     return albumAvailableCheckByAlbumID($allAlbumIDs);
 }
 
-function getDescendantAlbumIds($parentId, $map) {
+function getDescendantAlbumIds($parentId, $map)
+{
     $result = [];
 
     if (!isset($map[$parentId])) {
@@ -2183,11 +2230,12 @@ function getDescendantAlbumIds($parentId, $map) {
     return $result;
 }
 
-function albumAvailableCheckByAlbumID($allAlbumID){
-    return DB()->table('cc_album_details')->whereIn('album_id',$allAlbumID)->countAllResults();
+function albumAvailableCheckByAlbumID($allAlbumID)
+{
+    return DB()->table('cc_album_details')->whereIn('album_id', $allAlbumID)->countAllResults();
 }
 
-function getScheduleBySectionId($schedule,$sectionId)
+function getScheduleBySectionId($schedule, $sectionId)
 {
     foreach ($schedule as $row) {
         if ($row->featured_section_id == $sectionId) {
@@ -2196,16 +2244,18 @@ function getScheduleBySectionId($schedule,$sectionId)
     }
     return null;
 }
-function scheduleLogo(){
+function scheduleLogo()
+{
     $now = date('Y-m-d H:i:s');
     return DB()->table('cc_logo_schedule')
-        ->where('start_date <=',$now)
-        ->where('end_date >=',$now)
+        ->where('start_date <=', $now)
+        ->where('end_date >=', $now)
         ->orderBy('start_date', 'ASC')
         ->get()
         ->getRow();
 }
-function sliderArray(){
+function sliderArray()
+{
     $labels = ['slider_1', 'slider_2', 'slider_3', 'slider_4', 'slider_5'];
 
     $sliders = DB()->table('cc_theme_settings')->whereIn('label', $labels)->get()->getResult();
