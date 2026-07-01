@@ -136,6 +136,11 @@ table.dataTable thead .sorting_desc {
     box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175) !important;
 }
 
+div#productFormsContainer.w-80 {
+    width: 80%;
+    margin: 0 auto;
+}
+
 .ai-analyzing {
     animation: pulse-blue 2s infinite;
 }
@@ -222,4 +227,49 @@ table.dataTable thead .sorting_desc {
 .status-badge {
     font-size: 0.8rem;
     padding: 0.4em 0.8em;
+}
+
+/* Monochrome, minimalist aesthetic updates */
+
+.btn,
+.form-control,
+.card,
+.badge,
+.alert {
+    border-radius: 0px !important;
+}
+
+/* Queue management styles */
+.queue-item {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.queue-item img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border: 1px solid #000000;
+}
+
+.remove-queue-btn {
+    position: absolute;
+    top: 2px;
+    right: 10px;
+    background: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    line-height: 22px;
+    text-align: center;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.remove-queue-btn:hover {
+    background: #dc3545;
 }
