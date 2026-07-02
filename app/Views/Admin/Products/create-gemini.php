@@ -4,8 +4,10 @@
 
 <div class="content-wrapper">
     <section class="content-header">
+
         <div class="container-fluid">
-            <div class="row mb-2">
+            <div class="row ">
+
                 <div class="col-sm-6">
                     <h1>Product Create (Gemini AI)</h1>
                 </div>
@@ -16,6 +18,9 @@
                     </ol>
                 </div>
             </div>
+        </div>
+        <div class="">
+            <a href="<?= base_url('products') ?>" class="btn btn-dark btn-sm mt-3">← Back</a>
         </div>
     </section>
 
@@ -59,6 +64,9 @@
                 <hr class="my-5">
 
                 <div id="productFormsContainer"></div>
+            </div>
+            <div class="col-sm-12 mb-3">
+                <a href="<?= base_url('products') ?>" class="btn btn-dark btn-sm mt-3">← Back</a>
             </div>
         </div>
     </section>
@@ -293,8 +301,8 @@
                 '<div class="col-md-3 border-right">' +
                 '<div class="form-group mb-2">' +
                 '<label class="small text-muted text-uppercase font-weight-bold mb-1">Product Image</label>' +
-                '<div class="p-2 border rounded bg-white text-center" style="height: 180px; display: flex; align-items: center; justify-content: center;">' +
-                (pImage ? '<img src="' + pImage + '" class="img-fluid img-preview-' + i + '" style="max-height:160px;">' : '<div class="text-muted small"><i class="fas fa-image fa-3x mb-2 d-block"></i> No image</div>') +
+                '<div class="p-2 border rounded bg-white text-center" style="height: 250px; display: flex; align-items: center; justify-content: center;">' +
+                (pImage ? '<img src="' + pImage + '" class="img-fluid img-preview-' + i + '" style="max-height:250px;">' : '<div class="text-muted small"><i class="fas fa-image fa-3x mb-2 d-block"></i> No image</div>') +
                 '</div>' +
                 '</div>' +
 
@@ -309,7 +317,7 @@
                 '<select name="brand_id" class="form-control select2bs4">' +
                 '<option value="">Please select</option>' +
                 '<?php foreach ($brands as $brand) { ?>' +
-'<option value="<?php echo $brand->brand_id; ?>" ' + (productBrand == "<?php echo $brand->brand_id; ?>" ? "selected" : "") + '><?php echo $brand->name; ?></option>' +                '<?php } ?>' +
+                '<option value="<?php echo $brand->brand_id; ?>" ' + (productBrand == "<?php echo $brand->brand_id; ?>" ? "selected" : "") + '><?php echo $brand->name; ?></option>' + '<?php } ?>' +
                 '</select>' +
                 '</div>' +
 

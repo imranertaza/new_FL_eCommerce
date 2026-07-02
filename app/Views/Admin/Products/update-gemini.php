@@ -18,9 +18,15 @@
                 </div>
             </div>
         </div>
+        <a href="<?= base_url('products') ?>" class="btn btn-dark btn-sm mb-3">← Back</a>
     </section>
 
-    <div class="col-md-12 mt-3">
+    <div class="col-md-12 mb-3">
+        <textarea id="gemini_prompt" class="form-control" rows="8" style="width: 100%;"></textarea>
+
+        <button type="button" class="btn btn-primary my-3" onclick="updatePromptAndReload()">
+            Update Prompt & Reload
+        </button>
         <div id="ajax-alert-container"></div>
 
         <?php if (session()->getFlashdata('message') !== NULL): ?>
@@ -69,8 +75,8 @@
                                                 <label class="small text-muted text-uppercase font-weight-bold mb-1">Product Image</label>
                                                 <div class="p-2 border rounded bg-white text-center" style="height: 180px; display:flex; align-items:center; justify-content:center;">
                                                     <?php if (!empty($p['image'])): ?>
-                                                        <img src="<?= product_image_view('uploads/products', $p['unique_id'], $p['image'], 'noimage.png', '100', '100') ?>"
-                                                            class="img-fluid rounded" style="max-height: 160px; object-fit: contain;">
+                                                        <img src="<?= product_image_view('uploads/products', $p['unique_id'], $p['image'], 'noimage.png', '250', '250') ?>"
+                                                            class="img-fluid rounded" style="width: 100%; height: 100%; object-fit: contain;">
                                                     <?php else: ?>
                                                         <div class="text-muted">
                                                             <i class="fas fa-image fa-3x mb-1"></i><br>
@@ -198,6 +204,8 @@
                         </form>
                     <?php endforeach; ?>
                 </div>
+                <a href="<?= base_url('products') ?>" class="btn btn-dark btn-sm">← Back</a>
+
                 <div class="text-center mt-4 mb-4">
                     <button type="button" id="btnSaveAll" class="btn btn-success btn-lg px-5 shadow-sm">
                         <i class="fas fa-layer-group mr-2"></i> Save All Products
@@ -392,6 +400,26 @@
         setTimeout(() => {
             $(".alert").alert('close');
         }, 5000);
+    }
+</script>
+<script>
+    // 1. Populate textarea with existing URL value on page load
+    window.addEventListener('load', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentPrompt = urlParams.get('gemini_prompt');
+
+        if (currentPrompt) {
+            document.getElementById('gemini_prompt').value = currentPrompt;
+        }
+    });
+
+    // 2. Function to update URL and reload
+    function updatePromptAndReload() {
+        const url = new URL(window.location.href);
+        const newPrompt = document.getElementById('gemini_prompt').value;
+
+        url.searchParams.set('gemini_prompt', newPrompt);
+        window.location.href = url.toString();
     }
 </script>
 <?= $this->endSection() ?>
