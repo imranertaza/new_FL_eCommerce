@@ -233,7 +233,7 @@
             allowClear: true
         });
 
-        // Intercept individual form submissions via AJAX
+        // Initialize TinyMCE for all textareas with class 'editor'
         $('.product-ajax-form').on('submit', function(e) {
             e.preventDefault();
 
@@ -295,7 +295,7 @@
             });
         });
 
-        // Handle the "Save All" Batch Button
+        // Intercept the "Save All Products" button click for batch processing
         $('#btnSaveAll').on('click', function() {
             const $forms = $('.product-ajax-form');
 
@@ -377,7 +377,7 @@
             });
         });
     });
-
+// Function to remove a product card from the batch
     function removeProductCard(index) {
         if (confirm('Are you sure you want to remove this product from the batch?')) {
             const card = document.getElementById(`product-card-${index}`);
@@ -386,7 +386,7 @@
             }
         }
     }
-
+// Function to display alerts dynamically
     function showAlert(type, message) {
         const alertHtml = `
             <div class="alert alert-${type} alert-dismissible fade show" role="alert">
@@ -403,7 +403,7 @@
     }
 </script>
 <script>
-    // 1. Populate textarea with existing URL value on page load
+    // 1. Populate textarea with existing prompt value on page load
     window.addEventListener('load', () => {
         const urlParams = new URLSearchParams(window.location.search);
         const currentPrompt = urlParams.get('gemini_prompt');
@@ -413,7 +413,7 @@
         }
     });
 
-    // 2. Function to update URL and reload
+    // 2. Function to update prompt and reload
     function updatePromptAndReload() {
         const url = new URL(window.location.href);
         const newPrompt = document.getElementById('gemini_prompt').value;
