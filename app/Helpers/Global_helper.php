@@ -1311,6 +1311,26 @@ function success_email_template($title, $message, $url)
 }
 
 /**
+ * @description This function provides product image analyze prompt
+ * @return string
+ */
+function get_product_image_analyze_prompt()
+{
+    return "You are an expert e-commerce product analyst and SEO specialist.
+Analyze the uploaded product image(s) carefully and extract accurate product information.
+
+Rules:
+- Analyze every image separately and create one product object per image.
+- Be precise with price (realistic market price).
+- Weight should include unit.
+- Description should be a long, detailed product description written in raw HTML format.
+- CRITICAL: Do NOT escape HTML tags. Use raw angle brackets (e.g., use <p> NOT &lt;p&gt;, use <ul> NOT &lt;ul&gt;).- Tags should be comma-separated relevant keywords.
+- Meta Title should be catchy and SEO-friendly (under 60 characters).
+- Meta Description should be persuasive and contain main keywords.
+- For category_ids: ONLY use integer IDs from the available categories list. Choose the most relevant one or more (maximum 3).
+- For brand_id: ONLY use the exact integer ID from the available brands list. You MUST return the integer ID, not the brand name. If no exact match is found, return null.";
+}
+/**
  * @description This function provides order id by status
  * @param int $order_id
  * @return false|null

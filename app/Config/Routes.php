@@ -89,6 +89,7 @@ $routes->post('/product_category_sort_update_action', 'Admin\Product_category::s
 $routes->get('/products', 'Admin\Products::index');
 $routes->get('/product_create', 'Admin\Products::create');
 $routes->get('/product_create_gemini', 'Admin\Products::create_gemini');
+$routes->post('/product-create-gemini-all', 'Admin\Products::create_batch_gemini_action');
 $routes->post('/product-ai-analyze-batch', 'Admin\Products::product_ai_analyze_batch');
 $routes->post('/product_ai_analyze_single', 'Admin\Products::product_ai_analyze_single');
 $routes->post('/product-create-gemini', 'Admin\Products::product_create_gemini_action');
@@ -99,6 +100,7 @@ $routes->post('/product_image_delete', 'Admin\Products::image_delete');
 $routes->get('/product_update/(:num)', 'Admin\Products::update/$1');
 $routes->get('/product-multi-update-with-gemini', 'Admin\Products::multi_update_with_gemini');
 $routes->post('/product-gemini-update', 'Admin\Products::product_gemini_update_action');
+$routes->post('/product-gemini-update-batch', 'Admin\Products::product_gemini_update_batch_action');
 $routes->post('/product_delete', 'Admin\Products::delete');
 $routes->get('/related_product', 'Admin\Products::related_product');
 $routes->post('/product_option_search', 'Admin\Products::product_option_search');
