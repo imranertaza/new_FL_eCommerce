@@ -309,14 +309,15 @@
                 '<select name="brand_id" class="form-control select2bs4">' +
                 '<option value="">Please select</option>' +
                 '<?php foreach ($brands as $brand) { ?>' +
-'<option value="<?php echo $brand->brand_id; ?>" ' + (productBrand == "<?php echo $brand->brand_id; ?>" ? "selected" : "") + '><?php echo $brand->name; ?></option>' +                '<?php } ?>' +
+                '<option value="<?php echo $brand->brand_id; ?>" ' + (productBrand && String(productBrand) === "<?php echo $brand->brand_id; ?>" ? "selected" : "") + '><?php echo addslashes($brand->name); ?></option>' +
+                '<?php } ?>' +
                 '</select>' +
                 '</div>' +
 
                 '<div class="form-group mb-2">' +
-                '<label class="small font-weight-bold mb-1">Price <span class="text-danger">*</span></label>' +
-                '<input type="number" name="price" min="0" step="0.01" class="form-control form-control-sm" value="" required>' +
-                '<small>Recommended Price $' + productPrice + '</small>' +
+                '<label class="small font-weight-bold mb-1">Market Price (USD $) <span class="text-danger">*</span></label>' +
+                '<input type="number" name="price" min="0" step="0.01" class="form-control form-control-sm" value="" placeholder="0.00" required>' +
+                (productPrice ? '<small class="text-info font-weight-bold"><i class="fas fa-chart-line mr-1"></i>AI Market Price: $' + productPrice + '</small>' : '') +
                 '</div>' +
                 '<div class="form-group mb-2">' +
                 '<label class="small font-weight-bold mb-1">Weight (kg)</label>' +
