@@ -26,7 +26,9 @@ class Products extends BaseController
     protected $productsModel;
     private $module_name = 'Products';
     private $productImageSizes = [['width' => '191', 'height' => '191'], ['width' => '198', 'height' => '198'], ['width' => '100', 'height' => '100'], ['width' => '437', 'height' => '437'], ['width' => '50', 'height' => '50'],];
-
+    /**
+     * @description This method is the constructor for the Products controller
+     */
     public function __construct()
     {
         $this->validation = \Config\Services::validation();
@@ -39,7 +41,10 @@ class Products extends BaseController
         $this->productsModel = new ProductsModel();
         $this->imageProcessing = new Image_processing();
     }
-
+    /**
+     * @description This method provides the product create page
+     * @return void
+     */
     public function old_index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -100,6 +105,10 @@ class Products extends BaseController
             }
         }
     }
+    /**
+     * @description This method provides the product create page for Gemini integration
+     * @return void
+     */ 
     public function create_gemini()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -130,6 +139,10 @@ class Products extends BaseController
             }
         }
     }
+    /**
+     * @description This method analyzes a single product image using the Gemini API
+     * @return ResponseInterface
+     */
 
     public function product_ai_analyze_batch()
     {
@@ -198,7 +211,7 @@ class Products extends BaseController
                                     "alt_name" => ["type" => "STRING"],
                                     "description" => ["type" => "STRING"],
                                     "price" => ["type" => "NUMBER"],
-                                    "weight" => ["type" => "STRING"],
+                                    "weight" => ["type" => "STRING", "description" => "Weight in kg"],
                                     "model" => ["type" => "STRING"],
                                     "tags" => ["type" => "STRING"],
                                     "meta_title" => ["type" => "STRING"],
@@ -255,6 +268,10 @@ class Products extends BaseController
             return $this->response->setJSON(['status' => 'error', 'message' => 'API Connection failed: ' . $e->getMessage()]);
         }
     }
+    /**
+     * @description This method analyzes a single product image using the Gemini API
+     * @return ResponseInterface
+     */
     public function product_ai_analyze_single()
     {
         $apiKey = get_lebel_by_value_in_settings('gemini_api_key');
@@ -304,7 +321,7 @@ class Products extends BaseController
                         "name" => ["type" => "STRING"],
                         "description" => ["type" => "HTML", "format" => "html"],
                         "price" => ["type" => "NUMBER"],
-                        "weight" => ["type" => "STRING"],
+                        "weight" => ["type" => "STRING", "description" => "Weight in kg"],
                         "model" => ["type" => "STRING"],
                         "tags" => ["type" => "STRING"],
                         "meta_title" => ["type" => "STRING"],
@@ -346,6 +363,11 @@ class Products extends BaseController
         }
     }
 
+    /**
+     * @description This method returns a default product object for failed analyses
+     * @param array $meta
+     * @return array
+     */
     private function getErrorProduct($meta)
     {
         return [
@@ -362,6 +384,14 @@ class Products extends BaseController
             'category_ids' => []
         ];
     }
+    /**
+     * @description This method generates the prompt for batch product creation
+     * @param array $availableCategories
+     * @param array $availableBrands
+     * @param string|null $analyzePrompt
+     * @param array $metadata
+     * @return string
+     */
     private function getBatchPromptCreate($availableCategories, $availableBrands, $analyzePrompt = null, $metadata = [])
     {
         $metaInfo = '';
@@ -382,7 +412,10 @@ class Products extends BaseController
 
             Return ONLY the JSON. Do not add any extra text, return the same unique_id from the metadata. explanation, or markdown." . $metaInfo;
     }
-
+    /**
+     * @description This method provides product create action
+     * @return RedirectResponse
+     */
     private function getBatchPromptUpdate($availableCategories, $availableBrands, $analyzePrompt = null, $metadata = [])
     {
         $metaInfo = '';
@@ -407,7 +440,10 @@ class Products extends BaseController
     Response Instruction: Return ONLY the JSON adhering to your schema. Do not add markdown wrapping like ```json or trailing explanations. description should be HTML format not &lt;p&gt; user < >.";
     }
 
-
+    /**
+     * @description This method provides product create action
+     * @return RedirectResponse
+     */
     private function getBatchPrompt($availableCategories, $metadata = [])
     {
         $metaInfo = '';
@@ -529,6 +565,10 @@ class Products extends BaseController
             return redirect()->to('product_create_gemini');
         }
     }
+    /**
+     * @description This method provides product create action for single product
+     * @return ResponseInterface
+     */
     public function product_create_gemini_action()
     {
         // Restrict access strictly to AJAX POST interactions
@@ -661,7 +701,10 @@ class Products extends BaseController
             ]);
         }
     }
-
+    /**
+     * @description This method provides product create action
+     * @return RedirectResponse
+     */
     public function create_action()
     {
 
@@ -2624,6 +2667,11 @@ class Products extends BaseController
         }
         return redirect()->to($redirect_url);
     }
+    
+    /**
+     * @description This method provides remove Watermark Images Action
+     * @return RedirectResponse
+     */
     public function removeWatermarkImagesAction()
     {
         $redirect_url = isset($_COOKIE['product_url_path']) ? $_COOKIE['product_url_path'] : 'admin/products';

@@ -4,8 +4,10 @@
 
 <div class="content-wrapper">
     <section class="content-header">
+
         <div class="container-fluid">
-            <div class="row mb-2">
+            <div class="row ">
+
                 <div class="col-sm-6">
                     <h1>Product Create (Gemini AI)</h1>
                 </div>
@@ -16,6 +18,9 @@
                     </ol>
                 </div>
             </div>
+        </div>
+        <div class="">
+            <a href="<?= base_url('products') ?>" class="btn btn-dark btn-sm mt-3">← Back</a>
         </div>
     </section>
 
@@ -60,6 +65,9 @@
 
                 <div id="productFormsContainer"></div>
             </div>
+            <div class="col-sm-12 mb-3">
+                <a href="<?= base_url('products') ?>" class="btn btn-dark btn-sm mt-3">← Back</a>
+            </div>
         </div>
     </section>
 
@@ -93,7 +101,7 @@
 <script>
     // In-memory array holding your selected files so we can add/remove items freely
     let selectedFilesQueue = [];
-
+    // Handle file selection and queue management
     function handleFileSelection(input) {
         if (!input.files) return;
 
@@ -111,6 +119,7 @@
         input.value = '';
     }
 
+    // Render the selected files queue into a visual preview layout
     function renderQueuePreviews() {
         let container = $('#imageQueue').empty();
 
@@ -136,6 +145,7 @@
         });
     }
 
+    // Remove a file from the queue and update the UI accordingly
     function removeFileFromQueue(queueId) {
         // Filter array memory record down to unselected assets
         selectedFilesQueue = selectedFilesQueue.filter(file => file.queueId !== queueId);
@@ -144,7 +154,7 @@
             $(this).remove();
         });
     }
-
+    // Main function to handle the analysis of all queued images
     function analyzeAllImages() {
         if (selectedFilesQueue.length === 0) {
             alert('Please select at least one image to process.');
@@ -240,7 +250,7 @@
             }
         });
     }
-
+    // Preview the selected image for each product card
     function previewBatchImage(input, index) {
         if (input.files && input.files[0]) {
             let reader = new FileReader();
@@ -250,7 +260,7 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
-
+    // Render the batch product forms dynamically based on the analyzed data
     function renderBatchForms(products, categoryOptions, originalFiles) {
         let container = $('#productFormsContainer').empty();
 
@@ -293,8 +303,8 @@
                 '<div class="col-md-3 border-right">' +
                 '<div class="form-group mb-2">' +
                 '<label class="small text-muted text-uppercase font-weight-bold mb-1">Product Image</label>' +
-                '<div class="p-2 border rounded bg-white text-center" style="height: 180px; display: flex; align-items: center; justify-content: center;">' +
-                (pImage ? '<img src="' + pImage + '" class="img-fluid img-preview-' + i + '" style="max-height:160px;">' : '<div class="text-muted small"><i class="fas fa-image fa-3x mb-2 d-block"></i> No image</div>') +
+                '<div class="p-2 border rounded bg-white text-center" style="height: 250px; display: flex; align-items: center; justify-content: center;">' +
+                (pImage ? '<img src="' + pImage + '" class="img-fluid img-preview-' + i + '" style="max-height:250px;">' : '<div class="text-muted small"><i class="fas fa-image fa-3x mb-2 d-block"></i> No image</div>') +
                 '</div>' +
                 '</div>' +
 
@@ -309,7 +319,7 @@
                 '<select name="brand_id" class="form-control select2bs4">' +
                 '<option value="">Please select</option>' +
                 '<?php foreach ($brands as $brand) { ?>' +
-'<option value="<?php echo $brand->brand_id; ?>" ' + (productBrand == "<?php echo $brand->brand_id; ?>" ? "selected" : "") + '><?php echo $brand->name; ?></option>' +                '<?php } ?>' +
+                '<option value="<?php echo $brand->brand_id; ?>" ' + (productBrand == "<?php echo $brand->brand_id; ?>" ? "selected" : "") + '><?php echo $brand->name; ?></option>' + '<?php } ?>' +
                 '</select>' +
                 '</div>' +
 
@@ -417,6 +427,7 @@
             height: 180
         });
     }
+    // Intercept individual form submissions via AJAX
     $(document).on('submit', '.product-individual-save-form', function(e) {
         e.preventDefault();
 
@@ -465,7 +476,7 @@
             }
         });
     });
-
+    // Event delegation to handle dynamically added remove buttons
     $(document).on('click', '.remove-card', function() {
         $(this).closest('.product-individual-save-form').remove();
         if ($('.product-individual-save-form').length === 0) {
@@ -473,6 +484,7 @@
         }
     });
 
+    // Function to display alerts dynamically
     function showAlert(type, message) {
         const alertHtml = `
             <div class="alert alert-${type} alert-dismissible fade show" role="alert">
@@ -488,7 +500,7 @@
         }, 5000);
     }
 
-    // save all products
+    // Batch Save All Products Function
     function saveAllProducts() {
         const forms = $('.product-individual-save-form');
         if (forms.length === 0) {
