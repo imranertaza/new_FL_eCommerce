@@ -18,7 +18,7 @@
                 </div>
             </div>
         </div>
-        <a href="<?= base_url('products') ?>" class="btn btn-dark btn-sm mb-3">← Back</a>
+        <!-- <a href="<?= base_url('products') ?>" class="btn btn-dark btn-sm mb-3">← Back</a> -->
     </section>
 
     <div class="col-md-12 mb-3">
@@ -204,7 +204,7 @@
                         </form>
                     <?php endforeach; ?>
                 </div>
-                <a href="<?= base_url('products') ?>" class="btn btn-dark btn-sm">← Back</a>
+                <!-- <a href="<?= base_url('products') ?>" class="btn btn-dark btn-sm">← Back</a> -->
 
                 <div class="text-center mt-4 mb-4">
                     <button type="button" id="btnSaveAll" class="btn btn-success btn-lg px-5 shadow-sm">
@@ -377,7 +377,7 @@
             });
         });
     });
-// Function to remove a product card from the batch
+    // Function to remove a product card from the batch
     function removeProductCard(index) {
         if (confirm('Are you sure you want to remove this product from the batch?')) {
             const card = document.getElementById(`product-card-${index}`);
@@ -386,7 +386,7 @@
             }
         }
     }
-// Function to display alerts dynamically
+    // Function to display alerts dynamically
     function showAlert(type, message) {
         const alertHtml = `
             <div class="alert alert-${type} alert-dismissible fade show" role="alert">

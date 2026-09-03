@@ -108,7 +108,7 @@ class Products extends BaseController
     /**
      * @description This method provides the product create page for Gemini integration
      * @return void
-     */ 
+     */
     public function create_gemini()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -151,8 +151,7 @@ class Products extends BaseController
             return $this->response->setJSON(['status' => 'error', 'message' => 'API Key is missing']);
         }
 
-        $apiUrl = getenv('GEMINI_API_URL');
-        $url = $apiUrl . "?key=" . $apiKey;
+        $url = $this->getGeminiApiUrl($apiKey);
 
         $metadataInput = $this->request->getPost('metadata');
         $metadata = json_decode($metadataInput, true);
@@ -166,11 +165,29 @@ class Products extends BaseController
             return $this->response->setJSON(['status' => 'error', 'message' => 'No images were uploaded or files exceed server limits (post_max_size/upload_max_filesize)']);
         }
 
-        $availableCategories = $this->request->getPost('available_categories');
-        $availableBrands = $this->request->getPost('available_brands');
-        $availableBrandsIds = array_column(json_decode($availableBrands, true), 'id');
+        $availableCategoriesRaw = $this->request->getPost('available_categories');
+        $availableBrandsRaw = $this->request->getPost('available_brands');
+
+        $brandsList = json_decode($availableBrandsRaw, true) ?: [];
+        $brandMap = [];
+        foreach ($brandsList as $b) {
+            if (isset($b['id']) && isset($b['name'])) {
+                $brandMap[$b['name']] = (int)$b['id'];
+            }
+        }
+        $availableBrandsJson = json_encode($brandMap, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+        $categoriesList = json_decode($availableCategoriesRaw, true) ?: [];
+        $categoryMap = [];
+        foreach ($categoriesList as $c) {
+            if (isset($c['id']) && isset($c['name'])) {
+                $categoryMap[$c['name']] = (int)$c['id'];
+            }
+        }
+        $availableCategoriesJson = json_encode($categoryMap, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
         $parts = [
-            ["text" => $this->getBatchPromptCreate($availableCategories, $availableBrands, $analyzePrompt, $metadata)]
+            ["text" => $this->getBatchPromptCreate($availableCategoriesJson, $availableBrandsJson, $analyzePrompt, $metadata)]
         ];
 
         foreach ($images as $index => $file) {
@@ -192,8 +209,11 @@ class Products extends BaseController
 
         $payload = [
             "contents" => [["parts" => $parts]],
+            "tools" => [
+                ["google_search" => new \stdClass()]
+            ],
             "generationConfig" => [
-                "temperature" => 0.4,
+                "temperature" => 0.2,
                 "response_mime_type" => "application/json",
                 "response_schema" => [
                     "type" => "OBJECT",
@@ -218,9 +238,9 @@ class Products extends BaseController
                                     "meta_description" => ["type" => "STRING"],
                                     "meta_keyword" => ["type" => "STRING"],
                                     "category_ids" => ["type" => "ARRAY", "items" => ["type" => "INTEGER"]],
-                                    "brand_id" => ["type" => "INTEGER", "enum" => $availableBrandsIds]
+                                    "brand_id" => ["type" => "INTEGER"]
                                 ],
-                                "required" => ["unique_id", "name", "alt_name", "description", "price", "weight", "model", "tags", "meta_title", "meta_description", "meta_keyword", "category_ids", "brand_id"]
+                                "required" => ["unique_id", "name", "alt_name", "description", "price", "weight", "model", "tags", "meta_title", "meta_description", "meta_keyword", "category_ids"]
                             ]
                         ]
                     ]
@@ -229,11 +249,62 @@ class Products extends BaseController
         ];
 
         $client = \Config\Services::curlrequest();
-        try {
-            $response = $client->setBody(json_encode($payload))
-                ->setHeader('Content-Type', 'application/json')->request('POST', $url, ['timeout' => 2000]);
+        $maxRetries = 3;
+        $retryDelay = 2;
+        $result = null;
 
-            $result = json_decode($response->getBody(), true);
+        $requestUrl = $url;
+
+        try {
+            for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
+                $response = $client->setBody(json_encode($payload))
+                    ->setHeader('Content-Type', 'application/json')
+                    ->request('POST', $requestUrl, [
+                        'timeout' => 2000,
+                        'http_errors' => false
+                    ]);
+
+                $statusCode = $response->getStatusCode();
+                $result = json_decode($response->getBody(), true);
+
+                // Handle Rate Limits (429) and Server Demand / Temporary Overload (503, 500, 502, 504)
+                if ($statusCode === 429 || $statusCode === 503 || $statusCode === 500 || $statusCode === 502 || $statusCode === 504) {
+                    if (isset($payload['tools'])) {
+                        unset($payload['tools']);
+                    }
+
+                    // If model is experiencing high demand (503), switch to fallback model on next attempt
+                    if ($statusCode === 503) {
+                        $requestUrl = $this->getFallbackModelUrl($apiKey, $requestUrl);
+                    }
+
+                    if ($attempt === $maxRetries) {
+                        $apiMsg = $result['error']['message'] ?? 'Service temporarily unavailable after multiple retries.';
+                        return $this->response->setJSON([
+                            'status' => 'error',
+                            'message' => 'Gemini API Error (' . $statusCode . '): ' . $apiMsg . ' Please wait a moment and try again.'
+                        ]);
+                    }
+                    sleep($retryDelay);
+                    $retryDelay *= 2;
+                    continue;
+                }
+
+                if ($statusCode >= 400 && isset($result['error'])) {
+                    // If tools are not supported or rejected with 400, drop tools and retry once
+                    if (isset($payload['tools']) && ($statusCode === 400 || $statusCode === 422)) {
+                        unset($payload['tools']);
+                        continue;
+                    }
+
+                    return $this->response->setJSON([
+                        'status' => 'error',
+                        'message' => 'Gemini API Error (' . $statusCode . '): ' . ($result['error']['message'] ?? 'Unknown error')
+                    ]);
+                }
+
+                break;
+            }
 
             if (isset($result['error'])) {
                 return $this->response->setJSON([
@@ -278,8 +349,7 @@ class Products extends BaseController
         if (empty($apiKey)) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'API Key is missing']);
         }
-        $apiUrl = getenv('GEMINI_API_URL');
-        $url = $apiUrl . "?key=" . $apiKey;
+        $url = $this->getGeminiApiUrl($apiKey);
 
         $request = service('request');
         $product_id = $request->getPost('product_id');
@@ -312,8 +382,11 @@ class Products extends BaseController
         // UPDATED SCHEMA: Returning a single object instead of an array
         $payload = [
             "contents" => [["parts" => $parts]],
+            "tools" => [
+                ["google_search" => new \stdClass()]
+            ],
             "generationConfig" => [
-                "temperature" => 0.4,
+                "temperature" => 0.2,
                 "response_mime_type" => "application/json",
                 "response_schema" => [
                     "type" => "OBJECT",
@@ -335,11 +408,60 @@ class Products extends BaseController
         ];
 
         $client = \Config\Services::curlrequest();
-        try {
-            $response = $client->setBody(json_encode($payload))
-                ->setHeader('Content-Type', 'application/json')->request('POST', $url, ['timeout' => 30]);
+        $maxRetries = 3;
+        $retryDelay = 2;
+        $result = null;
 
-            $result = json_decode($response->getBody(), true);
+        $requestUrl = $url;
+
+        try {
+            for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
+                $response = $client->setBody(json_encode($payload))
+                    ->setHeader('Content-Type', 'application/json')
+                    ->request('POST', $requestUrl, [
+                        'timeout' => 30,
+                        'http_errors' => false
+                    ]);
+
+                $statusCode = $response->getStatusCode();
+                $result = json_decode($response->getBody(), true);
+
+                // Handle Rate Limits (429) and Server Demand / Temporary Overload (503, 500, 502, 504)
+                if ($statusCode === 429 || $statusCode === 503 || $statusCode === 500 || $statusCode === 502 || $statusCode === 504) {
+                    if (isset($payload['tools'])) {
+                        unset($payload['tools']);
+                    }
+
+                    if ($statusCode === 503) {
+                        $requestUrl = $this->getFallbackModelUrl($apiKey, $requestUrl);
+                    }
+
+                    if ($attempt === $maxRetries) {
+                        $apiMsg = $result['error']['message'] ?? 'Service temporarily unavailable after multiple retries.';
+                        return $this->response->setJSON([
+                            'status' => 'error',
+                            'message' => 'Gemini API Error (' . $statusCode . '): ' . $apiMsg
+                        ]);
+                    }
+                    sleep($retryDelay);
+                    $retryDelay *= 2;
+                    continue;
+                }
+
+                if ($statusCode >= 400 && isset($result['error'])) {
+                    if (isset($payload['tools']) && ($statusCode === 400 || $statusCode === 422)) {
+                        unset($payload['tools']);
+                        continue;
+                    }
+
+                    return $this->response->setJSON([
+                        'status' => 'error',
+                        'message' => 'Gemini Error (' . $statusCode . '): ' . ($result['error']['message'] ?? 'Unknown error')
+                    ]);
+                }
+
+                break;
+            }
 
             if (isset($result['error'])) {
                 return $this->response->setJSON(['status' => 'error', 'message' => 'Gemini Error: ' . $result['error']['message']]);
@@ -361,6 +483,38 @@ class Products extends BaseController
         } catch (\Exception $e) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Connection failed: ' . $e->getMessage()]);
         }
+    }
+
+    /**
+     * @description Get Gemini API URL with key
+     * @param string $apiKey
+     * @param string $model
+     * @return string
+     */
+    private function getGeminiApiUrl(string $apiKey, string $model = ''): string
+    {
+        $rawApiUrl = env('GEMINI_API_URL') ?: getenv('GEMINI_API_URL');
+        $apiUrl = !empty($rawApiUrl) ? trim($rawApiUrl, "\"' \t\n\r\0\x0B") : 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+
+        if (!empty($model)) {
+            $apiUrl = preg_replace('#/models/[^:]+:#', '/models/' . $model . ':', $apiUrl);
+        }
+
+        return $apiUrl . "?key=" . trim($apiKey);
+    }
+
+    /**
+     * @description Get fallback model URL when the primary model experiences high demand (503)
+     * @param string $apiKey
+     * @param string $currentUrl
+     * @return string
+     */
+    private function getFallbackModelUrl(string $apiKey, string $currentUrl): string
+    {
+        if (strpos($currentUrl, 'gemini-1.5-flash') !== false) {
+            return $this->getGeminiApiUrl($apiKey, 'gemini-2.0-flash');
+        }
+        return $this->getGeminiApiUrl($apiKey, 'gemini-1.5-flash');
     }
 
     /**
@@ -399,18 +553,32 @@ class Products extends BaseController
             $metaInfo = "\n\nImage return exact Metadata (use these exact unique_id):\n" .
                 json_encode($metadata, JSON_PRETTY_PRINT);
         }
-        return $analyzePrompt ? $analyzePrompt . "\n\n" : get_product_image_analyze_prompt() . "\n\n" . "
-            Available Categories (JSON map: category_name => prod_cat_id):
-            {$availableCategories}
-            Available Brands (JSON map: brand_name => brand_id):
-            {$availableBrands}
+        return ($analyzePrompt ? $analyzePrompt . "\n\n" : get_product_image_analyze_prompt() . "\n\n") . "
+Available Categories (JSON map: category_name => prod_cat_id):
+{$availableCategories}
 
-            - Match the brand name visible in the image/logo as closely as possible.
-            - If the brand is not in the list, use the brand name that appears most similar (fuzzy match).
-            - Prefer the official brand name over generic terms. Brand Selection Guidelines (Very Important):
-            - If no brand is clearly visible, use the most logical brand based on product type or set `brand_id` to null.
+Available Brands (JSON map: brand_name => brand_id):
+{$availableBrands}
 
-            Return ONLY the JSON. Do not add any extra text, return the same unique_id from the metadata. explanation, or markdown." . $metaInfo;
+Brand Selection Rules (CRITICAL):
+1. Carefully detect any brand name, logo, or manufacturer marked on the product or image.
+2. Search the 'Available Brands' map above for the matching brand name.
+3. If a match is found (even with slight case or spelling variation), return its exact integer `brand_id`.
+4. If no brand matches from the 'Available Brands' map, set `brand_id` to null.
+
+Competitor & Market Price Benchmarking (CRITICAL - STRICT USD $):
+1. Analyze what this exact same product (same brand, model, size/weight) is currently being sold for across major online e-commerce platforms and competitor websites (Amazon, Walmart, Target, eBay, brand webstores, and online retail stores).
+2. Suggest a realistic, competitive retail selling price in USD ($) matching what competitors and other sites charge for a SINGLE individual consumer unit.
+3. If printed MRP/price in local currency (BDT/Tk, INR/₹, EUR, GBP, etc.) is visible on the package, convert it accurately to USD:
+   - Example: 240 BDT -> divide by 120 -> suggest 2.00 USD (NEVER output 240!).
+   - Example: 450 INR -> divide by 85 -> suggest 5.29 USD (NEVER output 450!).
+4. Everyday grocery, food, snacks, personal care, and cosmetics typically retail between $0.99 and $15.00 USD. Never return inflated bulk prices.
+5. Always return a positive numeric float value in USD for `price` (e.g., 2.49, 4.99, 12.50).
+
+Category Selection Rules:
+1. Select the most relevant category IDs from 'Available Categories' and return them in `category_ids` array.
+
+Return ONLY the JSON. Do not add any extra text, explanation, or markdown." . $metaInfo;
     }
     /**
      * @description This method provides product create action
@@ -430,13 +598,14 @@ class Products extends BaseController
             ";
         }
 
-        return $analyzePrompt . "\n\n" . "{$metaInfo}
+        return ($analyzePrompt ? $analyzePrompt . "\n\n" : get_product_image_analyze_prompt() . "\n\n") . "{$metaInfo}
     Available Categories (JSON map: category_name => prod_cat_id):
     {$availableCategories}
     
     Available Brands (JSON map: brand_name => brand_id):
     {$availableBrands}
    
+    Price Instruction: All prices ('price', 'current_price') MUST be realistic competitor-matched retail market prices in USD ($). If packaging shows foreign currency/MRP (BDT, INR, EUR, etc.), convert accurately to USD (e.g. 240 BDT = 2.00 USD).
     Response Instruction: Return ONLY the JSON adhering to your schema. Do not add markdown wrapping like ```json or trailing explanations. description should be HTML format not &lt;p&gt; user < >.";
     }
 
@@ -451,12 +620,13 @@ class Products extends BaseController
             $metaInfo = "\n\nImage Metadata (use these unique_id):\n" .
                 json_encode($metadata, JSON_PRETTY_PRINT);
         }
-        return "You are an expert e-commerce product analyst and SEO specialist.
-            Analyze the uploaded product image(s) carefully and extract accurate product information.
+        return "You are an expert e-commerce product analyst, market pricing specialist, and SEO copywriter.
+            Analyze the uploaded product image(s) carefully to identify the exact product, brand, variant, and extract authentic product information.
             Rules:
             - Analyze every image separately and create one product object per image.
-            - Be precise with price (realistic market price).
-            - Weight should include unit.
+            - Competitor & Market Price Benchmarking (CRITICAL - STRICT USD $): Check what other competitor websites and major e-commerce platforms (Amazon, Walmart, eBay, brand direct webstores) sell this exact item for, and suggest a realistic competitive retail price in USD ($) for a SINGLE consumer unit. If non-USD currency (BDT, INR, EUR, etc.) or MRP is printed on the package, convert it accurately to USD (e.g. 240 BDT -> 2.00 USD). Never use raw foreign currency figures directly as USD.
+            - Weight should include unit (e.g., 500g, 1kg, 250ml, 100g).
+            - Description should be in raw HTML format.
             - Tags should be comma-separated relevant keywords.
             - Meta Title should be catchy and SEO-friendly (under 60 characters).
             - Meta Description should be persuasive and contain main keywords.
@@ -510,7 +680,7 @@ class Products extends BaseController
                     'quantity' => $p['quantity'],
                     'weight' => $p['weight'] ?? '',
                     'brand_id' => $p['brand_id'] ?? '',
-                    'status' => 1,
+                    'status' => 'Active',
                     'createdBy' => $adUserId
                 ];
                 DB()->table('cc_products')->insert($proData);
@@ -639,7 +809,7 @@ class Products extends BaseController
                 'model'     => $model,
                 'quantity'  => $quantity,
                 'weight'    => $weight,
-                'status'    => 1,
+                'status'    => 'Active',
                 'createdBy' => $adUserId
             ];
             DB()->table('cc_products')->insert($proData);
@@ -1901,8 +2071,7 @@ class Products extends BaseController
             return redirect()->to('products');
         }
 
-        $apiUrl = getenv('GEMINI_API_URL');
-        $url = $apiUrl . "?key=" . $apiKey;
+        $url = $this->getGeminiApiUrl($apiKey);
 
         $allProductId = $this->request->getGet('productId');
         $allImage     = $this->request->getGet('productImage');
@@ -1967,8 +2136,11 @@ class Products extends BaseController
         // Payload schema
         $payload = [
             "contents" => [["parts" => $parts]],
+            "tools" => [
+                ["google_search" => new \stdClass()]
+            ],
             "generationConfig" => [
-                "temperature" => 0.4,
+                "temperature" => 0.2,
                 "response_mime_type" => "application/json",
                 "response_schema" => [
                     "type" => "OBJECT",
@@ -2026,13 +2198,14 @@ class Products extends BaseController
         $maxRetries = 3;
         $retryDelay = 3;
         $result = null;
+        $requestUrl = $url;
 
         try {
             for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
                 // Added 'http_errors' => false to prevent CI4 from throwing exception on 429
                 $response = $client->setBody(json_encode($payload))
                     ->setHeader('Content-Type', 'application/json')
-                    ->request('POST', $url, [
+                    ->request('POST', $requestUrl, [
                         'timeout' => 2000,
                         'http_errors' => false
                     ]);
@@ -2040,14 +2213,30 @@ class Products extends BaseController
                 $statusCode = $response->getStatusCode();
                 $result = json_decode($response->getBody(), true);
 
-                // Handle Rate Limits (429) gracefully
-                if ($statusCode === 429) {
+                // Handle Rate Limits (429) and Server Demand / Overload (503, 500, 502, 504) gracefully
+                if ($statusCode === 429 || $statusCode === 503 || $statusCode === 500 || $statusCode === 502 || $statusCode === 504) {
+                    if (isset($payload['tools'])) {
+                        unset($payload['tools']);
+                    }
+
+                    if ($statusCode === 503) {
+                        $requestUrl = $this->getFallbackModelUrl($apiKey, $requestUrl);
+                    }
+
                     if ($attempt === $maxRetries) {
-                        throw new \Exception('Gemini API Rate Limit exceeded after multiple retries. Try a smaller batch.');
+                        $apiMsg = $result['error']['message'] ?? 'Service temporarily unavailable after multiple retries.';
+                        throw new \Exception('Gemini API Error (' . $statusCode . '): ' . $apiMsg . ' Try a smaller batch or switch model in .env.');
                     }
                     sleep($retryDelay);
                     $retryDelay *= 2; // 3s, then 6s delay
                     continue;
+                }
+
+                if ($statusCode >= 400 && isset($result['error'])) {
+                    if (isset($payload['tools']) && ($statusCode === 400 || $statusCode === 422)) {
+                        unset($payload['tools']);
+                        continue;
+                    }
                 }
 
                 // Handle generic API Errors
@@ -2667,7 +2856,7 @@ class Products extends BaseController
         }
         return redirect()->to($redirect_url);
     }
-    
+
     /**
      * @description This method provides remove Watermark Images Action
      * @return RedirectResponse

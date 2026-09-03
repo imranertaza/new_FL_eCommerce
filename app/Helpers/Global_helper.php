@@ -1316,15 +1316,26 @@ function success_email_template($title, $message, $url)
  */
 function get_product_image_analyze_prompt()
 {
-    return "You are an expert e-commerce product analyst and SEO specialist.
-Analyze the uploaded product image(s) carefully and extract accurate product information.
+    return "You are an expert e-commerce product analyst, market pricing specialist, and SEO copywriter.
+Analyze the uploaded product image(s) carefully to identify the exact product, brand, model, volume/weight, and extract authentic product information.
 
 Rules:
 - Analyze every image separately and create one product object per image.
-- Be precise with price (realistic market price).
-- Weight should include unit.
-- Description should be a long, detailed product description written in raw HTML format.
-- CRITICAL: Do NOT escape HTML tags. Use raw angle brackets (e.g., use <p> NOT &lt;p&gt;, use <ul> NOT &lt;ul&gt;).- Tags should be comma-separated relevant keywords.
+- Competitor & Market Price Benchmarking (CRITICAL - STRICT USD $):
+  * Analyze what this exact same product (same brand, name, variant, and weight/volume) is currently being sold for on major online e-commerce platforms and competitor websites (e.g., Amazon, Walmart, Target, eBay, official brand webstores, and online retail stores).
+  * Suggest a realistic, competitive retail selling price in USD ($) matching what competitors and other sites charge for a SINGLE individual consumer unit.
+  * If the packaging shows a printed local currency or MRP (BDT / Tk, INR / ₹, PKR, EUR / €, GBP / £, etc.), convert it accurately to USD ($):
+    - Example: If printed MRP is '৳240' (BDT), divide by ~120 -> suggest 2.00 USD (NOT 240!).
+    - Example: If printed MRP is '₹425' (INR), divide by ~85 -> suggest 5.00 USD (NOT 425!).
+    - NEVER return the raw local currency number as the USD price.
+  * REALISTIC PRICING GUARDRAILS:
+    - Typical grocery, food, spices, beverages, and personal care retail online between $0.99 and $15.00 USD.
+    - Do NOT price for a bulk carton or wholesale case unless the package explicitly states it is a multi-pack.
+    - 'price' MUST be a realistic positive numeric float in USD (e.g., 2.49, 4.99, 12.50). Never output dollar signs ($) or text.
+- Weight should include unit (e.g., 500g, 1kg, 250ml, 100g).
+- Description should be a comprehensive, high-converting product description written in raw HTML format.
+- CRITICAL: Do NOT escape HTML tags. Use raw angle brackets (e.g., use <p> NOT &lt;p&gt;, use <ul> NOT &lt;ul&gt;).
+- Tags should be comma-separated relevant keywords.
 - Meta Title should be catchy and SEO-friendly (under 60 characters).
 - Meta Description should be persuasive and contain main keywords.
 - For category_ids: ONLY use integer IDs from the available categories list. Choose the most relevant one or more (maximum 3).
