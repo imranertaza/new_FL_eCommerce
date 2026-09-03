@@ -108,7 +108,7 @@ class Products extends BaseController
     /**
      * @description This method provides the product create page for Gemini integration
      * @return void
-     */ 
+     */
     public function create_gemini()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -253,11 +253,13 @@ class Products extends BaseController
         $retryDelay = 2;
         $result = null;
 
+        $requestUrl = $url;
+
         try {
             for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
                 $response = $client->setBody(json_encode($payload))
                     ->setHeader('Content-Type', 'application/json')
-                    ->request('POST', $url, [
+                    ->request('POST', $requestUrl, [
                         'timeout' => 2000,
                         'http_errors' => false
                     ]);
@@ -265,18 +267,22 @@ class Products extends BaseController
                 $statusCode = $response->getStatusCode();
                 $result = json_decode($response->getBody(), true);
 
-                if ($statusCode === 429) {
-                    // If Google Search grounding caused quota exhaustion on free tier, drop tools and retry immediately
+                // Handle Rate Limits (429) and Server Demand / Temporary Overload (503, 500, 502, 504)
+                if ($statusCode === 429 || $statusCode === 503 || $statusCode === 500 || $statusCode === 502 || $statusCode === 504) {
                     if (isset($payload['tools'])) {
                         unset($payload['tools']);
-                        continue;
+                    }
+
+                    // If model is experiencing high demand (503), switch to fallback model on next attempt
+                    if ($statusCode === 503) {
+                        $requestUrl = $this->getFallbackModelUrl($apiKey, $requestUrl);
                     }
 
                     if ($attempt === $maxRetries) {
-                        $apiMsg = $result['error']['message'] ?? 'Too many requests sent in a short time.';
+                        $apiMsg = $result['error']['message'] ?? 'Service temporarily unavailable after multiple retries.';
                         return $this->response->setJSON([
                             'status' => 'error',
-                            'message' => 'Gemini API Rate Limit Exceeded (429): ' . $apiMsg . ' Please wait a moment and try again, or provide a new Gemini API Key in Settings.'
+                            'message' => 'Gemini API Error (' . $statusCode . '): ' . $apiMsg . ' Please wait a moment and try again.'
                         ]);
                     }
                     sleep($retryDelay);
@@ -406,11 +412,13 @@ class Products extends BaseController
         $retryDelay = 2;
         $result = null;
 
+        $requestUrl = $url;
+
         try {
             for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
                 $response = $client->setBody(json_encode($payload))
                     ->setHeader('Content-Type', 'application/json')
-                    ->request('POST', $url, [
+                    ->request('POST', $requestUrl, [
                         'timeout' => 30,
                         'http_errors' => false
                     ]);
@@ -418,18 +426,21 @@ class Products extends BaseController
                 $statusCode = $response->getStatusCode();
                 $result = json_decode($response->getBody(), true);
 
-                if ($statusCode === 429) {
-                    // If Google Search grounding caused quota exhaustion, drop tools and retry immediately
+                // Handle Rate Limits (429) and Server Demand / Temporary Overload (503, 500, 502, 504)
+                if ($statusCode === 429 || $statusCode === 503 || $statusCode === 500 || $statusCode === 502 || $statusCode === 504) {
                     if (isset($payload['tools'])) {
                         unset($payload['tools']);
-                        continue;
+                    }
+
+                    if ($statusCode === 503) {
+                        $requestUrl = $this->getFallbackModelUrl($apiKey, $requestUrl);
                     }
 
                     if ($attempt === $maxRetries) {
-                        $apiMsg = $result['error']['message'] ?? 'Please wait a few seconds and try again.';
+                        $apiMsg = $result['error']['message'] ?? 'Service temporarily unavailable after multiple retries.';
                         return $this->response->setJSON([
                             'status' => 'error',
-                            'message' => 'Gemini API Rate Limit Exceeded (429): ' . $apiMsg
+                            'message' => 'Gemini API Error (' . $statusCode . '): ' . $apiMsg
                         ]);
                     }
                     sleep($retryDelay);
@@ -474,12 +485,36 @@ class Products extends BaseController
         }
     }
 
-    private function getGeminiApiUrl($apiKey)
+    /**
+     * @description Get Gemini API URL with key
+     * @param string $apiKey
+     * @param string $model
+     * @return string
+     */
+    private function getGeminiApiUrl(string $apiKey, string $model = ''): string
     {
         $rawApiUrl = env('GEMINI_API_URL') ?: getenv('GEMINI_API_URL');
-        $apiUrl = !empty($rawApiUrl) ? trim($rawApiUrl, "\"' \t\n\r\0\x0B") : 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent';
+        $apiUrl = !empty($rawApiUrl) ? trim($rawApiUrl, "\"' \t\n\r\0\x0B") : 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+
+        if (!empty($model)) {
+            $apiUrl = preg_replace('#/models/[^:]+:#', '/models/' . $model . ':', $apiUrl);
+        }
 
         return $apiUrl . "?key=" . trim($apiKey);
+    }
+
+    /**
+     * @description Get fallback model URL when the primary model experiences high demand (503)
+     * @param string $apiKey
+     * @param string $currentUrl
+     * @return string
+     */
+    private function getFallbackModelUrl(string $apiKey, string $currentUrl): string
+    {
+        if (strpos($currentUrl, 'gemini-1.5-flash') !== false) {
+            return $this->getGeminiApiUrl($apiKey, 'gemini-2.0-flash');
+        }
+        return $this->getGeminiApiUrl($apiKey, 'gemini-1.5-flash');
     }
 
     /**
@@ -2163,13 +2198,14 @@ Return ONLY the JSON. Do not add any extra text, explanation, or markdown." . $m
         $maxRetries = 3;
         $retryDelay = 3;
         $result = null;
+        $requestUrl = $url;
 
         try {
             for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
                 // Added 'http_errors' => false to prevent CI4 from throwing exception on 429
                 $response = $client->setBody(json_encode($payload))
                     ->setHeader('Content-Type', 'application/json')
-                    ->request('POST', $url, [
+                    ->request('POST', $requestUrl, [
                         'timeout' => 2000,
                         'http_errors' => false
                     ]);
@@ -2177,16 +2213,19 @@ Return ONLY the JSON. Do not add any extra text, explanation, or markdown." . $m
                 $statusCode = $response->getStatusCode();
                 $result = json_decode($response->getBody(), true);
 
-                // Handle Rate Limits (429) gracefully
-                if ($statusCode === 429) {
+                // Handle Rate Limits (429) and Server Demand / Overload (503, 500, 502, 504) gracefully
+                if ($statusCode === 429 || $statusCode === 503 || $statusCode === 500 || $statusCode === 502 || $statusCode === 504) {
                     if (isset($payload['tools'])) {
                         unset($payload['tools']);
-                        continue;
+                    }
+
+                    if ($statusCode === 503) {
+                        $requestUrl = $this->getFallbackModelUrl($apiKey, $requestUrl);
                     }
 
                     if ($attempt === $maxRetries) {
-                        $apiMsg = $result['error']['message'] ?? 'Rate limit exceeded after multiple retries.';
-                        throw new \Exception('Gemini API Rate Limit Exceeded (429): ' . $apiMsg . ' Try a smaller batch or wait a moment.');
+                        $apiMsg = $result['error']['message'] ?? 'Service temporarily unavailable after multiple retries.';
+                        throw new \Exception('Gemini API Error (' . $statusCode . '): ' . $apiMsg . ' Try a smaller batch or switch model in .env.');
                     }
                     sleep($retryDelay);
                     $retryDelay *= 2; // 3s, then 6s delay
@@ -2817,7 +2856,7 @@ Return ONLY the JSON. Do not add any extra text, explanation, or markdown." . $m
         }
         return redirect()->to($redirect_url);
     }
-    
+
     /**
      * @description This method provides remove Watermark Images Action
      * @return RedirectResponse

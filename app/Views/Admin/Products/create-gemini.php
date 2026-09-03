@@ -19,9 +19,9 @@
                 </div>
             </div>
         </div>
-        <div class="">
+        <!-- <div class="">
             <a href="<?= base_url('products') ?>" class="btn btn-dark btn-sm mt-3">← Back</a>
-        </div>
+        </div> -->
     </section>
 
     <div class="col-md-12" style="margin-top: 10px">
@@ -65,9 +65,9 @@
 
                 <div id="productFormsContainer"></div>
             </div>
-            <div class="col-sm-12 mb-3">
+            <!-- <div class="col-sm-12 mb-3">
                 <a href="<?= base_url('products') ?>" class="btn btn-dark btn-sm mt-3">← Back</a>
-            </div>
+            </div> -->
         </div>
     </section>
 
