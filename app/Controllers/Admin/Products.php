@@ -511,10 +511,10 @@ class Products extends BaseController
      */
     private function getFallbackModelUrl(string $apiKey, string $currentUrl): string
     {
-        if (strpos($currentUrl, 'gemini-1.5-flash') !== false) {
-            return $this->getGeminiApiUrl($apiKey, 'gemini-2.0-flash');
+        if (strpos($currentUrl, 'gemini-3.5-flash') === false) {
+            return $this->getGeminiApiUrl($apiKey, 'gemini-2.5-flash');
         }
-        return $this->getGeminiApiUrl($apiKey, 'gemini-1.5-flash');
+        return $this->getGeminiApiUrl($apiKey, 'gemini-3.5-flash');
     }
 
     /**

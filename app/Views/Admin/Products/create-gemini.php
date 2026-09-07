@@ -303,8 +303,8 @@
                 '<div class="col-md-3 border-right">' +
                 '<div class="form-group mb-2">' +
                 '<label class="small text-muted text-uppercase font-weight-bold mb-1">Product Image</label>' +
-                '<div class="p-2 border rounded bg-white text-center" style="height: 250px; display: flex; align-items: center; justify-content: center;">' +
-                (pImage ? '<img src="' + pImage + '" class="img-fluid img-preview-' + i + '" style="max-height:250px;">' : '<div class="text-muted small"><i class="fas fa-image fa-3x mb-2 d-block"></i> No image</div>') +
+                '<div class="p-2 border rounded bg-white text-center" style="height: 225px; display: flex; align-items: center; justify-content: center;">' +
+                (pImage ? '<img src="' + pImage + '" class="img-fluid img-preview-' + i + '" style="max-height:100%;">' : '<div class="text-muted small"><i class="fas fa-image fa-3x mb-2 d-block"></i> No image</div>') +
                 '</div>' +
                 '</div>' +
 
