@@ -108,8 +108,8 @@
                                                     </div>
                                                     <div class="form-group mb-2">
                                                         <label class="small font-weight-bold mb-1">Price</label>
-                                                        <input type="number" step="0.01" name="price" class="form-control form-control-sm" value="<?= esc($p['current_price'] ?? '0.00') ?>" min="0">
-                                                        <small><i class="fas fa-tag mr-1"></i> Recommended: $<?= esc($p['price'] ?? '0.00') ?></small>
+                                                        <input type="number" step="0.01" name="price" class="form-control form-control-sm" value="<?= esc($p['price'] ?? $p['current_price'] ?? '0.00') ?>" min="0">
+                                                        <small class="text-muted"><i class="fas fa-tag mr-1"></i> Current: $<?= esc($p['current_price'] ?? '0.00') ?></small>
                                                     </div>
                                                     <div class="form-group mb-2">
                                                         <label class="small font-weight-bold mb-1">Weight</label>
