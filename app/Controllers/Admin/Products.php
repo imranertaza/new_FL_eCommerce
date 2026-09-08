@@ -592,7 +592,7 @@ Return ONLY the JSON. Do not add any extra text, explanation, or markdown." . $m
             $metaInfo .= "You are being passed an array of images. Map them sequentially to these objects:\n";
             foreach ($metadata as $index => $meta) {
                 // Added original image filename reference to help the model match contextually
-                $metaInfo .= "- Image index {$index} filename is \"{$meta['image']}\" matches Database ID: \"{$meta['unique_id']}\" (Current Price Reference: {$meta['current_price']}, Current Brand Name Reference: {$meta['current_brand_name']} if N/A return 'N/A' instead)\n";
+                $metaInfo .= "- Image index {$index} filename is \"{$meta['image']}\" matches Database ID: \"{$meta['unique_id']}\" (Current Store Price: \${$meta['current_price']}, Current Store Brand: {$meta['current_brand_name']})\n";
             }
             $metaInfo .= "\nCRITICAL RULE: For every processed product, set 'unique_id' EXACTLY to its matching Database ID string from the list above. Do NOT generate alphanumeric text slugs.
             ";
@@ -605,7 +605,7 @@ Return ONLY the JSON. Do not add any extra text, explanation, or markdown." . $m
     Available Brands (JSON map: brand_name => brand_id):
     {$availableBrands}
    
-    Price Instruction: All prices ('price', 'current_price') MUST be realistic competitor-matched retail market prices in USD ($). If packaging shows foreign currency/MRP (BDT, INR, EUR, etc.), convert accurately to USD (e.g. 240 BDT = 2.00 USD).
+    Price Instruction: Suggest a realistic competitor-matched retail market price in USD ($) for 'price'. If packaging shows foreign currency/MRP (BDT, INR, EUR, etc.), convert accurately to USD (e.g. 240 BDT = 2.00 USD).
     Response Instruction: Return ONLY the JSON adhering to your schema. Do not add markdown wrapping like ```json or trailing explanations. description should be HTML format not &lt;p&gt; user < >.";
     }
 
@@ -2091,23 +2091,41 @@ Return ONLY the JSON. Do not add any extra text, explanation, or markdown." . $m
         $availableBrands = array_column($brands, 'brand_id', 'name'); // Map Name => ID for the AI to understand
         $availableBrandsJson = json_encode($availableBrands, JSON_PRETTY_PRINT);
 
+        // Fetch existing product records from DB directly to ensure accurate current brand, price, and image
+        $existingProducts = DB()->table('cc_products p')
+            ->select('p.product_id, p.image, p.price, p.quantity, p.brand_id, b.name as brand_name')
+            ->join('cc_brand b', 'b.brand_id = p.brand_id', 'left')
+            ->whereIn('p.product_id', $allProductId)
+            ->get()->getResult();
+        $existingProductMap = [];
+        foreach ($existingProducts as $ep) {
+            $existingProductMap[$ep->product_id] = $ep;
+        }
+
         // Build metadata array (unique_id etc.)
         $metadata = [];
         $parts    = [];
 
         foreach ($allProductId as $productId) {
-            if (isset($allImage[$productId])) {
-                $currentBrandName = !empty($allBrand[$productId]) ? $allBrand[$productId] : 'N/A';
+            $ep = $existingProductMap[$productId] ?? null;
+            $img = !empty($allImage[$productId]) ? $allImage[$productId] : ($ep->image ?? '');
+
+            if (!empty($img)) {
+                $currentPrice     = $ep ? (float)$ep->price : (float)($allPrice[$productId] ?? 0.00);
+                $currentBrandName = ($ep && !empty($ep->brand_name)) ? $ep->brand_name : 'N/A';
+                $currentBrandId   = $ep ? $ep->brand_id : ($allBrand[$productId] ?? null);
+                $quantity         = $ep ? $ep->quantity : ($allQuantity[$productId] ?? 1);
 
                 $metadata[] = [
                     'unique_id'          => (string)$productId,
-                    'image'              => $allImage[$productId],
-                    'current_price'      => $allPrice[$productId],
-                    'quantity'           => $allQuantity[$productId],
-                    'current_brand_name' => (string)$currentBrandName
+                    'image'              => $img,
+                    'current_price'      => $currentPrice,
+                    'quantity'           => $quantity,
+                    'current_brand_name' => (string)$currentBrandName,
+                    'current_brand_id'   => $currentBrandId
                 ];
 
-                $image_path = get_product_original_image_path('uploads/products', $productId, $allImage[$productId]);
+                $image_path = get_product_original_image_path('uploads/products', $productId, $img);
 
                 if (is_file($image_path)) {
                     $parts[] = [
@@ -2264,7 +2282,18 @@ Return ONLY the JSON. Do not add any extra text, explanation, or markdown." . $m
 
             $orderedProducts = [];
             foreach ($metadata as $meta) {
-                $orderedProducts[] = $productMap[$meta['unique_id']] ?? $this->getErrorProduct($meta);
+                $pData = $productMap[$meta['unique_id']] ?? $this->getErrorProduct($meta);
+
+                // Preserve true current database values for reference
+                $pData['current_brand_name'] = $meta['current_brand_name'];
+                $pData['current_price']      = number_format((float)$meta['current_price'], 2, '.', '');
+
+                // Fallback to existing brand if AI did not return a valid brand_id
+                if (empty($pData['brand_id']) && !empty($meta['current_brand_id'])) {
+                    $pData['brand_id'] = $meta['current_brand_id'];
+                }
+
+                $orderedProducts[] = $pData;
             }
 
             echo view(
