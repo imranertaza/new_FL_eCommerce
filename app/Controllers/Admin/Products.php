@@ -26,7 +26,9 @@ class Products extends BaseController
     protected $productsModel;
     private $module_name = 'Products';
     private $productImageSizes = [['width' => '191', 'height' => '191'], ['width' => '198', 'height' => '198'], ['width' => '100', 'height' => '100'], ['width' => '437', 'height' => '437'], ['width' => '50', 'height' => '50'],];
-
+    /**
+     * @description This method is the constructor for the Products controller
+     */
     public function __construct()
     {
         $this->validation = \Config\Services::validation();
@@ -39,7 +41,10 @@ class Products extends BaseController
         $this->productsModel = new ProductsModel();
         $this->imageProcessing = new Image_processing();
     }
-
+    /**
+     * @description This method provides the product create page
+     * @return void
+     */
     public function old_index()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -100,6 +105,10 @@ class Products extends BaseController
             }
         }
     }
+    /**
+     * @description This method provides the product create page for Gemini integration
+     * @return void
+     */
     public function create_gemini()
     {
         $isLoggedInEcAdmin = $this->session->isLoggedInEcAdmin;
@@ -130,6 +139,10 @@ class Products extends BaseController
             }
         }
     }
+    /**
+     * @description This method analyzes a single product image using the Gemini API
+     * @return ResponseInterface
+     */
 
     public function product_ai_analyze_batch()
     {
@@ -137,28 +150,47 @@ class Products extends BaseController
         if (empty($apiKey)) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'API Key is missing']);
         }
-        $apiUrl = getenv('GEMINI_API_URL');
-        $url = $apiUrl . "?key=" . $apiKey;
+
+        $url = $this->getGeminiApiUrl($apiKey);
 
         $metadataInput = $this->request->getPost('metadata');
         $metadata = json_decode($metadataInput, true);
-        $images = $this->request->getFiles();
-
+        $images = $this->request->getFileMultiple('images');
+        $analyzePrompt = $this->request->getPost('analyzePrompt');
         if (empty($metadata)) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Metadata is missing']);
         }
 
-        if (empty($images['images'])) {
+        if (empty($images)) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'No images were uploaded or files exceed server limits (post_max_size/upload_max_filesize)']);
         }
 
-        $availableCategories = $this->request->getPost('available_categories');
+        $availableCategoriesRaw = $this->request->getPost('available_categories');
+        $availableBrandsRaw = $this->request->getPost('available_brands');
+
+        $brandsList = json_decode($availableBrandsRaw, true) ?: [];
+        $brandMap = [];
+        foreach ($brandsList as $b) {
+            if (isset($b['id']) && isset($b['name'])) {
+                $brandMap[$b['name']] = (int)$b['id'];
+            }
+        }
+        $availableBrandsJson = json_encode($brandMap, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+        $categoriesList = json_decode($availableCategoriesRaw, true) ?: [];
+        $categoryMap = [];
+        foreach ($categoriesList as $c) {
+            if (isset($c['id']) && isset($c['name'])) {
+                $categoryMap[$c['name']] = (int)$c['id'];
+            }
+        }
+        $availableCategoriesJson = json_encode($categoryMap, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
         $parts = [
-            ["text" => $this->getBatchPrompt($availableCategories, $metadata)]
+            ["text" => $this->getBatchPromptCreate($availableCategoriesJson, $availableBrandsJson, $analyzePrompt, $metadata)]
         ];
 
-
-        foreach ($images['images'] as $index => $file) {
+        foreach ($images as $index => $file) {
             if ($file->isValid() && !$file->hasMoved()) {
                 $parts[] = [
                     "inline_data" => [
@@ -173,11 +205,15 @@ class Products extends BaseController
                 ]);
             }
         }
+        $allowedIds = array_column($metadata, 'unique_id');
 
         $payload = [
             "contents" => [["parts" => $parts]],
+            "tools" => [
+                ["google_search" => new \stdClass()]
+            ],
             "generationConfig" => [
-                "temperature" => 0.4,
+                "temperature" => 0.2,
                 "response_mime_type" => "application/json",
                 "response_schema" => [
                     "type" => "OBJECT",
@@ -187,20 +223,24 @@ class Products extends BaseController
                             "items" => [
                                 "type" => "OBJECT",
                                 "properties" => [
-                                    "unique_id" => ["type" => "STRING"],
+                                    "unique_id" => [
+                                        "type" => "STRING",
+                                        "enum" => $allowedIds
+                                    ],
                                     "name" => ["type" => "STRING"],
                                     "alt_name" => ["type" => "STRING"],
                                     "description" => ["type" => "STRING"],
                                     "price" => ["type" => "NUMBER"],
-                                    "weight" => ["type" => "STRING"],
+                                    "weight" => ["type" => "STRING", "description" => "Weight in kg"],
                                     "model" => ["type" => "STRING"],
                                     "tags" => ["type" => "STRING"],
                                     "meta_title" => ["type" => "STRING"],
                                     "meta_description" => ["type" => "STRING"],
                                     "meta_keyword" => ["type" => "STRING"],
-                                    "category_ids" => ["type" => "ARRAY", "items" => ["type" => "INTEGER"]]
+                                    "category_ids" => ["type" => "ARRAY", "items" => ["type" => "INTEGER"]],
+                                    "brand_id" => ["type" => "INTEGER"]
                                 ],
-                                "required" => ["unique_id", "name", "description", "price"]
+                                "required" => ["unique_id", "name", "alt_name", "description", "price", "weight", "model", "tags", "meta_title", "meta_description", "meta_keyword", "category_ids"]
                             ]
                         ]
                     ]
@@ -209,11 +249,62 @@ class Products extends BaseController
         ];
 
         $client = \Config\Services::curlrequest();
-        try {
-            $response = $client->setBody(json_encode($payload))
-                ->setHeader('Content-Type', 'application/json')->request('POST', $url, ['timeout' => 2000]);
+        $maxRetries = 3;
+        $retryDelay = 2;
+        $result = null;
 
-            $result = json_decode($response->getBody(), true);
+        $requestUrl = $url;
+
+        try {
+            for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
+                $response = $client->setBody(json_encode($payload))
+                    ->setHeader('Content-Type', 'application/json')
+                    ->request('POST', $requestUrl, [
+                        'timeout' => 2000,
+                        'http_errors' => false
+                    ]);
+
+                $statusCode = $response->getStatusCode();
+                $result = json_decode($response->getBody(), true);
+
+                // Handle Rate Limits (429) and Server Demand / Temporary Overload (503, 500, 502, 504)
+                if ($statusCode === 429 || $statusCode === 503 || $statusCode === 500 || $statusCode === 502 || $statusCode === 504) {
+                    if (isset($payload['tools'])) {
+                        unset($payload['tools']);
+                    }
+
+                    // If model is experiencing high demand (503), switch to fallback model on next attempt
+                    if ($statusCode === 503) {
+                        $requestUrl = $this->getFallbackModelUrl($apiKey, $requestUrl);
+                    }
+
+                    if ($attempt === $maxRetries) {
+                        $apiMsg = $result['error']['message'] ?? 'Service temporarily unavailable after multiple retries.';
+                        return $this->response->setJSON([
+                            'status' => 'error',
+                            'message' => 'Gemini API Error (' . $statusCode . '): ' . $apiMsg . ' Please wait a moment and try again.'
+                        ]);
+                    }
+                    sleep($retryDelay);
+                    $retryDelay *= 2;
+                    continue;
+                }
+
+                if ($statusCode >= 400 && isset($result['error'])) {
+                    // If tools are not supported or rejected with 400, drop tools and retry once
+                    if (isset($payload['tools']) && ($statusCode === 400 || $statusCode === 422)) {
+                        unset($payload['tools']);
+                        continue;
+                    }
+
+                    return $this->response->setJSON([
+                        'status' => 'error',
+                        'message' => 'Gemini API Error (' . $statusCode . '): ' . ($result['error']['message'] ?? 'Unknown error')
+                    ]);
+                }
+
+                break;
+            }
 
             if (isset($result['error'])) {
                 return $this->response->setJSON([
@@ -232,7 +323,6 @@ class Products extends BaseController
             if (json_last_error() !== JSON_ERROR_NONE || !isset($decoded['products'])) {
                 return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid AI JSON structure']);
             }
-
             // Re-order based on metadata unique_id
             $productMap = array_column($decoded['products'], null, 'unique_id');
             $orderedProducts = [];
@@ -249,14 +339,17 @@ class Products extends BaseController
             return $this->response->setJSON(['status' => 'error', 'message' => 'API Connection failed: ' . $e->getMessage()]);
         }
     }
+    /**
+     * @description This method analyzes a single product image using the Gemini API
+     * @return ResponseInterface
+     */
     public function product_ai_analyze_single()
     {
         $apiKey = get_lebel_by_value_in_settings('gemini_api_key');
         if (empty($apiKey)) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'API Key is missing']);
         }
-        $apiUrl = getenv('GEMINI_API_URL');
-        $url = $apiUrl . "?key=" . $apiKey;
+        $url = $this->getGeminiApiUrl($apiKey);
 
         $request = service('request');
         $product_id = $request->getPost('product_id');
@@ -289,16 +382,19 @@ class Products extends BaseController
         // UPDATED SCHEMA: Returning a single object instead of an array
         $payload = [
             "contents" => [["parts" => $parts]],
+            "tools" => [
+                ["google_search" => new \stdClass()]
+            ],
             "generationConfig" => [
-                "temperature" => 0.4,
+                "temperature" => 0.2,
                 "response_mime_type" => "application/json",
                 "response_schema" => [
                     "type" => "OBJECT",
                     "properties" => [
                         "name" => ["type" => "STRING"],
-                        "description" => ["type" => "STRING", "format" => "html"],
+                        "description" => ["type" => "HTML", "format" => "html"],
                         "price" => ["type" => "NUMBER"],
-                        "weight" => ["type" => "STRING"],
+                        "weight" => ["type" => "STRING", "description" => "Weight in kg"],
                         "model" => ["type" => "STRING"],
                         "tags" => ["type" => "STRING"],
                         "meta_title" => ["type" => "STRING"],
@@ -312,11 +408,60 @@ class Products extends BaseController
         ];
 
         $client = \Config\Services::curlrequest();
-        try {
-            $response = $client->setBody(json_encode($payload))
-                ->setHeader('Content-Type', 'application/json')->request('POST', $url, ['timeout' => 30]);
+        $maxRetries = 3;
+        $retryDelay = 2;
+        $result = null;
 
-            $result = json_decode($response->getBody(), true);
+        $requestUrl = $url;
+
+        try {
+            for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
+                $response = $client->setBody(json_encode($payload))
+                    ->setHeader('Content-Type', 'application/json')
+                    ->request('POST', $requestUrl, [
+                        'timeout' => 30,
+                        'http_errors' => false
+                    ]);
+
+                $statusCode = $response->getStatusCode();
+                $result = json_decode($response->getBody(), true);
+
+                // Handle Rate Limits (429) and Server Demand / Temporary Overload (503, 500, 502, 504)
+                if ($statusCode === 429 || $statusCode === 503 || $statusCode === 500 || $statusCode === 502 || $statusCode === 504) {
+                    if (isset($payload['tools'])) {
+                        unset($payload['tools']);
+                    }
+
+                    if ($statusCode === 503) {
+                        $requestUrl = $this->getFallbackModelUrl($apiKey, $requestUrl);
+                    }
+
+                    if ($attempt === $maxRetries) {
+                        $apiMsg = $result['error']['message'] ?? 'Service temporarily unavailable after multiple retries.';
+                        return $this->response->setJSON([
+                            'status' => 'error',
+                            'message' => 'Gemini API Error (' . $statusCode . '): ' . $apiMsg
+                        ]);
+                    }
+                    sleep($retryDelay);
+                    $retryDelay *= 2;
+                    continue;
+                }
+
+                if ($statusCode >= 400 && isset($result['error'])) {
+                    if (isset($payload['tools']) && ($statusCode === 400 || $statusCode === 422)) {
+                        unset($payload['tools']);
+                        continue;
+                    }
+
+                    return $this->response->setJSON([
+                        'status' => 'error',
+                        'message' => 'Gemini Error (' . $statusCode . '): ' . ($result['error']['message'] ?? 'Unknown error')
+                    ]);
+                }
+
+                break;
+            }
 
             if (isset($result['error'])) {
                 return $this->response->setJSON(['status' => 'error', 'message' => 'Gemini Error: ' . $result['error']['message']]);
@@ -340,6 +485,43 @@ class Products extends BaseController
         }
     }
 
+    /**
+     * @description Get Gemini API URL with key
+     * @param string $apiKey
+     * @param string $model
+     * @return string
+     */
+    private function getGeminiApiUrl(string $apiKey, string $model = ''): string
+    {
+        $rawApiUrl = env('GEMINI_API_URL') ?: getenv('GEMINI_API_URL');
+        $apiUrl = !empty($rawApiUrl) ? trim($rawApiUrl, "\"' \t\n\r\0\x0B") : 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+
+        if (!empty($model)) {
+            $apiUrl = preg_replace('#/models/[^:]+:#', '/models/' . $model . ':', $apiUrl);
+        }
+
+        return $apiUrl . "?key=" . trim($apiKey);
+    }
+
+    /**
+     * @description Get fallback model URL when the primary model experiences high demand (503)
+     * @param string $apiKey
+     * @param string $currentUrl
+     * @return string
+     */
+    private function getFallbackModelUrl(string $apiKey, string $currentUrl): string
+    {
+        if (strpos($currentUrl, 'gemini-3.5-flash') === false) {
+            return $this->getGeminiApiUrl($apiKey, 'gemini-2.5-flash');
+        }
+        return $this->getGeminiApiUrl($apiKey, 'gemini-3.5-flash');
+    }
+
+    /**
+     * @description This method returns a default product object for failed analyses
+     * @param array $meta
+     * @return array
+     */
     private function getErrorProduct($meta)
     {
         return [
@@ -356,7 +538,81 @@ class Products extends BaseController
             'category_ids' => []
         ];
     }
+    /**
+     * @description This method generates the prompt for batch product creation
+     * @param array $availableCategories
+     * @param array $availableBrands
+     * @param string|null $analyzePrompt
+     * @param array $metadata
+     * @return string
+     */
+    private function getBatchPromptCreate($availableCategories, $availableBrands, $analyzePrompt = null, $metadata = [])
+    {
+        $metaInfo = '';
+        if ($metadata) {
+            $metaInfo = "\n\nImage return exact Metadata (use these exact unique_id):\n" .
+                json_encode($metadata, JSON_PRETTY_PRINT);
+        }
+        return ($analyzePrompt ? $analyzePrompt . "\n\n" : get_product_image_analyze_prompt() . "\n\n") . "
+Available Categories (JSON map: category_name => prod_cat_id):
+{$availableCategories}
 
+Available Brands (JSON map: brand_name => brand_id):
+{$availableBrands}
+
+Brand Selection Rules (CRITICAL):
+1. Carefully detect any brand name, logo, or manufacturer marked on the product or image.
+2. Search the 'Available Brands' map above for the matching brand name.
+3. If a match is found (even with slight case or spelling variation), return its exact integer `brand_id`.
+4. If no brand matches from the 'Available Brands' map, set `brand_id` to null.
+
+Competitor & Market Price Benchmarking (CRITICAL - STRICT USD $):
+1. Analyze what this exact same product (same brand, model, size/weight) is currently being sold for across major online e-commerce platforms and competitor websites (Amazon, Walmart, Target, eBay, brand webstores, and online retail stores).
+2. Suggest a realistic, competitive retail selling price in USD ($) matching what competitors and other sites charge for a SINGLE individual consumer unit.
+3. If printed MRP/price in local currency (BDT/Tk, INR/₹, EUR, GBP, etc.) is visible on the package, convert it accurately to USD:
+   - Example: 240 BDT -> divide by 120 -> suggest 2.00 USD (NEVER output 240!).
+   - Example: 450 INR -> divide by 85 -> suggest 5.29 USD (NEVER output 450!).
+4. Everyday grocery, food, snacks, personal care, and cosmetics typically retail between $0.99 and $15.00 USD. Never return inflated bulk prices.
+5. Always return a positive numeric float value in USD for `price` (e.g., 2.49, 4.99, 12.50).
+
+Category Selection Rules:
+1. Select the most relevant category IDs from 'Available Categories' and return them in `category_ids` array.
+
+Return ONLY the JSON. Do not add any extra text, explanation, or markdown." . $metaInfo;
+    }
+    /**
+     * @description This method provides product create action
+     * @return RedirectResponse
+     */
+    private function getBatchPromptUpdate($availableCategories, $availableBrands, $analyzePrompt = null, $metadata = [])
+    {
+        $metaInfo = '';
+        if (!empty($metadata)) {
+            $metaInfo = "\n\n[IMAGE ARRAY TO DATABASE ID MAP]:\n";
+            $metaInfo .= "You are being passed an array of images. Map them sequentially to these objects:\n";
+            foreach ($metadata as $index => $meta) {
+                // Added original image filename reference to help the model match contextually
+                $metaInfo .= "- Image index {$index} filename is \"{$meta['image']}\" matches Database ID: \"{$meta['unique_id']}\" (Current Store Price: \${$meta['current_price']}, Current Store Brand: {$meta['current_brand_name']})\n";
+            }
+            $metaInfo .= "\nCRITICAL RULE: For every processed product, set 'unique_id' EXACTLY to its matching Database ID string from the list above. Do NOT generate alphanumeric text slugs.
+            ";
+        }
+
+        return ($analyzePrompt ? $analyzePrompt . "\n\n" : get_product_image_analyze_prompt() . "\n\n") . "{$metaInfo}
+    Available Categories (JSON map: category_name => prod_cat_id):
+    {$availableCategories}
+    
+    Available Brands (JSON map: brand_name => brand_id):
+    {$availableBrands}
+   
+    Price Instruction: Suggest a realistic competitor-matched retail market price in USD ($) for 'price'. If packaging shows foreign currency/MRP (BDT, INR, EUR, etc.), convert accurately to USD (e.g. 240 BDT = 2.00 USD).
+    Response Instruction: Return ONLY the JSON adhering to your schema. Do not add markdown wrapping like ```json or trailing explanations. description should be HTML format not &lt;p&gt; user < >.";
+    }
+
+    /**
+     * @description This method provides product create action
+     * @return RedirectResponse
+     */
     private function getBatchPrompt($availableCategories, $metadata = [])
     {
         $metaInfo = '';
@@ -364,12 +620,13 @@ class Products extends BaseController
             $metaInfo = "\n\nImage Metadata (use these unique_id):\n" .
                 json_encode($metadata, JSON_PRETTY_PRINT);
         }
-        return "You are an expert e-commerce product analyst and SEO specialist.
-            Analyze the uploaded product image(s) carefully and extract accurate product information.
+        return "You are an expert e-commerce product analyst, market pricing specialist, and SEO copywriter.
+            Analyze the uploaded product image(s) carefully to identify the exact product, brand, variant, and extract authentic product information.
             Rules:
             - Analyze every image separately and create one product object per image.
-            - Be precise with price (realistic market price).
-            - Weight should include unit.
+            - Competitor & Market Price Benchmarking (CRITICAL - STRICT USD $): Check what other competitor websites and major e-commerce platforms (Amazon, Walmart, eBay, brand direct webstores) sell this exact item for, and suggest a realistic competitive retail price in USD ($) for a SINGLE consumer unit. If non-USD currency (BDT, INR, EUR, etc.) or MRP is printed on the package, convert it accurately to USD (e.g. 240 BDT -> 2.00 USD). Never use raw foreign currency figures directly as USD.
+            - Weight should include unit (e.g., 500g, 1kg, 250ml, 100g).
+            - Description should be in raw HTML format.
             - Tags should be comma-separated relevant keywords.
             - Meta Title should be catchy and SEO-friendly (under 60 characters).
             - Meta Description should be persuasive and contain main keywords.
@@ -380,7 +637,6 @@ class Products extends BaseController
 
             Return ONLY the JSON. Do not add any extra text, explanation, or markdown." . $metaInfo;
     }
-
     /**
      * @description This method provides product create action
      * @return RedirectResponse
@@ -390,6 +646,7 @@ class Products extends BaseController
         $adUserId = $this->session->adUserId;
         $batch = $this->request->getPost('batch');
         $files = $this->request->getFiles();
+
         if (empty($batch)) {
             $this->session->setFlashdata('message', '<div class="alert alert-danger">No products to save.</div>');
             return redirect()->to('product_create_gemini');
@@ -422,13 +679,15 @@ class Products extends BaseController
                     'model' => $p['model'],
                     'quantity' => $p['quantity'],
                     'weight' => $p['weight'] ?? '',
-                    'status' => 1,
+                    'brand_id' => $p['brand_id'] ?? '',
+                    'status' => 'Active',
                     'createdBy' => $adUserId
                 ];
                 DB()->table('cc_products')->insert($proData);
                 $productId = DB()->insertID();
 
                 // 2. Handle Image
+
                 $pic = $files['batch'][$i]['image'];
 
                 if ($pic && $pic->isValid() && !$pic->hasMoved()) {
@@ -476,6 +735,10 @@ class Products extends BaseController
             return redirect()->to('product_create_gemini');
         }
     }
+    /**
+     * @description This method provides product create action for single product
+     * @return ResponseInterface
+     */
     public function product_create_gemini_action()
     {
         // Restrict access strictly to AJAX POST interactions
@@ -495,6 +758,7 @@ class Products extends BaseController
         $model           = $this->request->getPost('model') ?? '';
         $price           = $this->request->getPost('price');
         $quantity        = $this->request->getPost('quantity');
+        $brand_id         = $this->request->getPost('brand_id') ?? '';
         $weight          = $this->request->getPost('weight') ?? '';
         $description     = $this->request->getPost('description') ?? '';
         $category_ids    = $this->request->getPost('categorys') ?? []; // mapped to 'categorys[]' in HTML
@@ -541,10 +805,11 @@ class Products extends BaseController
                 'name'      => $name,
                 'alt_name'  => $alt_name,
                 'price'     => $price,
+                'brand_id'  => $brand_id,
                 'model'     => $model,
                 'quantity'  => $quantity,
                 'weight'    => $weight,
-                'status'    => 1,
+                'status'    => 'Active',
                 'createdBy' => $adUserId
             ];
             DB()->table('cc_products')->insert($proData);
@@ -606,7 +871,10 @@ class Products extends BaseController
             ]);
         }
     }
-
+    /**
+     * @description This method provides product create action
+     * @return RedirectResponse
+     */
     public function create_action()
     {
 
@@ -1802,32 +2070,62 @@ class Products extends BaseController
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">API Key is missing <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('products');
         }
-        $apiUrl = getenv('GEMINI_API_URL');
-        $url = $apiUrl . "?key=" . $apiKey;
+
+        $url = $this->getGeminiApiUrl($apiKey);
 
         $allProductId = $this->request->getGet('productId');
         $allImage     = $this->request->getGet('productImage');
         $allPrice     = $this->request->getGet('productPrice');
         $allQuantity  = $this->request->getGet('productQuantity');
-
+        $allBrand     = $this->request->getGet('brand_id'); // Assuming this array holds current brand names or IDs
+        $prompt       = $this->request->getGet('gemini_prompt');
 
         if (empty($allProductId)) {
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">No products selected <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('products');
         }
 
+        // Fetch Brands for Prompt mapping
+        $tableBrand = DB()->table('cc_brand');
+        $brands = $tableBrand->where('status', 'Active')->orderBy('name', 'ASC')->get()->getResult();
+        $availableBrands = array_column($brands, 'brand_id', 'name'); // Map Name => ID for the AI to understand
+        $availableBrandsJson = json_encode($availableBrands, JSON_PRETTY_PRINT);
+
+        // Fetch existing product records from DB directly to ensure accurate current brand, price, and image
+        $existingProducts = DB()->table('cc_products p')
+            ->select('p.product_id, p.image, p.price, p.quantity, p.brand_id, b.name as brand_name')
+            ->join('cc_brand b', 'b.brand_id = p.brand_id', 'left')
+            ->whereIn('p.product_id', $allProductId)
+            ->get()->getResult();
+        $existingProductMap = [];
+        foreach ($existingProducts as $ep) {
+            $existingProductMap[$ep->product_id] = $ep;
+        }
+
         // Build metadata array (unique_id etc.)
         $metadata = [];
         $parts    = [];
-        foreach ($allProductId as $productId) {
-            if (isset($allImage[$productId])) {
-                $metadata[] = ['unique_id' => (string)$productId, 'image' => $allImage[$productId], 'price' => $allPrice[$productId], 'quantity' => $allQuantity[$productId]];
 
-                $image_path = get_product_original_image_path(
-                    'uploads/products',
-                    $productId,
-                    $allImage[$productId]
-                );
+        foreach ($allProductId as $productId) {
+            $ep = $existingProductMap[$productId] ?? null;
+            $img = !empty($allImage[$productId]) ? $allImage[$productId] : ($ep->image ?? '');
+
+            if (!empty($img)) {
+                $currentPrice     = $ep ? (float)$ep->price : (float)($allPrice[$productId] ?? 0.00);
+                $currentBrandName = ($ep && !empty($ep->brand_name)) ? $ep->brand_name : 'N/A';
+                $currentBrandId   = $ep ? $ep->brand_id : ($allBrand[$productId] ?? null);
+                $quantity         = $ep ? $ep->quantity : ($allQuantity[$productId] ?? 1);
+
+                $metadata[] = [
+                    'unique_id'          => (string)$productId,
+                    'image'              => $img,
+                    'current_price'      => $currentPrice,
+                    'quantity'           => $quantity,
+                    'current_brand_name' => (string)$currentBrandName,
+                    'current_brand_id'   => $currentBrandId
+                ];
+
+                $image_path = get_product_original_image_path('uploads/products', $productId, $img);
 
                 if (is_file($image_path)) {
                     $parts[] = [
@@ -1845,21 +2143,22 @@ class Products extends BaseController
             return redirect()->to('products');
         }
 
-
-        // Add prompt text
-        // Fetch all active categories
+        // Fetch Categories
         $table = DB()->table('cc_product_category');
         $categories = $table->where('status', '1')->get()->getResultArray();
-
         $availableCategories = array_column($categories, 'prod_cat_id', 'category_name');
         $availableCategoriesJson = json_encode($availableCategories, JSON_PRETTY_PRINT);
-        $parts = array_merge([["text" => $this->getBatchPrompt($availableCategoriesJson, $metadata)]], $parts);
+
+        $parts = array_merge([["text" => $this->getBatchPromptUpdate($availableCategoriesJson, $availableBrandsJson, $prompt ?? null, $metadata)]], $parts);
 
         // Payload schema
         $payload = [
             "contents" => [["parts" => $parts]],
+            "tools" => [
+                ["google_search" => new \stdClass()]
+            ],
             "generationConfig" => [
-                "temperature" => 0.4,
+                "temperature" => 0.2,
                 "response_mime_type" => "application/json",
                 "response_schema" => [
                     "type" => "OBJECT",
@@ -1869,22 +2168,41 @@ class Products extends BaseController
                             "items" => [
                                 "type" => "OBJECT",
                                 "properties" => [
-                                    "unique_id"       => ["type" => "STRING"],
-                                    "image"           => ["type" => "STRING"],
-                                    "name"            => ["type" => "STRING"],
-                                    "alt_name"        => ["type" => "STRING"],
-                                    // 👇 description as HTML
-                                    "description"     => ["type" => "STRING", "format" => "html"],
-                                    "price"           => ["type" => "NUMBER"],
-                                    "weight"          => ["type" => "STRING"],
-                                    "model"           => ["type" => "STRING"],
-                                    "tags"            => ["type" => "STRING"],
-                                    "meta_title"      => ["type" => "STRING"],
-                                    "meta_description" => ["type" => "STRING"],
-                                    "meta_keyword"    => ["type" => "STRING"],
-                                    "category_ids"    => ["type" => "ARRAY", "items" => ["type" => "INTEGER"]]
+                                    "unique_id"          => ["type" => "STRING"],
+                                    "image"              => ["type" => "STRING"],
+                                    "name"               => ["type" => "STRING"],
+                                    "alt_name"           => ["type" => "STRING"],
+                                    "description"        => ["type" => "STRING", "format" => "html"],
+                                    "current_price"      => ["type" => "NUMBER"],
+                                    "price"              => ["type" => "NUMBER"],
+                                    "weight"             => ["type" => "STRING"],
+                                    "model"              => ["type" => "STRING"],
+                                    "tags"               => ["type" => "STRING"],
+                                    "meta_title"         => ["type" => "STRING"],
+                                    "meta_description"   => ["type" => "STRING"],
+                                    "meta_keyword"       => ["type" => "STRING"],
+                                    "current_brand_name" => ["type" => "STRING"], // Fixed typo here
+                                    "brand_id"           => ["type" => "INTEGER"],
+                                    "category_ids"       => ["type" => "ARRAY", "items" => ["type" => "INTEGER"]]
                                 ],
-                                "required" => ["unique_id", "name", "description", "price"]
+                                "required" => [
+                                    "unique_id",
+                                    "image",
+                                    "name",
+                                    "alt_name",
+                                    "description",
+                                    "current_price",
+                                    "price",
+                                    "weight",
+                                    "model",
+                                    "tags",
+                                    "meta_title",
+                                    "meta_description",
+                                    "meta_keyword",
+                                    "current_brand_name", // Fixed typo here
+                                    "brand_id",
+                                    "category_ids"
+                                ]
                             ]
                         ]
                     ]
@@ -1893,51 +2211,105 @@ class Products extends BaseController
         ];
 
         $client = \Config\Services::curlrequest();
+
+        // API Retry Backoff logic
+        $maxRetries = 3;
+        $retryDelay = 3;
+        $result = null;
+        $requestUrl = $url;
+
         try {
-            $response = $client->setBody(json_encode($payload))
-                ->setHeader('Content-Type', 'application/json')
-                ->request('POST', $url, ['timeout' => 2000]);
+            for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
+                // Added 'http_errors' => false to prevent CI4 from throwing exception on 429
+                $response = $client->setBody(json_encode($payload))
+                    ->setHeader('Content-Type', 'application/json')
+                    ->request('POST', $requestUrl, [
+                        'timeout' => 2000,
+                        'http_errors' => false
+                    ]);
 
-            $result = json_decode($response->getBody(), true);
+                $statusCode = $response->getStatusCode();
+                $result = json_decode($response->getBody(), true);
 
-            if (isset($result['error'])) {
-                $this->session->setFlashdata(
-                    'message',
-                    '<div class="alert alert-danger alert-dismissible" role="alert">' .
-                        'Gemini API Error: ' . ($result['error']['message'] ?? 'Unknown API error')
-                );
-                return redirect()->to('products');
+                // Handle Rate Limits (429) and Server Demand / Overload (503, 500, 502, 504) gracefully
+                if ($statusCode === 429 || $statusCode === 503 || $statusCode === 500 || $statusCode === 502 || $statusCode === 504) {
+                    if (isset($payload['tools'])) {
+                        unset($payload['tools']);
+                    }
+
+                    if ($statusCode === 503) {
+                        $requestUrl = $this->getFallbackModelUrl($apiKey, $requestUrl);
+                    }
+
+                    if ($attempt === $maxRetries) {
+                        $apiMsg = $result['error']['message'] ?? 'Service temporarily unavailable after multiple retries.';
+                        throw new \Exception('Gemini API Error (' . $statusCode . '): ' . $apiMsg . ' Try a smaller batch or switch model in .env.');
+                    }
+                    sleep($retryDelay);
+                    $retryDelay *= 2; // 3s, then 6s delay
+                    continue;
+                }
+
+                if ($statusCode >= 400 && isset($result['error'])) {
+                    if (isset($payload['tools']) && ($statusCode === 400 || $statusCode === 422)) {
+                        unset($payload['tools']);
+                        continue;
+                    }
+                }
+
+                // Handle generic API Errors
+                if ($statusCode >= 400 || isset($result['error'])) {
+                    $errorMessage = $result['error']['message'] ?? "HTTP Error $statusCode";
+                    throw new \Exception('Gemini API Error: ' . $errorMessage);
+                }
+
+                // Success, break the retry loop
+                break;
             }
 
             $responseText = $result['candidates'][0]['content']['parts'][0]['text'] ?? null;
             if (!$responseText) {
-                return $this->response->setJSON(['status' => 'error', 'message' => 'Empty response from AI']);
+                throw new \Exception('Empty response from AI.');
             }
 
             $decoded = json_decode($responseText, true);
             if (json_last_error() !== JSON_ERROR_NONE || !isset($decoded['products'])) {
-                $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Invalid AI JSON structure <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-                return redirect()->to('products');
+                throw new \Exception('Invalid AI JSON structure returned.');
             }
 
             // Re-order based on metadata unique_id
             $productMap = array_column($decoded['products'], null, 'unique_id');
+
             $orderedProducts = [];
             foreach ($metadata as $meta) {
-                $orderedProducts[] = $productMap[$meta['unique_id']] ?? $this->getErrorProduct($meta);
+                $pData = $productMap[$meta['unique_id']] ?? $this->getErrorProduct($meta);
+
+                // Preserve true current database values for reference
+                $pData['current_brand_name'] = $meta['current_brand_name'];
+                $pData['current_price']      = number_format((float)$meta['current_price'], 2, '.', '');
+
+                // Fallback to existing brand if AI did not return a valid brand_id
+                if (empty($pData['brand_id']) && !empty($meta['current_brand_id'])) {
+                    $pData['brand_id'] = $meta['current_brand_id'];
+                }
+
+                $orderedProducts[] = $pData;
             }
-            // dd
 
             echo view(
                 'Admin/Products/update-gemini',
                 [
-                    'products' => $orderedProducts,
+                    'products'   => $orderedProducts,
                     'categories' => $categories,
-                    'csrfHash' => csrf_hash(),
+                    'csrfHash'   => csrf_hash(),
+                    'brands'     => $brands,
                 ]
             );
         } catch (\Exception $e) {
-            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">API Connection failed: ' . $e->getMessage() . '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->setFlashdata(
+                'message',
+                '<div class="alert alert-danger alert-dismissible" role="alert">API Update failed: ' . $e->getMessage() . '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
+            );
             return redirect()->to('products');
         }
     }
@@ -1972,6 +2344,7 @@ class Products extends BaseController
             'description'       => $this->request->getPost('description') ?? '',
             'price'             => $this->request->getPost('price') ?? '',
             'quantity'          => $this->request->getPost('quantity') ?? '',
+            'brand_id'          => $this->request->getPost('brand_id') ?? '',
             'weight'            => $this->request->getPost('weight') ?? null,
             'tag'               => $this->request->getPost('tags') ?? null,
             'meta_title'        => $this->request->getPost('meta_title') ?? null,
@@ -2006,6 +2379,7 @@ class Products extends BaseController
             'alt_name'  => $data['alt_name'],
             'model'     => $data['model'],
             'price'     => $data['price'],
+            'brand_id'  => $data['brand_id'],
             'weight'    => $data['weight'],
             'quantity'  => $data['quantity'],
             'updatedBy' => $adUserId,
@@ -2050,6 +2424,153 @@ class Products extends BaseController
             'message'   => '<strong>' . esc($data['pro_name']) . '</strong> updated successfully.',
             'csrf_hash' => csrf_hash()
         ]);
+    }
+
+    public function product_gemini_update_batch_action()
+    {
+        // Restrict access strictly to AJAX POST interactions
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(403)->setJSON([
+                'status'  => 'error',
+                'message' => 'Direct script access is not allowed.'
+            ]);
+        }
+
+        $adUserId = $this->session->adUserId;
+        $products = $this->request->getPost('products');
+
+        if (empty($products) || !is_array($products)) {
+            return $this->response->setJSON([
+                'status'    => 'error',
+                'message'   => 'No valid product batch data received.',
+                'csrf_hash' => csrf_hash()
+            ]);
+        }
+
+        // 1. First-pass Validation: Validate ALL items before running any SQL queries
+        foreach ($products as $index => $p) {
+            $displayIndex = $index + 1;
+
+            // Structure data matching your exact original key validation expectations
+            $validationData = [
+                'pro_name'    => $p['name'] ?? '',
+                'alt_name'    => $p['alt_name'] ?? '',
+                'categorys'   => $p['categorys'] ?? [],
+                'description' => $p['description'] ?? '',
+                'brand_id'    => $p['brand_id'] ?? '',
+                'price'       => $p['price'] ?? '',
+                'quantity'    => $p['quantity'] ?? '',
+            ];
+
+            $this->validation->setRules([
+                'pro_name'    => ['label' => "Product #{$displayIndex} Name", 'rules' => 'required'],
+                'alt_name'    => ['label' => "Product #{$displayIndex} Alt Name", 'rules' => 'required'],
+                'categorys'   => ['label' => "Product #{$displayIndex} Category", 'rules' => 'required'],
+                'description' => ['label' => "Product #{$displayIndex} Description", 'rules' => 'required'],
+                'price'       => ['label' => "Product #{$displayIndex} Price", 'rules' => 'required|numeric'],
+                'quantity'    => ['label' => "Product #{$displayIndex} Quantity", 'rules' => 'required|is_natural_no_zero'],
+                'brand_id'    => ['label' => "Product #{$displayIndex} Brand", 'rules' => 'required'],
+            ]);
+
+            if ($this->validation->run($validationData) === false) {
+                return $this->response->setJSON([
+                    'status'    => 'validation_error',
+                    'message'   => $this->validation->listErrors(),
+                    'csrf_hash' => csrf_hash()
+                ]);
+            }
+
+            // Double check identifier presence
+            if (empty($p['product_id'])) {
+                return $this->response->setJSON([
+                    'status'    => 'error',
+                    'message'   => "Missing target Product Identifier at position #{$displayIndex}.",
+                    'csrf_hash' => csrf_hash()
+                ]);
+            }
+        }
+
+        // 2. Database transaction processing block
+        DB()->transStart();
+
+        try {
+            foreach ($products as $p) {
+                $productId = $p['product_id'];
+
+                // Map standard keys precisely like your original single action
+                $proName     = $p['name'] ?? '';
+                $altName     = $p['alt_name'] ?? '';
+                $model       = $p['model'] ?? '';
+                $categories  = $p['categorys'] ?? [];
+                $description = $p['description'] ?? '';
+                $brandId     = $p['brand_id'] ?? '';
+                $price       = $p['price'] ?? '';
+                $quantity    = $p['quantity'] ?? '';
+                $weight      = !empty($p['weight']) ? $p['weight'] : null;
+                $tag         = !empty($p['tags']) ? $p['tags'] : null;
+                $metaTitle   = !empty($p['meta_title']) ? $p['meta_title'] : null;
+                $metaDesc    = !empty($p['meta_description']) ? $p['meta_description'] : null;
+                $metaKeyword = !empty($p['meta_keyword']) ? $p['meta_keyword'] : null;
+
+                // Update Table: cc_products
+                $proData = [
+                    'name'      => $proName,
+                    'alt_name'  => $altName,
+                    'model'     => $model,
+                    'price'     => $price,
+                    'weight'    => $weight,
+                    'quantity'  => $quantity,
+                    'brand_id'  => $brandId,
+                    'updatedBy' => $adUserId,
+                ];
+                DB()->table('cc_products')->where('product_id', $productId)->update($proData);
+
+                // Update Table: cc_product_to_category
+                DB()->table('cc_product_to_category')->where('product_id', $productId)->delete();
+                if (!empty($categories)) {
+                    $catData = array_map(fn($catId) => [
+                        'product_id'  => $productId,
+                        'category_id' => $catId,
+                    ], $categories);
+                    DB()->table('cc_product_to_category')->insertBatch($catData);
+                }
+
+                // Update Table: cc_product_description
+                $proDescData = [
+                    'description'      => $description,
+                    'tag'              => $tag,
+                    'meta_title'       => $metaTitle,
+                    'meta_description' => $metaDesc,
+                    'meta_keyword'     => $metaKeyword,
+                ];
+                DB()->table('cc_product_description')->where('product_id', $productId)->update($proDescData);
+            }
+
+            // Complete Transaction execution
+            DB()->transComplete();
+
+            if (DB()->transStatus() === false) {
+                DB()->transRollback();
+                return $this->response->setJSON([
+                    'status'    => 'error',
+                    'message'   => 'Database execution breakdown during batch processing. All changes rolled back.',
+                    'csrf_hash' => csrf_hash()
+                ]);
+            }
+
+            return $this->response->setJSON([
+                'status'    => 'success',
+                'message'   => 'Successfully batch updated <strong>' . count($products) . '</strong> products.',
+                'csrf_hash' => csrf_hash()
+            ]);
+        } catch (\Exception $e) {
+            DB()->transRollback();
+            return $this->response->setJSON([
+                'status'    => 'error',
+                'message'   => 'Critical application failure: ' . $e->getMessage(),
+                'csrf_hash' => csrf_hash()
+            ]);
+        }
     }
     public function multi_delete_action()
     {
@@ -2364,6 +2885,11 @@ class Products extends BaseController
         }
         return redirect()->to($redirect_url);
     }
+
+    /**
+     * @description This method provides remove Watermark Images Action
+     * @return RedirectResponse
+     */
     public function removeWatermarkImagesAction()
     {
         $redirect_url = isset($_COOKIE['product_url_path']) ? $_COOKIE['product_url_path'] : 'admin/products';
