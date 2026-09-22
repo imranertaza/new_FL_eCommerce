@@ -154,11 +154,10 @@ class Option extends BaseController
      */
     public function update_action()
     {
-        $option_id = $this->request->getPost('option_id');
+        $option_id    = $this->request->getPost('option_id');
         $data['name'] = $this->request->getPost('name');
         $data['type'] = $this->request->getPost('type');
-        $value = $this->request->getPost('value[]');
-        $option_value_id = $this->request->getPost('option_value_id[]');
+        $value        = $this->request->getPost('value');   // ← fixed (no [])
 
         $this->validation->setRules([
             'name' => ['label' => 'Name', 'rules' => 'required'],
@@ -168,34 +167,35 @@ class Option extends BaseController
         if ($this->validation->run($data) == FALSE) {
             $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">' . $this->validation->listErrors() . ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             return redirect()->to('option_update/' . $option_id);
-        } else {
-
-            if (!empty($value)) {
-                $table = DB()->table('cc_option');
-                $table->where('option_id', $option_id)->update($data);
-
-                foreach ($value as $key => $val) {
-                    $dataval['option_id'] = $option_id;
-                    $dataval['name'] = $val;
-
-                    if (!empty($option_value_id[$key])) {
-                        $datavalUp['name'] = $val;
-                        $tableValDel = DB()->table('cc_option_value');
-                        $tableValDel->where('option_value_id', $option_value_id[$key])->update($datavalUp);
-                    } else {
-                        $tableVal = DB()->table('cc_option_value');
-                        $tableVal->insert($dataval);
-                    }
-                }
-
-                $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Option Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-                return redirect()->to('option_update/' . $option_id);
-            }else{
-                $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"> Please Add Value ! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-                return redirect()->to('option_update/' . $option_id);
-            }
-
         }
+
+        // Remove empty values
+        $value = array_filter(array_map('trim', $value ?? []));
+
+        if (empty($value)) {
+            $this->session->setFlashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert">Please Add Value !<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            return redirect()->to('option_update/' . $option_id);
+        }
+
+        // Update main option
+        DB()->table('cc_option')->where('option_id', $option_id)->update($data);
+
+        // Delete old values
+        DB()->table('cc_option_value')->where('option_id', $option_id)->delete();
+
+        // Insert all values (old + new)
+        $batchData = [];
+        foreach ($value as $val) {
+            $batchData[] = [
+                'option_id' => $option_id,
+                'name'      => $val,
+            ];
+        }
+        // Insert all at once
+        DB()->table('cc_option_value')->insertBatch($batchData);
+
+        $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Option Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        return redirect()->to('option_update/' . $option_id);
     }
 
     /**
