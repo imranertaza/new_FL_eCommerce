@@ -407,7 +407,7 @@
                     <!-- Modal Header -->
                     <div class="modal-header">
                         <h4 class="modal-title">Modal Heading</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <button type="button" class="close" onclick="resetOption()" data-dismiss="modal">&times;</button>
                     </div>
 
                     <!-- Modal body -->
@@ -424,7 +424,7 @@
                     <!-- Modal footer -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" onclick="valueAdd()" >Save</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" onclick="resetOption()" data-dismiss="modal">Close</button>
                     </div>
 
                 </div>
@@ -437,6 +437,7 @@
 
 <?= $this->section('java_script') ?>
 <script>
+
     function searchOptionUp(key) {
         let csrfName = $('meta[name="csrf-name"]').attr('content');
         let csrfHash = $('meta[name="csrf-token"]').attr('content');
@@ -543,6 +544,14 @@
         }
     }
 
+    function resetOption(){
+        var id = $('#printId').val();
+        $('#valId_'+id).val('').trigger('change');
+    }
+    $('#myModal').on('hidden.bs.modal', function () {
+        resetOption();
+    });
+
     function valueAdd(){
 
         let value = $('#value').val().trim();
@@ -598,5 +607,6 @@
             }
         });
     }
+
 </script>
 <?= $this->endSection() ?>
