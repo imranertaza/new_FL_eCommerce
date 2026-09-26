@@ -838,10 +838,17 @@
                 },
                 complete: function() {
                     btn.html(originalText).prop('disabled', false);
-
                 }
             });
         });
+    });
+
+    function resetOption(){
+        var id = $('#printId').val();
+        $('#valId_'+id).val('').trigger('change');
+    }
+    $('#myModal').on('hidden.bs.modal', function () {
+        resetOption();
     });
 </script>
 <?= $this->endSection() ?>
