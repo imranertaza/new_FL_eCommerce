@@ -3299,3 +3299,6 @@ ul > li:last-child {
     font-size: 25px;
     color: #000000;
 }
+.box-checkbox{
+    border: 1px solid;
+}

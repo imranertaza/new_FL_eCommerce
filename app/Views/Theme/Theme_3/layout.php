@@ -1038,6 +1038,11 @@ $modules = modules_access();
         var shipcityId = $('#sh_stateView').val();
 
 
+        // Get all checked box[] values as array
+        var box = $('input[name="box[]"]:checked').map(function () {
+            return $(this).val();
+        }).get();
+
         $('#totalamo').val(totalAmount);
         $('#total').html('<?php echo $symbol; ?> ' + totalAmount);
 
@@ -1050,7 +1055,8 @@ $modules = modules_access();
                 amount: totalAmount,
                 city_id: cityId,
                 shipCityId: shipcityId,
-                paymethod: paymethod
+                paymethod: paymethod,
+                box: box
             },
             dataType: 'json',
             success: function(result) {
