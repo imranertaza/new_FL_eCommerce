@@ -60,7 +60,7 @@
                             <div class="row p-2">
                                 <div class="col-md-12">
                                     <span class="float-left"><b>Url:</b> <?= base_url('schedule-view/' . $result->featured_schedule_id) ?>
-                                        <!-- <button type="button" onclick="copyUrl('<?= base_url('schedule-view/' . $result->featured_schedule_id) ?>',event)" class="border-0"> <i class="nav-icon fas fa-copy"></i></button> -->
+                                        <button type="button" onclick="copyUrl('<?= base_url('schedule-view/' . $result->featured_schedule_id) ?>',event)" class="border-0"> <i class="nav-icon fas fa-copy"></i></button>
                                     </span>
                                     <!-- Remove button -->
                                     <a href="<?= base_url('section_view_delete/' . $result->featured_schedule_id) ?>" class="btn btn-danger float-right" onclick="return confirm('Are you sure you want to delete this section?');">X</a>
