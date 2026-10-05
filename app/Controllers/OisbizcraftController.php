@@ -235,6 +235,7 @@ class OisbizcraftController extends BaseController {
         $data['shipping_method'] = $this->session->shipping_method;
         $data['shipping_charge'] = $this->session->shipping_charge;
         $data['payment_method'] = $this->session->payment_method;
+        $box = $this->session->box;
 
         $data['store_id'] = $this->session->store_id;
 
@@ -347,11 +348,13 @@ class OisbizcraftController extends BaseController {
 
 
         foreach ($this->cart->contents() as $val) {
+            $withoutBox = in_array($val['id'], $box) ? '1' : null;
             $oldQty = get_data_by_id('quantity', 'cc_products', 'product_id', $val['id']);
             $dataOrder['order_id'] = $order_id;
             $dataOrder['product_id'] = $val['id'];
             $dataOrder['price'] = $val['price'];
             $dataOrder['quantity'] = $val['qty'];
+            $dataOrder['without_box'] = $withoutBox;
             $dataOrder['total_price'] = $val['subtotal'];
             $dataOrder['final_price'] = $val['subtotal'];
             $tableOrder = DB()->table('cc_order_item');
@@ -502,6 +505,7 @@ class OisbizcraftController extends BaseController {
         $data['shipping_charge'] = $this->request->getPost('shipping_charge');
         $data['shipping_discount_charge'] = $this->request->getPost('shipping_discount_charge');
         $data['payment_method'] = $this->request->getPost('payment_method');
+        $data['box'] = $this->request->getPost('box[]');
 
 
 

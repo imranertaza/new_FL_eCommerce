@@ -214,6 +214,7 @@
                                     <tr>
                                         <th>Image</th>
                                         <th>Product</th>
+                                        <th>Box</th>
                                         <th>Quantity</th>
                                         <th>Unit Price</th>
                                         <th>Total</th>
@@ -250,6 +251,7 @@
                                                     <?php }
                                                 } ?>
                                             </td>
+                                            <td><?= ($vew->without_box == 1)?'No':'Yes'; ?></td>
                                             <td><?php echo $vew->quantity; ?></td>
                                             <td><?php echo currency_symbol_with_symbol($vew->price,$symbol); ?></td>
                                             <td><?php echo currency_symbol_with_symbol($vew->final_price,$symbol); ?></td>
@@ -257,19 +259,19 @@
                                     <?php } ?>
 
                                     <tr>
-                                        <td class="text-right" colspan="4">Sub-Total:</td>
+                                        <td class="text-right" colspan="5">Sub-Total:</td>
                                         <td><?php echo currency_symbol_with_symbol($order->total,$symbol); ?></td>
                                     </tr>
                                     <tr>
-                                        <td class="text-right" colspan="4">Discount:</td>
+                                        <td class="text-right" colspan="5">Discount:</td>
                                         <td><?php echo currency_symbol_with_symbol($order->discount,$symbol); ?></td>
                                     </tr>
                                     <tr>
-                                        <td class="text-right" colspan="4">Shipping Charge:</td>
+                                        <td class="text-right" colspan="5">Shipping Charge:</td>
                                         <td><?php echo currency_symbol_with_symbol($order->shipping_charge,$symbol); ?></td>
                                     </tr>
                                     <tr>
-                                        <td class="text-right" colspan="4">Total:</td>
+                                        <td class="text-right" colspan="5">Total:</td>
                                         <td><?php echo currency_symbol_with_symbol($order->final_amount,$symbol); ?></td>
                                     </tr>
                                     </tbody>

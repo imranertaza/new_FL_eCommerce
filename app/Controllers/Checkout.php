@@ -268,6 +268,7 @@ class Checkout extends BaseController
             $data['shipping_method'] = $this->request->getPost('shipping_method');
             $data['shipping_charge'] = $this->request->getPost('shipping_charge');
             $data['payment_method'] = $this->request->getPost('payment_method');
+            $box = $this->request->getPost('box[]');
 
             $data['store_id'] = get_data_by_id('store_id', 'cc_stores', 'is_default', '1');
 
@@ -451,11 +452,13 @@ class Checkout extends BaseController
 
 
                 foreach ($this->cart->contents() as $val) {
+                    $withoutBox = in_array($val['id'], $box) ? '1' : null;
                     $oldQty = get_data_by_id('quantity', 'cc_products', 'product_id', $val['id']);
                     $dataOrder['order_id'] = $order_id;
                     $dataOrder['product_id'] = $val['id'];
                     $dataOrder['price'] = $val['price'];
                     $dataOrder['quantity'] = $val['qty'];
+                    $dataOrder['without_box'] = $withoutBox;
                     $dataOrder['total_price'] = $val['subtotal'];
                     $dataOrder['final_price'] = $val['subtotal'];
                     $tableOrder = DB()->table('cc_order_item');
@@ -538,6 +541,7 @@ class Checkout extends BaseController
         $city_id = $this->request->getPost('city_id');
         $shipCityId = $this->request->getPost('shipCityId');
         $paymethod = $this->request->getPost('paymethod');
+        $box = $this->request->getPost('box');
         if (!empty($shipCityId)) {
             $city_id = $shipCityId;
         }
@@ -553,7 +557,7 @@ class Checkout extends BaseController
             $data['charge'] = $this->weight_shipping->getSettings()->calculateShipping();
         }
         if ($paymethod == 'zone_rate') {
-            $data['charge'] = $this->zone_rate_shipping->getSettings($city_id)->calculateShipping();
+            $data['charge'] = $this->zone_rate_shipping->getSettingsBox($box)->getSettings($city_id)->calculateShipping();
         }
         if(!empty($city_id)) {
             $country_id = get_data_by_id('country_id', 'cc_zone', 'zone_id', $city_id);

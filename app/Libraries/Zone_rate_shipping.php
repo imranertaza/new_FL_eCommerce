@@ -4,6 +4,7 @@ class Zone_rate_shipping{
 
     private $zone_rate_method;
     private $geo_zone_id;
+    private $boxData;
 
     /**
      * @description This function provides get settings
@@ -27,7 +28,15 @@ class Zone_rate_shipping{
 
         return $this;
     }
-
+    /**
+     * @description This function provides box /without box
+     * @param int $box
+     * @return $this
+     */
+    public function getSettingsBox($box){
+        $this->boxData = !empty($box) ? count($box) : 0;
+        return $this;
+    }
     /**
      * @description This function provides calculate shipping
      * @return int
@@ -88,6 +97,7 @@ class Zone_rate_shipping{
     private function weight_rate_calculation($geo_zone_id){
         $charge = 0;
         $totalWeight = 0;
+        $minasWeight = $this->boxData;
 
         $eligible_product_array = $this->get_shipping_eligible_product();
 
@@ -101,16 +111,18 @@ class Zone_rate_shipping{
                 }
             }
 
+            $totalRestWeight = $totalWeight - $minasWeight;
+
 
             $tableRate = DB()->table('cc_geo_zone_shipping_rate');
-            $allZoneRate = $tableRate->where('geo_zone_id', $geo_zone_id)->where('up_to_value >=',$totalWeight)->orderBy('up_to_value','ASC')->get()->getRow();
+            $allZoneRate = $tableRate->where('geo_zone_id', $geo_zone_id)->where('up_to_value >=',$totalRestWeight)->orderBy('up_to_value','ASC')->get()->getRow();
 
             if (!empty($allZoneRate)){
                 $charge = $allZoneRate->cost;
             }
 
             $tableRate = DB()->table('cc_geo_zone_shipping_rate');
-            $allZoneRateAbove = $tableRate->where('geo_zone_id', $geo_zone_id)->where('above <',$totalWeight)->orderBy('above','ASC')->get()->getRow();
+            $allZoneRateAbove = $tableRate->where('geo_zone_id', $geo_zone_id)->where('above <',$totalRestWeight)->orderBy('above','ASC')->get()->getRow();
 
             if (!empty($allZoneRateAbove)){
                 $charge = $allZoneRateAbove->cost;
