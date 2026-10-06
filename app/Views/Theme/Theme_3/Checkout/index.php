@@ -276,10 +276,14 @@
                                     <p class="lh-sm">
                                         <small><?php echo product_id_by_rating($val['id'], '1'); ?></small>
                                     </p>
+                                    <label class="form-check-label">
+                                        <input class="form-check-input box-checkbox" type="checkbox" name="box[]" oninput="shippingCharge()"  value="<?= $val['id']?>"  >
+                                        Without Box
+                                    </label>
+
                                 </div>
                             </div>
-                            <div
-                                class="list-item-qty text-center bg-gray p-1 py-3 rounded-2 align-items-center d-flex flex-column pro-bg-check">
+                            <div class="list-item-qty text-center bg-gray p-1 py-3 rounded-2 align-items-center d-flex flex-column pro-bg-check">
                                 <button type="button" class="btn btn-sm w-100 p-0"
                                     onclick="plusItem('<?php echo $val['rowid']; ?>')" id="minus-btn"><i
                                         class="fa fa-plus"></i></button>
@@ -393,7 +397,6 @@
                         </div>
 
                         <div class="group-check ">
-
                             <div class="d-flex flex-column">
                                 <?php
                                     $sMethod = get_array_data_by_id('cc_shipping_method','status','1');
