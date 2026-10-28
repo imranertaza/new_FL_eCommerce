@@ -107,18 +107,28 @@
         $(data).parent().remove();
     }
     function remove_option_new_remove(data, id) {
+        if (!confirm('Are you sure you want to delete this value?')) {
+            return;
+        }
         $(data).parent().remove();
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('option_remove_action') ?>",
             data: {
+                [csrfName]: csrfHash,
                 id: id
             },
             beforeSend: function() {
                 $("#loading-image").show();
             },
             success: function(data) {
-                $(data).parent().remove();
+                if (data && data.csrfHash) {
+                    $('meta[name="csrf-token"]').attr('content', data.csrfHash);
+                    $('input[name="<?= csrf_token() ?>"]').val(data.csrfHash);
+                }
+                $("#loading-image").hide();
             }
 
         });
