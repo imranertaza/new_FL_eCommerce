@@ -157,7 +157,8 @@ class Option extends BaseController
         $option_id    = $this->request->getPost('option_id');
         $data['name'] = $this->request->getPost('name');
         $data['type'] = $this->request->getPost('type');
-        $value        = $this->request->getPost('value');   // ← fixed (no [])
+        $value        = $this->request->getPost('value[]');
+        $optionValueIds = $this->request->getPost('option_value_id[]');
 
         $this->validation->setRules([
             'name' => ['label' => 'Name', 'rules' => 'required'],
@@ -180,19 +181,44 @@ class Option extends BaseController
         // Update main option
         DB()->table('cc_option')->where('option_id', $option_id)->update($data);
 
-        // Delete old values
-        DB()->table('cc_option_value')->where('option_id', $option_id)->delete();
-
-        // Insert all values (old + new)
+        // Update old values, insert new values
         $batchData = [];
-        foreach ($value as $val) {
-            $batchData[] = [
-                'option_id' => $option_id,
-                'name'      => $val,
-            ];
+        $submittedIds = [];
+        foreach ($value as $key => $val) {
+            $option_value_id = $optionValueIds[$key] ?? '';
+            if (!empty($option_value_id)) {
+                // Existing value → update
+                $submittedIds[] = $option_value_id;
+                DB()->table('cc_option_value')
+                    ->where('option_value_id', $option_value_id)
+                    ->where('option_id', $option_id)
+                    ->update(['name' => $val]);
+            } else {
+                // New value → collect for batch insert
+                $batchData[] = [
+                    'option_id' => $option_id,
+                    'name'      => $val,
+                ];
+            }
         }
-        // Insert all at once
-        DB()->table('cc_option_value')->insertBatch($batchData);
+        if (!empty($batchData)) {
+            DB()->table('cc_option_value')->insertBatch($batchData);
+        }
+
+        // Delete removed values (existing in DB but no longer in form)
+        $existingIds = DB()->table('cc_option_value')
+            ->select('option_value_id')
+            ->where('option_id', $option_id)
+            ->get()
+            ->getResultArray();
+        $existingIds = array_column($existingIds, 'option_value_id');
+
+        $deletedIds = array_diff($existingIds, $submittedIds);
+        if (!empty($deletedIds)) {
+            DB()->table('cc_option_value')->where('option_id', $option_id)->whereIn('option_value_id', $deletedIds)->delete();
+            // Also remove product references of deleted values
+            DB()->table('cc_product_option')->whereIn('option_value_id', $deletedIds)->delete();
+        }
 
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Option Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('option_update/' . $option_id);

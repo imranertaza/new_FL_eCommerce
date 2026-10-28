@@ -285,8 +285,11 @@
                                                             ?>
                                                             <?php $i = 101;
                                                             foreach ($opValue as $val) {  ?>
-                                                                <div class='col-md-12 mt-3' id='new_<?php echo $i++ . $option->name; ?>'><input type='hidden' name='option[]' value='<?php echo $val->option_id; ?>'><select name='opValue[]' id='valId_"+new_chq_no+"' style='padding: 3px;'>
-                                                                        <option value=''>Please select</option><?php foreach ($opVal as $p) { ?><option value='<?php echo $p->option_value_id; ?>' <?php echo ($p->option_value_id == $val->option_value_id) ? 'selected' : ''; ?>><?php echo $p->name; ?></option><?php } ?>
+                                                                <div class='col-md-12 mt-3' id='new_<?php echo $i++ . $option->name; ?>'><input type='hidden' name='option[]' value='<?php echo $val->option_id; ?>'><select name='opValue[]' id='valId_new_<?php echo ($i - 1) . strtolower(str_replace(' ', '', $option->name)); ?>' onchange="valueCreate(this,<?php echo $op->option_id ?>,'new_<?php echo ($i - 1) . strtolower(str_replace(' ', '', $option->name)); ?>')" style='padding: 3px;'>
+                                                                    <option value=''>Please select</option>
+                                                                    <option value='create'>Add Option</option>
+                                                                    <?php foreach ($opVal as $p) { ?>
+                                                                    <option value='<?php echo $p->option_value_id; ?>' <?php echo ($p->option_value_id == $val->option_value_id) ? 'selected' : ''; ?>><?php echo $p->name; ?></option><?php } ?>
                                                                     </select><select name='subtract[]' style='padding: 3px;'>
                                                                         <option value='plus' <?php echo ($val->subtract == null) ? 'selected' : ''; ?>>Plus</option>
                                                                         <option value='minus' <?php echo ($val->subtract != null) ? 'selected' : ''; ?>>Minus</option>
@@ -591,8 +594,8 @@
                 var new_chq_no = parseInt($('#total_chq').val()) + 1;
                 var new_input = "<div class='col-md-12 mt-3' id='new_" + new_chq_no +
                     "' ><input type='hidden' name='option[]' value='" + option_id +
-                    "' ><select name='opValue[]' id='valId_" + new_chq_no +
-                    "' style='padding: 3px;' onchange='valueCreate(this," + option_id + "," + new_chq_no + ")' required><option value=''>Please select</option><option value='create'>Add Option</option>" + data +
+                    "' ><select name='opValue[]' id='valId_new_" + new_chq_no +
+                    "' style='padding: 3px;' onchange='valueCreate(this," + option_id + ",\"new_" + new_chq_no + "\")' required><option value=''>Please select</option><option value='create'>Add Option</option>" + data +
                     "</select><select name='subtract[]' style='padding: 3px;'><option value='plus'>Plus</option><option value='minus'>Minus</option></select><input type='number' placeholder='Quantity' name='qty[]' required> <input type='number' placeholder='Price' name='price_op[]' required> <a href='javascript:void(0)' onclick='remove_option(this)' class='btn btn-sm btn-danger' style='margin-top: -5px;'>X</a></div>";
 
                 $('#' + id).append(new_input);
@@ -696,6 +699,7 @@
 
     function valueCreate(el, id, printId) {
         if (el.value === 'create') {
+            window.valueCreated = false;
             $('#myModal').modal('show');
             $('#printId').val(printId);
             $('#optionId').val(id);
@@ -751,6 +755,9 @@
 
                 // select it
                 $(selectId).val(data.id);
+
+                // mark success so modal-close doesn't reset the selection
+                window.valueCreated = true;
 
                 // close modal + reset
                 $('#myModal').modal('hide');
@@ -848,7 +855,10 @@
         $('#valId_'+id).val('').trigger('change');
     }
     $('#myModal').on('hidden.bs.modal', function () {
-        resetOption();
+        // only reset when the modal was cancelled, not after a successful create
+        if (!window.valueCreated) {
+            resetOption();
+        }
     });
 </script>
 <?= $this->endSection() ?>

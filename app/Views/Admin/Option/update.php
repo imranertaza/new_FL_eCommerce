@@ -52,7 +52,6 @@
                                 <select name="type" class="form-control" required>
                                     <option value="">Please select</option>
                                     <option value="select" <?php echo ($option->type == 'select')?'selected':''; ?> >Select</option>
-<!--                                    <option value="checkbox" --><?php //echo ($option->type == 'checkbox')?'selected':''; ?><!-- >Checkbox</option>-->
                                     <option value="radio" <?php echo ($option->type == 'radio')?'selected':''; ?> >Radio</option>
                                 </select>
                             </div>
@@ -98,7 +97,7 @@
 
         var new_chq_no = parseInt($('#total_chq').val()) + 1;
         var new_input = "<div class='form-group mt-3' id='new_" + new_chq_no +
-            "' ><input type='text' class='form-control'  placeholder='value' name='value[]' style='width: 70%;float: left;'> <a href='javascript:void(0)' onclick='remove_option_new(this)' class='btn btn-sm btn-danger' style='margin-left: 5px;padding: 7px;'>X</a></div>";
+            "' ><input type='hidden' name='option_value_id[]' value=''><input type='text' class='form-control'  placeholder='value' name='value[]' style='width: 70%;float: left;'> <a href='javascript:void(0)' onclick='remove_option_new(this)' class='btn btn-sm btn-danger' style='margin-left: 5px;padding: 7px;'>X</a></div>";
 
         $('#new_chq').append(new_input);
         $('#total_chq').val(new_chq_no);
