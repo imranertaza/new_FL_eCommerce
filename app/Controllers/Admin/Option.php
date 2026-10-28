@@ -183,12 +183,10 @@ class Option extends BaseController
 
         // Update old values, insert new values
         $batchData = [];
-        $submittedIds = [];
         foreach ($value as $key => $val) {
             $option_value_id = $optionValueIds[$key] ?? '';
             if (!empty($option_value_id)) {
                 // Existing value → update
-                $submittedIds[] = $option_value_id;
                 DB()->table('cc_option_value')
                     ->where('option_value_id', $option_value_id)
                     ->where('option_id', $option_id)
@@ -203,21 +201,6 @@ class Option extends BaseController
         }
         if (!empty($batchData)) {
             DB()->table('cc_option_value')->insertBatch($batchData);
-        }
-
-        // Delete removed values (existing in DB but no longer in form)
-        $existingIds = DB()->table('cc_option_value')
-            ->select('option_value_id')
-            ->where('option_id', $option_id)
-            ->get()
-            ->getResultArray();
-        $existingIds = array_column($existingIds, 'option_value_id');
-
-        $deletedIds = array_diff($existingIds, $submittedIds);
-        if (!empty($deletedIds)) {
-            DB()->table('cc_option_value')->where('option_id', $option_id)->whereIn('option_value_id', $deletedIds)->delete();
-            // Also remove product references of deleted values
-            DB()->table('cc_product_option')->whereIn('option_value_id', $deletedIds)->delete();
         }
 
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Option Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -247,7 +230,7 @@ class Option extends BaseController
 
     /**
      * @description This method provides option remove action
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function option_remove_action(){
         $option_value_id = $this->request->getPost('id');
@@ -257,6 +240,11 @@ class Option extends BaseController
 
         $tableValDel = DB()->table('cc_option_value');
         $tableValDel->where('option_value_id', $option_value_id)->delete();
+
+        return $this->response->setJSON([
+            'status'   => 'success',
+            'csrfHash' => csrf_hash()
+        ]);
     }
 
     public function optionAddAction()
