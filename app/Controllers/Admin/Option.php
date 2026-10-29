@@ -157,7 +157,8 @@ class Option extends BaseController
         $option_id    = $this->request->getPost('option_id');
         $data['name'] = $this->request->getPost('name');
         $data['type'] = $this->request->getPost('type');
-        $value        = $this->request->getPost('value');   // ← fixed (no [])
+        $value        = $this->request->getPost('value[]');
+        $optionValueIds = $this->request->getPost('option_value_id[]');
 
         $this->validation->setRules([
             'name' => ['label' => 'Name', 'rules' => 'required'],
@@ -180,19 +181,27 @@ class Option extends BaseController
         // Update main option
         DB()->table('cc_option')->where('option_id', $option_id)->update($data);
 
-        // Delete old values
-        DB()->table('cc_option_value')->where('option_id', $option_id)->delete();
-
-        // Insert all values (old + new)
+        // Update old values, insert new values
         $batchData = [];
-        foreach ($value as $val) {
-            $batchData[] = [
-                'option_id' => $option_id,
-                'name'      => $val,
-            ];
+        foreach ($value as $key => $val) {
+            $option_value_id = $optionValueIds[$key] ?? '';
+            if (!empty($option_value_id)) {
+                // Existing value → update
+                DB()->table('cc_option_value')
+                    ->where('option_value_id', $option_value_id)
+                    ->where('option_id', $option_id)
+                    ->update(['name' => $val]);
+            } else {
+                // New value → collect for batch insert
+                $batchData[] = [
+                    'option_id' => $option_id,
+                    'name'      => $val,
+                ];
+            }
         }
-        // Insert all at once
-        DB()->table('cc_option_value')->insertBatch($batchData);
+        if (!empty($batchData)) {
+            DB()->table('cc_option_value')->insertBatch($batchData);
+        }
 
         $this->session->setFlashdata('message', '<div class="alert alert-success alert-dismissible" role="alert">Option Update Success <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         return redirect()->to('option_update/' . $option_id);
@@ -221,7 +230,7 @@ class Option extends BaseController
 
     /**
      * @description This method provides option remove action
-     * @return void
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function option_remove_action(){
         $option_value_id = $this->request->getPost('id');
@@ -231,6 +240,11 @@ class Option extends BaseController
 
         $tableValDel = DB()->table('cc_option_value');
         $tableValDel->where('option_value_id', $option_value_id)->delete();
+
+        return $this->response->setJSON([
+            'status'   => 'success',
+            'csrfHash' => csrf_hash()
+        ]);
     }
 
     public function optionAddAction()

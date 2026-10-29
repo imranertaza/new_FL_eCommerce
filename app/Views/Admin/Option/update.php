@@ -52,7 +52,6 @@
                                 <select name="type" class="form-control" required>
                                     <option value="">Please select</option>
                                     <option value="select" <?php echo ($option->type == 'select')?'selected':''; ?> >Select</option>
-<!--                                    <option value="checkbox" --><?php //echo ($option->type == 'checkbox')?'selected':''; ?><!-- >Checkbox</option>-->
                                     <option value="radio" <?php echo ($option->type == 'radio')?'selected':''; ?> >Radio</option>
                                 </select>
                             </div>
@@ -98,7 +97,7 @@
 
         var new_chq_no = parseInt($('#total_chq').val()) + 1;
         var new_input = "<div class='form-group mt-3' id='new_" + new_chq_no +
-            "' ><input type='text' class='form-control'  placeholder='value' name='value[]' style='width: 70%;float: left;'> <a href='javascript:void(0)' onclick='remove_option_new(this)' class='btn btn-sm btn-danger' style='margin-left: 5px;padding: 7px;'>X</a></div>";
+            "' ><input type='hidden' name='option_value_id[]' value=''><input type='text' class='form-control'  placeholder='value' name='value[]' style='width: 70%;float: left;'> <a href='javascript:void(0)' onclick='remove_option_new(this)' class='btn btn-sm btn-danger' style='margin-left: 5px;padding: 7px;'>X</a></div>";
 
         $('#new_chq').append(new_input);
         $('#total_chq').val(new_chq_no);
@@ -108,18 +107,28 @@
         $(data).parent().remove();
     }
     function remove_option_new_remove(data, id) {
+        if (!confirm('Are you sure you want to delete this value?')) {
+            return;
+        }
         $(data).parent().remove();
+        let csrfName = $('meta[name="csrf-name"]').attr('content');
+        let csrfHash = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             method: "POST",
             url: "<?php echo base_url('option_remove_action') ?>",
             data: {
+                [csrfName]: csrfHash,
                 id: id
             },
             beforeSend: function() {
                 $("#loading-image").show();
             },
             success: function(data) {
-                $(data).parent().remove();
+                if (data && data.csrfHash) {
+                    $('meta[name="csrf-token"]').attr('content', data.csrfHash);
+                    $('input[name="<?= csrf_token() ?>"]').val(data.csrfHash);
+                }
+                $("#loading-image").hide();
             }
 
         });

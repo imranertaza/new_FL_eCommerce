@@ -407,7 +407,7 @@
                     <!-- Modal Header -->
                     <div class="modal-header">
                         <h4 class="modal-title">Modal Heading</h4>
-                        <button type="button" class="close" onclick="resetOption()" data-dismiss="modal">&times;</button>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
 
                     <!-- Modal body -->
@@ -424,7 +424,7 @@
                     <!-- Modal footer -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" onclick="valueAdd()" >Save</button>
-                        <button type="button" class="btn btn-danger" onclick="resetOption()" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
 
                 </div>
@@ -537,6 +537,7 @@
 
     function valueCreate(el,id,printId){
         if (el.value === 'create') {
+            window.valueCreated = false;
             $('#myModal').modal('show');
             $('#printId').val(printId);
             $('#optionId').val(id);
@@ -549,7 +550,10 @@
         $('#valId_'+id).val('').trigger('change');
     }
     $('#myModal').on('hidden.bs.modal', function () {
-        resetOption();
+        // only reset when the modal was cancelled, not after a successful create
+        if (!window.valueCreated) {
+            resetOption();
+        }
     });
 
     function valueAdd(){
@@ -600,6 +604,9 @@
 
                 // select it
                 $(selectId).val(data.id);
+
+                // mark success so modal-close doesn't reset the selection
+                window.valueCreated = true;
 
                 // close modal + reset
                 $('#myModal').modal('hide');
