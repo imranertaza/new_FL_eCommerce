@@ -1066,7 +1066,7 @@ Return ONLY the JSON. Do not add any extra text, explanation, or markdown." . $m
             $qty = $this->request->getPost('qty[]');
             $subtract = $this->request->getPost('subtract[]');
             $price_op = $this->request->getPost('price_op[]');
-            if (!empty($qty)) {
+            if (isset($qty) && is_countable($qty)) {
                 $optionData = [];
                 foreach ($qty as $key => $val) {
                     $optionData[$key] = [
@@ -1078,8 +1078,10 @@ Return ONLY the JSON. Do not add any extra text, explanation, or markdown." . $m
                         'price' => $price_op[$key],
                     ];
                 }
-                $optionTable = DB()->table('cc_product_option');
-                $optionTable->insertBatch($optionData);
+                if (!empty($optionData)) { 
+                    $optionTable = DB()->table('cc_product_option');
+                    $optionTable->insertBatch($optionData);
+                }
             }
             //product options table data insert(end)
 
@@ -1638,24 +1640,34 @@ Return ONLY the JSON. Do not add any extra text, explanation, or markdown." . $m
 
             $optionTableDel = DB()->table('cc_product_option');
             $optionTableDel->where('product_id', $product_id)->delete();
-
-            if (!empty($qty)) {
+            
+        
+            if (isset($qty) && is_countable($qty)) {
+            
                 $optionData = [];
+
                 foreach ($qty as $key => $val) {
-                    $optionData[$key] = [
-                        'product_id' => $product_id,
-                        'option_id' => $option[$key],
+                    // Skip this key if any required value is missing or empty
+                    if (empty($qty[$key]) || !isset($option[$key]) || empty($option[$key]) || !isset($opValue[$key]) || empty($opValue[$key]) ) {
+                        continue;
+                    }
+
+                    $optionData[] = [                    
+                        'product_id'      => $product_id,
+                        'option_id'       => $option[$key],
                         'option_value_id' => $opValue[$key],
-                        'quantity' => $qty[$key],
-                        'subtract' => ($subtract[$key] == 'plus') ? null : 1,
-                        'price' => $price_op[$key],
+                        'quantity'        => $qty[$key],
+                        'subtract'        => (isset($subtract[$key]) && $subtract[$key] === 'plus') ? null : 1,
+                        'price'           => $price_op[$key] ?? 0,   // fallback if price is missing
                     ];
                 }
-                $optionTable = DB()->table('cc_product_option');
-                $optionTable->insertBatch($optionData);
+
+                if (!empty($optionData)) {
+                    $optionTable = DB()->table('cc_product_option');
+                    $optionTable->insertBatch($optionData);
+                }
             }
             //product options table data insert(end)
-
 
             //product Attribute table data insert(start)
             $attribute_group_id = $this->request->getPost('attribute_group_id[]');
