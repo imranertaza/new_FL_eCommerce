@@ -11,6 +11,7 @@
                             <div  style="color: green; border: 2px green solid; text-align: center; padding: 5px;margin-bottom: 10px;">  Payment Successful! </div>
                         <?php endif ?>
                         <form id='checkout-form' method='post' action="<?php echo base_url('payment_stripe_checkout_action'); ?>">
+                            <?= csrf_field() ?>
                             <input type='hidden' name='stripeToken' id='stripe-token-id'>
                             <label for="card-element" class="mb-5">Payment Forms</label>
                             <br>
