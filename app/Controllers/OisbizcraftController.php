@@ -235,7 +235,7 @@ class OisbizcraftController extends BaseController {
         $data['shipping_method'] = $this->session->shipping_method;
         $data['shipping_charge'] = $this->session->shipping_charge;
         $data['payment_method'] = $this->session->payment_method;
-        $box = $this->session->box;
+        $box = $this->session->box ?? [];
 
         $data['store_id'] = $this->session->store_id;
 

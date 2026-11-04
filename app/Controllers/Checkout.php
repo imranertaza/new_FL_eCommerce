@@ -268,7 +268,7 @@ class Checkout extends BaseController
             $data['shipping_method'] = $this->request->getPost('shipping_method');
             $data['shipping_charge'] = $this->request->getPost('shipping_charge');
             $data['payment_method'] = $this->request->getPost('payment_method');
-            $box = $this->request->getPost('box[]');
+            $box = $this->request->getPost('box[]') ?? [];
 
             $data['store_id'] = get_data_by_id('store_id', 'cc_stores', 'is_default', '1');
 
@@ -541,7 +541,7 @@ class Checkout extends BaseController
         $city_id = $this->request->getPost('city_id');
         $shipCityId = $this->request->getPost('shipCityId');
         $paymethod = $this->request->getPost('paymethod');
-        $box = $this->request->getPost('box');
+        $box = $this->request->getPost('box') ?? [];
         if (!empty($shipCityId)) {
             $city_id = $shipCityId;
         }
