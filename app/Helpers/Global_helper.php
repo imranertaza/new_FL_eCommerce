@@ -1064,8 +1064,11 @@ function order_email_template($orderId)
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222'>
                 Model
             </td>
+            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222'>
+                Box
+            </td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:right;padding:7px;color:#222222'>
-                Quantity
+                Qty
             </td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:right;padding:7px;color:#222222'>
                 Price
@@ -1085,6 +1088,7 @@ function order_email_template($orderId)
         $url = base_url('detail/' . $row->product_id);
         $price = currency_symbol($row->total_price);
         $total = currency_symbol($row->final_price);
+        $boxStatus = ($row->without_box == 1)?'No':'Yes';;
         $view .= "<tr>
             <td style='border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
             <a href='$url' target='_blank' title='" . $proName . "' style='padding:1px;border:1px solid #dddddd' >
@@ -1097,6 +1101,9 @@ function order_email_template($orderId)
             </td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
                 $model
+            </td>
+            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                $boxStatus
             </td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'>
                 $row->quantity
@@ -1118,28 +1125,28 @@ function order_email_template($orderId)
         <tfoot>
         <tr>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'
-                colspan='5'><b>Sub-Total:</b></td>
+                colspan='6'><b>Sub-Total:</b></td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'>
                 $subTo
             </td>
         </tr>
         <tr>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'
-                colspan='5'><b>Shipping Charge:</b></td>
+                colspan='6'><b>Shipping Charge:</b></td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'>
                 $shipping_charge
             </td>
         </tr>
         <tr>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'
-                colspan='5'><b>Discount:</b></td>
+                colspan='6'><b>Discount:</b></td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'>
                 $discount
             </td>
         </tr>
         <tr>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'
-                colspan='5'><b>Total:</b></td>
+                colspan='6'><b>Total:</b></td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'>
                 $final_amount
             </td>
