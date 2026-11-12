@@ -984,6 +984,7 @@ function order_email_template($orderId)
 
     $tableItem = DB()->table('cc_order_item');
     $item = $tableItem->where('order_id', $orderId)->get()->getResult();
+
     $logoImg = get_lebel_by_value_in_theme_settings('side_logo')->value;
     $logo = image_view('uploads/logo', '', $logoImg, 'noimage.png', 'logo-css');
 
@@ -992,91 +993,95 @@ function order_email_template($orderId)
     $paymentMet = get_data_by_id('name', 'cc_payment_method', 'payment_method_id', $val->payment_method);
     $state = get_data_by_id('name', 'cc_zone', 'zone_id', $val->shipping_city);
     $country = get_data_by_id('name', 'cc_country', 'country_id', $val->shipping_country_id);
+    $date = date('Y-m-d', strtotime($val->createdDtm));
     $view = '';
-    $view .= "<div style='width:680px'><style> .logo-css{ margin-bottom:20px;border:none; } </style>
-    <a href='#' title='$titleStore' target='_blank' >
-        $logo
+    $view .= "<div style='width:680px'>
+    <style>
+        .logo-css { margin-bottom:20px; border:none; }
+    </style>
+    <a href='#' title='{$titleStore}' target='_blank'>
+        {$logo}
     </a>
     <p style='margin-top:0px;margin-bottom:20px'>
-        Thank you for your interest in        
-        <span class='il'> $titleStore </span> products. Your
+        Thank you for your interest in
+        <span class='il'>{$titleStore}</span> products. Your
         <span class='il'>order</span>
         has been received and will be processed once payment has been confirmed.
     </p>
     
     <table style='border-collapse:collapse;width:100%;border-top:1px solid #dddddd;border-left:1px solid #dddddd;margin-bottom:20px'>
         <thead>
-        <tr>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222'
-                colspan='2'><span class='il'>Order</span> Details
-            </td>
-        </tr>
+            <tr>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222' colspan='2'>
+                    <span class='il'>Order</span> Details
+                </td>
+            </tr>
         </thead>
         <tbody>
-        <tr>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
-                <b><span class='il'>Order</span> ID:</b> $val->order_id<br>
-                <b>Date Added:</b> $val->createdDtm<br>
-                <b>Payment Method:</b> $paymentMet<br>
-                <b>Shipping Method:</b> $val->shipping_method
-            </td>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
-                <b>Name:</b> $val->payment_firstname $val->payment_lastname<br>
-                <b>Email:</b> <a href='mailto:$val->payment_email' target='_blank'>$val->payment_email</a><br>
-                <b>Telephone:</b> $val->payment_phone<br>
-            </td>
-        </tr>
+            <tr>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                    <b><span class='il'>Order</span> ID:</b> {$val->order_id}<br>
+                    <b>Date Added:</b> {$date}<br>
+                    <b>Payment Method:</b> {$paymentMet}<br>
+                    <b>Shipping Method:</b> {$val->shipping_method}
+                </td>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                    <b>Name:</b> {$val->payment_firstname} {$val->payment_lastname}<br>
+                    <b>Email:</b> <a href='mailto:{$val->payment_email}' target='_blank'>{$val->payment_email}</a><br>
+                    <b>Telephone:</b> {$val->payment_phone}<br>
+                </td>
+            </tr>
         </tbody>
     </table>
 
     <table style='border-collapse:collapse;width:100%;border-top:1px solid #dddddd;border-left:1px solid #dddddd;margin-bottom:20px'>
         <thead>
-        <tr>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222'>
-                Payment Address
-            </td>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222'>
-                Shipping Address
-            </td>
-        </tr>
+            <tr>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222'>
+                    Payment Address
+                </td>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222'>
+                    Shipping Address
+                </td>
+            </tr>
         </thead>
         <tbody>
-        <tr>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
-                $val->payment_address_1, $val->shipping_postcode, $state, $country
-            </td>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
-                $val->shipping_address_1, $val->shipping_postcode, $state, $country
-            </td>
-        </tr>
+            <tr>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                    {$val->payment_address_1}, {$val->shipping_postcode}, {$state}, {$country}
+                </td>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                    {$val->shipping_address_1}, {$val->shipping_postcode}, {$state}, {$country}
+                </td>
+            </tr>
         </tbody>
     </table>";
 
     $view .= "<table style='border-collapse:collapse;width:100%;border-top:1px solid #dddddd;border-left:1px solid #dddddd;margin-bottom:20px'>
         <thead>
-        <tr>
-            <td style='border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222'>
-                Image
-            </td>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222'>
-                Product
-            </td>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222'>
-                Model
-            </td>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222'>
-                Box
-            </td>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:right;padding:7px;color:#222222'>
-                Qty
-            </td>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:right;padding:7px;color:#222222'>
-                Price
-            </td>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:right;padding:7px;color:#222222'>
-                Total
-            </td>
-        </tr>
+            <tr>
+                <td style='border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222'>
+                    Image
+                </td>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222'>
+                    Product
+                </td>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222'>
+                    Model
+                </td>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:left;padding:7px;color:#222222'>
+                    Box
+                </td>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:right;padding:7px;color:#222222'>
+                    Qty
+                </td>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:right;padding:7px;color:#222222'>
+                    Price
+                </td>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;background-color:#efefef;font-weight:bold;text-align:right;padding:7px;color:#222222'>
+                    Total
+                </td>
+            </tr>
         </thead>
         <tbody>";
 
@@ -1084,35 +1089,59 @@ function order_email_template($orderId)
         $proName = get_data_by_id('name', 'cc_products', 'product_id', $row->product_id);
         $model = get_data_by_id('model', 'cc_products', 'product_id', $row->product_id);
         $image = get_data_by_id('image', 'cc_products', 'product_id', $row->product_id);
-        $imgView = '<img data-sizes="auto"  id="" src="' . product_image_view('uploads/products', $row->product_id, $image, 'noimage.png',  '100', '100') . '" >';
+        $imgView = '<img data-sizes="auto" src="' . product_image_view('uploads/products', $row->product_id, $image, 'noimage.png', '100', '100') . '">';
         $url = base_url('detail/' . $row->product_id);
         $price = currency_symbol($row->total_price);
         $total = currency_symbol($row->final_price);
-        $boxStatus = ($row->without_box == 1)?'No':'Yes';;
+        $boxStatus = ($row->without_box == 1) ? 'No' : 'Yes';
+        $orOption = order_iten_id_by_order_options($row->order_item);
+
         $view .= "<tr>
             <td style='border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
-            <a href='$url' target='_blank' title='" . $proName . "' style='padding:1px;border:1px solid #dddddd' >
-                    $imgView
-            </a>
+                <a href='{$url}' target='_blank' title='" . htmlspecialchars($proName) . "' style='padding:1px;border:1px solid #dddddd'>
+                    {$imgView}
+                </a>
             </td>
+            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
+                <a href='{$url}' target='_blank'>" . htmlspecialchars($proName) . "</a>";
 
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
-                <a href='$url' target='_blank'>$proName</a>
+        // Product options
+        if (!empty($orOption)) {
+            foreach ($orOption as $op) {
+                $firstChar = mb_substr($op->value, 0, 1);
+                $length = strlen($op->value);
+                $isHexColor = ($firstChar === '#' && $length === 7);
+
+                $style = $isHexColor
+                    ? "background-color: {$op->value}; padding: 13px 14px; border: unset;"
+                    : "padding: 0px 4px;";
+
+                $displayValue = $isHexColor ? '' : htmlspecialchars($op->value);
+
+                $view .= "<br>
+                    <span>" . htmlspecialchars($op->name) . " :</span>
+                    <label class='btn btn-outline-secondary pd-new' style='{$style} border-radius: unset; margin-left:8px;'>
+                        {$displayValue}
+                    </label>";
+            }
+        }
+
+        $view .= "
             </td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
-                $model
+                {$model}
             </td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:left;padding:7px'>
-                $boxStatus
+                {$boxStatus}
             </td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'>
-                $row->quantity
+                {$row->quantity}
             </td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'>
-                $price
+                {$price}
             </td>
             <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'>
-                $total
+                {$total}
             </td>
         </tr>";
     }
@@ -1121,36 +1150,41 @@ function order_email_template($orderId)
     $shipping_charge = currency_symbol($val->shipping_charge);
     $discount = currency_symbol($val->discount);
     $final_amount = currency_symbol($val->final_amount);
+
     $view .= "</tbody>
         <tfoot>
-        <tr>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'
-                colspan='6'><b>Sub-Total:</b></td>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'>
-                $subTo
-            </td>
-        </tr>
-        <tr>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'
-                colspan='6'><b>Shipping Charge:</b></td>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'>
-                $shipping_charge
-            </td>
-        </tr>
-        <tr>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'
-                colspan='6'><b>Discount:</b></td>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'>
-                $discount
-            </td>
-        </tr>
-        <tr>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'
-                colspan='6'><b>Total:</b></td>
-            <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'>
-                $final_amount
-            </td>
-        </tr>
+            <tr>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px' colspan='6'>
+                    <b>Sub-Total:</b>
+                </td>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'>
+                    {$subTo}
+                </td>
+            </tr>
+            <tr>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px' colspan='6'>
+                    <b>Shipping Charge:</b>
+                </td>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'>
+                    {$shipping_charge}
+                </td>
+            </tr>
+            <tr>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px' colspan='6'>
+                    <b>Discount:</b>
+                </td>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'>
+                    {$discount}
+                </td>
+            </tr>
+            <tr>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px' colspan='6'>
+                    <b>Total:</b>
+                </td>
+                <td style='font-size:12px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;text-align:right;padding:7px'>
+                    {$final_amount}
+                </td>
+            </tr>
         </tfoot>
     </table>
 </div>";
