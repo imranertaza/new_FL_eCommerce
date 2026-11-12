@@ -223,13 +223,14 @@
                                     <tbody>
                                     <?php foreach ($orderItem as $vew) {
                                         $product = get_all_row_data_by_id('cc_products', 'product_id', $vew->product_id);
-                                        $img = str_replace("pro_", "", $product->image);
-                                        $url = (!empty($product->image)) ? base_url('uploads/products/' . $vew->product_id . '/' . $img):base_url('uploads/products/noimage.png' );
+                                        $product_image = $product->image ?? '';
+                                        $img = str_replace("pro_", "", $product_image);
+                                        $url = (!empty($product_image)) ? base_url('uploads/products/' . $vew->product_id . '/' . $img):base_url('uploads/products/noimage.png' );
                                         ?>
                                         <tr>
                                             <td>
                                                 <a class="product-image-link" href="<?= $url;?>" data-lightbox="product-set-<?= $vew->product_id;?>">
-                                                    <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $vew->product_id, $product->image, 'noimage.png', '50', '50') ?>" alt="<?php echo $product->alt_name?>" class="img-fluid" loading="lazy">
+                                                    <img data-sizes="auto"  id="" src="<?php echo product_image_view('uploads/products', $vew->product_id, $product_image, 'noimage.png', '50', '50') ?>" alt="<?php echo $product->alt_name ?? ''?>" class="img-fluid" loading="lazy">
                                                 </a>
                                             </td>
                                             <td width="400">
